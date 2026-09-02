@@ -1,0 +1,6 @@
+{
+  "n_best": 20,
+  "max_answer_length": 100,
+  "max_input_length": 384,
+  "model_path": "models/llm/final_model"
+}

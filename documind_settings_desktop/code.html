@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>DocuMind Settings &amp; Account</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&amp;family=Inter:wght@100..900&amp;family=JetBrains+Mono:wght@100..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "tertiary-fixed-dim": "#d0bcff",
+                      "outline": "#958ea0",
+                      "surface-container": "#1d2023",
+                      "outline-variant": "#494454",
+                      "electric-violet": "#8B5CF6",
+                      "on-primary-fixed": "#23005c",
+                      "surface-container-highest": "#323539",
+                      "cyber-cyan": "#06B6D4",
+                      "on-surface": "#e1e2e7",
+                      "surface-bright": "#37393d",
+                      "on-surface-variant": "#cbc3d7",
+                      "primary-fixed-dim": "#d0bcff",
+                      "void-black": "#000000",
+                      "on-primary-fixed-variant": "#5516be",
+                      "secondary": "#4cd7f6",
+                      "tertiary": "#d0bcff",
+                      "surface-container-lowest": "#0c0e12",
+                      "on-tertiary-fixed": "#210f48",
+                      "on-secondary": "#003640",
+                      "surface-container-low": "#191c1f",
+                      "inverse-primary": "#6d3bd7",
+                      "primary": "#d0bcff",
+                      "inverse-surface": "#e1e2e7",
+                      "tertiary-container": "#9987c6",
+                      "on-primary": "#3c0091",
+                      "surface-deep": "#05070A",
+                      "on-tertiary": "#37265e",
+                      "secondary-fixed-dim": "#4cd7f6",
+                      "background": "#111417",
+                      "on-background": "#e1e2e7",
+                      "error": "#ffb4ab",
+                      "on-tertiary-container": "#301f57",
+                      "surface-container-high": "#282a2e",
+                      "on-tertiary-fixed-variant": "#4d3d76",
+                      "secondary-container": "#03b5d3",
+                      "on-error": "#690005",
+                      "surface-variant": "#323539",
+                      "error-container": "#93000a",
+                      "secondary-fixed": "#acedff",
+                      "on-error-container": "#ffdad6",
+                      "primary-container": "#a078ff",
+                      "on-secondary-fixed": "#001f26",
+                      "surface": "#111417",
+                      "glass-stroke": "rgba(255, 255, 255, 0.1)",
+                      "surface-dim": "#111417",
+                      "surface-tint": "#d0bcff",
+                      "on-secondary-container": "#00424e",
+                      "tertiary-fixed": "#e9ddff",
+                      "primary-fixed": "#e9ddff",
+                      "on-primary-container": "#340080",
+                      "on-secondary-fixed-variant": "#004e5c",
+                      "inverse-on-surface": "#2e3134"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "container-max": "1600px",
+                      "section-gap": "80px",
+                      "margin-desktop": "64px",
+                      "gutter": "32px",
+                      "unit": "8px"
+              },
+              "fontFamily": {
+                      "headline-lg": [
+                              "Geist"
+                      ],
+                      "body-base": [
+                              "Inter"
+                      ],
+                      "body-sm": [
+                              "Inter"
+                      ],
+                      "display-xl": [
+                              "Geist"
+                      ],
+                      "headline-md": [
+                              "Geist"
+                      ],
+                      "label-caps": [
+                              "JetBrains Mono"
+                      ],
+                      "label-code": [
+                              "JetBrains Mono"
+                      ],
+                      "display-lg": [
+                              "Geist"
+                      ]
+              },
+              "fontSize": {
+                      "headline-lg": [
+                              "40px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-base": [
+                              "16px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "letterSpacing": "0em",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-sm": [
+                              "14px",
+                              {
+                                      "lineHeight": "1.5",
+                                      "letterSpacing": "0em",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "display-xl": [
+                              "80px",
+                              {
+                                      "lineHeight": "1.0",
+                                      "letterSpacing": "-0.05em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-md": [
+                              "28px",
+                              {
+                                      "lineHeight": "1.3",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-caps": [
+                              "10px",
+                              {
+                                      "lineHeight": "1.0",
+                                      "letterSpacing": "0.1em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "label-code": [
+                              "12px",
+                              {
+                                      "lineHeight": "1.0",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "display-lg": [
+                              "56px",
+                              {
+                                      "lineHeight": "1.1",
+                                      "letterSpacing": "-0.04em",
+                                      "fontWeight": "700"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        body {
+            background-color: #000000;
+            color: #e1e2e7;
+            overflow-x: hidden;
+        }
+
+        /* Glassmorphism utility classes */
+        .glass-panel {
+            background-color: rgba(5, 7, 10, 0.7);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+            border-right: 1px solid rgba(255, 255, 255, 0.02);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+        }
+
+        .glass-panel-content {
+            background-color: rgba(5, 7, 10, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+            border-right: 1px solid rgba(255, 255, 255, 0.02);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+        }
+
+        /* Input styling */
+        .input-underline {
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid var(--tw-colors-outline-variant);
+            border-radius: 0;
+            padding: 8px 0;
+            transition: all 0.3s ease;
+        }
+        
+        .input-underline:focus {
+            outline: none;
+            border-bottom: 2px solid var(--tw-colors-electric-violet);
+            box-shadow: 0 4px 10px rgba(139, 92, 246, 0.2);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: transparent;
+            border-radius: 20px;
+            transition: background-color 0.3s;
+        }
+        :hover::-webkit-scrollbar-thumb {
+            background-color: var(--tw-colors-cyber-cyan);
+        }
+
+        /* Ambient Glow */
+        .hover-glow:hover {
+            box-shadow: 0 0 40px rgba(139, 92, 246, 0.15);
+        }
+
+        .toggle-checkbox:checked {
+            background-color: var(--tw-colors-electric-violet);
+            border-color: var(--tw-colors-electric-violet);
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            transform: translateX(100%);
+        }
+
+        /* Background Shader Simulation */
+        .cosmic-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            background: radial-gradient(circle at 50% 50%, #0a0a1a 0%, #000000 100%);
+            overflow: hidden;
+        }
+
+        .cosmic-bg::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 30% 70%, rgba(139, 92, 246, 0.05) 0%, transparent 40%),
+                        radial-gradient(circle at 70% 30%, rgba(6, 182, 212, 0.05) 0%, transparent 40%);
+            animation: rotate 60s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="font-body-base text-body-base bg-void-black text-on-surface antialiased">
+<div class="cosmic-bg"></div>
+<div class="flex h-screen w-full overflow-hidden">
+<!-- Shared Component: SideNavBar (The Oracle Identity) -->
+<nav class="bg-surface-deep/70 backdrop-blur-3xl h-screen w-64 fixed left-0 top-0 border-r border-glass-stroke shadow-[inset_1px_1px_0px_rgba(255,255,255,0.1)] z-50 flex flex-col py-unit hidden md:flex">
+<!-- Header -->
+<div class="p-6 mb-8 border-b border-white/5">
+<div class="flex items-center gap-4 mb-2">
+<div class="w-10 h-10 rounded-full bg-gradient-to-br from-electric-violet to-cyber-cyan p-0.5 shadow-[0_0_15px_rgba(139,92,246,0.3)]">
+<img alt="Oracle Identity" class="w-full h-full rounded-full object-cover border-2 border-surface-deep" data-alt="A macro shot of a sleek, futuristic metallic emblem featuring a stylized eye or lens, glowing with subtle violet and cyan light against a dark background. The texture is smooth, reflective, and premium, evoking advanced AI technology." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCr_FZJz_F1rXsdHsyUCarcyx2m17b--IO7JU_QmrEXFkAAtjYct0cCWECsJEklGYc_o_g7VXg7zldLEWnIPio_4KRPmdFKkHvEFAU4lMU2qWCrpcY6jeVZMz2cFatBDcV5Wtocwm3fnrCKDtyh3d6UlgivnCdsDB5GW5SAmMQnCYCREWqaujxtG-j3yL-GrzTXL49dC8HzVIRPDBzu1rhkxHCuOYWES-YWGXMPui6jD1KI29g_ZbM8"/>
+</div>
+<div>
+<h1 class="font-headline-lg text-headline-lg font-bold bg-clip-text text-transparent bg-gradient-to-br from-electric-violet to-cyber-cyan text-xl">The Oracle</h1>
+<p class="font-label-caps text-label-caps text-outline">V.2.0.4 AI Core</p>
+</div>
+</div>
+</div>
+<!-- Navigation Links -->
+<div class="flex-1 px-4 space-y-2">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-outline hover:text-on-surface transition-colors hover:bg-surface-bright/20 hover:shadow-[0_0_15px_rgba(6,182,212,0.2)] group" href="#">
+<span class="material-symbols-outlined group-hover:text-cyber-cyan transition-colors" data-icon="psychology">psychology</span>
+<span class="font-label-caps text-label-caps tracking-wider">Core</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-outline hover:text-on-surface transition-colors hover:bg-surface-bright/20 hover:shadow-[0_0_15px_rgba(6,182,212,0.2)] group" href="#">
+<span class="material-symbols-outlined group-hover:text-cyber-cyan transition-colors" data-icon="tempest">qr_code_2</span>
+<span class="font-label-caps text-label-caps tracking-wider">Threads</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-outline hover:text-on-surface transition-colors hover:bg-surface-bright/20 hover:shadow-[0_0_15px_rgba(6,182,212,0.2)] group" href="#">
+<span class="material-symbols-outlined group-hover:text-cyber-cyan transition-colors" data-icon="insert_chart">insert_chart</span>
+<span class="font-label-caps text-label-caps tracking-wider">Analytics</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-outline hover:text-on-surface transition-colors hover:bg-surface-bright/20 hover:shadow-[0_0_15px_rgba(6,182,212,0.2)] group" href="#">
+<span class="material-symbols-outlined group-hover:text-cyber-cyan transition-colors" data-icon="database">database</span>
+<span class="font-label-caps text-label-caps tracking-wider">Resources</span>
+</a>
+<!-- Active Item: System (Settings intent) -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-cyber-cyan border-l-4 border-cyber-cyan bg-surface-container-highest/30 shadow-[0_0_15px_rgba(6,182,212,0.1)] transition-transform duration-300 scale-[0.98]" href="#">
+<span class="material-symbols-outlined" data-icon="settings" style="font-variation-settings: 'FILL' 1;">settings</span>
+<span class="font-label-caps text-label-caps tracking-wider">System</span>
+</a>
+</div>
+<!-- Footer / CTA -->
+<div class="p-6 border-t border-white/5 space-y-4">
+<button class="w-full py-3 rounded-lg font-label-caps text-label-caps tracking-widest text-white bg-gradient-to-r from-electric-violet to-cyber-cyan hover:shadow-[0_0_20px_rgba(139,92,246,0.4)] transition-all duration-300 relative overflow-hidden group">
+<span class="relative z-10">Initiate Pulse</span>
+<div class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out"></div>
+</button>
+<div class="flex justify-between px-2">
+<a class="text-outline hover:text-cyber-cyan transition-colors flex items-center gap-2" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="help">help</span>
+<span class="font-label-caps text-label-caps text-[9px]">Help</span>
+</a>
+<a class="text-outline hover:text-cyber-cyan transition-colors flex items-center gap-2" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="security">security</span>
+<span class="font-label-caps text-label-caps text-[9px]">Privacy</span>
+</a>
+</div>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="flex-1 ml-0 md:ml-64 h-screen overflow-y-auto relative z-10 p-margin-desktop scroll-smooth">
+<div class="max-w-container-max mx-auto">
+<!-- Page Header -->
+<header class="mb-section-gap flex justify-between items-end">
+<div>
+<h2 class="font-display-lg text-display-lg font-bold text-on-surface mb-2 tracking-tight">System Settings</h2>
+<p class="font-body-base text-body-base text-on-surface-variant max-w-2xl">Configure your neural link preferences, security protocols, and visual environment for DocuMind.</p>
+</div>
+<div class="hidden lg:flex items-center gap-4">
+<span class="flex items-center gap-2 text-cyber-cyan font-label-code text-label-code bg-cyber-cyan/10 px-4 py-2 rounded-full border border-cyber-cyan/20">
+<span class="w-2 h-2 rounded-full bg-cyber-cyan animate-pulse"></span>
+                            Secure Connection
+                        </span>
+</div>
+</header>
+<!-- Profile Section (Hero Glass Panel) -->
+<section class="glass-panel rounded-xl p-8 mb-gutter hover-glow transition-shadow duration-500 relative overflow-hidden">
+<!-- Subtle background glow for the profile card -->
+<div class="absolute top-0 right-0 w-64 h-64 bg-electric-violet/10 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/4 pointer-events-none"></div>
+<div class="flex flex-col md:flex-row items-center md:items-start gap-8 relative z-10">
+<!-- Avatar -->
+<div class="relative group cursor-pointer">
+<div class="w-32 h-32 rounded-full p-1 bg-gradient-to-tr from-electric-violet via-surface-container to-cyber-cyan shadow-[0_0_30px_rgba(139,92,246,0.3)]">
+<img alt="User Profile Image" class="w-full h-full rounded-full object-cover border-4 border-surface-deep group-hover:opacity-80 transition-opacity" data-alt="A highly detailed, cinematic portrait of a person bathed in neon cyber-cyan and electric-violet light. The aesthetic is sleek, futuristic, and cyberpunk-inspired, with deep shadows and high contrast, perfect for an advanced AI system user profile." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDtTkIwwpcWg0P7NjqKembrdWqXYFJ9IKaKx4CmX6yhdMZry7-3ToY0d8EnttHc1G-jfR2PxdGd8xLdWV7SM0UVk7TwkbC3jFvGll0RCROHVV4TAjR5Mk43P3vEAuz_dOHOhPgajGa8MSj-HwZes7aQ-1844OXJh0jFwPJ3FfX_oB5qlAjvZDTeWwB52lPZK98p5q-OE-t87Gj3xWJ4L3upt_wFQz2GOFNLNuoCbQFiwPNVBxfT86VY"/>
+</div>
+<div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-white text-3xl drop-shadow-lg" data-icon="photo_camera">photo_camera</span>
+</div>
+<div class="absolute bottom-2 right-2 w-5 h-5 bg-cyber-cyan rounded-full border-2 border-surface-deep shadow-[0_0_10px_rgba(6,182,212,0.8)]"></div>
+</div>
+<!-- User Info -->
+<div class="flex-1 text-center md:text-left">
+<h3 class="font-headline-md text-headline-md font-semibold text-white mb-1">Dr. Aris Thorne</h3>
+<p class="font-label-code text-label-code text-electric-violet mb-4">Level 4 Clearance | Quantum Researcher</p>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-6">
+<div class="space-y-1">
+<label class="font-label-caps text-label-caps text-outline block">Neural ID</label>
+<div class="flex items-center gap-2 bg-surface-container-low/50 px-3 py-2 rounded border border-white/5">
+<span class="font-label-code text-label-code text-on-surface-variant">NX-883-9910-Delta</span>
+<button class="ml-auto text-outline hover:text-cyber-cyan"><span class="material-symbols-outlined text-[16px]" data-icon="content_copy">content_copy</span></button>
+</div>
+</div>
+<div class="space-y-1">
+<label class="font-label-caps text-label-caps text-outline block">Primary Email</label>
+<input class="w-full bg-surface-container-low/50 border border-white/5 rounded px-3 py-2 font-body-sm text-body-sm text-on-surface focus:border-electric-violet/50 focus:ring-1 focus:ring-electric-violet/50 transition-colors" readonly="" type="email" value="aris.thorne@documind.core"/>
+</div>
+</div>
+</div>
+<!-- Actions -->
+<div class="flex flex-row md:flex-col gap-4 w-full md:w-auto">
+<button class="flex-1 md:flex-none px-6 py-2.5 rounded border border-electric-violet/30 bg-electric-violet/10 hover:bg-electric-violet/20 text-electric-violet font-label-code text-label-code transition-all shadow-[inset_0_0_20px_rgba(139,92,246,0.1)]">Edit Profile</button>
+<button class="flex-1 md:flex-none px-6 py-2.5 rounded border border-outline-variant hover:border-error/50 hover:bg-error/10 text-on-surface-variant hover:text-error font-label-code text-label-code transition-all">Sign Out</button>
+</div>
+</div>
+</section>
+<!-- Bento Grid for Settings Categories -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter mb-section-gap">
+<!-- Security Protocols (Takes up more space) -->
+<section class="glass-panel rounded-xl lg:col-span-8 p-6 hover-glow transition-shadow duration-500 flex flex-col">
+<div class="flex items-center gap-3 mb-6 border-b border-white/5 pb-4">
+<div class="w-8 h-8 rounded bg-cyber-cyan/10 flex items-center justify-center border border-cyber-cyan/20">
+<span class="material-symbols-outlined text-cyber-cyan text-[20px]" data-icon="security">security</span>
+</div>
+<h4 class="font-headline-md text-headline-md text-white">Security Protocols</h4>
+</div>
+<div class="flex-1 space-y-6">
+<!-- Biometric -->
+<div class="glass-panel-content rounded-lg p-5 flex items-center justify-between group hover:border-electric-violet/30 transition-colors cursor-pointer">
+<div>
+<h5 class="font-body-base text-body-base font-medium text-white mb-1 flex items-center gap-2">
+                                        Biometric Authentication
+                                        <span class="bg-electric-violet/20 text-electric-violet font-label-caps text-label-caps px-2 py-0.5 rounded text-[8px]">Active</span>
+</h5>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Require retinal or fingerprint scan for high-clearance documents.</p>
+</div>
+<!-- Custom Toggle -->
+<div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+<input checked="" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 border-surface-container appearance-none cursor-pointer z-10 transition-transform duration-300" id="toggle-bio" name="toggle" type="checkbox"/>
+<label class="toggle-label block overflow-hidden h-6 rounded-full bg-surface-container cursor-pointer border border-white/10" for="toggle-bio"></label>
+</div>
+</div>
+<!-- Quantum Encryption -->
+<div class="glass-panel-content rounded-lg p-5 flex items-center justify-between group hover:border-electric-violet/30 transition-colors cursor-pointer">
+<div>
+<h5 class="font-body-base text-body-base font-medium text-white mb-1">Quantum Encryption</h5>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Use entangled key distribution for all cross-node communications.</p>
+</div>
+<div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+<input checked="" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 border-surface-container appearance-none cursor-pointer z-10 transition-transform duration-300" id="toggle-quantum" name="toggle" type="checkbox"/>
+<label class="toggle-label block overflow-hidden h-6 rounded-full bg-surface-container cursor-pointer border border-white/10" for="toggle-quantum"></label>
+</div>
+</div>
+<!-- Key Management -->
+<div class="pt-2">
+<button class="flex items-center gap-2 text-cyber-cyan hover:text-white transition-colors font-label-code text-label-code">
+<span class="material-symbols-outlined text-[18px]" data-icon="key">key</span>
+                                    Manage Encryption Keys
+                                </button>
+</div>
+</div>
+</section>
+<!-- AI Preferences (Taller, narrower) -->
+<section class="glass-panel rounded-xl lg:col-span-4 p-6 hover-glow transition-shadow duration-500 relative overflow-hidden flex flex-col">
+<!-- Visual flair -->
+<div class="absolute bottom-0 right-0 w-32 h-32 bg-cyber-cyan/10 rounded-full blur-[50px] pointer-events-none"></div>
+<div class="flex items-center gap-3 mb-6 border-b border-white/5 pb-4 relative z-10">
+<div class="w-8 h-8 rounded bg-electric-violet/10 flex items-center justify-center border border-electric-violet/20">
+<span class="material-symbols-outlined text-electric-violet text-[20px]" data-icon="psychology">psychology</span>
+</div>
+<h4 class="font-headline-md text-headline-md text-white">AI Processing</h4>
+</div>
+<div class="flex-1 space-y-6 relative z-10">
+<!-- Slider for depth -->
+<div class="space-y-3">
+<div class="flex justify-between items-end">
+<label class="font-label-caps text-label-caps text-outline">Neural Processing Depth</label>
+<span class="font-label-code text-label-code text-cyber-cyan">Deep (Level 3)</span>
+</div>
+<input class="w-full h-1 bg-surface-container rounded-lg appearance-none cursor-pointer accent-electric-violet hover:accent-cyber-cyan transition-colors" max="5" min="1" style="background: linear-gradient(to right, var(--tw-colors-electric-violet) 0%, var(--tw-colors-cyber-cyan) 60%, var(--tw-colors-surface-container) 60%, var(--tw-colors-surface-container) 100%);" type="range" value="3"/>
+<div class="flex justify-between text-[10px] text-outline-variant font-label-caps">
+<span>Fast</span>
+<span>Analytical</span>
+<span>Creative</span>
+</div>
+</div>
+<!-- Context retention -->
+<div class="space-y-2 pt-4">
+<label class="font-label-caps text-label-caps text-outline block mb-2">Context Memory Window</label>
+<select class="w-full bg-surface-container-low/50 border border-white/5 rounded px-3 py-2.5 font-body-sm text-body-sm text-on-surface focus:border-electric-violet/50 focus:ring-0 appearance-none cursor-pointer outline-none transition-colors">
+<option class="bg-surface-deep text-on-surface" value="session">Current Session Only</option>
+<option class="bg-surface-deep text-on-surface" value="24h">Rolling 24 Hours</option>
+<option class="bg-surface-deep text-on-surface" selected="" value="infinite">Persistent Knowledge Graph</option>
+</select>
+</div>
+</div>
+</section>
+<!-- Appearance & Environment -->
+<section class="glass-panel rounded-xl lg:col-span-12 p-6 hover-glow transition-shadow duration-500">
+<div class="flex items-center gap-3 mb-6 border-b border-white/5 pb-4">
+<div class="w-8 h-8 rounded bg-surface-container-high flex items-center justify-center border border-white/10">
+<span class="material-symbols-outlined text-outline text-[20px]" data-icon="palette">palette</span>
+</div>
+<h4 class="font-headline-md text-headline-md text-white">Environment Display</h4>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Theme Selection -->
+<div class="space-y-4">
+<label class="font-label-caps text-label-caps text-outline block">Visual Theme</label>
+<div class="flex gap-4">
+<div class="flex-1 h-20 rounded border-2 border-electric-violet relative cursor-pointer overflow-hidden group">
+<div class="absolute inset-0 bg-void-black flex flex-col p-2">
+<div class="h-2 w-1/3 bg-surface-container-high rounded mb-1"></div>
+<div class="h-10 bg-surface-deep rounded border border-white/10"></div>
+</div>
+<div class="absolute bottom-2 right-2 text-electric-violet">
+<span class="material-symbols-outlined text-[16px] drop-shadow-lg" data-icon="check_circle">check_circle</span>
+</div>
+</div>
+<div class="flex-1 h-20 rounded border border-white/10 opacity-50 relative cursor-not-allowed overflow-hidden grayscale">
+<div class="absolute inset-0 bg-[#f0f0f0] flex flex-col p-2">
+<div class="h-2 w-1/3 bg-[#e0e0e0] rounded mb-1"></div>
+<div class="h-10 bg-white rounded border border-black/10"></div>
+</div>
+<div class="absolute inset-0 flex items-center justify-center bg-black/40">
+<span class="font-label-caps text-label-caps text-white">Disabled</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Density -->
+<div class="space-y-4">
+<label class="font-label-caps text-label-caps text-outline block">Data Density</label>
+<div class="space-y-2">
+<label class="flex items-center gap-3 p-3 rounded border border-white/5 bg-surface-container-low/30 cursor-pointer hover:bg-surface-container-low/80 transition-colors">
+<input class="text-electric-violet focus:ring-electric-violet bg-surface-container border-white/20" name="density" type="radio"/>
+<span class="font-body-sm text-body-sm">Standard (Comfortable)</span>
+</label>
+<label class="flex items-center gap-3 p-3 rounded border border-electric-violet/30 bg-electric-violet/5 cursor-pointer">
+<input checked="" class="text-electric-violet focus:ring-electric-violet bg-surface-container border-white/20" name="density" type="radio"/>
+<span class="font-body-sm text-body-sm text-white">High (Data Heavy)</span>
+</label>
+</div>
+</div>
+<!-- Transparency -->
+<div class="space-y-4">
+<label class="font-label-caps text-label-caps text-outline block">Glassmorphism Intensity</label>
+<div class="glass-panel-content p-4 rounded-lg flex items-center justify-center h-24 border-dashed border-white/20 relative">
+<div class="absolute inset-0 bg-gradient-to-r from-electric-violet/20 to-cyber-cyan/20 blur-xl z-0"></div>
+<span class="font-label-code text-label-code text-white z-10 drop-shadow-md">70% Blur Active</span>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Footer Actions -->
+<div class="flex justify-end gap-4 pb-section-gap">
+<button class="px-6 py-3 rounded font-label-code text-label-code text-outline hover:text-white transition-colors">Discard Changes</button>
+<button class="px-8 py-3 rounded font-label-code text-label-code text-void-black bg-cyber-cyan hover:bg-secondary transition-colors shadow-[0_0_20px_rgba(6,182,212,0.3)] hover:shadow-[0_0_30px_rgba(6,182,212,0.6)]">Apply Configuration</button>
+</div>
+</div>
+</main>
+</div>
+<!-- Script for subtle interactive effects -->
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const rangeInput = document.querySelector('input[type="range"]');
+            if(rangeInput) {
+                rangeInput.addEventListener('input', function() {
+                    const val = (this.value - this.min) / (this.max - this.min) * 100;
+                    this.style.background = `linear-gradient(to right, var(--tw-colors-electric-violet) 0%, var(--tw-colors-cyber-cyan) ${val}%, var(--tw-colors-surface-container) ${val}%, var(--tw-colors-surface-container) 100%)`;
+                });
+            }
+        });
+    </script>
+</body></html>

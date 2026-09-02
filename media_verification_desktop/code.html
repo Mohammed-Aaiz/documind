@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>DocuMind - Media Verification</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;600;700&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-fixed-dim": "#d0bcff",
+                        "outline": "#958ea0",
+                        "surface-container": "#1d2023",
+                        "outline-variant": "#494454",
+                        "electric-violet": "#8B5CF6",
+                        "on-primary-fixed": "#23005c",
+                        "surface-container-highest": "#323539",
+                        "cyber-cyan": "#06B6D4",
+                        "on-surface": "#e1e2e7",
+                        "surface-bright": "#37393d",
+                        "on-surface-variant": "#cbc3d7",
+                        "primary-fixed-dim": "#d0bcff",
+                        "void-black": "#000000",
+                        "on-primary-fixed-variant": "#5516be",
+                        "secondary": "#4cd7f6",
+                        "tertiary": "#d0bcff",
+                        "surface-container-lowest": "#0c0e12",
+                        "on-tertiary-fixed": "#210f48",
+                        "on-secondary": "#003640",
+                        "surface-container-low": "#191c1f",
+                        "inverse-primary": "#6d3bd7",
+                        "primary": "#d0bcff",
+                        "inverse-surface": "#e1e2e7",
+                        "tertiary-container": "#9987c6",
+                        "on-primary": "#3c0091",
+                        "surface-deep": "#05070A",
+                        "on-tertiary": "#37265e",
+                        "secondary-fixed-dim": "#4cd7f6",
+                        "background": "#111417",
+                        "on-background": "#e1e2e7",
+                        "error": "#ffb4ab",
+                        "on-tertiary-container": "#301f57",
+                        "surface-container-high": "#282a2e",
+                        "on-tertiary-fixed-variant": "#4d3d76",
+                        "secondary-container": "#03b5d3",
+                        "on-error": "#690005",
+                        "surface-variant": "#323539",
+                        "error-container": "#93000a",
+                        "secondary-fixed": "#acedff",
+                        "on-error-container": "#ffdad6",
+                        "primary-container": "#a078ff",
+                        "on-secondary-fixed": "#001f26",
+                        "surface": "#111417",
+                        "glass-stroke": "rgba(255, 255, 255, 0.1)",
+                        "surface-dim": "#111417",
+                        "surface-tint": "#d0bcff",
+                        "on-secondary-container": "#00424e",
+                        "tertiary-fixed": "#e9ddff",
+                        "primary-fixed": "#e9ddff",
+                        "on-primary-container": "#340080",
+                        "on-secondary-fixed-variant": "#004e5c",
+                        "inverse-on-surface": "#2e3134"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-max": "1600px",
+                        "section-gap": "80px",
+                        "margin-desktop": "64px",
+                        "gutter": "32px",
+                        "unit": "8px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Geist"],
+                        "body-base": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "display-xl": ["Geist"],
+                        "headline-md": ["Geist"],
+                        "label-caps": ["JetBrains Mono"],
+                        "label-code": ["JetBrains Mono"],
+                        "display-lg": ["Geist"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["40px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "body-base": ["16px", { "lineHeight": "1.6", "letterSpacing": "0em", "fontWeight": "400" }],
+                        "body-sm": ["14px", { "lineHeight": "1.5", "letterSpacing": "0em", "fontWeight": "400" }],
+                        "display-xl": ["80px", { "lineHeight": "1.0", "letterSpacing": "-0.05em", "fontWeight": "700" }],
+                        "headline-md": ["28px", { "lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "label-caps": ["10px", { "lineHeight": "1.0", "letterSpacing": "0.1em", "fontWeight": "700" }],
+                        "label-code": ["12px", { "lineHeight": "1.0", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "display-lg": ["56px", { "lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .glass-panel {
+            background-color: rgba(5, 7, 10, 0.7);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .glow-active {
+            box-shadow: 0 0 40px rgba(139, 92, 246, 0.15);
+        }
+        .scan-line {
+            background: linear-gradient(to bottom, transparent, rgba(6, 182, 212, 0.4), transparent);
+            animation: scan 3s infinite linear;
+        }
+        @keyframes scan {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100vh); }
+        }
+        .shimmer-text {
+            background: linear-gradient(90deg, #8B5CF6, #06B6D4, #8B5CF6);
+            background-size: 200% auto;
+            color: transparent;
+            -webkit-background-clip: text;
+            animation: shimmer 3s linear infinite;
+        }
+        @keyframes shimmer {
+            to { background-position: 200% center; }
+        }
+    </style>
+</head>
+<body class="bg-void-black text-on-surface font-body-base min-h-screen overflow-hidden selection:bg-electric-violet/30 selection:text-white relative">
+<!-- Background Shader Placeholder (Assuming static for this prompt since no DATA tag provided, using CSS gradient fallback) -->
+<div class="absolute inset-0 z-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-surface-deep via-void-black to-void-black opacity-80"></div>
+<div class="absolute inset-0 z-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjEiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wNSkiLz48L3N2Zz4=')] opacity-20 mix-blend-overlay"></div>
+<!-- Top Navigation (Generated from JSON guidance) -->
+<nav class="fixed top-4 right-8 left-72 h-16 rounded-xl border border-glass-stroke bg-surface-container-low/60 backdrop-blur-xl shadow-[inset_1px_1px_0px_rgba(255,255,255,0.05)] shadow-[0_0_30px_rgba(0,0,0,0.5)] z-50 flex items-center justify-between px-gutter w-auto mx-auto focus-within:ring-2 ring-electric-violet/50">
+<div class="flex items-center gap-6">
+<span class="font-headline-md text-headline-md text-on-surface font-bold">DocuMind Core</span>
+<div class="hidden md:flex space-x-4">
+<a class="font-label-code text-label-code text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high/40 transition-all px-3 py-2 rounded-md" href="#">Dashboard</a>
+<a class="font-label-code text-label-code text-primary font-bold border-b-2 border-primary pb-1 px-3 py-2" href="#">Verification</a>
+<a class="font-label-code text-label-code text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high/40 transition-all px-3 py-2 rounded-md" href="#">Nodes</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="font-label-code text-label-code text-on-surface-variant hover:text-on-surface"><span class="material-symbols-outlined">search</span></button>
+<button class="bg-gradient-to-r from-electric-violet to-cyber-cyan text-white font-label-code text-label-code px-4 py-2 rounded hover:shadow-[0_0_15px_rgba(139,92,246,0.4)] transition-all">Execute</button>
+<div class="flex gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined hover:text-white cursor-pointer">notifications_active</span>
+<span class="material-symbols-outlined hover:text-white cursor-pointer">account_tree</span>
+</div>
+<img class="w-8 h-8 rounded-full border border-glass-stroke" data-alt="A small, stylized neon avatar profile picture featuring geometric shapes and a glowing deep purple and cyan color palette, set against a dark background in a futuristic tech style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAXwLaaBZh1Xvw-wXB7n8SHUpevjQIBwUMDbqa06pQuKhOgg5MhU37dO41wIKVdr9Fs3iZfAUg8lwOhnXRkXxswRP5euQWQKqc4BiiW-0JnSCmsrTYYClMw9boYeb73Wgu3tS4yHUbTVtz7sXYLhHFKd9ocjO4dFTDnJdvO35thNMSTkoKElInM1NtcSXMsDDJC2-dV5nBYIn4ZVETOl5-xYMsZQyQFAf0H2uwQIC4D9JbPkqxY2c4A"/>
+</div>
+</nav>
+<!-- Side Navigation (Generated from JSON guidance) -->
+<aside class="h-screen w-64 fixed left-0 top-0 border-r border-glass-stroke bg-surface-deep/70 backdrop-blur-3xl shadow-[inset_1px_1px_0px_rgba(255,255,255,0.1)] shadow-[0_0_40px_rgba(139,92,246,0.15)] z-40 flex flex-col h-full py-unit">
+<div class="p-6 flex flex-col items-center border-b border-glass-stroke/50 mb-4">
+<img class="w-16 h-16 rounded-full mb-3 shadow-[0_0_20px_rgba(6,182,212,0.3)]" data-alt="A high-tech, glowing orb icon representing an AI core, primarily in electric violet and cyber cyan colors, with subtle internal circuitry details against a pure black background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC5kktdRdkiBdURvs18IZKtqmutlAMymm9vf_Cj4Ebo-8fnGvXZw27zKhuWl2RRbRtccfQBesupZwdiYij-pCVFKvCcpJJvmZ0RvQaMWbfENHzVHHu8Vpk-8tbvtwcZZsOa2RUDCatcYbgQqdCrPwlyE45SmUdx92vwB93d4b1OXvaLUpaWG2Tkvee54DIdgFooy4n9igPAqLQdF--0qYFC3XpcddjTLZnRqniI2Ntqt6Q0CJpCrHLa"/>
+<h2 class="font-headline-md text-headline-md font-bold bg-clip-text text-transparent bg-gradient-to-br from-electric-violet to-cyber-cyan text-center leading-tight">DocuMind</h2>
+<span class="font-label-caps text-label-caps text-outline mt-1">V.4.2 Forensic Core</span>
+</div>
+<nav class="flex-1 px-4 space-y-2">
+<a class="flex items-center gap-3 p-3 rounded-lg text-outline hover:text-on-surface hover:bg-surface-bright/20 hover:shadow-[0_0_15px_rgba(6,182,212,0.2)] transition-colors active:scale-95 duration-300" href="#">
+<span class="material-symbols-outlined">psychology</span>
+<span class="font-label-caps text-label-caps">Analysis</span>
+</a>
+<a class="flex items-center gap-3 p-3 rounded-lg text-cyber-cyan border-l-4 border-cyber-cyan bg-surface-container-highest/30 active:scale-95 transition-transform duration-300" href="#">
+<span class="material-symbols-outlined">qr_code_2</span>
+<span class="font-label-caps text-label-caps">Media Auth</span>
+</a>
+<a class="flex items-center gap-3 p-3 rounded-lg text-outline hover:text-on-surface hover:bg-surface-bright/20 hover:shadow-[0_0_15px_rgba(6,182,212,0.2)] transition-colors active:scale-95 duration-300" href="#">
+<span class="material-symbols-outlined">insert_chart</span>
+<span class="font-label-caps text-label-caps">Metrics</span>
+</a>
+</nav>
+<div class="mt-auto p-4 border-t border-glass-stroke/50 space-y-2">
+<button class="w-full bg-electric-violet/10 text-electric-violet border border-electric-violet/30 hover:bg-electric-violet/20 font-label-caps text-label-caps py-2 rounded transition-all">Initiate Pulse</button>
+<div class="flex justify-around pt-2 text-outline">
+<span class="material-symbols-outlined cursor-pointer hover:text-white">help</span>
+<span class="material-symbols-outlined cursor-pointer hover:text-white">security</span>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-64 pt-28 px-8 pb-8 h-screen overflow-y-auto relative z-10 flex flex-col gap-6">
+<!-- Header -->
+<header class="flex justify-between items-end mb-2">
+<div>
+<h1 class="font-display-lg text-display-lg font-bold text-on-surface mb-2">Media Verification</h1>
+<p class="font-body-base text-body-base text-on-surface-variant flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-cyber-cyan animate-pulse"></span>
+                    Live Forensic Analysis Session #8892
+                </p>
+</div>
+<div class="flex gap-4">
+<button class="px-6 py-2 rounded-lg glass-panel font-label-code text-label-code text-on-surface hover:bg-surface-bright/30 transition-all border border-outline-variant">Export Report</button>
+<button class="px-6 py-2 rounded-lg bg-electric-violet text-white font-label-code text-label-code hover:shadow-[0_0_20px_rgba(139,92,246,0.4)] transition-all">Halt Analysis</button>
+</div>
+</header>
+<!-- Primary Grid Layout -->
+<div class="grid grid-cols-12 gap-6 flex-1 min-h-[600px]">
+<!-- Left Column: Parameters -->
+<div class="col-span-3 flex flex-col gap-4">
+<div class="glass-panel rounded-xl p-5 flex-1 flex flex-col">
+<h3 class="font-headline-md text-headline-md text-tertiary-fixed-dim mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined">tune</span> Parameters
+                    </h3>
+<div class="space-y-6 flex-1">
+<!-- Toggle Group 1 -->
+<div class="space-y-3">
+<div class="flex justify-between items-center">
+<label class="font-label-code text-label-code text-on-surface">Deepfake Heuristics</label>
+<div class="w-10 h-5 bg-surface-container-high rounded-full relative cursor-pointer shadow-[inset_0_2px_4px_rgba(0,0,0,0.6)]">
+<div class="absolute right-1 top-0.5 w-4 h-4 bg-cyber-cyan rounded-full shadow-[0_0_10px_rgba(6,182,212,0.8)]"></div>
+</div>
+</div>
+<div class="h-1 w-full bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-gradient-to-r from-surface-container to-cyber-cyan w-3/4"></div>
+</div>
+</div>
+<!-- Toggle Group 2 -->
+<div class="space-y-3">
+<div class="flex justify-between items-center">
+<label class="font-label-code text-label-code text-on-surface">AI Generative Artifacts</label>
+<div class="w-10 h-5 bg-surface-container-high rounded-full relative cursor-pointer shadow-[inset_0_2px_4px_rgba(0,0,0,0.6)]">
+<div class="absolute right-1 top-0.5 w-4 h-4 bg-electric-violet rounded-full shadow-[0_0_10px_rgba(139,92,246,0.8)]"></div>
+</div>
+</div>
+<div class="h-1 w-full bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-gradient-to-r from-surface-container to-electric-violet w-[90%]"></div>
+</div>
+</div>
+<!-- Toggle Group 3 -->
+<div class="space-y-3">
+<div class="flex justify-between items-center">
+<label class="font-label-code text-label-code text-on-surface-variant">Pixel Manipulation</label>
+<div class="w-10 h-5 bg-surface-container-lowest rounded-full relative cursor-pointer border border-outline-variant">
+<div class="absolute left-1 top-0.5 w-4 h-4 bg-outline rounded-full"></div>
+</div>
+</div>
+<div class="h-1 w-full bg-surface-container rounded-full overflow-hidden"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Center Column: Media Preview -->
+<div class="col-span-6 flex flex-col">
+<div class="glass-panel rounded-xl p-1 flex-1 relative overflow-hidden group glow-active border-cyber-cyan/30">
+<div class="absolute inset-0 bg-surface-container-lowest/80 z-10 pointer-events-none"></div>
+<!-- Main Media Image -->
+<div class="absolute inset-1 rounded-lg overflow-hidden z-0">
+<img class="w-full h-full object-cover opacity-60 mix-blend-luminosity filter contrast-125" data-alt="A highly detailed close-up portrait of a generic person's face, evenly lit with a slight digital grain, suitable for a deepfake analysis demonstration in a dark, high-contrast technological setting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAoTmVVMUoOpM-049jlmvLluUcTRmOrIDBft-LU2uttaHghI_6ooB9fP4o79U1GuS9gS_d3ljef8bKlnUwFShd1nsniALZFnb2FWYnWhkhzkYYCkz112Ho_VQqEn5THcs5VpO6q1fF4CL3HbZ-9FN7FhIhAWc6cbi9B552PcPHIdpKYOO5kEEOBd8L6H-0WMF7BD1hGlRZhT8TNbu30_tQ_UR9Hcz2sjzNc2-41aAJX_EgOqelyc2Ku"/>
+</div>
+<!-- Overlay UI elements -->
+<div class="absolute inset-0 z-20 p-6 flex flex-col justify-between pointer-events-none">
+<div class="flex justify-between items-start">
+<div class="bg-black/50 backdrop-blur-md px-3 py-1 rounded border border-cyber-cyan/50 font-label-code text-label-code text-cyber-cyan flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">visibility</span>
+                                FACIAL NODES: ACQUIRED
+                            </div>
+<div class="font-label-caps text-label-caps text-outline bg-black/40 px-2 py-1 rounded">FRAME: 02441.9</div>
+</div>
+<!-- Simulated Facial Tracking Overlay -->
+<div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 border border-cyber-cyan/30 rounded-full relative">
+<div class="absolute top-1/4 left-1/4 w-2 h-2 bg-electric-violet rounded-full shadow-[0_0_10px_#8B5CF6]"></div>
+<div class="absolute top-1/4 right-1/4 w-2 h-2 bg-electric-violet rounded-full shadow-[0_0_10px_#8B5CF6]"></div>
+<div class="absolute bottom-1/4 left-1/2 w-3 h-3 bg-error rounded-full shadow-[0_0_15px_#ffb4ab] transform -translate-x-1/2"></div>
+<!-- Connecting lines -->
+<svg class="absolute inset-0 w-full h-full opacity-50" viewbox="0 0 100 100">
+<line stroke="#06B6D4" stroke-dasharray="2,2" stroke-width="0.5" x1="25" x2="75" y1="25" y2="25"></line>
+<line stroke="#06B6D4" stroke-dasharray="2,2" stroke-width="0.5" x1="25" x2="50" y1="25" y2="75"></line>
+<line stroke="#06B6D4" stroke-dasharray="2,2" stroke-width="0.5" x1="75" x2="50" y1="25" y2="75"></line>
+</svg>
+</div>
+<!-- Scanline animation -->
+<div class="absolute inset-0 w-full h-1 scan-line"></div>
+<div class="self-end mt-auto text-right">
+<div class="shimmer-text font-display-xl text-display-xl font-bold tracking-tighter">87.4%</div>
+<div class="font-label-caps text-label-caps text-on-surface-variant">ANOMALY DETECTED</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Gauges & Metrics -->
+<div class="col-span-3 flex flex-col gap-4">
+<div class="glass-panel rounded-xl p-5 flex-1 flex flex-col justify-between">
+<h3 class="font-headline-md text-headline-md text-tertiary-fixed-dim mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined">donut_large</span> Confidence
+                    </h3>
+<!-- Gauge Chart Placeholder (CSS implementation) -->
+<div class="relative w-40 h-40 mx-auto flex items-center justify-center">
+<svg class="w-full h-full transform -rotate-90" viewbox="0 0 100 100">
+<!-- Background Circle -->
+<circle cx="50" cy="50" fill="none" r="45" stroke="rgba(255,255,255,0.05)" stroke-width="8"></circle>
+<!-- Progress Circle -->
+<circle cx="50" cy="50" fill="none" r="45" stroke="url(#gradient)" stroke-dasharray="282.7" stroke-dashoffset="35.3" stroke-linecap="round" stroke-width="8"></circle>
+<defs>
+<lineargradient id="gradient" x1="0%" x2="100%" y1="0%" y2="100%">
+<stop offset="0%" stop-color="#8B5CF6"></stop>
+<stop offset="100%" stop-color="#06B6D4"></stop>
+</lineargradient>
+</defs>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="font-headline-lg text-headline-lg text-white font-bold">87%</span>
+<span class="font-label-caps text-label-caps text-error">SYNTHETIC</span>
+</div>
+</div>
+<div class="space-y-4 mt-6">
+<div>
+<div class="flex justify-between font-label-code text-label-code mb-1">
+<span class="text-on-surface-variant">Lip Sync Drift</span>
+<span class="text-cyber-cyan">High</span>
+</div>
+<div class="h-1.5 w-full bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-cyber-cyan w-[85%]"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between font-label-code text-label-code mb-1">
+<span class="text-on-surface-variant">Blink Rate</span>
+<span class="text-electric-violet">Abnormal</span>
+</div>
+<div class="h-1.5 w-full bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-electric-violet w-[92%]"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Log -->
+<div class="glass-panel rounded-xl p-4 mt-2 h-48 flex flex-col">
+<div class="flex justify-between items-center mb-3 border-b border-glass-stroke pb-2">
+<h4 class="font-label-code text-label-code text-outline flex items-center gap-2">
+<span class="material-symbols-outlined text-[14px]">terminal</span> TERMINAL LOG
+                </h4>
+<div class="flex gap-2">
+<span class="w-3 h-3 rounded-full bg-error-container border border-error"></span>
+<span class="w-3 h-3 rounded-full bg-surface-container-high border border-outline"></span>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto font-label-code text-label-code text-on-surface-variant space-y-1.5 opacity-80 pl-2 border-l-2 border-surface-container">
+<p><span class="text-cyber-cyan">[14:32:01]</span> Initiating deep learning sequence across visual spectrum.</p>
+<p><span class="text-cyber-cyan">[14:32:03]</span> Extracted 24,051 facial landmarks from temporal buffer.</p>
+<p><span class="text-electric-violet">[14:32:04]</span> WARNING: Micro-expression variance below organic threshold (std_dev &lt; 0.02).</p>
+<p><span class="text-error">[14:32:05]</span> CRITICAL: Inconsistent spectral reflection detected on right iris.</p>
+<p><span class="text-cyber-cyan">[14:32:06]</span> Cross-referencing known GAN artifact databases... Match found.</p>
+<p><span class="text-cyber-cyan">[14:32:06]</span> Analysis complete. Awaiting operator input.</p>
+</div>
+</div>
+</main>
+</body></html>

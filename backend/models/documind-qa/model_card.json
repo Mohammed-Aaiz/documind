@@ -1,0 +1,36 @@
+{
+  "model_name": "DocuMind-DistilBERT-Final",
+  "base_model": "distilbert-base-uncased",
+  "training_phases": [
+    {
+      "phase": 1,
+      "dataset": "SQuAD 2.0",
+      "samples": 87599,
+      "platform": "Google Colab T4"
+    },
+    {
+      "phase": 2,
+      "dataset": "SQuAD+HotpotQA+CoQA+NewsQA+TriviaQA",
+      "samples": 414057,
+      "stages": 5,
+      "platform": "Kaggle T4"
+    },
+    {
+      "phase": 3,
+      "dataset": "Custom Academic QA \u2014 50 pairs",
+      "samples": 50,
+      "epochs": 15,
+      "topics": [
+        "RAG and Document QA",
+        "Transformers and LLMs",
+        "Fake Detection and CNN",
+        "Speech Processing",
+        "System Architecture"
+      ],
+      "platform": "Google Colab T4"
+    }
+  ],
+  "total_training_samples": 414107,
+  "final_train_loss": 1.6592,
+  "final_eval_loss": 3.8913
+}
