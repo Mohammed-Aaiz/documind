@@ -164,17 +164,41 @@ def rag_answer(
     # Clamp confidence to [0, 1] — raw scores can be slightly negative
     score = max(0.0, min(1.0, qa_result["score"]))
 
-    # If the QA model returns an empty answer or very low confidence,
-    # flag insufficient context
-    insufficient = not answer.strip() or score < 0.01
+    # ------------------------------------------------------------------
+    # Answerability gate: distinguish genuinely supported answers from
+    # guesses based on superficially related context.
+    #
+    # Two real signals, no fabrication:
+    #
+    #   1. QA confidence: the model's own probability that its extracted
+    #      span is correct. Supported answers score 0.39–0.89. Unsupported
+    #      guesses score <0.11.
+    #
+    #   2. Retrieval score: how semantically similar the top chunk is to
+    #      the question. Truly relevant context scores ≥0.50. Superficial
+    #      matches (e.g. a year near a year-related question) score <0.20.
+    #
+    # An answer is flagged insufficient when BOTH signals are weak:
+    # low QA confidence AND low retrieval — meaning the model extracted
+    # a span from context that is only superficially related to the
+    # question.
+    #
+    # This preserves low-confidence answers that ARE grounded (e.g.
+    # definition questions where retrieval is high but the model extracts
+    # a partial span).
+    # ------------------------------------------------------------------
 
     # Factual grounding: check if the extracted answer span appears
-    # in the retrieved context. This is a real signal — not fabricated.
+    # in the retrieved context.
     factual_grounded = False
-    if answer.strip() and not insufficient:
+    if answer.strip():
         answer_lower = answer.strip().lower()
         context_lower = context.lower()
         factual_grounded = answer_lower in context_lower
+
+    insufficient = not answer.strip() or (
+        score < 0.30 and best_score < 0.50
+    )
 
     return RagResult(
         answer=answer,
