@@ -18,10 +18,13 @@ const PAGE_LABELS: Record<Page, string> = {
 export const TopNavBar: React.FC<TopNavBarProps> = ({ currentPage, onNavigate }) => {
   const { user } = useAuth();
   const initial = user.name ? user.name[0].toUpperCase() : 'U';
+  const isWorkspace = currentPage === 'workspace';
 
   return (
     <nav
-      className="fixed top-4 right-4 md:right-8 left-4 md:left-72 h-16 rounded-xl z-40 flex items-center justify-between px-4 md:px-8"
+      className={`fixed top-4 right-4 md:right-8 left-4 h-16 rounded-xl z-40 flex items-center justify-between px-4 md:px-8 ${
+        isWorkspace ? '' : 'md:left-72'
+      }`}
       style={{
         background: 'rgba(25,28,31,0.60)',
         backdropFilter: 'blur(20px)',

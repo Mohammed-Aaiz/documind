@@ -1,0 +1,163 @@
+============================================================
+PHASE 4F.5-F0 — GPU ENVIRONMENT RECOVERY REPORT
+============================================================
+
+STATUS: GPU_ENVIRONMENT_READY
+
+============================================================
+STEP 1 — CURRENT ENVIRONMENT
+============================================================
+
+System Python:
+  Version:    3.13.12
+  PyTorch:    2.11.0+cpu (CPU-ONLY)
+  CUDA:       NOT AVAILABLE
+  GPU:        N/A
+  Note:       System Python CANNOT be used for GPU training
+
+GPU Virtual Environment:
+  Path:       backend/phase4f_gpu/
+  Python:     3.11.0
+  PyTorch:    2.6.0+cu124
+  CUDA:       12.4 (available)
+  GPU:        NVIDIA GeForce RTX 3050 Laptop GPU (4.29 GB)
+  Transformers: 5.16.1
+  Tokenizers:   0.23.2
+
+============================================================
+STEP 2 — KNOWN GPU ENVIRONMENT
+============================================================
+
+backend/phase4f_gpu/                    EXISTS ✓
+
+Contents:
+  - Python 3.11.0 venv
+  - PyTorch 2.6.0+cu124               PRESENT ✓
+  - CUDA 12.4                          PRESENT ✓
+  - Transformers 5.16.1                PRESENT ✓
+  - accelerate 1.15.0                  PRESENT ✓
+  - safetensors 0.8.0                  PRESENT ✓
+  - numpy 2.4.6                        PRESENT ✓
+
+Created from: backend/venv/ (Python 3.11.0)
+Do NOT reinstall — environment is intact.
+
+============================================================
+STEP 3 — CUDA SMOKE TEST
+============================================================
+
+PASS ✓
+
+  PyTorch:       2.6.0+cu124
+  CUDA version:  12.4
+  cuda.is_available(): True
+  GPU name:      NVIDIA GeForce RTX 3050 Laptop GPU
+  VRAM:          4.29 GB
+  Tensor op:     3x3 matrix multiply on cuda:0 — SUCCESS
+
+============================================================
+STEP 4 — MODEL LOADING TEST
+============================================================
+
+PASS ✓
+
+  Model:         distilbert-base-uncased (QA)
+  GPU memory before: 0.0 MB
+  GPU memory after:  266.6 MB
+  GPU memory used:   266.6 MB
+  Inference:     SUCCESS (246.4ms latency)
+  Prediction:    "what is the capital? the capital of france is paris."
+
+  Note: qa_outputs weights randomly initialized (expected for
+  base-to-QA conversion). This is normal.
+
+============================================================
+STEP 5 — MEMORY TEST
+============================================================
+
+PASS ✓
+
+  Total VRAM: 4295 MB
+  Model footprint: 267 MB
+
+  Batch Size Tests (training step with AdamW):
+  +--------+----------+----------+------------+--------+
+  | Batch  | Peak MB  | Alloc MB | Headroom   | Status |
+  +--------+----------+----------+------------+--------+
+  | 1      | 1354     | 818      | 2940 MB    | OK     |
+  | 2      | 1351     | 817      | 2943 MB    | OK     |
+  | 4      | 1351     | 817      | 2943 MB    | OK     |
+  | 8      | 1351     | 818      | 2943 MB    | OK     |
+  +--------+----------+----------+------------+--------+
+
+  Target config analysis:
+    Physical batch:     8
+    Grad accumulation:  8
+    Effective batch:    64
+    Peak VRAM:          1351 MB
+    Headroom:           2943 MB
+    Status:             SAFE ✓
+
+  Recommended config (matches Phase 4F.5-B A1):
+    batch=8, grad_acc=8, fp16=True, lr=3e-5, epochs=3
+
+============================================================
+STEP 6 — ENVIRONMENT STATUS
+============================================================
+
+GPU_ENVIRONMENT_READY
+
+No reinstallation needed. The backend/phase4f_gpu/ virtual
+environment contains all required dependencies with correct
+versions matching the previous Phase 4F.5-B environment.
+
+To use:
+  backend/phase4f_gpu/Scripts/python.exe <script>
+  -- OR --
+  backend/phase4f_gpu/Scripts/activate
+  python <script>
+
+============================================================
+INTEGRITY VALIDATION
+============================================================
+
+[✓] Production model unchanged  (df592aa8...)
+[✓] Frozen dataset unchanged    (a5175303...)
+[✓] Derived dataset unchanged   (abcf4182...)
+[✓] Benchmark unchanged         (1166bf4f...)
+[✓] Phase 4F.5-B A1 checkpoint  EXISTS
+[✓] No training performed
+[✓] No checkpoints created
+[✓] No production code changed
+[✓] No stage/commit/push
+
+============================================================
+FINAL STATUS
+============================================================
+
+PHASE 4F.5-F0 STATUS:
+
+PYTHON:           3.11.0 (gpu venv)
+PYTORCH:          2.6.0+cu124
+CUDA:             12.4 (available)
+GPU:              NVIDIA GeForce RTX 3050 Laptop GPU
+VRAM:             4.29 GB
+TRANSFORMERS:     5.16.1
+
+KNOWN GPU ENVIRONMENT:  FOUND
+CUDA SMOKE TEST:        PASS
+MODEL LOAD:             PASS
+MEMORY TEST:            PASS
+
+TRAINING:          NOT PERFORMED
+PRODUCTION:        UNCHANGED
+DATASET:           UNCHANGED
+BENCHMARK:         UNCHANGED
+
+STATUS:            GPU_ENVIRONMENT_READY
+
+NEXT STEP:         Re-run Phase 4F.5-F using:
+                   backend/phase4f_gpu/Scripts/python.exe
+                   backend/phase4f/phase4f_5f/run_experiment.py
+
+============================================================

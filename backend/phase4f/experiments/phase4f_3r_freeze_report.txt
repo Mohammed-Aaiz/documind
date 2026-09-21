@@ -1,0 +1,244 @@
+======================================================================
+PHASE 4F.3-R — FREEZE REPORT
+======================================================================
+
+Date: 2026-09-21 (freeze completion)
+Dataset: phase4f-qa-v3.1
+Full SHA-256: a517530354fc9bcaeef6f1aa16c3fb9ce92f1967668386bc66781e6e6bbf2e97
+Short hash: a517530354fc9bca
+Examples: 918
+File size: 479,512 bytes
+
+======================================================================
+1. FINAL DATASET IDENTITY
+======================================================================
+  Version:          phase4f-qa-v3.1
+  Parent version:   phase4f-qa-v3
+  Parent hash:      ff293619e1a7b051
+  Total examples:   918
+  Document count:   19
+  Changed examples: 12 (answer-span mismatch repair)
+  File size:        479,512 bytes
+
+======================================================================
+2. FULL SHA-256 VERIFICATION
+======================================================================
+  Dataset file:
+    backend/phase4f/dataset/training_data_v3_1.jsonl
+    SHA-256: a517530354fc9bcaeef6f1aa16c3fb9ce92f1967668386bc66781e6e6bbf2e97
+
+  Package copy:
+    backend/phase4f/experiments/final_gpu_package/dataset/training_data_v3_1.jsonl
+    SHA-256: a517530354fc9bcaeef6f1aa16c3fb9ce92f1967668386bc66781e6e6bbf2e97
+
+  Both copies MATCH: VERIFIED
+
+======================================================================
+3. STRUCTURAL VALIDATION
+======================================================================
+  Source: Verified from Phase 4F.2-R artifacts
+  Total:  918
+  Valid:  918
+  Invalid: 0
+  Status: PASS
+
+  Checks performed (inherited):
+  - Valid JSON:                    PASS (918/918)
+  - Required fields present:       PASS
+  - Answer span validity:          PASS
+  - context[start:end] matching:   PASS
+  - Malformed metadata:            0
+  - Question mark present:         PASS
+  - Context length minimum:        PASS
+  - Unanswerable has no answer:    PASS
+  - Unicode validity:              PASS
+
+======================================================================
+4. SEMANTIC AUDIT
+======================================================================
+  Source:      Verified from Phase 4F.2-R artifacts
+               (not independently re-audited during freeze completion)
+  Sample size: 150
+  Pass rate:   100.0%
+  Failures:    0
+  Status:      PASS
+
+======================================================================
+5. HIGH-RISK CATEGORY AUDIT
+======================================================================
+  Source: Verified from Phase 4F.2-R artifacts
+
+  TABLE_CELL:      362 examples, 100.0% pass rate, 0 issues
+  TABLE_ROW:        82 examples, 100.0% pass rate, 0 issues
+  LIST_ITEM:       106 examples, 100.0% pass rate, 0 issues
+  MULTI_CHUNK:      26 examples, 100.0% pass rate, 0 issues
+  LONG_CONTEXT:     15 examples, 100.0% pass rate, 0 issues
+  UNANSWERABLE:     42 examples, 100.0% pass rate, 0 issues
+  SECTION_SPECIFIC: 55 examples, 100.0% pass rate, 0 issues
+
+  Repaired examples (12):
+    tc_20399d46, tc_00f97d46, tc_c2c51b89, tc_4e522e45, tc_3b383990,
+    tr_fc34fb8b, li_89834a97, li_7216dc7b, li_ce7dfc4b, li_8bc7889f,
+    li_4fa4a839, li_8770780b
+
+======================================================================
+6. DUPLICATE / LEAKAGE RESULTS
+======================================================================
+  Source: Verified from Phase 4F.2-R artifacts
+
+  Exact Q+C duplicates:     0
+  Exact Q+A duplicates:     0
+  Near-duplicate pairs:    122 (threshold 0.85)
+  Cross-split leakage:      0
+  External isolation:      PASS
+  Question overlap:         0
+  Context overlap:          0
+  Eval phrases checked:  1143
+
+======================================================================
+7. EXTERNAL EVALUATION ISOLATION
+======================================================================
+  Status: PASS
+  Question overlap with external Phase 4B: 0
+  Context overlap with external Phase 4B: 0
+  Eval phrases checked: 1143
+
+======================================================================
+8. PRODUCTION MODEL SAFETY
+======================================================================
+  Model directory:          backend/models/documind-qa/
+  Exists:                   YES
+  Full SHA-256:             df592aa8d0ee1a235489bd3eead44d4cf0861221339226311960697c1c1512ac
+  Short hash:               df592aa8d0ee1a23
+  Files:                    config.json, inference_config.json, model.safetensors,
+                            model_card.json, tokenizer.json, tokenizer_config.json
+  Status:                   UNCHANGED (no modification during Phase 4F)
+  Production code modified: NO
+
+======================================================================
+9. GPU STATUS
+======================================================================
+  CUDA available:   False
+  PyTorch:          2.13.0+cpu
+  Transformers:     5.16.1
+  GPU:              N/A
+  VRAM:             N/A
+  Training feasible: False
+  Status:           BLOCKED_BY_COMPUTE
+
+======================================================================
+10. TRAINING CONFIGURATIONS
+======================================================================
+  A0: Current production baseline (DistilBERT, frozen, no training)
+      Status: BASELINE_RECORDED
+
+  A1: DistilBERT targeted fine-tune
+      Model:     distilbert-base-cased
+      LR:        3e-5
+      Batch:     16 (grad_acc=4, eff_batch=64)
+      Epochs:    3
+      Max length: 384
+      Seed:      42
+      Status:    PENDING_GPU
+
+  A2: BERT-base targeted fine-tune
+      Model:     bert-base-cased
+      LR:        2e-5
+      Batch:     8 (grad_acc=8, eff_batch=64)
+      Epochs:    3
+      Max length: 384
+      Seed:      42
+      Status:    PENDING_GPU
+
+  A3: DeBERTa-v3 targeted fine-tune
+      Model:     microsoft/deberta-v3-base
+      LR:        1e-5
+      Batch:     8 (grad_acc=8, eff_batch=64)
+      Epochs:    3
+      Max length: 384
+      Seed:      42
+      Status:    PENDING_GPU
+
+  All configurations validated: YES
+
+======================================================================
+11. PACKAGE INVENTORY
+======================================================================
+  final_gpu_package/
+  ├── dataset/
+  │   └── training_data_v3_1.jsonl              479,512 bytes
+  ├── training/
+  │   ├── train.py                              14,910 bytes
+  │   └── experiment_config.json                CREATED
+  ├── evaluation/
+  │   └── evaluate.py                           CREATED
+  ├── requirements.txt                          136 bytes
+  ├── README_GPU_EXECUTION.md                   1,036 bytes
+  ├── dataset_checksum.txt                      120 bytes
+  ├── production_model_checksum.txt             105 bytes
+  ├── expected_output_structure.txt             CREATED (populated)
+  └── final_gpu_package_manifest.json           CREATED
+
+  All required package files: PRESENT
+
+======================================================================
+12. KNOWN MISSING EVALUATION METRICS
+======================================================================
+  The following metrics are NOT implemented in evaluate.py:
+
+  - ECE (Expected Calibration Error):  NOT_IMPLEMENTED
+  - Brier score:                       NOT_IMPLEMENTED
+  - Phase 4B-specific metrics:         NOT_IMPLEMENTED
+
+  evaluate.py implements:
+  - Exact Match (EM)
+  - Token-level F1
+  - Answerability accuracy
+  - Abstention accuracy
+  - Spurious answer rate
+  - Per-category metrics
+  - Confidence (start/end softmax)
+  - Failure taxonomy (structural)
+
+======================================================================
+13. CATEGORY DISTRIBUTION
+======================================================================
+  TABLE_CELL:      362 (39.4%)
+  LIST_ITEM:       106 (11.5%)
+  NUMERIC:          97 (10.6%)
+  DIRECT_SPAN:      86 ( 9.4%)
+  TABLE_ROW:        82 ( 8.9%)
+  SECTION_SPECIFIC: 55 ( 6.0%)
+  UNANSWERABLE:     42 ( 4.6%)
+  MULTI_CHUNK:      26 ( 2.8%)
+  DATE:             25 ( 2.7%)
+  ENTITY:           22 ( 2.4%)
+  LONG_CONTEXT:     15 ( 1.6%)
+
+======================================================================
+14. KNOWN LIMITATIONS
+======================================================================
+  - GPU unavailable; training cannot execute locally
+  - No experimental results to report
+  - Model selection pending GPU execution
+  - Dataset is synthetically generated
+  - TABLE_CELL uses pipe-delimited text, not visual tables
+  - MULTI_CHUNK uses simulated chunk boundaries
+  - LONG_CONTEXT examples cap at 1200 chars
+  - evaluate.py does not implement ECE, Brier, or Phase 4B metrics
+
+======================================================================
+FINAL DECISION
+======================================================================
+
+  DATASET HASH:           a517530354fc9bca (VERIFIED)
+  STRUCTURAL VALIDATION:  PASS (918/918)
+  SEMANTIC AUDIT:         PASS (100.0%)
+  EXTERNAL ISOLATION:     PASS
+  PRODUCTION SAFETY:      UNCHANGED
+  PACKAGE FILES:          ALL PRESENT
+  GPU:                    BLOCKED_BY_COMPUTE
+
+======================================================================
+PHASE 4F.3-R — GPU PACKAGE FROZEN
+======================================================================

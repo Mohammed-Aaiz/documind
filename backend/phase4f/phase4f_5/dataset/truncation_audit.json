@@ -1,0 +1,15 @@
+{
+  "phase": "4F.5-A",
+  "max_length": 384,
+  "total_examples": 918,
+  "examples_truncated": 918,
+  "truncation_rate": 100.0,
+  "answerable_answers_truncated": 0,
+  "answer_truncation_rate": 0.0,
+  "context_length_stats": {
+    "min": 20,
+    "max": 928,
+    "mean": 148,
+    "median": 99
+  }
+}

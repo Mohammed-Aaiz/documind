@@ -1,0 +1,4291 @@
+[
+  {
+    "candidate_id": "h_cand_0005",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0006",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0007",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0008",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0011",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0012",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0013",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0014",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0017",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0018",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0019",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0020",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0023",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0024",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0025",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0026",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0029",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0030",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0031",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0032",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0035",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0036",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0039",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0040",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0041",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0042",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0045",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0046",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0047",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0048",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0051",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0052",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0053",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0054",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0057",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0058",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0059",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0060",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0061",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0062",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0063",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0064",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0065",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0066",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0067",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0068",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0069",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0070",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0071",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0072",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0073",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0074",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0075",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0076",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0077",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0078",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0094",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0095",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0096",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0097",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0098",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0099",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0100",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0101",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0102",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0103",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0104",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0105",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0108",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0109",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0110",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0111",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0112",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0113",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0114",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0115",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0118",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0119",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0120",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0121",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0122",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0123",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0126",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0127",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0128",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0129",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0130",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0131",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0132",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0133",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0136",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0137",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0138",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0139",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0140",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0141",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0142",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0143",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0144",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0145",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0146",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0147",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0148",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0149",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0150",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0151",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0152",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0153",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0154",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0156",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0157",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0158",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0159",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0171",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0172",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0176",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0177",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0180",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0182",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0183",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0184",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0186",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0189",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0191",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0192",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0194",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0195",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0196",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0197",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0198",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0199",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0200",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0201",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0202",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0205",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0206",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0207",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0208",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0209",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0210",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0211",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0212",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0213",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0214",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0215",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0216",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0217",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0218",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0221",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0222",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0223",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0224",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0225",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0226",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0227",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0228",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0229",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0230",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0231",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0232",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0233",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0234",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0235",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0236",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0237",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0238",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0239",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0240",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0241",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0242",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0243",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0244",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0245",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0246",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0249",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0250",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0251",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0252",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0253",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0254",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0255",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0256",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0257",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0258",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0259",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0260",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0261",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0262",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0263",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0264",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0265",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0266",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0267",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0268",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0269",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0270",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0271",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0272",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0273",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0274",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0275",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0276",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0277",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0282",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0283",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0284",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0285",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0286",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0287",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0288",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0289",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0290",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0291",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0294",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0295",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0296",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0297",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0298",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0299",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0300",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0301",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0302",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0303",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0306",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0307",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0308",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0309",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0310",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0311",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0312",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0313",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0314",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0315",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0318",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0319",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0320",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0321",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0322",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0323",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0324",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0325",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0326",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0327",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0330",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0331",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0332",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0333",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0334",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0335",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0336",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0337",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0338",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0339",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0342",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0343",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0344",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0345",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0346",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0347",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0348",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0349",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0350",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0351",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0352",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0353",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0354",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0355",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0356",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0357",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0358",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0359",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0360",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0361",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0362",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0363",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0365",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0366",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0367",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0369",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0370",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0371",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0372",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0374",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0375",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0378",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0380",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0381",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0382",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0383",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0384",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0385",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0386",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0387",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0388",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0390",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0393",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0394",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0395",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0399",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0400",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0401",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0402",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0403",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0404",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0405",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0406",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0407",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0408",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0409",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0410",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0411",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0412",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0413",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0414",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0415",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0416",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0417",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0418",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0419",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0420",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0421",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0422",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0423",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0424",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0425",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0426",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0427",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0428",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0429",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0430",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0431",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0432",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0433",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0434",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0435",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0436",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0437",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0438",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0439",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0440",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0441",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0442",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0443",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0444",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0445",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0446",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0447",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0448",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0449",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0450",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0451",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0452",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0453",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0454",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0457",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0458",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0459",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0460",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0461",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0462",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0463",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0464",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0465",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0467",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0468",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0469",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0470",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0471",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0476",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0477",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0478",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0479",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0480",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0481",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0482",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0483",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0484",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0485",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0486",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0487",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0488",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0489",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0490",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0491",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0492",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0493",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0494",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0495",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0496",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0497",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0498",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0499",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0500",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0503",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0510",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0511",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0512",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0513",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0514",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0515",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0516",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0517",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0520",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0521",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0522",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0523",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0524",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0525",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0526",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0527",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0530",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0531",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0532",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0533",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0534",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0535",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0536",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0537",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0539",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0540",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0541",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0542",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0544",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0545",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0546",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0547",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0549",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0550",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0551",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0552",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0553",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0554",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0555",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0556",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0557",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0558",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0559",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0560",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0561",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0568",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0569",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0571",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0573",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0574",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0575",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0576",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0577",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0578",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0579",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0580",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0581",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0582",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0583",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0584",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0586",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0587",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0588",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0589",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0590",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0591",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0592",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0593",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0594",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0595",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0596",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0598",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0599",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0600",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0601",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0602",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0603",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0604",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0605",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0606",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0607",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0608",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0609",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0610",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0611",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0612",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0613",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0614",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0615",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0617",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0618",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0619",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0620",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0621",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0622",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0623",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0624",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0625",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0626",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0627",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0628",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0629",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0630",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0631",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0632",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0633",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0634",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0635",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0636",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0637",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0638",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0639",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0640",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0641",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0642",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0643",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0644",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0645",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0646",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0647",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0648",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0649",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0650",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0651",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0652",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0653",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0654",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0655",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0656",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0657",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0658",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0659",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0660",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0661",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0662",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0663",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0664",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0665",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0666",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0667",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0668",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0669",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0670",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0671",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0672",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0673",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0674",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0675",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0676",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0677",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0678",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0679",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0680",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0681",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0682",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0683",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0684",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0685",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0686",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0687",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0688",
+    "reasons": [
+      "leakage_benchmark_context",
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0689",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0690",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0691",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0692",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0700",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0701",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0702",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0703",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0704",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0705",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0706",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0707",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0710",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0711",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0712",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0713",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0714",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0715",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0716",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0717",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0720",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0721",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0722",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0723",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0724",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0725",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0726",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0727",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0730",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0731",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0732",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0733",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0734",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0735",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0736",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0737",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0740",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0741",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0742",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0743",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0744",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0745",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0746",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0747",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0748",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0749",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0750",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0751",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0752",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0753",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0754",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0755",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0756",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0757",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0759",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0760",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0761",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0762",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0763",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0769",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0770",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0772",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0773",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0774",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0775",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0800",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0801",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0802",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0803",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0804",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0805",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0806",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0807",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0810",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0811",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0812",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0813",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0814",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0815",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0816",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0817",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0820",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0821",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0822",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0823",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0824",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0825",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0826",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0827",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0830",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0831",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0832",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0833",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0834",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0835",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0836",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0837",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0840",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0841",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0842",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0843",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0844",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0845",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0846",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0847",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0848",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0849",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0850",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0851",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0852",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0853",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0854",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0855",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0856",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0857",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0862",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0863",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0864",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0865",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0867",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0868",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0869",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0870",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0925",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0926",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0927",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0934",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0935",
+    "reasons": [
+      "leakage_benchmark_context"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0937",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  },
+  {
+    "candidate_id": "h_cand_0939",
+    "reasons": [
+      "duplicate_qc_pair"
+    ]
+  }
+]

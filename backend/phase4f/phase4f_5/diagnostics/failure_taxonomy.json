@@ -1,0 +1,30 @@
+{
+  "phase": "4F.5-B",
+  "models": {
+    "a0": {
+      "label": "A0_Production",
+      "total_failures": 214,
+      "failure_rate": 96.8,
+      "by_type": {
+        "ABSTAIN": 138,
+        "EXTRACT": 76
+      }
+    },
+    "a1": {
+      "label": "A1_DistilBERT",
+      "total_failures": 217,
+      "failure_rate": 98.2,
+      "by_type": {
+        "EXTRACT": 217
+      }
+    },
+    "a2": {
+      "label": "A2_BERT",
+      "total_failures": 219,
+      "failure_rate": 99.1,
+      "by_type": {
+        "EXTRACT": 219
+      }
+    }
+  }
+}

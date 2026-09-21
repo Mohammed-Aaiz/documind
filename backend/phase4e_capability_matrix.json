@@ -1,0 +1,1566 @@
+{
+  "timestamp": "2026-09-19T20:39:23.513512+00:00",
+  "capabilities": [
+    {
+      "capability": "DIRECT_SPAN",
+      "definition": "Answer is one contiguous span directly stated in evidence",
+      "example": "What year was the paper published? \u2192 2024",
+      "expected_answer_type": "SPAN",
+      "extractive_representability": "YES",
+      "current_evidence": "n=24, EM=0.5833, F1=0.8241",
+      "question_count": 24,
+      "baseline_performance": {
+        "exact_match": 0.5833,
+        "token_f1": 0.8241,
+        "mean_confidence": 0.5504
+      }
+    },
+    {
+      "capability": "ENTITY_EXTRACTION",
+      "definition": "Answer is a named entity (person, org, location, technology)",
+      "example": "What tool is required? \u2192 Tundra torque wrench",
+      "expected_answer_type": "ENTITY",
+      "extractive_representability": "YES",
+      "current_evidence": "NOT_EVALUATED",
+      "question_count": 0,
+      "baseline_performance": {
+        "exact_match": 0,
+        "token_f1": 0,
+        "mean_confidence": 0
+      }
+    },
+    {
+      "capability": "NUMERIC_EXTRACTION",
+      "definition": "Answer is a number, percentage, measurement, or currency",
+      "example": "What is the accuracy? \u2192 85 percent",
+      "expected_answer_type": "NUMBER",
+      "extractive_representability": "PARTIAL",
+      "current_evidence": "n=14, EM=0.2143, F1=0.4893",
+      "question_count": 14,
+      "baseline_performance": {
+        "exact_match": 0.2143,
+        "token_f1": 0.4893,
+        "mean_confidence": 0.3847
+      }
+    },
+    {
+      "capability": "DATE_EXTRACTION",
+      "definition": "Answer is a date, year, or time range",
+      "example": "When was it released? \u2192 March 2024",
+      "expected_answer_type": "DATE",
+      "extractive_representability": "YES",
+      "current_evidence": "NOT_EVALUATED",
+      "question_count": 0,
+      "baseline_performance": {
+        "exact_match": 0,
+        "token_f1": 0,
+        "mean_confidence": 0
+      }
+    },
+    {
+      "capability": "TABLE_CELL",
+      "definition": "Answer is directly contained in a single table cell",
+      "example": "What is the accuracy of Config D? \u2192 91.3",
+      "expected_answer_type": "SPAN",
+      "extractive_representability": "PARTIAL",
+      "current_evidence": "n=11, EM=0.1818, F1=0.4212",
+      "question_count": 11,
+      "baseline_performance": {
+        "exact_match": 0.1818,
+        "token_f1": 0.4212,
+        "mean_confidence": 0.2172
+      }
+    },
+    {
+      "capability": "TABLE_ROW",
+      "definition": "Answer requires interpreting one table row",
+      "example": "Which method has highest accuracy? \u2192 Config G",
+      "expected_answer_type": "ENTITY",
+      "extractive_representability": "PARTIAL",
+      "current_evidence": "NOT_EVALUATED",
+      "question_count": 0,
+      "baseline_performance": {
+        "exact_match": 0,
+        "token_f1": 0,
+        "mean_confidence": 0
+      }
+    },
+    {
+      "capability": "TABLE_COMPARISON",
+      "definition": "Answer requires comparing values across table rows",
+      "example": "Which is faster, A or B? \u2192 A",
+      "expected_answer_type": "ENTITY",
+      "extractive_representability": "NOT_REPRESENTABLE",
+      "current_evidence": "n=9, EM=0.1111, F1=0.3138",
+      "question_count": 9,
+      "baseline_performance": {
+        "exact_match": 0.1111,
+        "token_f1": 0.3138,
+        "mean_confidence": 0.1021
+      }
+    },
+    {
+      "capability": "LIST_ITEM",
+      "definition": "Answer is one list item",
+      "example": "What is the third step? \u2192 Configure the database",
+      "expected_answer_type": "SPAN",
+      "extractive_representability": "PARTIAL",
+      "current_evidence": "n=8, EM=0.2500, F1=0.6358",
+      "question_count": 8,
+      "baseline_performance": {
+        "exact_match": 0.25,
+        "token_f1": 0.6358,
+        "mean_confidence": 0.2092
+      }
+    },
+    {
+      "capability": "LIST_ORDER",
+      "definition": "Question depends on list ordering/position",
+      "example": "What follows draining the loop? \u2192 Remove the filter",
+      "expected_answer_type": "SPAN",
+      "extractive_representability": "NOT_REPRESENTABLE",
+      "current_evidence": "n=8, EM=0.0000, F1=0.1801",
+      "question_count": 8,
+      "baseline_performance": {
+        "exact_match": 0.0,
+        "token_f1": 0.1801,
+        "mean_confidence": 0.0443
+      }
+    },
+    {
+      "capability": "MULTI_CHUNK",
+      "definition": "Relevant evidence spans multiple retrieved chunks",
+      "example": "Trace the programme from start to finish \u2192 1984",
+      "expected_answer_type": "SPAN",
+      "extractive_representability": "PARTIAL",
+      "current_evidence": "n=3, EM=0.6667, F1=0.6667",
+      "question_count": 3,
+      "baseline_performance": {
+        "exact_match": 0.6667,
+        "token_f1": 0.6667,
+        "mean_confidence": 0.5049
+      }
+    },
+    {
+      "capability": "MULTI_HOP",
+      "definition": "Answer requires connecting multiple pieces of evidence",
+      "example": "What replaced the booster that was introduced in 1971? \u2192 Falcon",
+      "expected_answer_type": "SPAN",
+      "extractive_representability": "NOT_REPRESENTABLE",
+      "current_evidence": "NOT_EVALUATED",
+      "question_count": 0,
+      "baseline_performance": {
+        "exact_match": 0,
+        "token_f1": 0,
+        "mean_confidence": 0
+      }
+    },
+    {
+      "capability": "COMPARISON",
+      "definition": "Answer requires comparing two or more values",
+      "example": "Which method is more accurate? \u2192 Neural Network",
+      "expected_answer_type": "ENTITY",
+      "extractive_representability": "NOT_REPRESENTABLE",
+      "current_evidence": "NOT_EVALUATED",
+      "question_count": 0,
+      "baseline_performance": {
+        "exact_match": 0,
+        "token_f1": 0,
+        "mean_confidence": 0
+      }
+    },
+    {
+      "capability": "AGGREGATION",
+      "definition": "Answer requires calculation or aggregation",
+      "example": "What is the average accuracy? \u2192 85.2%",
+      "expected_answer_type": "NUMBER",
+      "extractive_representability": "NOT_REPRESENTABLE",
+      "current_evidence": "NOT_EVALUATED",
+      "question_count": 0,
+      "baseline_performance": {
+        "exact_match": 0,
+        "token_f1": 0,
+        "mean_confidence": 0
+      }
+    },
+    {
+      "capability": "DEFINITION",
+      "definition": "Answer is a definition or explanation",
+      "example": "What is abstention? \u2192 withholds an answer",
+      "expected_answer_type": "SPAN",
+      "extractive_representability": "YES",
+      "current_evidence": "n=8, EM=0.2500, F1=0.6006",
+      "question_count": 8,
+      "baseline_performance": {
+        "exact_match": 0.25,
+        "token_f1": 0.6006,
+        "mean_confidence": 0.1891
+      }
+    },
+    {
+      "capability": "SECTION_SPECIFIC",
+      "definition": "Answer requires correct section identification",
+      "example": "What is in the Epsilon section? \u2192 Vermilion coating",
+      "expected_answer_type": "SPAN",
+      "extractive_representability": "YES",
+      "current_evidence": "n=7, EM=0.2857, F1=0.7290",
+      "question_count": 7,
+      "baseline_performance": {
+        "exact_match": 0.2857,
+        "token_f1": 0.729,
+        "mean_confidence": 0.4236
+      }
+    },
+    {
+      "capability": "UNANSWERABLE",
+      "definition": "Evidence does not support an answer",
+      "example": "What is the population of Tokyo? \u2192 (no answer)",
+      "expected_answer_type": "NONE",
+      "extractive_representability": "YES",
+      "current_evidence": "NOT_EVALUATED",
+      "question_count": 0,
+      "baseline_performance": {
+        "exact_match": 0,
+        "token_f1": 0,
+        "mean_confidence": 0
+      }
+    }
+  ],
+  "question_mappings": [
+    {
+      "qid": "ss_1",
+      "question": "At what angle is the Zephyr valve calibrated?",
+      "kind": "factual",
+      "document": "short_sections.docx",
+      "answerable": true,
+      "expected_answer": "22 degrees",
+      "primary_capability": "DIRECT_SPAN",
+      "answer_type": "SPAN",
+      "extractive_representability": "YES"
+    },
+    {
+      "qid": "ss_2",
+      "question": "How many watts does the Helios lamp draw?",
+      "kind": "factual",
+      "document": "short_sections.docx",
+      "answerable": true,
+      "expected_answer": "14 watts",
+      "primary_capability": "DIRECT_SPAN",
+      "answer_type": "SPAN",
+      "extractive_representability": "YES"
+    },
+    {
+      "qid": "ss_3",
+      "question": "How much does the Quokka bracket weigh?",
+      "kind": "factual",
+      "document": "short_sections.docx",
+      "answerable": true,
+      "expected_answer": "3 kilograms",
+      "primary_capability": "DIRECT_SPAN",
+      "answer_type": "SPAN",
+      "extractive_representability": "YES"
+    },
+    {
+      "qid": "ss_4",
+      "question": "What does the Epsilon section describe?",
+      "kind": "section_specific",
+      "document": "short_sections.docx",
+      "answerable": true,
+      "expected_answer": "Vermilion",
+      "primary_capability": "SECTION_SPECIFIC",
+      "answer_type": "SPAN",
+      "extractive_representability": "YES"
+    },
+    {
+      "qid": "hh_1",
+      "question": "What tool is required for preparation?",
+      "kind": "section_specific",
+      "document": "heading_heavy.docx",
+      "answerable": true,
+      "expected_answer": "Tundra torque wrench",
+      "primary_capability": "SECTION_SPECIFIC",
+      "answer_type": "SPAN",
+      "extractive_representability": "YES"
+    },
+    {
+      "qid": "hh_2",
+      "question": "Where should the Kestrel cable be routed?",
+      "kind": "section_specific",
+      "document": "heading_heavy.docx",
+      "answerable": true,
+      "expected_answer": "behind the panel",
+      "primary_capability": "SECTION_SPECIFIC",
+      "answer_type": "SPAN",
+      "extractive_representability": "YES"
+    },
+    {
+      "qid": "hh_3",
+      "question": "How often should the Zephyr filter be replaced?",
+      "kind": "factual",
+      "document": "heading_heavy.docx",
+      "answerable": true,
+      "expected_answer": "every 500 hours",
+      "primary_capability": "DIRECT_SPAN",
+      "answer_type": "SPAN",
+      "extractive_representability": "YES"
+    },
+    {
+      "qid": "ts_1",
+      "question": "What result did SVM achieve?",
+      "kind": "table",
+      "document": "tables_small.docx",
+      "answerable": true,
+      "expected_answer": "92 percent",
+      "primary_capability": "TABLE_CELL",
+      "answer_type": "SPAN",
+      "extractive_representability": "PARTIAL"
+    },
+    {
+      "qid": "ts_2",
+      "question": "What result did PCA achieve?",
+      "kind": "table",
+      "document": "tables_small.docx",
+      "answerable": true,
+      "expected_answer": "85 percent",
+      "primary_capability": "TABLE_CELL",
+      "answer_type": "SPAN",
+      "extractive_representability": "PARTIAL"
+    },
+    {
+      "qid": "tl_1",
+      "question": "What is the accuracy of Method 30?",
+      "kind": "table",
+      "document": "tables_large.docx",
+      "answerable": true,
+      "expected_answer": "90 percent",
+      "primary_capability": "TABLE_CELL",
+      "answer_type": "SPAN",
+      "extractive_representability": "PARTIAL"
+    },
+    {
+      "qid": "tl_2",
+      "question": "Which configuration is recommended?",
+      "kind": "table",
+      "document": "tables_large.docx",
+      "answerable": true,
+      "expected_answer": "Method 30",
+      "primary_capability": "TABLE_CELL",
+      "answer_type": "SPAN",
+      "extractive_representability": "PARTIAL"
+    },
+    {
+      "qid": "tl_3",
+      "question": "What runtime does Method 12 have?",
+      "kind": "table",
+      "document": "tables_large.docx",
+      "answerable": true,
+      "expected_answer": "84 milliseconds",
+      "primary_capability": "NUMERIC_EXTRACTION",
+      "answer_type": "NUMBER",
+      "extractive_representability": "PARTIAL"
+    },
+    {
+      "qid": "li_1",
+      "question": "Which item follows draining the Vermilion loop?",
+      "kind": "list",
+      "document": "lists.docx",
+      "answerable": true,
+      "expected_answer": "Remove the Helios filter",
+      "primary_capability": "LIST_ITEM",
+      "answer_type": "SPAN",
+      "extractive_representability": "PARTIAL"
+    },
+    {
+      "qid": "li_2",
+      "question": "What should be isolated first?",
+      "kind": "list",
+      "document": "lists.docx",
+      "answerable": true,
+      "expected_answer": "Nimbus supply",
+      "primary_capability": "LIST_ITEM",
+      "answer_type": "SPAN",
+      "extractive_representability": "PARTIAL"
+    },
+    {
+      "qid": "li_3",
+      "question": "What must be confirmed in the checks section?",
+      "kind": "list",
+      "document": "lists.docx",
+      "answerable": true,
+      "expected_answer": "Zephyr reading",
+      "primary_capability": "LIST_ITEM",
+      "answer_type": "SPAN",
+      "extractive_representability": "PARTIAL"
+    },
+    {
+      "qid": "mx_1",
+      "question": "What was the lowest recorded pressure?",
+      "kind": "table",
+      "document": "mixed.docx",
+      "answerable": true,
+      "expected_answer": "998 millibars",
+      "primary_capability": "TABLE_CELL",
+      "answer_type": "SPAN",
+      "extractive_representability": "PARTIAL"
+    },
+    {
+      "qid": "mx_2",
+      "question": "What does the Nimbus array use for calibration?",
+      "kind": "section_specific",
+      "document": "mixed.docx",
+      "answerable": true,
+      "expected_answer": "Quokka reference cell",
+      "primary_capability": "SECTION_SPECIFIC",
+      "answer_type": "SPAN",
+      "extractive_representability": "YES"
+    },
+    {
+      "qid": "mx_3",
+      "question": "Which season recorded 1013 millibars?",
+      "kind": "table",
+      "document": "mixed.docx",
+      "answerable": true,
+      "expected_answer": "Spring",
+      "primary_capability": "TABLE_COMPARISON",
+      "answer_type": "ENTITY",
+      "extractive_representability": "NOT_REPRESENTABLE"
+    },
+    {
+      "qid": "mx_4",
+      "question": "How far did the Helios sensor drift?",
+      "kind": "list",
+      "document": "mixed.docx",
+      "answerable": true,
+      "expected_answer": "2 millibars",
+      "primary_capability": "LIST_ITEM",
+      "answer_type": "SPAN",
+      "extractive_representability": "PARTIAL"
+    },
+    {
+      "qid": "lp_1",
+      "question": "What was the reported mean erosion rate?",
+      "kind": "long_paragraph",
+      "document": "long_paragraph.txt",
+      "answerable": true,
+      "expected_answer": "1.4 metres per year",
+      "primary_capability": "DIRECT_SPAN",
+      "answer_type": "SPAN",
+      "extractive_representability": "YES"
+    },
+    {
+      "qid": "lp_2",
+      "question": "In which year was the first survey completed?",
+      "kind": "factual",
+      "document": "long_paragraph.txt",
+      "answerable": true,
+      "expected_answer": "1988",
+      "primary_capability": "DIRECT_SPAN",
+      "answer_type": "SPAN",
+      "extractive_representability": "YES"
+    },
+    {
+      "qid": "lp_3",
+      "question": "How many beaches did the second survey cover?",
+      "kind": "long_paragraph",
+      "document": "long_paragraph.txt",
+      "answerable": true,
+      "expected_answer": "twenty beaches",
+      "primary_capability": "DIRECT_SPAN",
+      "answer_type": "SPAN",
+      "extractive_representability": "YES"
+    },
+    {
+      "qid": "dp_1",
+      "question": "What instrument determined the grain size?",
+      "kind": "dense_prose",
+      "document": "dense_prose.txt",
+      "answerable": true,
+      "expected_answer": "laser diffraction",
+      "primary_capability": "DIRECT_SPAN",
+      "answer_type": "SPAN",
+      "extractive_representability": "YES"
+    },
+    {
+      "qid": "dp_2",
+      "question": "What was the mean transport rate?",
+      "kind": "dense_prose",
+      "document": "dense_prose.txt",
+      "answerable": true,
+      "expected_answer": "1.4 kilograms per metre per day",
+      "primary_capability": "NUMERIC_EXTRACTION",
+      "answer_type": "NUMBER",
+      "extractive_representability": "PARTIAL"
+    },
+    {
+      "qid": "dp_3",
+      "question": "What was the maximum recorded frame deflection?",
+      "kind": "dense_prose",
+      "document": "dense_prose.txt",
+      "answerable": true,
+      "expected_answer": "14 millimetres",
+      "primary_capability": "NUMERIC_EXTRACTION",
+      "answer_type": "NUMBER",
+      "extractive_representability": "PARTIAL"
+    },
+    {
+      "qid": "dp_4",
+      "question": "When was the base of the sequence dated to?",
+      "kind": "dense_prose",
+      "document": "dense_prose.txt",
+      "answerable": true,
+      "expected_answer": "1850",
+      "primary_capability": "NUMERIC_EXTRACTION",
+      "answer_type": "NUMBER",
+      "extractive_representability": "PARTIAL"
+    },
+    {
+      "qid": "dp_5",
+      "question": "Which transect should be monitored annually?",
+      "kind": "dense_prose",
+      "document": "dense_prose.txt",
+      "answerable": true,
+      "expected_answer": "northern transect",
+      "primary_capability": "DIRECT_SPAN",
+      "answer_type": "SPAN",
+      "extractive_representability": "YES"
+    },
+    {
+      "qid": "dp_6",
+      "question": "What was reviewed before fieldwork began?",
+      "kind": "surrounding_context",
+      "document": "dense_prose.txt",
+      "answerable": true,
+      "expected_answer": "design",
+      "primary_capability": "DIRECT_SPAN",
+      "answer_type": "SPAN",
+      "extractive_representability": "YES"
+    },
+    {
+      "qid": "up_1",
+      "question": "Which token repeats in the document?",
+      "kind": "unpunctuated",
+      "document": "unpunctuated.txt",
+      "answerable": true,
+      "expected_answer": "AlphaBetaGammaDelta",
+      "primary_capability": "DIRECT_SPAN",
+      "answer_type": "SPAN",
+      "extractive_representability": "YES"
+    },
+    {
+      "qid": "md_1",
+      "question": "When did the Tundra station open?",
+      "kind": "factual",
+      "document": "markdown_sections.txt",
+      "answerable": true,
+      "expected_answer": "2005",
+      "primary_capability": "DIRECT_SPAN",
+      "answer_type": "SPAN",
+      "extractive_representability": "YES"
+    },
+    {
+      "qid": "md_2",
+      "question": "What generator does the station use?",
+      "kind": "section_specific",
+      "document": "markdown_sections.txt",
+      "answerable": true,
+      "expected_answer": "Helios generator",
+      "primary_capability": "SECTION_SPECIFIC",
+      "answer_type": "SPAN",
+      "extractive_representability": "YES"
+    },
+    {
+      "qid": "md_3",
+      "question": "When did the station close?",
+      "kind": "section_specific",
+      "document": "markdown_sections.txt",
+      "answerable": true,
+      "expected_answer": "2019",
+      "primary_capability": "SECTION_SPECIFIC",
+      "answer_type": "SPAN",
+      "extractive_representability": "YES"
+    },
+    {
+      "qid": "mp_1",
+      "question": "When did the Kestrel programme begin?",
+      "kind": "factual",
+      "document": "multipage_section.pdf",
+      "answerable": true,
+      "expected_answer": "1971",
+      "primary_capability": "DIRECT_SPAN",
+      "answer_type": "SPAN",
+      "extractive_representability": "YES"
+    },
+    {
+      "qid": "mp_2",
+      "question": "When did the Kestrel programme conclude?",
+      "kind": "multipage",
+      "document": "multipage_section.pdf",
+      "answerable": true,
+      "expected_answer": "1984",
+      "primary_capability": "MULTI_CHUNK",
+      "answer_type": "SPAN",
+      "extractive_representability": "PARTIAL"
+    },
+    {
+      "qid": "mp_3",
+      "question": "What replaced the Nimbus booster?",
+      "kind": "multipage",
+      "document": "multipage_section.pdf",
+      "answerable": true,
+      "expected_answer": "Falcon array",
+      "primary_capability": "MULTI_CHUNK",
+      "answer_type": "SPAN",
+      "extractive_representability": "PARTIAL"
+    },
+    {
+      "qid": "mp_4",
+      "question": "Trace the Kestrel programme from start to finish.",
+      "kind": "multichunk",
+      "document": "multipage_section.pdf",
+      "answerable": true,
+      "expected_answer": "1984",
+      "primary_capability": "MULTI_CHUNK",
+      "answer_type": "SPAN",
+      "extractive_representability": "PARTIAL"
+    },
+    {
+      "qid": "ac_1",
+      "question": "What is the name of the estimator?",
+      "kind": "academic",
+      "document": "academic_two_column.pdf",
+      "answerable": true,
+      "expected_answer": "Quokka estimator",
+      "primary_capability": "DIRECT_SPAN",
+      "answer_type": "SPAN",
+      "extractive_representability": "YES"
+    },
+    {
+      "qid": "ac_2",
+      "question": "Which basis does the estimator build on?",
+      "kind": "academic",
+      "document": "academic_two_column.pdf",
+      "answerable": true,
+      "expected_answer": "Tundra basis",
+      "primary_capability": "DIRECT_SPAN",
+      "answer_type": "SPAN",
+      "extractive_representability": "YES"
+    },
+    {
+      "qid": "ac_3",
+      "question": "By how much does the contribution improve recall?",
+      "kind": "academic",
+      "document": "academic_two_column.pdf",
+      "answerable": true,
+      "expected_answer": "11 percent",
+      "primary_capability": "DIRECT_SPAN",
+      "answer_type": "SPAN",
+      "extractive_representability": "YES"
+    },
+    {
+      "qid": "tm_1",
+      "question": "What is the accuracy of Config D?",
+      "kind": "table",
+      "document": "tables_medium.docx",
+      "answerable": true,
+      "expected_answer": "91.3 percent",
+      "primary_capability": "TABLE_CELL",
+      "answer_type": "SPAN",
+      "extractive_representability": "PARTIAL"
+    },
+    {
+      "qid": "tm_2",
+      "question": "Which configuration has the highest accuracy?",
+      "kind": "table",
+      "document": "tables_medium.docx",
+      "answerable": true,
+      "expected_answer": "Config G",
+      "primary_capability": "TABLE_COMPARISON",
+      "answer_type": "ENTITY",
+      "extractive_representability": "NOT_REPRESENTABLE"
+    },
+    {
+      "qid": "tm_3",
+      "question": "What is the latency of Config F?",
+      "kind": "table",
+      "document": "tables_medium.docx",
+      "answerable": true,
+      "expected_answer": "85 milliseconds",
+      "primary_capability": "NUMERIC_EXTRACTION",
+      "answer_type": "NUMBER",
+      "extractive_representability": "PARTIAL"
+    },
+    {
+      "qid": "tm_4",
+      "question": "How much memory does Config D use?",
+      "kind": "table",
+      "document": "tables_medium.docx",
+      "answerable": true,
+      "expected_answer": "640 MB",
+      "primary_capability": "NUMERIC_EXTRACTION",
+      "answer_type": "NUMBER",
+      "extractive_representability": "PARTIAL"
+    },
+    {
+      "qid": "tm_5",
+      "question": "Which configuration has the lowest latency?",
+      "kind": "table",
+      "document": "tables_medium.docx",
+      "answerable": true,
+      "expected_answer": "Config F",
+      "primary_capability": "TABLE_COMPARISON",
+      "answer_type": "ENTITY",
+      "extractive_representability": "NOT_REPRESENTABLE"
+    },
+    {
+      "qid": "tn_1",
+      "question": "What is the temperature at Alpha-2?",
+      "kind": "table",
+      "document": "tables_nested.docx",
+      "answerable": true,
+      "expected_answer": "19.8 degrees",
+      "primary_capability": "TABLE_CELL",
+      "answer_type": "SPAN",
+      "extractive_representability": "PARTIAL"
+    },
+    {
+      "qid": "tn_2",
+      "question": "Which station has the highest humidity in Region Beta?",
+      "kind": "table",
+      "document": "tables_nested.docx",
+      "answerable": true,
+      "expected_answer": "Beta-3",
+      "primary_capability": "TABLE_COMPARISON",
+      "answer_type": "ENTITY",
+      "extractive_representability": "NOT_REPRESENTABLE"
+    },
+    {
+      "qid": "tn_3",
+      "question": "What is the temperature difference between Alpha-1 and Beta-1?",
+      "kind": "table",
+      "document": "tables_nested.docx",
+      "answerable": true,
+      "expected_answer": "4.2 degrees",
+      "primary_capability": "TABLE_COMPARISON",
+      "answer_type": "ENTITY",
+      "extractive_representability": "NOT_REPRESENTABLE"
+    },
+    {
+      "qid": "tn_4",
+      "question": "Which region had consistently higher humidity?",
+      "kind": "section_specific",
+      "document": "tables_nested.docx",
+      "answerable": true,
+      "expected_answer": "Region Beta",
+      "primary_capability": "SECTION_SPECIFIC",
+      "answer_type": "SPAN",
+      "extractive_representability": "YES"
+    },
+    {
+      "qid": "ln_1",
+      "question": "What Python version is required?",
+      "kind": "list",
+      "document": "lists_nested.docx",
+      "answerable": true,
+      "expected_answer": "3.10",
+      "primary_capability": "LIST_ITEM",
+      "answer_type": "SPAN",
+      "extractive_representability": "PARTIAL"
+    },
+    {
+      "qid": "ln_2",
+      "question": "What is the third installation step?",
+      "kind": "list",
+      "document": "lists_nested.docx",
+      "answerable": true,
+      "expected_answer": "Configure the database connection in .env",
+      "primary_capability": "LIST_ORDER",
+      "answer_type": "SPAN",
+      "extractive_representability": "NOT_REPRESENTABLE"
+    },
+    {
+      "qid": "ln_3",
+      "question": "What should you check if the database connection is refused?",
+      "kind": "list",
+      "document": "lists_nested.docx",
+      "answerable": true,
+      "expected_answer": "PostgreSQL is running",
+      "primary_capability": "LIST_ITEM",
+      "answer_type": "SPAN",
+      "extractive_representability": "PARTIAL"
+    },
+    {
+      "qid": "ln_4",
+      "question": "How many prerequisites are listed?",
+      "kind": "list",
+      "document": "lists_nested.docx",
+      "answerable": true,
+      "expected_answer": "4",
+      "primary_capability": "LIST_ORDER",
+      "answer_type": "SPAN",
+      "extractive_representability": "NOT_REPRESENTABLE"
+    },
+    {
+      "qid": "ll_1",
+      "question": "What is the sixth component in the list?",
+      "kind": "list",
+      "document": "lists_long.docx",
+      "answerable": true,
+      "expected_answer": "JWT authentication module",
+      "primary_capability": "LIST_ORDER",
+      "answer_type": "SPAN",
+      "extractive_representability": "NOT_REPRESENTABLE"
+    },
+    {
+      "qid": "ll_2",
+      "question": "Which component handles HTTP requests?",
+      "kind": "list",
+      "document": "lists_long.docx",
+      "answerable": true,
+      "expected_answer": "FastAPI web server",
+      "primary_capability": "LIST_ITEM",
+      "answer_type": "SPAN",
+      "extractive_representability": "PARTIAL"
+    },
+    {
+      "qid": "ll_3",
+      "question": "What is the last component listed?",
+      "kind": "list",
+      "document": "lists_long.docx",
+      "answerable": true,
+      "expected_answer": "Health check endpoint",
+      "primary_capability": "LIST_ORDER",
+      "answer_type": "SPAN",
+      "extractive_representability": "NOT_REPRESENTABLE"
+    },
+    {
+      "qid": "ll_4",
+      "question": "How many components are listed?",
+      "kind": "list",
+      "document": "lists_long.docx",
+      "answerable": true,
+      "expected_answer": "12",
+      "primary_capability": "LIST_ORDER",
+      "answer_type": "SPAN",
+      "extractive_representability": "NOT_REPRESENTABLE"
+    },
+    {
+      "qid": "tm_manual_1",
+      "question": "What is the nominal voltage?",
+      "kind": "table",
+      "document": "technical_manual.docx",
+      "answerable": true,
+      "expected_answer": "5.0 V",
+      "primary_capability": "TABLE_CELL",
+      "answer_type": "SPAN",
+      "extractive_representability": "PARTIAL"
+    },
+    {
+      "qid": "tm_manual_2",
+      "question": "What tolerance is specified for current?",
+      "kind": "table",
+      "document": "technical_manual.docx",
+      "answerable": true,
+      "expected_answer": "\u00b10.05 A",
+      "primary_capability": "TABLE_CELL",
+      "answer_type": "SPAN",
+      "extractive_representability": "PARTIAL"
+    },
+    {
+      "qid": "tm_manual_3",
+      "question": "What is the fourth calibration step?",
+      "kind": "list",
+      "document": "technical_manual.docx",
+      "answerable": true,
+      "expected_answer": "Record the measured voltage on the oscilloscope",
+      "primary_capability": "LIST_ORDER",
+      "answer_type": "SPAN",
+      "extractive_representability": "NOT_REPRESENTABLE"
+    },
+    {
+      "qid": "tm_manual_4",
+      "question": "How long is the calibration valid?",
+      "kind": "factual",
+      "document": "technical_manual.docx",
+      "answerable": true,
+      "expected_answer": "12 months",
+      "primary_capability": "DIRECT_SPAN",
+      "answer_type": "SPAN",
+      "extractive_representability": "YES"
+    },
+    {
+      "qid": "tm_manual_5",
+      "question": "What equipment is required for calibration?",
+      "kind": "list",
+      "document": "technical_manual.docx",
+      "answerable": true,
+      "expected_answer": "Meridian calibration kit",
+      "primary_capability": "LIST_ITEM",
+      "answer_type": "SPAN",
+      "extractive_representability": "PARTIAL"
+    },
+    {
+      "qid": "rp_1",
+      "question": "What accuracy does the Falcon estimator achieve on MNIST?",
+      "kind": "factual",
+      "document": "research_paper.txt",
+      "answerable": true,
+      "expected_answer": "98.2 percent",
+      "primary_capability": "TABLE_COMPARISON",
+      "answer_type": "ENTITY",
+      "extractive_representability": "NOT_REPRESENTABLE"
+    },
+    {
+      "qid": "rp_2",
+      "question": "What is the improvement over baseline on CIFAR-10?",
+      "kind": "table",
+      "document": "research_paper.txt",
+      "answerable": true,
+      "expected_answer": "3.3 percentage points",
+      "primary_capability": "NUMERIC_EXTRACTION",
+      "answer_type": "NUMBER",
+      "extractive_representability": "PARTIAL"
+    },
+    {
+      "qid": "rp_3",
+      "question": "What sparsity level is used in sparse coding?",
+      "kind": "factual",
+      "document": "research_paper.txt",
+      "answerable": true,
+      "expected_answer": "20",
+      "primary_capability": "NUMERIC_EXTRACTION",
+      "answer_type": "NUMBER",
+      "extractive_representability": "PARTIAL"
+    },
+    {
+      "qid": "rp_4",
+      "question": "How many iterations does dictionary learning use?",
+      "kind": "factual",
+      "document": "research_paper.txt",
+      "answerable": true,
+      "expected_answer": "1000",
+      "primary_capability": "NUMERIC_EXTRACTION",
+      "answer_type": "NUMBER",
+      "extractive_representability": "PARTIAL"
+    },
+    {
+      "qid": "rp_5",
+      "question": "What is the baseline accuracy on ImageNet?",
+      "kind": "factual",
+      "document": "research_paper.txt",
+      "answerable": true,
+      "expected_answer": "69.5 percent",
+      "primary_capability": "TABLE_COMPARISON",
+      "answer_type": "ENTITY",
+      "extractive_representability": "NOT_REPRESENTABLE"
+    },
+    {
+      "qid": "faq_1",
+      "question": "What file formats does DocuMind support?",
+      "kind": "factual",
+      "document": "faq_document.txt",
+      "answerable": true,
+      "expected_answer": "PDF, DOCX, and TXT",
+      "primary_capability": "DEFINITION",
+      "answer_type": "SPAN",
+      "extractive_representability": "YES"
+    },
+    {
+      "qid": "faq_2",
+      "question": "What embedding model does DocuMind use?",
+      "kind": "factual",
+      "document": "faq_document.txt",
+      "answerable": true,
+      "expected_answer": "all-MiniLM-L6-v2",
+      "primary_capability": "DEFINITION",
+      "answer_type": "SPAN",
+      "extractive_representability": "YES"
+    },
+    {
+      "qid": "faq_3",
+      "question": "What is the default maximum upload size?",
+      "kind": "factual",
+      "document": "faq_document.txt",
+      "answerable": true,
+      "expected_answer": "50 MB",
+      "primary_capability": "DEFINITION",
+      "answer_type": "SPAN",
+      "extractive_representability": "YES"
+    },
+    {
+      "qid": "faq_4",
+      "question": "What authentication method is used?",
+      "kind": "factual",
+      "document": "faq_document.txt",
+      "answerable": true,
+      "expected_answer": "JWT tokens",
+      "primary_capability": "DEFINITION",
+      "answer_type": "SPAN",
+      "extractive_representability": "YES"
+    },
+    {
+      "qid": "mpr_1",
+      "question": "What was the reduction in query latency?",
+      "kind": "factual",
+      "document": "multi_page_report.pdf",
+      "answerable": true,
+      "expected_answer": "35%",
+      "primary_capability": "DIRECT_SPAN",
+      "answer_type": "SPAN",
+      "extractive_representability": "YES"
+    },
+    {
+      "qid": "mpr_2",
+      "question": "What is the chunk count after the upgrade?",
+      "kind": "table",
+      "document": "multi_page_report.pdf",
+      "answerable": true,
+      "expected_answer": "42",
+      "primary_capability": "NUMERIC_EXTRACTION",
+      "answer_type": "NUMBER",
+      "extractive_representability": "PARTIAL"
+    },
+    {
+      "qid": "mpr_3",
+      "question": "When is the corpus expansion estimated?",
+      "kind": "factual",
+      "document": "multi_page_report.pdf",
+      "answerable": true,
+      "expected_answer": "Q1 2026",
+      "primary_capability": "DIRECT_SPAN",
+      "answer_type": "SPAN",
+      "extractive_representability": "YES"
+    },
+    {
+      "qid": "mpr_4",
+      "question": "What is the QA_EXTRACT failure rate?",
+      "kind": "factual",
+      "document": "multi_page_report.pdf",
+      "answerable": true,
+      "expected_answer": "28.2 percent",
+      "primary_capability": "NUMERIC_EXTRACTION",
+      "answer_type": "NUMBER",
+      "extractive_representability": "PARTIAL"
+    },
+    {
+      "qid": "mpr_5",
+      "question": "How many parameters does the QA model have?",
+      "kind": "factual",
+      "document": "multi_page_report.pdf",
+      "answerable": true,
+      "expected_answer": "66 million",
+      "primary_capability": "NUMERIC_EXTRACTION",
+      "answer_type": "NUMBER",
+      "extractive_representability": "PARTIAL"
+    },
+    {
+      "qid": "tl_1",
+      "question": "When was the first prototype completed?",
+      "kind": "factual",
+      "document": "timeline_data.txt",
+      "answerable": true,
+      "expected_answer": "March 2024",
+      "primary_capability": "DIRECT_SPAN",
+      "answer_type": "SPAN",
+      "extractive_representability": "YES"
+    },
+    {
+      "qid": "tl_2",
+      "question": "When was version 1.0 released?",
+      "kind": "factual",
+      "document": "timeline_data.txt",
+      "answerable": true,
+      "expected_answer": "December 2024",
+      "primary_capability": "DIRECT_SPAN",
+      "answer_type": "SPAN",
+      "extractive_representability": "YES"
+    },
+    {
+      "qid": "tl_3",
+      "question": "What was the initial QA model accuracy?",
+      "kind": "factual",
+      "document": "timeline_data.txt",
+      "answerable": true,
+      "expected_answer": "72%",
+      "primary_capability": "NUMERIC_EXTRACTION",
+      "answer_type": "NUMBER",
+      "extractive_representability": "PARTIAL"
+    },
+    {
+      "qid": "tl_4",
+      "question": "When is the QA model retraining scheduled?",
+      "kind": "factual",
+      "document": "timeline_data.txt",
+      "answerable": true,
+      "expected_answer": "March 2026",
+      "primary_capability": "DIRECT_SPAN",
+      "answer_type": "SPAN",
+      "extractive_representability": "YES"
+    },
+    {
+      "qid": "ms_1",
+      "question": "What was the revenue in August?",
+      "kind": "table",
+      "document": "mixed_structured.docx",
+      "answerable": true,
+      "expected_answer": "1.4 million",
+      "primary_capability": "TABLE_CELL",
+      "answer_type": "SPAN",
+      "extractive_representability": "PARTIAL"
+    },
+    {
+      "qid": "ms_2",
+      "question": "Which month had negative growth?",
+      "kind": "table",
+      "document": "mixed_structured.docx",
+      "answerable": true,
+      "expected_answer": "September",
+      "primary_capability": "TABLE_COMPARISON",
+      "answer_type": "ENTITY",
+      "extractive_representability": "NOT_REPRESENTABLE"
+    },
+    {
+      "qid": "ms_3",
+      "question": "What was the first key achievement?",
+      "kind": "list",
+      "document": "mixed_structured.docx",
+      "answerable": true,
+      "expected_answer": "new document processing pipeline",
+      "primary_capability": "LIST_ORDER",
+      "answer_type": "SPAN",
+      "extractive_representability": "NOT_REPRESENTABLE"
+    },
+    {
+      "qid": "ms_4",
+      "question": "What caused the September revenue decline?",
+      "kind": "factual",
+      "document": "mixed_structured.docx",
+      "answerable": true,
+      "expected_answer": "seasonal factors",
+      "primary_capability": "DIRECT_SPAN",
+      "answer_type": "SPAN",
+      "extractive_representability": "YES"
+    },
+    {
+      "qid": "ms_5",
+      "question": "What is the first next quarter goal?",
+      "kind": "list",
+      "document": "mixed_structured.docx",
+      "answerable": true,
+      "expected_answer": "1.5 million per month",
+      "primary_capability": "LIST_ORDER",
+      "answer_type": "SPAN",
+      "extractive_representability": "NOT_REPRESENTABLE"
+    },
+    {
+      "qid": "gl_1",
+      "question": "What is abstention?",
+      "kind": "factual",
+      "document": "glossary.txt",
+      "answerable": true,
+      "expected_answer": "withhold an answer",
+      "primary_capability": "DEFINITION",
+      "answer_type": "SPAN",
+      "extractive_representability": "YES"
+    },
+    {
+      "qid": "gl_2",
+      "question": "What is the current context window size?",
+      "kind": "factual",
+      "document": "glossary.txt",
+      "answerable": true,
+      "expected_answer": "384 tokens",
+      "primary_capability": "DEFINITION",
+      "answer_type": "SPAN",
+      "extractive_representability": "YES"
+    },
+    {
+      "qid": "gl_3",
+      "question": "What does CTX_TRUNC stand for?",
+      "kind": "factual",
+      "document": "glossary.txt",
+      "answerable": true,
+      "expected_answer": "context truncation",
+      "primary_capability": "DEFINITION",
+      "answer_type": "SPAN",
+      "extractive_representability": "YES"
+    },
+    {
+      "qid": "gl_4",
+      "question": "What is MRR?",
+      "kind": "factual",
+      "document": "glossary.txt",
+      "answerable": true,
+      "expected_answer": "Mean Reciprocal Rank",
+      "primary_capability": "DEFINITION",
+      "answer_type": "SPAN",
+      "extractive_representability": "YES"
+    },
+    {
+      "qid": "cd_1",
+      "question": "What is the accuracy of DeBERTa-large?",
+      "kind": "table",
+      "document": "comparison_data.txt",
+      "answerable": true,
+      "expected_answer": "87.9 percent",
+      "primary_capability": "TABLE_CELL",
+      "answer_type": "SPAN",
+      "extractive_representability": "PARTIAL"
+    },
+    {
+      "qid": "cd_2",
+      "question": "Which model has the fewest parameters?",
+      "kind": "table",
+      "document": "comparison_data.txt",
+      "answerable": true,
+      "expected_answer": "DistilBERT",
+      "primary_capability": "TABLE_COMPARISON",
+      "answer_type": "ENTITY",
+      "extractive_representability": "NOT_REPRESENTABLE"
+    },
+    {
+      "qid": "cd_3",
+      "question": "What is the latency of BERT-large?",
+      "kind": "table",
+      "document": "comparison_data.txt",
+      "answerable": true,
+      "expected_answer": "65 ms",
+      "primary_capability": "NUMERIC_EXTRACTION",
+      "answer_type": "NUMBER",
+      "extractive_representability": "PARTIAL"
+    },
+    {
+      "qid": "cd_4",
+      "question": "What is the recommended model for production?",
+      "kind": "factual",
+      "document": "comparison_data.txt",
+      "answerable": true,
+      "expected_answer": "DeBERTa-base",
+      "primary_capability": "DIRECT_SPAN",
+      "answer_type": "SPAN",
+      "extractive_representability": "YES"
+    },
+    {
+      "qid": "un_1",
+      "question": "What is the capital of Finland?",
+      "kind": "unsupported",
+      "document": "unsupported",
+      "answerable": false,
+      "expected_answer": null,
+      "primary_capability": "UNANSWERABLE",
+      "answer_type": "NONE",
+      "extractive_representability": "YES"
+    },
+    {
+      "qid": "un_2",
+      "question": "How many employees work at the observatory?",
+      "kind": "unsupported",
+      "document": "unsupported",
+      "answerable": false,
+      "expected_answer": null,
+      "primary_capability": "UNANSWERABLE",
+      "answer_type": "NONE",
+      "extractive_representability": "YES"
+    },
+    {
+      "qid": "un_3",
+      "question": "What is the melting point of tungsten?",
+      "kind": "unsupported",
+      "document": "unsupported",
+      "answerable": false,
+      "expected_answer": null,
+      "primary_capability": "UNANSWERABLE",
+      "answer_type": "NONE",
+      "extractive_representability": "YES"
+    },
+    {
+      "qid": "un_4",
+      "question": "What is the population of Tokyo?",
+      "kind": "unsupported",
+      "document": "unsupported",
+      "answerable": false,
+      "expected_answer": null,
+      "primary_capability": "UNANSWERABLE",
+      "answer_type": "NONE",
+      "extractive_representability": "YES"
+    },
+    {
+      "qid": "un_5",
+      "question": "What is the chemical formula for glucose?",
+      "kind": "unsupported",
+      "document": "unsupported",
+      "answerable": false,
+      "expected_answer": null,
+      "primary_capability": "UNANSWERABLE",
+      "answer_type": "NONE",
+      "extractive_representability": "YES"
+    },
+    {
+      "qid": "un_6",
+      "question": "How many planets are in the solar system?",
+      "kind": "unsupported",
+      "document": "unsupported",
+      "answerable": false,
+      "expected_answer": null,
+      "primary_capability": "UNANSWERABLE",
+      "answer_type": "NONE",
+      "extractive_representability": "YES"
+    },
+    {
+      "qid": "un_7",
+      "question": "What year was the internet invented?",
+      "kind": "unsupported",
+      "document": "unsupported",
+      "answerable": false,
+      "expected_answer": null,
+      "primary_capability": "UNANSWERABLE",
+      "answer_type": "NONE",
+      "extractive_representability": "YES"
+    },
+    {
+      "qid": "un_8",
+      "question": "What is the fastest land animal?",
+      "kind": "unsupported",
+      "document": "unsupported",
+      "answerable": false,
+      "expected_answer": null,
+      "primary_capability": "UNANSWERABLE",
+      "answer_type": "NONE",
+      "extractive_representability": "YES"
+    },
+    {
+      "qid": "un_9",
+      "question": "What is the boiling point of mercury?",
+      "kind": "unsupported",
+      "document": "unsupported",
+      "answerable": false,
+      "expected_answer": null,
+      "primary_capability": "UNANSWERABLE",
+      "answer_type": "NONE",
+      "extractive_representability": "YES"
+    },
+    {
+      "qid": "un_10",
+      "question": "How many chromosomes do humans have?",
+      "kind": "unsupported",
+      "document": "unsupported",
+      "answerable": false,
+      "expected_answer": null,
+      "primary_capability": "UNANSWERABLE",
+      "answer_type": "NONE",
+      "extractive_representability": "YES"
+    }
+  ],
+  "capability_distribution": {
+    "DIRECT_SPAN": 24,
+    "SECTION_SPECIFIC": 7,
+    "TABLE_CELL": 11,
+    "NUMERIC_EXTRACTION": 14,
+    "LIST_ITEM": 8,
+    "TABLE_COMPARISON": 9,
+    "MULTI_CHUNK": 3,
+    "LIST_ORDER": 8,
+    "DEFINITION": 8,
+    "UNANSWERABLE": 10
+  },
+  "product_requirements": [
+    {
+      "requirement": "Answer factual questions about documents",
+      "capability": "DIRECT_SPAN",
+      "extractive_compatible": true,
+      "current_evidence": "70% EM on factual questions (unified oracle)",
+      "priority": "HIGH"
+    },
+    {
+      "requirement": "Extract values from tables",
+      "capability": "TABLE_CELL",
+      "extractive_compatible": "PARTIAL",
+      "current_evidence": "29.2% EM on table questions (unified oracle)",
+      "priority": "HIGH"
+    },
+    {
+      "requirement": "Navigate lists and ordered items",
+      "capability": "LIST_ITEM/LIST_ORDER",
+      "extractive_compatible": "PARTIAL/NOT_REPRESENTABLE",
+      "current_evidence": "6.25% EM on list questions (unified oracle)",
+      "priority": "HIGH"
+    },
+    {
+      "requirement": "Extract numeric values with units",
+      "capability": "NUMERIC_EXTRACTION",
+      "extractive_compatible": "PARTIAL",
+      "current_evidence": "NOT_EVALUATED separately",
+      "priority": "MEDIUM"
+    },
+    {
+      "requirement": "Compare values across documents",
+      "capability": "COMPARISON",
+      "extractive_compatible": false,
+      "current_evidence": "NOT_EVALUATED separately",
+      "priority": "MEDIUM"
+    },
+    {
+      "requirement": "Multi-chunk evidence synthesis",
+      "capability": "MULTI_CHUNK",
+      "extractive_compatible": "PARTIAL",
+      "current_evidence": "1 multi-chunk question, 100% failure",
+      "priority": "LOW"
+    },
+    {
+      "requirement": "Correct abstention on unanswerable questions",
+      "capability": "UNANSWERABLE",
+      "extractive_compatible": true,
+      "current_evidence": "10 unsupported questions, needs verification",
+      "priority": "HIGH"
+    },
+    {
+      "requirement": "Evidence citation and provenance",
+      "capability": "ALL",
+      "extractive_compatible": true,
+      "current_evidence": "Extractive QA inherently provides span positions",
+      "priority": "HIGH"
+    },
+    {
+      "requirement": "Low latency (<200ms)",
+      "capability": "ALL",
+      "extractive_compatible": true,
+      "current_evidence": "~23ms QA latency on CPU",
+      "priority": "HIGH"
+    },
+    {
+      "requirement": "Deterministic behavior",
+      "capability": "ALL",
+      "extractive_compatible": true,
+      "current_evidence": "Extractive QA is deterministic",
+      "priority": "MEDIUM"
+    }
+  ],
+  "architecture_options": {
+    "OPTION_A": {
+      "name": "Improve DistilBERT extractive QA",
+      "description": "Fine-tune with targeted table/list data on GPU",
+      "supported_capabilities": [
+        "DIRECT_SPAN",
+        "ENTITY_EXTRACTION",
+        "DATE_EXTRACTION",
+        "DEFINITION",
+        "SECTION_SPECIFIC"
+      ],
+      "limitations": [
+        "Cannot synthesize across chunks",
+        "Cannot compare values",
+        "Cannot aggregate",
+        "Cannot reason about list order"
+      ],
+      "evidence_requirements": "GPU training with 1000+ targeted examples",
+      "implementation_complexity": "LOW",
+      "latency_impact": "NONE (same model)",
+      "reliability_impact": "LOW (proven architecture)",
+      "hallucination_risk": "NONE (extractive)",
+      "provenance_impact": "EXCELLENT (span positions in context)",
+      "evaluation_complexity": "LOW (same evaluation framework)"
+    },
+    "OPTION_B": {
+      "name": "Stronger extractive model (DeBERTa-v3-base)",
+      "description": "Replace DistilBERT with DeBERTa for better span extraction",
+      "supported_capabilities": [
+        "DIRECT_SPAN",
+        "ENTITY_EXTRACTION",
+        "DATE_EXTRACTION",
+        "DEFINITION",
+        "SECTION_SPECIFIC",
+        "TABLE_CELL"
+      ],
+      "limitations": [
+        "Same synthesis limitations as DistilBERT",
+        "Higher latency (~2x)",
+        "Larger model (~86M params)"
+      ],
+      "evidence_requirements": "Benchmark DeBERTa on unified oracle",
+      "implementation_complexity": "MEDIUM (model swap + retraining)",
+      "latency_impact": "MODERATE (+50-100%)",
+      "reliability_impact": "LOW (proven architecture)",
+      "hallucination_risk": "NONE (extractive)",
+      "provenance_impact": "EXCELLENT (span positions)",
+      "evaluation_complexity": "LOW"
+    },
+    "OPTION_C": {
+      "name": "Extractive + lightweight synthesis layer",
+      "description": "Extractive QA for simple questions, rule-based synthesis for complex",
+      "supported_capabilities": [
+        "DIRECT_SPAN",
+        "ENTITY_EXTRACTION",
+        "DATE_EXTRACTION",
+        "DEFINITION",
+        "SECTION_SPECIFIC",
+        "TABLE_CELL",
+        "LIST_ITEM",
+        "MULTI_CHUNK",
+        "COMPARISON"
+      ],
+      "limitations": [
+        "Synthesis layer is rule-based, not learned",
+        "Cannot handle arbitrary aggregation",
+        "More complex architecture"
+      ],
+      "evidence_requirements": "Define synthesis rules for each capability",
+      "implementation_complexity": "MEDIUM-HIGH",
+      "latency_impact": "MODERATE (+20-50%)",
+      "reliability_impact": "MODERATE (more components to validate)",
+      "hallucination_risk": "LOW (rule-based synthesis)",
+      "provenance_impact": "GOOD (extractive path is traceable)",
+      "evaluation_complexity": "MEDIUM"
+    },
+    "OPTION_D": {
+      "name": "Generative grounded QA",
+      "description": "Small generative model (T5-small) with evidence grounding",
+      "supported_capabilities": [
+        "DIRECT_SPAN",
+        "ENTITY_EXTRACTION",
+        "DATE_EXTRACTION",
+        "DEFINITION",
+        "SECTION_SPECIFIC",
+        "TABLE_CELL",
+        "LIST_ITEM",
+        "LIST_ORDER",
+        "MULTI_CHUNK",
+        "MULTI_HOP",
+        "COMPARISON",
+        "AGGREGATION",
+        "SUMMARIZATION"
+      ],
+      "limitations": [
+        "Hallucination risk",
+        "Loss of exact span provenance",
+        "Higher latency",
+        "Requires evidence verification"
+      ],
+      "evidence_requirements": "Prototype with evidence grounding verification",
+      "implementation_complexity": "HIGH",
+      "latency_impact": "HIGH (+200-500%)",
+      "reliability_impact": "HIGH (new failure modes)",
+      "hallucination_risk": "MODERATE (generative)",
+      "provenance_impact": "MODERATE (needs evidence verification layer)",
+      "evaluation_complexity": "HIGH"
+    },
+    "OPTION_E": {
+      "name": "Hybrid: extractive + grounded synthesis",
+      "description": "Route simple questions to extractive, complex to grounded synthesis",
+      "supported_capabilities": [
+        "ALL"
+      ],
+      "limitations": [
+        "Routing accuracy",
+        "Two models to maintain",
+        "Complex evaluation",
+        "Integration complexity"
+      ],
+      "evidence_requirements": "Question classifier + both models trained",
+      "implementation_complexity": "HIGH",
+      "latency_impact": "VARIABLE (extractive for simple, generative for complex)",
+      "reliability_impact": "HIGH (routing errors possible)",
+      "hallucination_risk": "LOW-MODERATE (generative path only)",
+      "provenance_impact": "GOOD (extractive path is traceable, generative needs verification)",
+      "evaluation_complexity": "HIGH"
+    }
+  }
+}

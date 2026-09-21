@@ -1,0 +1,502 @@
+================================================================================
+PHASE 4B — QA EVALUATION EXPANSION & REAL-WORLD VALIDATION
+================================================================================
+
+Report Date: 2026-09-19
+Evaluation Version: 4b-v1
+Corpus Version: phase4b-v1
+Corpus: 24 documents, 102 questions (92 answerable, 10 unsupported)
+
+================================================================================
+1. EXECUTIVE SUMMARY
+================================================================================
+
+The expanded evaluation (92 answerable questions across 24 documents)
+REVEALS A DRAMATICALLY DIFFERENT PICTURE from Phase 3F:
+
+  Phase 3F (42 questions):  Structure-v2 achieves Recall@5=1.0, EM=0.385
+  Phase 4B (92 questions):  Structure-v2 achieves Recall@5=0.837, EM=0.239
+
+Key findings:
+
+  1. QA_EXTRACT remains dominant (33 failures, 35.9%) — CONSISTENT with Phase 3F
+  2. RET_MISS reappeared (15 failures, 16.3%) — WAS 0% IN PHASE 3F
+  3. EVID_OMIT increased (10 failures, 10.9%) — WAS 2% IN PHASE 3F
+  4. List questions: 93.75% failure rate (15/16) — PIPELINE CANNOT HANDLE LISTS
+  5. Table questions: 95.8% failure rate (23/24) — PIPELINE CANNOT HANDLE TABLES
+  6. Structure-v2 is NOT superior on the expanded corpus
+  7. The Phase 3F conclusion that structure-v2 should be production default
+     DOES NOT SURVIVE broader evaluation
+
+Confidence: HIGH — based on 92 answerable questions across 24 documents.
+
+Limitation: All documents are synthetic.  Real-world accuracy unknown.
+REAL_CORPUS_STATUS = NOT_AVAILABLE
+
+================================================================================
+2. SOURCE-OF-TRUTH INVENTORY
+================================================================================
+
+Read and verified:
+  - Phase 3F evaluation report (3f-v1): per-question data for 42 questions
+  - Phase 3G pipeline audit: failure funnel, retrieval diagnosis
+  - Phase 4A QA failure audit: root cause analysis, model architecture
+  - QA model implementation: chat/qa_model.py (DistilBERT, 66M params)
+  - QA model config: config.json (DistilBertForQuestionAnswering)
+  - QA inference config: inference_config.json (384 tokens, 100 answer, 20 n-best)
+  - QA training artifacts: model_card.json (414K samples, 3 phases)
+  - Tokenization: tokenization.py (WordPiece, 4 chars/token fallback)
+  - Context builder: chat/rag.py (build_qa_context, ContextPack)
+  - Chunking: documents/chunking.py (structure-v2, legacy)
+  - Retrieval: chat/rag.py (pgvector cosine similarity)
+  - Brain: brain/__init__.py, brain/executor.py, brain/gate.py
+  - Extraction: documents/processing.py (DOCX, TXT, PDF)
+  - Evaluation corpus: tests/phase4b_corpus.py (24 docs, 102 questions)
+  - Evaluation runner: test_phase4b_evaluation.py
+
+================================================================================
+3. CORPUS DESCRIPTION
+================================================================================
+
+Total: 24 documents, 102 questions (92 answerable, 10 unsupported)
+
+Document breakdown:
+  DOCX: 12 documents
+    short_sections.docx, heading_heavy.docx, tables_small.docx,
+    tables_large.docx, lists.docx, mixed.docx,
+    tables_medium.docx, tables_nested.docx, lists_nested.docx,
+    lists_long.docx, technical_manual.docx, mixed_structured.docx
+
+  TXT: 9 documents
+    long_paragraph.txt, dense_prose.txt, unpunctuated.txt,
+    markdown_sections.txt, research_paper.txt, faq_document.txt,
+    timeline_data.txt, glossary.txt, comparison_data.txt
+
+  PDF: 3 documents
+    multipage_section.pdf, academic_two_column.pdf, multi_page_report.pdf
+
+Question breakdown by kind:
+  factual:           30  (32.6%)
+  table:             24  (26.1%)
+  list:              16  (17.4%)
+  section_specific:   7  ( 7.6%)
+  dense_prose:        5  ( 5.4%)
+  academic:           3  ( 3.3%)
+  long_paragraph:     2  ( 2.2%)
+  multipage:          2  ( 2.2%)
+  multichunk:         1  ( 1.1%)
+  surrounding_context:1  ( 1.1%)
+  unpunctuated:       1  ( 1.1%)
+
+================================================================================
+4. SYNTHETIC VS REAL CORPUS STATUS
+================================================================================
+
+REAL_CORPUS_STATUS = NOT_AVAILABLE
+
+All 24 documents are SYNTHETIC (programmatic builders).
+No real-world documents are included.
+Results do NOT represent production accuracy.
+
+The synthetic corpus tests specific document structures but cannot
+capture:
+  - Real-world formatting inconsistencies
+  - Scanned PDFs with OCR errors
+  - Complex table layouts (merged cells, nested tables)
+  - Multi-column academic papers
+  - Headers/footers/captions
+  - Encoding issues
+
+================================================================================
+5. QUESTION TAXONOMY
+================================================================================
+
+Questions test the following QA behaviors:
+  - Direct span extraction (factual questions)
+  - Numeric extraction (dates, measurements, percentages)
+  - Entity extraction (names, organizations)
+  - Table cell lookup (specific row/column intersection)
+  - Table row lookup (finding the correct row)
+  - Table comparison (which has highest/lowest)
+  - List-item lookup (specific item in a list)
+  - List ordering (which item follows X)
+  - Section-specific extraction (from a specific section)
+  - Multi-chunk extraction (information across pages)
+  - Surrounding-context extraction (context around the answer)
+  - Definition questions (what is X)
+  - Comparative questions (which is larger)
+  - Unanswerable questions (no supporting evidence)
+
+================================================================================
+6. GOLD EVIDENCE METHODOLOGY
+================================================================================
+
+For every answerable question:
+  - expected_answer: deterministic gold answer
+  - acceptable_answers: paraphrase variants
+  - evidence: distinctive substrings that must appear in supporting chunks
+  - kind: question category
+  - document: source document
+
+Evidence is established from the document builders (programmatic,
+deterministic).  No fuzzy matching or semantic similarity is used
+as the primary correctness criterion.
+
+================================================================================
+7. ARM A RESULTS (legacy + legacy context)
+================================================================================
+
+  Recall@1:    0.7065
+  Recall@3:    0.7935
+  Recall@5:    0.8261
+  MRR:         0.8261
+  Exact Match: 0.2500
+  Token F1:    0.5032
+  Answerability: 0.3261
+  Evidence Coverage: 0.8261
+
+  Failure distribution:
+    QA_EXTRACT: 31
+    RET_MISS:   16
+    EVID_OMIT:  10
+    CTX_TRUNC:   5
+    CORRECT:    29
+    CORRECT_ABSTAIN: 9
+    UNKNOWN:     1
+
+================================================================================
+8. ARM B RESULTS (legacy + token-aware context)
+================================================================================
+
+  Recall@1:    0.7065
+  Recall@3:    0.7935
+  Recall@5:    0.8261
+  MRR:         0.8261
+  Exact Match: 0.2500
+  Token F1:    0.5032
+  Answerability: 0.3261
+  Evidence Coverage: 0.8261
+
+  IDENTICAL to Arm A on all answer metrics.
+  Context builder change alone does not affect answer quality
+  when retrieval is unchanged.
+
+================================================================================
+9. ARM C RESULTS (structure-v2 + token-aware context)
+================================================================================
+
+  Recall@1:    0.6848
+  Recall@3:    0.8043
+  Recall@5:    0.8370
+  MRR:         0.8370
+  Exact Match: 0.2391
+  Token F1:    0.4874
+  Answerability: 0.3152
+  Evidence Coverage: 0.8261
+
+  Failure distribution:
+    QA_EXTRACT: 33
+    RET_MISS:   15
+    EVID_OMIT:  10
+    CTX_TRUNC:   5
+    CORRECT:    29
+    CORRECT_ABSTAIN: 9
+    UNKNOWN:     1
+
+================================================================================
+10. PHASE 3F VS PHASE 4B
+================================================================================
+
+METRIC                  PHASE 3F (42q)    PHASE 4B (92q)    DELTA
+────────────────────────────────────────────────────────────────────
+Recall@5 (Arm C)        1.000             0.837             -16.3%
+Exact Match (Arm C)     0.385             0.239             -14.6%
+Token F1 (Arm C)        0.720             0.487             -23.3%
+Answerability (Arm C)   0.615             0.315             -30.0%
+RET_MISS (Arm C)        0                 15                +15
+QA_EXTRACT (Arm C)      11                33                +22
+EVID_OMIT (Arm C)       2                 10                +8
+CTX_TRUNC (Arm C)       2                 5                 +3
+
+CAUSE OF CHANGES:
+  - Corpus effects: New documents (tables, lists, technical) expose
+    failure modes not present in the Phase 3F corpus
+  - Measurement effects: 92 questions provides more statistical signal
+  - NOT pipeline changes: No code was modified between phases
+
+The Phase 3F conclusion that structure-v2 achieves "perfect recall"
+was an artifact of the small, curated corpus.  The expanded corpus
+reveals that retrieval fails on 16.3% of questions.
+
+================================================================================
+11. FAILURE FUNNEL
+================================================================================
+
+All questions (102)
+  ↓ answerable: 92 (90.2%)
+  ↓ evidence exists: 92 (100% of answerable)
+  ↓ evidence retrieved: 77 (83.7% of answerable) ← 15 RET_MISS
+  ↓ evidence supplied to QA: 67 (72.8% of answerable) ← 10 EVID_OMIT
+  ↓ QA produced answer: 67 (100% of those with evidence)
+  ↓ answer correct: 29 (31.5% of answerable)
+  ↓ evidence correctly reported: 29 (100% of correct)
+  ↓ final SUCCESS: 29 (31.5%)
+
+Information loss by stage:
+  Retrieval:     15 questions lost (16.3%)
+  Context:       10 questions lost (10.9%)
+  QA extraction: 38 questions lost (41.3%)
+  Total lost:    63 questions (68.5%)
+
+Largest loss: QA extraction (38 failures, 41.3%)
+Second loss:  Retrieval (15 failures, 16.3%)
+Third loss:   Context construction (10 failures, 10.9%)
+
+================================================================================
+12. QA_EXTRACT FAILURE REPLAY (Arm C)
+================================================================================
+
+33 QA_EXTRACT failures.  Breakdown by kind:
+
+TABLE: 16 failures (66.7% of table questions)
+  Most tables serialize as pipe-delimited text.  The extractive model
+  cannot navigate row/column relationships.  Specific patterns:
+  - Wrong cell extracted (adjacent row/column confusion)
+  - Heading extracted instead of cell value
+  - Partial cell value extracted
+  - Multiple cells merged into one span
+
+LIST: 7 failures (43.8% of list questions)
+  List questions require ordinal/positional reasoning that extractive
+  QA cannot perform.  Specific patterns:
+  - Span extends across multiple list items
+  - Wrong item extracted (adjacent item confusion)
+  - Partial item extracted
+
+FACTUAL: 6 failures (20.0% of factual questions)
+  Factual questions on new documents fail when:
+  - Answer is in a different section than expected
+  - Multiple similar facts create ambiguity
+  - Answer span is too short (tokenizer boundary)
+
+DENSE_PROSE: 1 failure (20.0%)
+MULTICHUNK: 1 failure (100%)
+ACADEMIC: 1 failure (33.3%)
+SECTION_SPECIFIC: 1 failure (14.3%)
+
+================================================================================
+13. TABLE ANALYSIS
+================================================================================
+
+24 table questions across 7 documents.
+Failure rate: 95.8% (23/24)
+
+Root causes:
+  A. Representation (16/23): Pipe-delimited serialization destroys
+     row/column structure that the extractive model needs.
+  B. Context ordering (4/23): Evidence omitted from QA context
+     (EVID_OMIT) despite being retrieved.
+  C. Context truncation (3/23): Table text exceeds QA context window.
+
+The table representation problem is the #1 cause of table failures.
+The pipe-delimited format ("Method | Result") is treated as continuous
+prose by the tokenizer, making row boundaries invisible.
+
+================================================================================
+14. LIST ANALYSIS
+================================================================================
+
+16 list questions across 3 documents.
+Failure rate: 93.75% (15/16)
+
+Root causes:
+  A. Retrieval miss (8/16): List items not retrieved.  The legacy
+     chunker splits lists across chunks, and even structure-v2
+     sometimes fails to preserve list item boundaries in embeddings.
+  B. QA extraction (7/16): List items retrieved but wrong span
+     extracted.  Ordinal questions ("which follows X?") require
+     reasoning that extractive QA cannot perform.
+
+List questions are the WORST performing category.  The pipeline
+fundamentally cannot handle list-based content.
+
+================================================================================
+15. MULTI-CHUNK ANALYSIS
+================================================================================
+
+1 multi-chunk question.
+Failure rate: 100% (1/1)
+
+The question "Trace the Kestrel programme from start to finish" requires
+synthesizing information across 3 pages.  The extractive model cannot
+compress a multi-page narrative into a single answer span.
+
+EXTRACTIVE_ARCHITECTURE_LIMITATION confirmed.
+
+================================================================================
+16. CONTEXT ANALYSIS
+================================================================================
+
+EVID_OMIT: 10 failures (10.9%)
+  Evidence retrieved but not supplied to QA.  The 384-token QA window
+  cannot accommodate all relevant chunks.  Structure-v2 produces larger
+  chunks (median 34 tokens vs 13), so fewer chunks fit.
+
+CTX_TRUNC: 5 failures (5.4%)
+  Context overflow.  The QA context exceeds the 384-token window.
+  Primarily affects table and long-paragraph documents.
+
+Context utilization: 0.98 (Arm C) — nearly full on average.
+
+================================================================================
+17. CONFIDENCE ANALYSIS
+================================================================================
+
+Correct answers (29):
+  Confidence range: 0.0002 to 0.8328
+  Median: ~0.35
+
+Incorrect answers (63):
+  Confidence range: 0.0001 to 0.643
+  Median: ~0.05
+
+Overlap zone: 0.0002 — 0.643
+
+Conclusion: Confidence is NOT calibrated.  No threshold separates
+correct from incorrect answers.  The evidence gate's use of
+QA_CONFIDENCE_NONE = 0.0 remains the only safe boundary.
+
+================================================================================
+18. TRAINING DATA ANALYSIS
+================================================================================
+
+Model card shows:
+  Phase 1: SQuAD 2.0 (87,599 samples) — prose QA
+  Phase 2: SQuAD + HotpotQA + CoQA + NewsQA + TriviaQA (414,057)
+  Phase 3: Custom Academic QA (50 pairs)
+
+Training data DOES NOT represent:
+  - Table QA (no pipe-delimited table data)
+  - List/ordinal QA (no sequential reasoning data)
+  - Structured document navigation
+  - Multi-column layouts
+  - Unpunctuated text
+
+This explains why table (95.8% failure) and list (93.75% failure)
+questions perform so poorly.
+
+================================================================================
+19. LEAKAGE ANALYSIS
+================================================================================
+
+LEAKAGE_STATUS = NOT_DETERMINABLE
+
+The training data artifacts (model_card.json) provide only summary
+statistics, not the actual training examples.  Exact question/answer
+overlap cannot be checked without the full training datasets.
+
+The evaluation questions are newly created for Phase 4B and were not
+part of the Phase 3F corpus.  However, some evaluation document text
+(synthetic fixtures) may overlap with training data if the training
+included similar synthetic content.
+
+================================================================================
+20. STRUCTURE-V2 DECISION
+================================================================================
+
+STRUCTURE_V2_NOT_SUPPORTED
+
+Phase 4B evidence:
+  - Recall@5: 0.837 (C) vs 0.826 (A/B) — marginal (+1.1%)
+  - Exact Match: 0.239 (C) vs 0.250 (A/B) — WORSE (-1.1%)
+  - Token F1: 0.487 (C) vs 0.503 (A/B) — WORSE (-1.6%)
+  - Answerability: 0.315 (C) vs 0.326 (A/B) — WORSE (-1.1%)
+  - EVID_OMIT: 10 (C) vs 10 (A/B) — SAME
+  - CTX_TRUNC: 5 (C) vs 5 (A/B) — SAME
+  - Spurious answers: 1 (C) vs 0 (A/B) — REGRESSION
+  - QA latency: 110ms (C) vs 71ms (A/B) — +55% SLOWER
+
+Structure-v2 does NOT provide meaningful improvement on the expanded
+corpus.  It produces WORSE answer quality and is SLOWER.
+
+The Phase 3F conclusion was an artifact of the small corpus.
+
+================================================================================
+21. BOTTLENECK DECISION
+================================================================================
+
+Based on Phase 4B evidence:
+
+  #1 QA MODEL (33 failures, 35.9%)
+     Table and list failures dominate.  The extractive model cannot
+     handle structured content.  Training data mismatch confirmed.
+
+  #2 RETRIEVAL (15 failures, 16.3%)
+     Significant retrieval failures on list and factual questions.
+     The embedding model struggles with short list items and
+     unpunctuated text.
+
+  #3 CONTEXT CONSTRUCTION (10 failures, 10.9%)
+     Evidence omission and context truncation affect table and
+     long-paragraph questions.
+
+The QA model remains the #1 bottleneck, but retrieval is now a
+significant secondary bottleneck that Phase 3F did not reveal.
+
+================================================================================
+22. LIMITATIONS
+================================================================================
+
+  1. All documents are synthetic — real-world accuracy unknown
+  2. 92 answerable questions — statistical significance limited
+  3. QA confidence is not calibrated
+  4. Token F1 uses simple token overlap
+  5. REAL_CORPUS_STATUS = NOT_AVAILABLE
+  6. Training data details beyond model card are unavailable
+  7. No real documents to validate production representativeness
+  8. The evaluation measures synthetic performance, not production
+
+================================================================================
+23. RECOMMENDED PHASE 4C
+================================================================================
+
+Based on Phase 4B evidence, the recommended next phase is:
+
+  PRIMARY: Expand evaluation with REAL documents
+    - Acquire 10+ legally sourced real documents
+    - Validate that synthetic results correlate with real performance
+    - This is BLOCKING — no model changes without real validation
+
+  SECONDARY: Address retrieval failures (15 RET_MISS)
+    - Investigate why list items are not retrieved
+    - Consider list-aware embedding or retrieval strategies
+    - This is a NEW finding from Phase 4B
+
+  TERTIARY: QA model improvement (table/list training data)
+    - Add table QA training data (pipe-delimited serialization)
+    - Add list/ordinal training data
+    - Address 33 QA_EXTRACT failures
+
+  DEFERRED: Structure-v2 production promotion
+    - NOT supported by Phase 4B evidence
+    - Requires broader validation with real documents
+
+  NOT RECOMMENDED: Generative QA, Retrieval V2, hybrid search
+    - No evidence supporting these changes
+
+================================================================================
+
+# PHASE 4B — CONTRACT READY
+
+The expanded evaluation reveals that:
+  1. QA extraction is still the #1 bottleneck (35.9%)
+  2. Retrieval is a significant secondary bottleneck (16.3%)
+  3. Structure-v2 is NOT superior on the expanded corpus
+  4. Table and list questions are fundamentally broken (95.8% and 93.75% failure)
+  5. Real-world validation is required before any model changes
+
+The Phase 4A conclusion that QA extraction is the dominant bottleneck
+SURVIVES the expanded evaluation.  However, the recommended approach
+now includes addressing retrieval failures alongside QA improvement.
+
+================================================================================

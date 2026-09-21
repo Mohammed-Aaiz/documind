@@ -1,0 +1,245 @@
+======================================================================
+PHASE 4F.5-E — QA CAPABILITY & TRAINING-DATA GAP AUDIT
+======================================================================
+
+Date: 2026-09-21
+Status: ANALYSIS_COMPLETE
+
+======================================================================
+1. UNANSWERABLE VALIDITY
+======================================================================
+
+  42 unanswerable examples inspected.
+  Classification:
+    ABSENT_FACT:           30 (71.4%)
+    UNSUPPORTED_NUMBER:     6 (14.3%)
+    UNSUPPORTED_ENTITY:     3  (7.1%)
+    UNSUPPORTED_DATE:       3  (7.1%)
+
+  All 42 are VALID_UNANSWERABLE — well-formed questions asking for
+  information genuinely absent from the context.
+
+  Unanswerable source: ALL from `unanswerable_corpus` document
+  (standalone question corpus, not tied to specific source docs).
+
+======================================================================
+2. ROOT CAUSE: UNANSWERABLE TRAINING GAP
+======================================================================
+
+  CRITICAL FINDING:
+
+  Category      | Total | Train | Val | Test | Benchmark
+  UNANSWERABLE  |    42 |     0 |  42 |    0 |        42
+
+  A1/A2 were trained on ZERO unanswerable examples.
+  All 42 unanswerable examples went to VALIDATION, not TRAINING.
+  A1/A2 never received a single training signal for abstention.
+
+  A0 (production) was trained on ~414K examples including SQuAD 2.0,
+  which has extensive unanswerable question training.
+
+  This is the DEFINITIVE root cause of the abstention gap.
+
+======================================================================
+3. A0 ABSTENTION ANALYSIS
+======================================================================
+
+  A0 correct abstention: 27/42 (64.3%)
+  A0 spurious answers: 15/42 (35.7%)
+
+  A0's abstention mechanism:
+  - Confidence distribution: correct=0.62, spurious=0.45
+  - Some separation exists but overlap is significant
+  - A0 likely learned answerability from SQuAD 2.0 training
+  - Not from threshold — from learned behavior
+
+======================================================================
+4. A1/A2 SPURIOUS ANSWER ANALYSIS
+======================================================================
+
+  A1 spurious: 42/42 (100%) — ALL unanswerable questions get answers
+  A2 spurious: 42/42 (100%)
+
+  A1/A2 show SYSTEMATIC EXTRACTION behavior:
+  - Always return the highest-scoring span
+  - Never abstain
+  - Confidence on spurious: A1=0.08, A2=0.07
+  - These are LOW confidence but above any reasonable threshold
+
+  Root cause: Without unanswerable training examples, the model
+  has no mechanism to learn "when not to answer."
+
+======================================================================
+5. CONFIDENCE SEPARATION
+======================================================================
+
+  | Group                | A0 conf | A1 conf | A2 conf |
+  |----------------------|---------|---------|---------|
+  | Answerable correct   |  0.6208 |  0.1082 |  0.0934 |
+  | Answerable incorrect |  0.6144 |  0.0654 |  0.0636 |
+  | Unanswerable abstain |     N/A |     N/A |     N/A |
+  | Unanswerable spurious|  0.4528 |  0.0797 |  0.0727 |
+
+  A0: Some separation (correct=0.62 vs spurious=0.45)
+  A1: Minimal separation (correct=0.11 vs spurious=0.08)
+  A2: Minimal separation (correct=0.09 vs spurious=0.07)
+
+  CONCLUSION: Confidence alone cannot separate answerable from
+  unanswerable for A1/A2. The distributions overlap heavily.
+
+======================================================================
+6. THRESHOLD SWEEP
+======================================================================
+
+  A0: Best F1 at threshold=0.0 (no thresholding helps)
+      A0 already abstains on its own
+
+  A1: Best F1 at threshold=0.10
+      F1=41.7%, EM=12.5%
+      BUT: false_abstention=82.9% (abstains on 83% of answerable!)
+      AND: unanswerable_abstention=78.6%
+
+  A2: Best F1 at threshold=0.15
+      F1=40.0%, EM=0.0%
+      false_abstention=97.9%
+      unanswerable_abstention=95.2%
+
+  FINDING: Threshold-based abstention is NOT viable for A1/A2.
+  To get meaningful unanswerable abstention (78-95%), you must
+  sacrifice 83-98% of answerable coverage. The trade-off is
+  unacceptable — you'd be abstaining on almost everything.
+
+======================================================================
+7. TRAINING DATA COMPOSITION
+======================================================================
+
+  | Category         | Total | Train | Val  | Test | Benchmark |
+  |------------------|-------|-------|------|------|-----------|
+  | TABLE_CELL       |   362 |   231 |   20 |  111 |        24 |
+  | LIST_ITEM        |   106 |    82 |    5 |   19 |        20 |
+  | NUMERIC          |    97 |    57 |   20 |   20 |        20 |
+  | DIRECT_SPAN      |    86 |    50 |   11 |   25 |        24 |
+  | TABLE_ROW        |    82 |    52 |    5 |   25 |        16 |
+  | SECTION_SPECIFIC |    55 |    37 |    4 |   14 |        16 |
+  | UNANSWERABLE     |    42 |     0 |   42 |    0 |        42 |
+  | MULTI_CHUNK      |    26 |    16 |    3 |    7 |        10 |
+  | DATE             |    25 |    25 |    0 |    0 |         0 |
+  | ENTITY           |    22 |    22 |    0 |    0 |         0 |
+  | LONG_CONTEXT     |    15 |     3 |   12 |    0 |        10 |
+
+  KEY: UNANSWERABLE has 0 in training, 42 in validation.
+
+======================================================================
+8. PRODUCTION VS EXPERIMENT
+======================================================================
+
+  | Dimension          | Production (A0)     | Experiment (A1/A2)   |
+  |--------------------|---------------------|----------------------|
+  | Base model         | distilbert-uncased  | distilbert/bert      |
+  | Training samples   | ~414,107            | 571                  |
+  | Unanswerable       | Yes (SQuAD 2.0)     | 0                    |
+  | Structured QA      | Extensive           | Limited              |
+  | Abstention learned | Yes                 | No                   |
+  | Training recipe    | Multi-phase         | 3 epochs, single     |
+
+  The production model's abstention capability comes from SQuAD 2.0
+  training, which includes unanswerable questions. A1/A2 never
+  received this signal.
+
+======================================================================
+9. CAPABILITY MATRIX
+======================================================================
+
+  | Model | Extraction EM | Extraction F1 | Abstention | Spurious |
+  |-------|---------------|---------------|------------|----------|
+  | A0    |     2.1%      |    12.0%      |   64.3%    |   8.2%   |
+  | A1    |     3.6%      |    21.3%      |    0.0%    |  23.1%   |
+  | A2    |     3.6%      |    19.4%      |    0.0%    |  23.1%   |
+
+  A1/A2 improve extraction but completely lose abstention.
+  This is NOT a trade-off — it's a missing capability.
+
+======================================================================
+10. ROOT-CAUSE MATRIX
+======================================================================
+
+  | Problem            | Cause        | Status            |
+  |--------------------|--------------|-------------------|
+  | Extraction         | TRAINING     | SUPPORTED         |
+  | Abstention         | DATA         | SUPPORTED         |
+  | Numeric            | REPRESENTATION | SUPPORTED       |
+  | Table cell         | REPR + DATA  | SUPPORTED         |
+  | Table row          | MODEL + TRAIN| PARTIALLY_SUPPORT |
+  | List item          | MODEL        | PARTIALLY_SUPPORT |
+  | Section-specific   | DATA + MODEL | SUPPORTED         |
+  | Multi-chunk        | MODEL + ARCH | PARTIALLY_SUPPORT |
+
+======================================================================
+11. NEXT-EXPERIMENT MATRIX
+======================================================================
+
+  OPTION A: Threshold/calibration
+    Evidence for: Some confidence separation in A0
+    Evidence against: A1/A2 distributions overlap heavily
+    Risk: LOW
+    Should happen: YES (diagnostic)
+
+  OPTION B: Unanswerable training
+    Evidence for: DIRECT ROOT CAUSE FIX. A1/A2 trained on 0 unanswerable.
+    Evidence against: Only 42 available. May be insufficient.
+    Risk: LOW
+    Should happen: YES (addresses root cause)
+
+  OPTION C: Production init + fine-tune
+    Evidence for: Preserves A0 abstention, gains fine-tuning
+    Evidence against: Different tokenizer/task distribution
+    Risk: MEDIUM
+    Should happen: CONSIDER after B
+
+  OPTION D: Structured QA data
+    Evidence for: TABLE_CELL is universal failure
+    Evidence against: May be representation issue
+    Risk: MEDIUM
+    Should happen: CONSIDER after A/B
+
+  OPTION E: Table representation
+    Evidence for: Pipe-delimited text loses structure
+    Evidence against: Requires pipeline changes
+    Risk: HIGH
+    Should happen: NO
+
+  OPTION F: Different architecture
+    Evidence for: DeBERTa may handle structured data
+    Evidence against: Previous attempt failed (NaN)
+    Risk: HIGH
+    Should happen: NO
+
+======================================================================
+12. HARD CONCLUSION
+======================================================================
+
+  The evidence SUPPORTS:
+
+  ROOT CAUSE: A1/A2 were trained on 0 unanswerable examples.
+  All 42 went to validation, not training. This is a data
+  allocation error, not a model or architecture limitation.
+
+  The abstention gap is FIXABLE by including unanswerable examples
+  in the training set. This is the highest-priority next step.
+
+  The extraction improvement in A1/A2 is REAL and should be
+  preserved. The fix should ADD unanswerable training without
+  losing the extraction gains.
+
+  INSUFFICIENT EVIDENCE for:
+  - Architecture changes
+  - Table representation changes
+  - Larger datasets (571 may be sufficient with proper balance)
+
+  STRONG EVIDENCE for:
+  - Include unanswerable examples in training (Option B)
+  - Diagnostic threshold analysis (Option A)
+
+======================================================================
+PHASE 4F.5-E — ANALYSIS COMPLETE
+======================================================================

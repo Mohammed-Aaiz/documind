@@ -1,0 +1,79 @@
+{
+  "phase": "4F.5-C",
+  "A1": {
+    "history": [
+      {
+        "epoch": 1,
+        "loss": 5.6384,
+        "val_em": 5.0,
+        "val_f1": 18.5,
+        "val_count": 80,
+        "lr": 2.16e-05,
+        "time_s": 9.3,
+        "val_time_s": 2.0
+      },
+      {
+        "epoch": 2,
+        "loss": 4.329,
+        "val_em": 7.5,
+        "val_f1": 24.0,
+        "val_count": 80,
+        "lr": 1.08e-05,
+        "time_s": 9.0,
+        "val_time_s": 2.0
+      },
+      {
+        "epoch": 3,
+        "loss": 3.4867,
+        "val_em": 8.8,
+        "val_f1": 22.7,
+        "val_count": 80,
+        "lr": 0.0,
+        "time_s": 9.1,
+        "val_time_s": 2.0
+      }
+    ],
+    "loss_decreasing": true,
+    "val_em_increasing": true,
+    "overfitting": "MILD: val_EM=8.8% vs test_EM=1.8%",
+    "stability": "STABLE"
+  },
+  "A2": {
+    "history": [
+      {
+        "epoch": 1,
+        "loss": 5.3747,
+        "val_em": 7.5,
+        "val_f1": 21.8,
+        "val_count": 80,
+        "lr": 1.4400000000000001e-05,
+        "time_s": 17.5,
+        "val_time_s": 3.7
+      },
+      {
+        "epoch": 2,
+        "loss": 3.9508,
+        "val_em": 10.0,
+        "val_f1": 23.2,
+        "val_count": 80,
+        "lr": 7.2000000000000005e-06,
+        "time_s": 17.5,
+        "val_time_s": 3.7
+      },
+      {
+        "epoch": 3,
+        "loss": 3.2996,
+        "val_em": 11.2,
+        "val_f1": 23.9,
+        "val_count": 80,
+        "lr": 0.0,
+        "time_s": 18.0,
+        "val_time_s": 3.9
+      }
+    ],
+    "loss_decreasing": true,
+    "val_em_increasing": true,
+    "overfitting": "SIGNIFICANT: val_EM=11.2% vs test_EM=0.9% (2 validation docs unreliable)",
+    "stability": "STABLE"
+  }
+}

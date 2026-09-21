@@ -1,0 +1,442 @@
+{
+  "total_examples": 182,
+  "overall": {
+    "em": 0.0,
+    "f1": 11.0,
+    "answerable_correct": 0,
+    "answerable_total": 140,
+    "answerability_accuracy": 0.0,
+    "abstention_accuracy": 45.2,
+    "false_abstention": 10.7,
+    "spurious_rate": 54.8,
+    "answerable": 140,
+    "unanswerable": 42
+  },
+  "by_category": {
+    "DIRECT_SPAN": {
+      "n": 24,
+      "em": 0.0,
+      "f1": 13.0
+    },
+    "LIST_ITEM": {
+      "n": 20,
+      "em": 0.0,
+      "f1": 12.9
+    },
+    "LONG_CONTEXT": {
+      "n": 10,
+      "em": 0.0,
+      "f1": 1.6
+    },
+    "MULTI_CHUNK": {
+      "n": 10,
+      "em": 0.0,
+      "f1": 3.0
+    },
+    "NUMERIC": {
+      "n": 20,
+      "em": 0.0,
+      "f1": 22.6
+    },
+    "SECTION_SPECIFIC": {
+      "n": 16,
+      "em": 0.0,
+      "f1": 3.2
+    },
+    "TABLE_CELL": {
+      "n": 24,
+      "em": 0.0,
+      "f1": 5.8
+    },
+    "TABLE_ROW": {
+      "n": 16,
+      "em": 0.0,
+      "f1": 18.0
+    },
+    "UNANSWERABLE": {
+      "n": 42,
+      "em": 0,
+      "f1": 0
+    }
+  },
+  "unanswerable_details": [
+    {
+      "example_id": "unans_fb3b3426",
+      "question": "What machine learning framework is used for embeddings?",
+      "prediction": "the system uses sentence transformer models for generating 768 -",
+      "null_score": 0.003959,
+      "best_answer_score": 0.004397,
+      "null_margin": -0.000438,
+      "abstained": false
+    },
+    {
+      "example_id": "unans_ecebc88c",
+      "question": "What was the date of the board meeting?",
+      "prediction": "the board of directors consists of 9 members.",
+      "null_score": 0.003994,
+      "best_answer_score": 0.004092,
+      "null_margin": -9.9e-05,
+      "abstained": false
+    },
+    {
+      "example_id": "unans_63ece8c5",
+      "question": "What is the data retention policy?",
+      "prediction": "",
+      "null_score": 0.00392,
+      "best_answer_score": 0.004203,
+      "null_margin": -0.000283,
+      "abstained": true
+    },
+    {
+      "example_id": "unans_7a9ef8c8",
+      "question": "Who is the chief marketing officer?",
+      "prediction": "james whitfield, cfo : robert tanaka, coo : elena vasque",
+      "null_score": 0.003651,
+      "best_answer_score": 0.004494,
+      "null_margin": -0.000843,
+      "abstained": false
+    },
+    {
+      "example_id": "unans_ee310eea",
+      "question": "What programming language is the frontend written in?",
+      "prediction": "the backend is written in python with fastapi.",
+      "null_score": 0.003961,
+      "best_answer_score": 0.004377,
+      "null_margin": -0.000416,
+      "abstained": false
+    },
+    {
+      "example_id": "unans_04664035",
+      "question": "What is the stock price of Meridian Analytics?",
+      "prediction": "",
+      "null_score": 0.004308,
+      "best_answer_score": 0.00434,
+      "null_margin": -3.2e-05,
+      "abstained": true
+    },
+    {
+      "example_id": "unans_4725a75e",
+      "question": "How many patents does the company hold?",
+      "prediction": "$ 1. 24 billion.",
+      "null_score": 0.004105,
+      "best_answer_score": 0.004379,
+      "null_margin": -0.000273,
+      "abstained": false
+    },
+    {
+      "example_id": "unans_de20050d",
+      "question": "What training data was used for the model?",
+      "prediction": "",
+      "null_score": 0.00385,
+      "best_answer_score": 0.004266,
+      "null_margin": -0.000416,
+      "abstained": true
+    },
+    {
+      "example_id": "unans_e1454d12",
+      "question": "What training framework was used?",
+      "prediction": "the platform uses postgresql 16. 2 with pgvector 0. 7. 0",
+      "null_score": 0.003761,
+      "best_answer_score": 0.00443,
+      "null_margin": -0.000669,
+      "abstained": false
+    },
+    {
+      "example_id": "unans_885f9d0e",
+      "question": "What is the average customer lifetime value?",
+      "prediction": "",
+      "null_score": 0.004024,
+      "best_answer_score": 0.003959,
+      "null_margin": 6.5e-05,
+      "abstained": true
+    },
+    {
+      "example_id": "unans_a60eda2e",
+      "question": "How many data breaches occurred?",
+      "prediction": "",
+      "null_score": 0.003762,
+      "best_answer_score": 0.004027,
+      "null_margin": -0.000265,
+      "abstained": true
+    },
+    {
+      "example_id": "unans_496d4272",
+      "question": "What is the maximum upload file size for images?",
+      "prediction": ", and html formats with a 100 mb limit.",
+      "null_score": 0.004234,
+      "best_answer_score": 0.004873,
+      "null_margin": -0.000639,
+      "abstained": false
+    },
+    {
+      "example_id": "unans_67e1a2fc",
+      "question": "What color is the device?",
+      "prediction": "",
+      "null_score": 0.003897,
+      "best_answer_score": 0.003945,
+      "null_margin": -4.8e-05,
+      "abstained": true
+    },
+    {
+      "example_id": "unans_d7480687",
+      "question": "How many bugs were reported in Q3?",
+      "prediction": ". 3 percent for q3 2025.",
+      "null_score": 0.003877,
+      "best_answer_score": 0.004169,
+      "null_margin": -0.000292,
+      "abstained": false
+    },
+    {
+      "example_id": "unans_29bba51a",
+      "question": "What is the false positive rate of the QA model?",
+      "prediction": "94. 2",
+      "null_score": 0.003806,
+      "best_answer_score": 0.004158,
+      "null_margin": -0.000352,
+      "abstained": false
+    },
+    {
+      "example_id": "unans_3b23eb33",
+      "question": "When was the first version released?",
+      "prediction": "",
+      "null_score": 0.004,
+      "best_answer_score": 0.004363,
+      "null_margin": -0.000363,
+      "abstained": true
+    },
+    {
+      "example_id": "unans_520918ca",
+      "question": "What is the population of Tokyo?",
+      "prediction": "",
+      "null_score": 0.003927,
+      "best_answer_score": 0.003793,
+      "null_margin": 0.000134,
+      "abstained": true
+    },
+    {
+      "example_id": "unans_02ea167f",
+      "question": "Who is the marketing director?",
+      "prediction": "",
+      "null_score": 0.003935,
+      "best_answer_score": 0.004418,
+      "null_margin": -0.000483,
+      "abstained": true
+    },
+    {
+      "example_id": "unans_691bae51",
+      "question": "How many open source contributors does the project have?",
+      "prediction": "",
+      "null_score": 0.003963,
+      "best_answer_score": 0.004459,
+      "null_margin": -0.000495,
+      "abstained": true
+    },
+    {
+      "example_id": "unans_b415e6a3",
+      "question": "What was the highest temperature recorded?",
+      "prediction": "42. 3 to 48. 7 degrees celsius across all stations",
+      "null_score": 0.003691,
+      "best_answer_score": 0.003879,
+      "null_margin": -0.000189,
+      "abstained": false
+    },
+    {
+      "example_id": "unans_20e56903",
+      "question": "What is the mean time between failures?",
+      "prediction": "99. 97 percent uptime for q3 2025",
+      "null_score": 0.003852,
+      "best_answer_score": 0.004107,
+      "null_margin": -0.000256,
+      "abstained": false
+    },
+    {
+      "example_id": "unans_a042521b",
+      "question": "What machine learning algorithm does DocuMind use for classification?",
+      "prediction": "documi",
+      "null_score": 0.004138,
+      "best_answer_score": 0.004551,
+      "null_margin": -0.000414,
+      "abstained": false
+    },
+    {
+      "example_id": "unans_a7ad9d04",
+      "question": "What is the employee turnover rate?",
+      "prediction": "apex computing employs 2, 847 people across 14 offices worldwide",
+      "null_score": 0.004176,
+      "best_answer_score": 0.004316,
+      "null_margin": -0.00014,
+      "abstained": false
+    },
+    {
+      "example_id": "unans_a334de2c",
+      "question": "What version of React is the frontend built with?",
+      "prediction": "the platform uses postgresql 16. 2 with pgvector 0. 7. 0",
+      "null_score": 0.003878,
+      "best_answer_score": 0.004672,
+      "null_margin": -0.000795,
+      "abstained": false
+    },
+    {
+      "example_id": "unans_422d6ea0",
+      "question": "What is the average order value?",
+      "prediction": "$ 412. 5 million",
+      "null_score": 0.003959,
+      "best_answer_score": 0.00419,
+      "null_margin": -0.000231,
+      "abstained": false
+    },
+    {
+      "example_id": "unans_a603100e",
+      "question": "How many concurrent users can the system support?",
+      "prediction": "",
+      "null_score": 0.00398,
+      "best_answer_score": 0.004243,
+      "null_margin": -0.000263,
+      "abstained": true
+    },
+    {
+      "example_id": "unans_7a4e5b72",
+      "question": "What is the battery life of CloudDocs?",
+      "prediction": "clouddocs enterprise is a cloud -",
+      "null_score": 0.003983,
+      "best_answer_score": 0.004525,
+      "null_margin": -0.000541,
+      "abstained": false
+    },
+    {
+      "example_id": "unans_89493393",
+      "question": "What is the average response time for Tier 2 support?",
+      "prediction": "99. 95",
+      "null_score": 0.004003,
+      "best_answer_score": 0.004179,
+      "null_margin": -0.000176,
+      "abstained": false
+    },
+    {
+      "example_id": "unans_7b46d69d",
+      "question": "What is the maximum concurrent connection limit?",
+      "prediction": "",
+      "null_score": 0.004045,
+      "best_answer_score": 0.004083,
+      "null_margin": -3.8e-05,
+      "abstained": true
+    },
+    {
+      "example_id": "unans_39b0bf0c",
+      "question": "What is the customer churn rate?",
+      "prediction": "",
+      "null_score": 0.003994,
+      "best_answer_score": 0.003908,
+      "null_margin": 8.6e-05,
+      "abstained": true
+    },
+    {
+      "example_id": "unans_1b510697",
+      "question": "What is the environmental impact score?",
+      "prediction": "",
+      "null_score": 0.003958,
+      "best_answer_score": 0.004086,
+      "null_margin": -0.000128,
+      "abstained": true
+    },
+    {
+      "example_id": "unans_03d364a3",
+      "question": "What is the total cost of ownership?",
+      "prediction": ", 000.",
+      "null_score": 0.004017,
+      "best_answer_score": 0.004806,
+      "null_margin": -0.000789,
+      "abstained": false
+    },
+    {
+      "example_id": "unans_f6563cea",
+      "question": "Who designed the company logo?",
+      "prediction": "james whitfield.",
+      "null_score": 0.003654,
+      "best_answer_score": 0.004269,
+      "null_margin": -0.000616,
+      "abstained": false
+    },
+    {
+      "example_id": "unans_8afe7d03",
+      "question": "What is the exact number of active users?",
+      "prediction": ", 000 documents per day.",
+      "null_score": 0.003795,
+      "best_answer_score": 0.004962,
+      "null_margin": -0.001166,
+      "abstained": false
+    },
+    {
+      "example_id": "unans_3a0430bc",
+      "question": "What is the recovery point objective?",
+      "prediction": "",
+      "null_score": 0.003768,
+      "best_answer_score": 0.00407,
+      "null_margin": -0.000302,
+      "abstained": true
+    },
+    {
+      "example_id": "unans_0badce8d",
+      "question": "What is the operating temperature of the PaperStack device?",
+      "prediction": "",
+      "null_score": 0.003878,
+      "best_answer_score": 0.004228,
+      "null_margin": -0.000349,
+      "abstained": true
+    },
+    {
+      "example_id": "unans_08af12b6",
+      "question": "What encryption standard does the mobile app use?",
+      "prediction": "encryption at rest uses aes -",
+      "null_score": 0.004052,
+      "best_answer_score": 0.004669,
+      "null_margin": -0.000616,
+      "abstained": false
+    },
+    {
+      "example_id": "unans_20bbdfeb",
+      "question": "What is the ISBN of the textbook?",
+      "prediction": "",
+      "null_score": 0.004021,
+      "best_answer_score": 0.004208,
+      "null_margin": -0.000187,
+      "abstained": true
+    },
+    {
+      "example_id": "unans_2a3dd2f6",
+      "question": "When was the last security audit completed?",
+      "prediction": "",
+      "null_score": 0.004056,
+      "best_answer_score": 0.004276,
+      "null_margin": -0.00022,
+      "abstained": true
+    },
+    {
+      "example_id": "unans_06ccc9f0",
+      "question": "What is the customer satisfaction rating?",
+      "prediction": "94. 2",
+      "null_score": 0.004041,
+      "best_answer_score": 0.004381,
+      "null_margin": -0.000341,
+      "abstained": false
+    },
+    {
+      "example_id": "unans_0e172594",
+      "question": "What is the SLA response time for Tier 1 support?",
+      "prediction": "the sla targets 99. 95",
+      "null_score": 0.004047,
+      "best_answer_score": 0.004177,
+      "null_margin": -0.00013,
+      "abstained": false
+    },
+    {
+      "example_id": "unans_e25b96fd",
+      "question": "How many API calls were made last month?",
+      "prediction": "",
+      "null_score": 0.003983,
+      "best_answer_score": 0.004416,
+      "null_margin": -0.000433,
+      "abstained": true
+    }
+  ]
+}

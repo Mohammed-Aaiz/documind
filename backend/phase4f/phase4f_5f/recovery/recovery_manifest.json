@@ -1,0 +1,65 @@
+{
+  "phase": "4F.5-F-R",
+  "recovery_type": "AUDIT_ONLY",
+  "timestamp": "2026-09-21T00:00:00Z",
+  "execution_status": "NEVER_REACHED_main()",
+  "exit_cause": "FREEBUFF_EXECUTION_LIMIT",
+  "exit_cause_confidence": "HIGH",
+  "exit_cause_evidence": [
+    "Zero output artifacts (no results/, checkpoints/, logs/ directories)",
+    "main() creates output directories as first action — they do not exist",
+    "No log files, error files, or traceback files found",
+    "Previous Freebuff session ran for ~10 minutes before termination",
+    "No GPU available in current environment (PyTorch CPU-only 2.11.0+cpu)"
+  ],
+  "gpu_environment": {
+    "python": "3.13.12",
+    "pytorch": "2.11.0+cpu",
+    "cuda_available": false,
+    "gpu_name": "N/A",
+    "gpu_memory_gb": null,
+    "transformers_installed": true,
+    "distilbert_cached": true
+  },
+  "previous_gpu_environment": {
+    "gpu": "NVIDIA GeForce RTX 3050 Laptop GPU",
+    "pytorch": "2.6.0+cu124",
+    "transformers": "5.16.1",
+    "note": "Used during Phase 4F.5-B A1/A2 training"
+  },
+  "f1_state": {
+    "dataset_preparation": "NOT_STARTED",
+    "training": "NOT_STARTED",
+    "checkpoint": "NONE",
+    "evaluation": "NOT_STARTED"
+  },
+  "f2_state": {
+    "dataset_preparation": "NOT_STARTED",
+    "training": "NOT_STARTED",
+    "checkpoint": "NONE",
+    "evaluation": "NOT_STARTED"
+  },
+  "a0_baseline": "NOT_STARTED",
+  "a1_baseline": "NOT_STARTED",
+  "production_model": {
+    "status": "UNCHANGED",
+    "checksum": "df592aa8d0ee1a235489bd3eead44d4cf0861221339226311960697c1c1512ac",
+    "expected_checksum": "df592aa8d0ee1a235489bd3eead44d4cf0861221339226311960697c1c1512ac"
+  },
+  "frozen_dataset": {
+    "status": "UNCHANGED",
+    "source_hash": "a517530354fc9bcaeef6f1aa16c3fb9ce92f1967668386bc66781e6e6bbf2e97",
+    "derived_hash": "abcf4182f39f0620fb056eee4167d1872baf9b4c748051eade9d6312332f271f"
+  },
+  "benchmark": {
+    "status": "UNCHANGED",
+    "hash": "1166bf4ff38265c209614ac20261417b7eeb43653f4482dfdf94721fd50a41d0"
+  },
+  "safe_to_continue": true,
+  "recommended_next_steps": [
+    "Resolve GPU/CUDA environment (install CUDA-enabled PyTorch or accept CPU execution)",
+    "Re-run run_experiment.py when GPU is available or with CPU-optimized settings",
+    "Consider splitting experiment into smaller batches to avoid timeout"
+  ],
+  "training_performed_during_recovery": false
+}

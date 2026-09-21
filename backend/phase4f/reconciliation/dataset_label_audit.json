@@ -1,0 +1,70 @@
+{
+  "phase": "4F.4-R",
+  "audit_type": "dataset_label_audit",
+  "dataset_path": "backend/phase4f/dataset/training_data_v3_1.jsonl",
+  "dataset_version": "phase4f-qa-v3.1",
+  "dataset_hash": "a517530354fc9bcaeef6f1aa16c3fb9ce92f1967668386bc66781e6e6bbf2e97",
+  "hash_verified": true,
+  "total_examples": 918,
+  "train_count": 918,
+  "validation_count": 0,
+  "test_count": 0,
+  "split_note": "NO SPLIT PERFORMED. All 918 examples used for both training and evaluation. This means evaluation measures memorization, not generalization.",
+  "category_distribution": {
+    "TABLE_CELL": 362,
+    "LIST_ITEM": 106,
+    "NUMERIC": 97,
+    "DIRECT_SPAN": 86,
+    "TABLE_ROW": 82,
+    "SECTION_SPECIFIC": 55,
+    "UNANSWERABLE": 42,
+    "MULTI_CHUNK": 26,
+    "DATE": 25,
+    "ENTITY": 22,
+    "LONG_CONTEXT": 15
+  },
+  "examples_dropped": 0,
+  "examples_skipped": 0,
+  "malformed_examples": 0,
+  "missing_answers": 0,
+  "empty_answers": 42,
+  "empty_answers_note": "All 42 empty answers belong to UNANSWERABLE category (correct)",
+  "duplicate_questions": 0,
+  "invalid_answer_spans": 3,
+  "answer_text_not_found_in_context": 10,
+  "multiple_occurrences_of_answer_text": "not checked",
+  "normalization_performed": "none before span alignment",
+  "valid_span_rate": 0.985,
+  "invalid_span_rate": 0.003,
+  "truncated_answer_rate": 0.0,
+  "answer_found_rate": 0.989,
+  "span_mismatch_examples": [
+    {
+      "issue": "case mismatch (sentence transformer vs Sentence transformer)",
+      "count": 1,
+      "severity": "minor"
+    },
+    {
+      "issue": "pipe character in table cell extraction",
+      "count": 4,
+      "severity": "moderate"
+    },
+    {
+      "issue": "subword tokenization boundary (numbers split across tokens)",
+      "count": 3,
+      "severity": "moderate"
+    },
+    {
+      "issue": "list item extraction includes newline or adjacent text",
+      "count": 2,
+      "severity": "minor"
+    }
+  ],
+  "quality_notes": [
+    "Dataset structure is clean: all 918 examples have required fields (question, context, answer, answer_start, answer_end, question_kind)",
+    "12 examples were repaired in v3.1 to fix span mismatches from v3",
+    "42 UNANSWERABLE examples correctly have empty answers and answer_start=0",
+    "No cross-split leakage detected (0 question overlap with external eval)",
+    "122 near-duplicate pairs exist (by design in synthetic dataset)"
+  ]
+}

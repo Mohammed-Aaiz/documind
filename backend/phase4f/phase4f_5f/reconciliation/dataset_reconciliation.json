@@ -1,0 +1,96 @@
+{
+  "reconciliation_version": "4F.5-F1R-reconciliation-v1",
+  "timestamp": "2026-09-21T00:00:00Z",
+
+  "source_hashes": {
+    "training_data_v3_1": "a517530354fc9bcaeef6f1aa16c3fb9ce92f1967668386bc66781e6e6bbf2e97",
+    "derived_dataset": "abcf4182f39f0620fb056eee4167d1872baf9b4c748051eade9d6312332f271f",
+    "benchmark": "1166bf4ff38265c209614ac20261417b7eeb43653f4482dfdf94721fd50a41d0"
+  },
+
+  "derived_dataset_total": 918,
+  "derived_split": {"train": 575, "test": 221, "validation": 122},
+
+  "reconciliation_steps": {
+    "1_excluded_invalid_spans": {
+      "count": 4,
+      "reason": "INVALID_TOKEN_SPAN — token_span.valid=False, cannot compute training labels",
+      "ids": ["li_4fa4a839", "li_8770780b", "li_8bc7889f", "tc_3b383990"],
+      "source_dataset_modified": false
+    },
+    "2_valid_answerable_pool": {
+      "count": 571,
+      "note": "575 original - 4 excluded = 571 valid answerable"
+    },
+    "3_answerable_train_val_split": {
+      "method": "random.shuffle with seed=42 on valid_answerable_ids",
+      "val_ratio": 0.15,
+      "train_answerable": 486,
+      "val_answerable": 85
+    },
+    "4_unanswerable_split": {
+      "method": "sort by example_id, first 28 for experiment pool, last 14 for final holdout",
+      "seed": 42,
+      "experiment_pool": 28,
+      "final_holdout": 14
+    },
+    "5_unanswerable_train_val_split": {
+      "method": "random.shuffle with seed=42 on 28 experiment pool unanswerable",
+      "train_unanswerable": 20,
+      "val_unanswerable": 8
+    }
+  },
+
+  "final_split": {
+    "train": {
+      "answerable": 486,
+      "unanswerable": 20,
+      "total": 506
+    },
+    "validation": {
+      "answerable": 85,
+      "unanswerable": 8,
+      "total": 93
+    },
+    "holdout": {
+      "unanswerable": 14,
+      "total": 14
+    },
+    "excluded": {
+      "answerable_invalid_span": 4,
+      "total": 4
+    }
+  },
+
+  "leakage_check": {
+    "train_val_overlap": 0,
+    "train_holdout_overlap": 0,
+    "val_holdout_overlap": 0,
+    "status": "CLEAN"
+  },
+
+  "label_alignment": {
+    "train_answerable_all_valid_token_span": true,
+    "val_answerable_all_valid_token_span": true,
+    "unanswerable_all_empty_answer": true,
+    "unanswerable_all_no_token_span": true,
+    "no_answerable_labeled_as_impossible": true,
+    "status": "PASS"
+  },
+
+  "validation_category_coverage": {
+    "DIRECT_SPAN": 4,
+    "ENTITY": 3,
+    "DATE": 7,
+    "NUMERIC": 9,
+    "TABLE_CELL": 35,
+    "TABLE_ROW": 5,
+    "LIST_ITEM": 14,
+    "SECTION_SPECIFIC": 6,
+    "MULTI_CHUNK": 1,
+    "LONG_CONTEXT": 1,
+    "UNANSWERABLE": 8,
+    "total_categories_covered": 11,
+    "total_categories": 11
+  }
+}

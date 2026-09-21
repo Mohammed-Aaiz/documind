@@ -1,0 +1,222 @@
+{
+  "total_examples": 22,
+  "overall": {
+    "em": 0,
+    "f1": 0,
+    "answerable_correct": 0,
+    "answerable_total": 0,
+    "answerability_accuracy": 0.0,
+    "abstention_accuracy": 36.4,
+    "false_abstention": 0.0,
+    "spurious_rate": 63.6,
+    "answerable": 0,
+    "unanswerable": 22
+  },
+  "by_category": {
+    "UNANSWERABLE": {
+      "n": 22,
+      "em": 0,
+      "f1": 0
+    }
+  },
+  "unanswerable_details": [
+    {
+      "example_id": "unans_67e1a2fc",
+      "question": "What color is the device?",
+      "prediction": "",
+      "null_score": 0.003897,
+      "best_answer_score": 0.003945,
+      "null_margin": -4.8e-05,
+      "abstained": true
+    },
+    {
+      "example_id": "unans_691bae51",
+      "question": "How many open source contributors does the project have?",
+      "prediction": "",
+      "null_score": 0.003963,
+      "best_answer_score": 0.004459,
+      "null_margin": -0.000495,
+      "abstained": true
+    },
+    {
+      "example_id": "unans_7a4e5b72",
+      "question": "What is the battery life of CloudDocs?",
+      "prediction": "clouddocs enterprise is a cloud -",
+      "null_score": 0.003983,
+      "best_answer_score": 0.004525,
+      "null_margin": -0.000541,
+      "abstained": false
+    },
+    {
+      "example_id": "unans_7a9ef8c8",
+      "question": "Who is the chief marketing officer?",
+      "prediction": "james whitfield, cfo : robert tanaka, coo : elena vasque",
+      "null_score": 0.003651,
+      "best_answer_score": 0.004494,
+      "null_margin": -0.000843,
+      "abstained": false
+    },
+    {
+      "example_id": "unans_7b46d69d",
+      "question": "What is the maximum concurrent connection limit?",
+      "prediction": "",
+      "null_score": 0.004045,
+      "best_answer_score": 0.004083,
+      "null_margin": -3.8e-05,
+      "abstained": true
+    },
+    {
+      "example_id": "unans_885f9d0e",
+      "question": "What is the average customer lifetime value?",
+      "prediction": "",
+      "null_score": 0.004024,
+      "best_answer_score": 0.003959,
+      "null_margin": 6.5e-05,
+      "abstained": true
+    },
+    {
+      "example_id": "unans_89493393",
+      "question": "What is the average response time for Tier 2 support?",
+      "prediction": "99. 95",
+      "null_score": 0.004003,
+      "best_answer_score": 0.004179,
+      "null_margin": -0.000176,
+      "abstained": false
+    },
+    {
+      "example_id": "unans_8afe7d03",
+      "question": "What is the exact number of active users?",
+      "prediction": ", 000 documents per day.",
+      "null_score": 0.003795,
+      "best_answer_score": 0.004962,
+      "null_margin": -0.001166,
+      "abstained": false
+    },
+    {
+      "example_id": "unans_a042521b",
+      "question": "What machine learning algorithm does DocuMind use for classification?",
+      "prediction": "documi",
+      "null_score": 0.004138,
+      "best_answer_score": 0.004551,
+      "null_margin": -0.000414,
+      "abstained": false
+    },
+    {
+      "example_id": "unans_a334de2c",
+      "question": "What version of React is the frontend built with?",
+      "prediction": "the platform uses postgresql 16. 2 with pgvector 0. 7. 0",
+      "null_score": 0.003878,
+      "best_answer_score": 0.004672,
+      "null_margin": -0.000795,
+      "abstained": false
+    },
+    {
+      "example_id": "unans_a603100e",
+      "question": "How many concurrent users can the system support?",
+      "prediction": "",
+      "null_score": 0.00398,
+      "best_answer_score": 0.004243,
+      "null_margin": -0.000263,
+      "abstained": true
+    },
+    {
+      "example_id": "unans_a60eda2e",
+      "question": "How many data breaches occurred?",
+      "prediction": "",
+      "null_score": 0.003762,
+      "best_answer_score": 0.004027,
+      "null_margin": -0.000265,
+      "abstained": true
+    },
+    {
+      "example_id": "unans_a7ad9d04",
+      "question": "What is the employee turnover rate?",
+      "prediction": "apex computing employs 2, 847 people across 14 offices worldwide",
+      "null_score": 0.004176,
+      "best_answer_score": 0.004316,
+      "null_margin": -0.00014,
+      "abstained": false
+    },
+    {
+      "example_id": "unans_b415e6a3",
+      "question": "What was the highest temperature recorded?",
+      "prediction": "42. 3 to 48. 7 degrees celsius across all stations",
+      "null_score": 0.003691,
+      "best_answer_score": 0.003879,
+      "null_margin": -0.000189,
+      "abstained": false
+    },
+    {
+      "example_id": "unans_d7480687",
+      "question": "How many bugs were reported in Q3?",
+      "prediction": ". 3 percent for q3 2025.",
+      "null_score": 0.003877,
+      "best_answer_score": 0.004169,
+      "null_margin": -0.000292,
+      "abstained": false
+    },
+    {
+      "example_id": "unans_de20050d",
+      "question": "What training data was used for the model?",
+      "prediction": "",
+      "null_score": 0.00385,
+      "best_answer_score": 0.004266,
+      "null_margin": -0.000416,
+      "abstained": true
+    },
+    {
+      "example_id": "unans_e1454d12",
+      "question": "What training framework was used?",
+      "prediction": "the platform uses postgresql 16. 2 with pgvector 0. 7. 0",
+      "null_score": 0.003761,
+      "best_answer_score": 0.00443,
+      "null_margin": -0.000669,
+      "abstained": false
+    },
+    {
+      "example_id": "unans_e25b96fd",
+      "question": "How many API calls were made last month?",
+      "prediction": "",
+      "null_score": 0.003983,
+      "best_answer_score": 0.004416,
+      "null_margin": -0.000433,
+      "abstained": true
+    },
+    {
+      "example_id": "unans_ecebc88c",
+      "question": "What was the date of the board meeting?",
+      "prediction": "the board of directors consists of 9 members.",
+      "null_score": 0.003994,
+      "best_answer_score": 0.004092,
+      "null_margin": -9.9e-05,
+      "abstained": false
+    },
+    {
+      "example_id": "unans_ee310eea",
+      "question": "What programming language is the frontend written in?",
+      "prediction": "the backend is written in python with fastapi.",
+      "null_score": 0.003961,
+      "best_answer_score": 0.004377,
+      "null_margin": -0.000416,
+      "abstained": false
+    },
+    {
+      "example_id": "unans_f6563cea",
+      "question": "Who designed the company logo?",
+      "prediction": "james whitfield.",
+      "null_score": 0.003654,
+      "best_answer_score": 0.004269,
+      "null_margin": -0.000616,
+      "abstained": false
+    },
+    {
+      "example_id": "unans_fb3b3426",
+      "question": "What machine learning framework is used for embeddings?",
+      "prediction": "the system uses sentence transformer models for generating 768 -",
+      "null_score": 0.003959,
+      "best_answer_score": 0.004397,
+      "null_margin": -0.000438,
+      "abstained": false
+    }
+  ]
+}

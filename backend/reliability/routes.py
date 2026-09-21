@@ -1,6 +1,9 @@
+import uuid
+
 from fastapi import APIRouter, Depends
 from pydantic import BaseModel
-from sqlalchemy import select
+from sqlalchemy import func, select
+from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from auth.dependencies import CurrentUser
@@ -18,26 +21,37 @@ router = APIRouter(prefix="/api/reliability", tags=["reliability"])
 async def store_query_reliability(
     user_id: str, data: dict, *, db: AsyncSession
 ) -> None:
-    """Upsert the last query's reliability data for this user."""
-    result = await db.execute(
-        select(ReliabilityLog).where(ReliabilityLog.user_id == user_id)
+    """Upsert the last query's reliability data for this user.
+
+    Uses PostgreSQL ``INSERT ... ON CONFLICT (user_id) DO UPDATE`` so the
+    operation is atomic and always exactly one row per user, regardless of
+    type-coercion quirks between asyncpg and SQLAlchemy's UUID column.
+    """
+    user_uuid = uuid.UUID(user_id) if isinstance(user_id, str) else user_id
+
+    values = dict(
+        user_id=user_uuid,
+        question=data.get("question", ""),
+        answer=data.get("answer", ""),
+        qa_confidence=data.get("qaConfidence", 0.0),
+        retrieval_score=data.get("retrievalScore", 0.0),
+        avg_retrieval_score=data.get("avgRetrievalScore", 0.0),
+        source_count=data.get("sourceCount", 0),
+        unique_documents=data.get("uniqueDocuments", 0),
+        factual_grounded=data.get("factualGrounded", False),
+        insufficient_context=data.get("insufficientContext", True),
+        sources_json=data.get("sources", []),
     )
-    row = result.scalar_one_or_none()
 
-    if row is None:
-        row = ReliabilityLog(user_id=user_id)
-        db.add(row)
-
-    row.question = data.get("question", "")
-    row.answer = data.get("answer", "")
-    row.qa_confidence = data.get("qaConfidence", 0.0)
-    row.retrieval_score = data.get("retrievalScore", 0.0)
-    row.avg_retrieval_score = data.get("avgRetrievalScore", 0.0)
-    row.source_count = data.get("sourceCount", 0)
-    row.unique_documents = data.get("uniqueDocuments", 0)
-    row.factual_grounded = data.get("factualGrounded", False)
-    row.insufficient_context = data.get("insufficientContext", True)
-    row.sources_json = data.get("sources", [])
+    stmt = (
+        insert(ReliabilityLog)
+        .values(**values)
+        .on_conflict_do_update(
+            index_elements=["user_id"],
+            set_={k: v for k, v in values.items() if k != "user_id"},
+        )
+    )
+    await db.execute(stmt)
 
 
 # ---------------------------------------------------------------------------

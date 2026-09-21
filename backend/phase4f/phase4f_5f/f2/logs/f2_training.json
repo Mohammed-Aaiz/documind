@@ -1,0 +1,57 @@
+{
+  "experiment": "F2",
+  "data_description": "486 answerable + 20 unanswerable (reconciled)",
+  "model_name": "distilbert-base-uncased",
+  "hyperparameters": {
+    "model": "distilbert-base-uncased",
+    "lr": 3e-05,
+    "batch": 8,
+    "grad_acc": 8,
+    "epochs": 3,
+    "fp16": true
+  },
+  "training_history": [
+    {
+      "epoch": 1,
+      "loss": 5.7107,
+      "val_em": 2.4,
+      "val_f1": 15.1,
+      "val_count": 85,
+      "val_abstention": 0.0,
+      "val_spurious": 8,
+      "lr": 2.1818181818181818e-05,
+      "time_s": 8.4
+    },
+    {
+      "epoch": 2,
+      "loss": 4.6389,
+      "val_em": 5.9,
+      "val_f1": 17.9,
+      "val_count": 85,
+      "val_abstention": 0.0,
+      "val_spurious": 8,
+      "lr": 1.0909090909090909e-05,
+      "time_s": 7.8
+    },
+    {
+      "epoch": 3,
+      "loss": 3.8235,
+      "val_em": 4.7,
+      "val_f1": 17.6,
+      "val_count": 85,
+      "val_abstention": 0.0,
+      "val_spurious": 8,
+      "lr": 0.0,
+      "time_s": 7.9
+    }
+  ],
+  "training_time_s": 29.6,
+  "peak_gpu_memory_mb": 1844.0,
+  "best_checkpoint": "C:\\Users\\moham\\OneDrive\\Desktop\\stitch_documind_futuristic_3d_ui\\backend\\phase4f\\phase4f_5f\\f2\\checkpoints\\F2\\checkpoint_epoch2",
+  "best_val_score": 5.9,
+  "checkpoint_hash": "416b63642ba80a1c",
+  "nan_detected": false,
+  "overflow_count": 0,
+  "device": "cuda",
+  "gpu": "NVIDIA GeForce RTX 3050 Laptop GPU"
+}

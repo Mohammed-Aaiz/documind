@@ -1,0 +1,91 @@
+Expected Output Structure — Phase 4F.3-R GPU Execution
+======================================================
+
+This file describes what a successful external GPU run is expected to produce.
+None of these files currently exist. They will be created by train.py and evaluate.py
+when run on a machine with a CUDA-capable GPU.
+
+FINAL GPU PACKAGE (current state):
+final_gpu_package/
+├── dataset/
+│   └── training_data_v3_1.jsonl            (EXISTS — 918 examples, 479,512 bytes)
+├── training/
+│   ├── train.py                            (EXISTS)
+│   └── experiment_config.json              (EXISTS)
+├── evaluation/
+│   └── evaluate.py                         (EXISTS)
+├── requirements.txt                        (EXISTS)
+├── README_GPU_EXECUTION.md                 (EXISTS)
+├── dataset_checksum.txt                    (EXISTS)
+├── production_model_checksum.txt           (EXISTS)
+├── expected_output_structure.txt           (THIS FILE)
+└── final_gpu_package_manifest.json         (EXISTS)
+
+
+EXPECTED OUTPUT AFTER SUCCESSFUL GPU EXECUTION:
+final_gpu_package/
+├── a0_baseline/
+│   ├── config.json
+│   ├── model.safetensors
+│   ├── tokenizer.json
+│   ├── tokenizer_config.json
+│   └── training_metadata.json              (baseline metadata, no training)
+│
+├── a1_distilbert/
+│   ├── config.json                         (model configuration)
+│   ├── model.safetensors                   (trained checkpoint)
+│   ├── tokenizer.json                      (tokenizer files)
+│   ├── tokenizer_config.json
+│   ├── training_metadata.json              (training history, loss, duration)
+│   └── eval/
+│       └── evaluation_results.json         (EM, F1, per-category metrics)
+│
+├── a2_bert_base/
+│   ├── config.json
+│   ├── model.safetensors
+│   ├── tokenizer.json
+│   ├── tokenizer_config.json
+│   ├── training_metadata.json
+│   └── eval/
+│       └── evaluation_results.json
+│
+├── a3_deberta_v3/
+│   ├── config.json
+│   ├── model.safetensors
+│   ├── tokenizer.json
+│   ├── tokenizer_config.json
+│   ├── training_metadata.json
+│   └── eval/
+│       └── evaluation_results.json
+│
+├── dataset/
+│   └── training_data_v3_1.jsonl
+├── training/
+│   ├── train.py
+│   └── experiment_config.json
+├── evaluation/
+│   └── evaluate.py
+├── requirements.txt
+├── README_GPU_EXECUTION.md
+├── dataset_checksum.txt
+├── production_model_checksum.txt
+├── expected_output_structure.txt           (THIS FILE)
+└── final_gpu_package_manifest.json
+
+NOTE: evaluate.py implements the following metrics:
+  - Exact Match (EM)
+  - Token-level F1
+  - Answerability accuracy
+  - Abstention accuracy
+  - Spurious answer rate
+  - Per-category metrics
+  - Confidence (start/end softmax)
+  - Failure taxonomy (structural)
+
+NOT implemented in evaluate.py:
+  - ECE (Expected Calibration Error)
+  - Brier score
+  - Phase 4B-specific metrics
+
+These metrics are NOT included and would require changes to evaluate.py
+if needed in a future phase.

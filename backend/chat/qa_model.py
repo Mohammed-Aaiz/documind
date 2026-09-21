@@ -95,6 +95,90 @@ def get_model_status() -> dict:
         }
 
 
+# ---------------------------------------------------------------------------
+# Token accounting (Phase 3D)
+#
+# The QA model has a finite input window and the tokenizer TRUNCATES silently
+# at that window.  Everything upstream (chunking budget, context construction)
+# must therefore be able to ask this module exactly how much room is left.
+# ---------------------------------------------------------------------------
+
+_DEFAULT_MAX_INPUT_LENGTH = 384
+
+
+def _ensure_inference_config() -> None:
+    """Populate ``_inference_config`` from disk without loading the model.
+
+    Context construction must be able to size its budget even before the QA
+    weights are needed (and even when the model is unavailable, so the call
+    can then fail honestly at the QA step instead of here).
+    """
+    global _inference_config
+    if _inference_config:
+        return
+
+    cfg_path = Path(_MODEL_NAME) / "inference_config.json"
+    try:
+        if cfg_path.exists():
+            with open(cfg_path) as f:
+                _inference_config = json.load(f)
+    except Exception:
+        _inference_config = {}
+
+
+def get_max_input_length() -> int:
+    """QA model input window in tokens (question + context + specials)."""
+    _ensure_inference_config()
+    try:
+        return int(_inference_config.get("max_input_length", _DEFAULT_MAX_INPUT_LENGTH))
+    except (TypeError, ValueError):
+        return _DEFAULT_MAX_INPUT_LENGTH
+
+
+def get_tokenizer():
+    """The QA tokenizer, or ``None`` when the model cannot be loaded."""
+    try:
+        _load_model()
+    except RuntimeError:
+        return None
+    return _tokenizer
+
+
+def is_tokenizer_available() -> bool:
+    """True when exact QA token counts are available."""
+    return get_tokenizer() is not None
+
+
+def count_input_tokens(question: str, context: str) -> int | None:
+    """Exact token count of the (question, context) pair, specials included.
+
+    Returns ``None`` when the tokenizer is unavailable so callers can fall
+    back deterministically instead of guessing silently.
+    """
+    tokenizer = get_tokenizer()
+    if tokenizer is None:
+        return None
+    try:
+        return len(
+            tokenizer(
+                question, context, add_special_tokens=True, truncation=False
+            )["input_ids"]
+        )
+    except Exception:
+        return None
+
+
+def count_text_tokens(text: str) -> int | None:
+    """Exact token count of a string without special tokens."""
+    tokenizer = get_tokenizer()
+    if tokenizer is None:
+        return None
+    try:
+        return len(tokenizer(text, add_special_tokens=False, truncation=False)["input_ids"])
+    except Exception:
+        return None
+
+
 def answer_question(question: str, context: str) -> dict:
     """
     Run extractive QA on the given question and context using the
@@ -116,6 +200,7 @@ def answer_question(question: str, context: str) -> dict:
 
     _load_model()  # raises RuntimeError if model unavailable
 
+    _ensure_inference_config()
     max_input_length = _inference_config.get("max_input_length", 384)
     max_answer_length = _inference_config.get("max_answer_length", 100)
     n_best = _inference_config.get("n_best", 20)

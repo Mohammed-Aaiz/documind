@@ -1,0 +1,24 @@
+{
+  "audit_version": "4F.5-F2R-prediction-audit-v1",
+  "model_checkpoint": "checkpoint_epoch2",
+  "total_holdout": 14,
+  "total_abstained": 0,
+  "total_spurious": 14,
+
+  "predictions": [
+    {"id": "unans_ee310eea", "question": "What programming language is the frontend written in?", "predicted": "fastapi", "abstained": false, "cls_combined": 0.5057},
+    {"id": "unans_ecebc88c", "question": "What was the date of the board meeting?", "predicted": "of directors", "abstained": false, "cls_combined": 0.4889},
+    {"id": "unans_d7480687", "question": "How many bugs were reported in Q3?", "predicted": "0.3 percent", "abstained": false, "cls_combined": 0.8347},
+    {"id": "unans_a042521b", "question": "What machine learning algorithm does DocuMind use for classification?", "predicted": "documind", "abstained": false, "cls_combined": 0.5942},
+    {"id": "unans_a603100e", "question": "How many concurrent users can the system support?", "predicted": "500 documents per minute", "abstained": false, "cls_combined": 0.5809},
+    {"id": "unans_de20050d", "question": "What training data was used for the model?", "predicted": "distilbert for question answering.", "abstained": false, "cls_combined": 0.5069},
+    {"id": "unans_f6563cea", "question": "Who designed the company logo?", "predicted": "james whitfield", "abstained": false, "cls_combined": 0.6732},
+    {"id": "unans_e1454d12", "question": "What training framework was used?", "predicted": "16.2 with pgvector 0.7.0", "abstained": false, "cls_combined": 0.5868},
+    {"id": "unans_a7ad9d04", "question": "What is the employee turnover rate?", "predicted": "2,847 people across 14 offices", "abstained": false, "cls_combined": 0.8446},
+    {"id": "unans_a60eda2e", "question": "How many data breaches occurred?", "predicted": "72 hours", "abstained": false, "cls_combined": 0.5591},
+    {"id": "unans_a334de2c", "question": "What version of React is the frontend built with?", "predicted": "16.2 with pgvector 0.7.0", "abstained": false, "cls_combined": 0.6076},
+    {"id": "unans_e25b96fd", "question": "How many API calls were made last month?", "predicted": "100 requests per minute", "abstained": false, "cls_combined": 0.6572},
+    {"id": "unans_b415e6a3", "question": "What was the highest temperature recorded?", "predicted": "42.3 to 48.7 degrees", "abstained": false, "cls_combined": 0.5322},
+    {"id": "unans_fb3b3426", "question": "What machine learning framework is used for embeddings?", "predicted": "768-", "abstained": false, "cls_combined": 0.6689}
+  ]
+}

@@ -51,3 +51,30 @@ llm/
 # ML model weights
 llm/model.safetensors
 backend/models/documind-qa/model.safetensors
+
+# Generated runtime logs
+uvicorn.log
+vite.log
+# Local GPU experiment environment
+backend/phase4f_gpu/
+
+# ML experiment checkpoints and generated model binaries
+**/checkpoints/
+**/model.safetensors
+**/pytorch_model.bin
+**/*.pt
+**/*.pth
+**/*.ckpt
+**/*.onnx
+
+# Local experiment model directories
+backend/phase4f/models/
+backend/models/experiments/
+
+# Local Python environments
+backend/venv/
+backend/phase4f_gpu/
+
+# Runtime logs
+*.log
+

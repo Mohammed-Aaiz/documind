@@ -1,0 +1,47 @@
+{
+  "phase": "4F.4-R",
+  "audit_type": "token_span_audit",
+  "critical_finding": "TOKEN SPAN ALIGNMENT IS FUNDAMENTALLY BROKEN",
+  "tokenizer_used": "distilbert-base-cased",
+  "max_length": 384,
+  "return_offsets_mapping_passed": false,
+  "return_offsets_mapping_note": "The QADataset.__getitem__ in run_experiment.py does NOT pass return_offsets_mapping=True to the tokenizer. This causes encoding.get('offset_mapping') to return None, triggering the fallback heuristic.",
+  "fallback_heuristic": "start_token = min(ans_start_char, len(ctx_ids) - 1); end_token = min(ans_end_char - 1, len(ctx_ids) - 1). This uses CHARACTER offsets as TOKEN indices, which is fundamentally wrong.",
+  "results": {
+    "total_answerable_examples": 876,
+    "with_broken_heuristic": {
+      "valid_token_span": 6,
+      "invalid_token_span": 870,
+      "valid_rate": 0.007,
+      "invalid_rate": 0.993
+    },
+    "with_correct_offset_mapping": {
+      "correct_alignment_and_decode": 249,
+      "truncated": 1,
+      "partially_found": 40,
+      "aligned_but_wrong_decode": 586,
+      "correct_rate": 0.284,
+      "truncation_rate": 0.001,
+      "decode_mismatch_rate": 0.669
+    }
+  },
+  "per_category_with_correct_alignment": {
+    "DATE": {"n": 25, "correct": 18, "rate": 0.720},
+    "ENTITY": {"n": 22, "correct": 13, "rate": 0.591},
+    "TABLE_CELL": {"n": 362, "correct": 148, "rate": 0.409},
+    "LONG_CONTEXT": {"n": 15, "correct": 6, "rate": 0.400},
+    "MULTI_CHUNK": {"n": 26, "correct": 8, "rate": 0.308},
+    "DIRECT_SPAN": {"n": 86, "correct": 19, "rate": 0.221},
+    "SECTION_SPECIFIC": {"n": 55, "correct": 10, "rate": 0.182},
+    "NUMERIC": {"n": 97, "correct": 13, "rate": 0.134},
+    "LIST_ITEM": {"n": 106, "correct": 10, "rate": 0.094},
+    "TABLE_ROW": {"n": 82, "correct": 4, "rate": 0.049}
+  },
+  "decode_mismatch_causes": [
+    "Subword tokenization splits numbers (e.g., '2.5 amps' -> '2. 5 amps')",
+    "Subword boundaries cause whitespace insertion",
+    "Multi-word answers span multiple subword tokens with different text boundaries"
+  ],
+  "impact": "With the broken heuristic, 99.3% of training examples receive WRONG start/end position labels. The model is trained to predict arbitrary token positions instead of the correct answer spans. This is the PRIMARY ROOT CAUSE of A1/A2 training collapse.",
+  "even_with_correct_alignment": "Only 28.4% would decode to exact answer text. The remaining 67% would have token-aligned spans that decode to slightly different text (subword boundaries). This secondary issue would still limit but not prevent learning."
+}

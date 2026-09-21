@@ -1,0 +1,38 @@
+{
+  "timestamp": "2026-09-19T20:51:05.196821+00:00",
+  "dataset_hash": "bceed283120d51f5",
+  "validation": {
+    "total": 217,
+    "valid": 217,
+    "invalid": 0,
+    "issues": []
+  },
+  "statistics": {
+    "total_examples": 217,
+    "by_kind": {
+      "DIRECT_SPAN": 59,
+      "NUMERIC_EXTRACTION": 100,
+      "TABLE_CELL": 15,
+      "LIST_ITEM": 12,
+      "UNANSWERABLE": 10,
+      "DATE_EXTRACTION": 8,
+      "SECTION_SPECIFIC": 5,
+      "ENTITY_EXTRACTION": 8
+    },
+    "by_source": {
+      "synthetic_direct_span": 59,
+      "synthetic_numeric": 100,
+      "synthetic_table_cell": 15,
+      "synthetic_list_item": 12,
+      "synthetic_unanswerable": 10,
+      "synthetic_date": 8,
+      "synthetic_section": 5,
+      "synthetic_entity": 8
+    },
+    "answer_length_mean": 12.5,
+    "answer_length_max": 46,
+    "context_length_mean": 58.9,
+    "context_length_max": 316,
+    "unanswerable_count": 10
+  }
+}

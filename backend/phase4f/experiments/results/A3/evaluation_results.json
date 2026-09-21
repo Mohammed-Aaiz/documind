@@ -1,0 +1,99 @@
+{
+  "model_label": "A3_DeBERTa_v3",
+  "total_examples": 918,
+  "overall": {
+    "em": 0.0,
+    "f1": 0.0,
+    "answerability_accuracy": 0.0,
+    "abstention_accuracy": 100.0,
+    "false_abstention": 100.0,
+    "spurious_rate": 0.0,
+    "answerable": 876,
+    "unanswerable": 42
+  },
+  "by_category": {
+    "DATE": {
+      "n": 25,
+      "em": 0.0,
+      "f1": 0.0,
+      "avg_confidence": NaN
+    },
+    "DIRECT_SPAN": {
+      "n": 86,
+      "em": 0.0,
+      "f1": 0.0,
+      "avg_confidence": NaN
+    },
+    "ENTITY": {
+      "n": 22,
+      "em": 0.0,
+      "f1": 0.0,
+      "avg_confidence": NaN
+    },
+    "LIST_ITEM": {
+      "n": 106,
+      "em": 0.0,
+      "f1": 0.0,
+      "avg_confidence": NaN
+    },
+    "LONG_CONTEXT": {
+      "n": 15,
+      "em": 0.0,
+      "f1": 0.0,
+      "avg_confidence": NaN
+    },
+    "MULTI_CHUNK": {
+      "n": 26,
+      "em": 0.0,
+      "f1": 0.0,
+      "avg_confidence": NaN
+    },
+    "NUMERIC": {
+      "n": 97,
+      "em": 0.0,
+      "f1": 0.0,
+      "avg_confidence": NaN
+    },
+    "SECTION_SPECIFIC": {
+      "n": 55,
+      "em": 0.0,
+      "f1": 0.0,
+      "avg_confidence": NaN
+    },
+    "TABLE_CELL": {
+      "n": 362,
+      "em": 0.0,
+      "f1": 0.0,
+      "avg_confidence": NaN
+    },
+    "TABLE_ROW": {
+      "n": 82,
+      "em": 0.0,
+      "f1": 0.0,
+      "avg_confidence": NaN
+    },
+    "UNANSWERABLE": {
+      "n": 42,
+      "em": 0,
+      "f1": 0,
+      "avg_confidence": NaN
+    }
+  },
+  "failure_taxonomy": {
+    "total_failures": 876,
+    "failure_rate": 95.4,
+    "by_type": {
+      "ABSTAIN": 876
+    }
+  },
+  "confidence_analysis": {
+    "correct_mean": 0,
+    "correct_std": 0,
+    "incorrect_mean": NaN,
+    "incorrect_std": NaN,
+    "separation": 0,
+    "ECE": "NOT_IMPLEMENTED",
+    "Brier": "NOT_IMPLEMENTED"
+  },
+  "latency_ms": 31.81
+}

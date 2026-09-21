@@ -1,0 +1,84 @@
+{
+  "dataset_version": "4F.5-F1-v1",
+  "experiment": "F1",
+  "description": "Targeted unanswerable training with natural ratio (575:28)",
+  "created": "2026-09-21T00:00:00Z",
+
+  "source_hashes": {
+    "training_data_v3_1": "a517530354fc9bcaeef6f1aa16c3fb9ce92f1967668386bc66781e6e6bbf2e97",
+    "derived_dataset": "abcf4182f39f0620fb056eee4167d1872baf9b4c748051eade9d6312332f271f"
+  },
+
+  "split_seed": 42,
+  "split_method": "deterministic_sort_by_example_id",
+
+  "counts": {
+    "train_total": 603,
+    "train_answerable": 575,
+    "train_unanswerable": 28,
+    "validation_total": 80,
+    "validation_answerable": 80,
+    "validation_unanswerable": 0,
+    "held_out_total": 14,
+    "held_out_unanswerable": 14,
+    "ratio_answerable_to_unanswerable": "575:28 = 20.5:1"
+  },
+
+  "train_unanswerable_ids": [
+    "unans_02ea167f", "unans_03d364a3", "unans_04664035", "unans_06ccc9f0",
+    "unans_08af12b6", "unans_0badce8d", "unans_0e172594", "unans_1b510697",
+    "unans_20bbdfeb", "unans_20e56903", "unans_29bba51a", "unans_2a3dd2f6",
+    "unans_39b0bf0c", "unans_3a0430bc", "unans_3b23eb33", "unans_422d6ea0",
+    "unans_4725a75e", "unans_496d4272", "unans_520918ca", "unans_63ece8c5",
+    "unans_67e1a2fc", "unans_691bae51", "unans_7a4e5b72", "unans_7a9ef8c8",
+    "unans_7b46d69d", "unans_885f9d0e", "unans_89493393", "unans_8afe7d03"
+  ],
+
+  "held_out_unanswerable_ids": [
+    "unans_a042521b", "unans_a334de2c", "unans_a603100e", "unans_a60eda2e",
+    "unans_a7ad9d04", "unans_b415e6a3", "unans_d7480687", "unans_de20050d",
+    "unans_e1454d12", "unans_e25b96fd", "unans_ecebc88c", "unans_ee310eea",
+    "unans_f6563cea", "unans_fb3b3426"
+  ],
+
+  "label_format": {
+    "answerable": "token_span with start_token/end_token, validated via token_span.valid",
+    "unanswerable": "start_positions=0, end_positions=0 (CLS token), answer='', token_span=null",
+    "character_offsets": "present but not used directly by training (token spans used instead)",
+    "note": "12 examples have character offset mismatches but are handled correctly by token_span.valid fallback"
+  },
+
+  "tokenizer": "distilbert-base-uncased",
+  "base_model": "distilbert-base-uncased",
+  "max_sequence_length": 384,
+  "max_answer_length": 50,
+
+  "planned_training": {
+    "batch_size": 8,
+    "gradient_accumulation": 8,
+    "effective_batch_size": 64,
+    "learning_rate": 3e-5,
+    "epochs": 3,
+    "fp16": true,
+    "weight_decay": 0.01,
+    "warmup_ratio": 0.1,
+    "optimizer": "AdamW",
+    "lr_scheduler": "linear_with_warmup",
+    "max_grad_norm": 1.0
+  },
+
+  "gpu_environment": {
+    "venv_path": "backend/phase4f_gpu/",
+    "python": "3.11.0",
+    "pytorch": "2.6.0+cu124",
+    "cuda": "12.4",
+    "gpu": "NVIDIA GeForce RTX 3050 Laptop GPU",
+    "vram_gb": 4.29,
+    "peak_memory_tested_mb": 1351,
+    "headroom_mb": 2943
+  },
+
+  "execution_command": "backend/phase4f_gpu/Scripts/python.exe backend/phase4f/phase4f_5f/run_experiment.py",
+
+  "validation_set_note": "Validation = 80 answerable from original validation split. run_experiment.py currently also includes 14 held-out unanswerable in validation — instructions say these should be excluded. This needs to be addressed before running."
+}

@@ -1,0 +1,14 @@
+{
+  "old_benchmark": {
+    "total": 221,
+    "answerable": 221,
+    "unanswerable": 0,
+    "docs": 4
+  },
+  "new_benchmark": {
+    "total": 182,
+    "answerable": 140,
+    "unanswerable": 42,
+    "docs": 6
+  }
+}

@@ -126,32 +126,39 @@ async def semantic_search(
     # Generate query embedding
     query_embedding = embed_query(body.query)
 
-    # Use pgvector cosine distance to find the most similar chunks
+    # Use pgvector cosine distance to find the most similar chunks.
     # Only search chunks that belong to documents owned by the current user
-    # and whose documents have embedding_status = 'ready'
-    # Note: vector is interpolated directly because SQLAlchemy's :param
-    # syntax conflicts with PostgreSQL's ::type cast syntax.
+    # and whose documents have embedding_status = 'ready'.
+    #
+    # The embedding vector is passed as a string parameter and cast to
+    # pgvector's `vector` type in the SQL.  All other values use standard
+    # SQLAlchemy parameter binding — no f-string interpolation of user
+    # input.
     emb_str = str(query_embedding)
-    user_id_str = str(current_user.id)
 
+    # NOTE: CAST(:embedding AS vector) instead of :embedding::vector
+    # because asyncpg treats `:embedding::vector` as a single parameter name.
     search_sql = text(
-        f"SELECT"
-        f"  dc.id as chunk_id,"
-        f"  dc.content,"
-        f"  dc.document_id,"
-        f"  d.name as document_name,"
-        f"  dc.page,"
-        f"  1 - (dc.embedding <=> '{emb_str}'::vector) as similarity"
-        f" FROM document_chunks dc"
-        f" JOIN documents d ON d.id = dc.document_id"
-        f" WHERE d.user_id = '{user_id_str}'"
-        f"   AND d.embedding_status = 'ready'"
-        f"   AND dc.embedding IS NOT NULL"
-        f" ORDER BY dc.embedding <=> '{emb_str}'::vector"
-        f" LIMIT {body.topK}"
+        "SELECT"
+        "  dc.id as chunk_id,"
+        "  dc.content,"
+        "  dc.document_id,"
+        "  d.name as document_name,"
+        "  dc.page,"
+        "  1 - (dc.embedding <=> CAST(:embedding AS vector)) as similarity"
+        " FROM document_chunks dc"
+        " JOIN documents d ON d.id = dc.document_id"
+        " WHERE d.user_id = :user_id"
+        "   AND d.embedding_status = 'ready'"
+        "   AND dc.embedding IS NOT NULL"
+        " ORDER BY dc.embedding <=> CAST(:embedding AS vector)"
+        " LIMIT :top_k"
     )
 
-    result = await db.execute(search_sql)
+    result = await db.execute(
+        search_sql,
+        {"embedding": emb_str, "user_id": str(current_user.id), "top_k": body.topK},
+    )
     rows = result.fetchall()
 
     results = [

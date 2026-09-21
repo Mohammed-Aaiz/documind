@@ -1,0 +1,101 @@
+{
+  "model_label": "A0_Production_Baseline",
+  "total_examples": 918,
+  "overall": {
+    "em": 7.8,
+    "f1": 14.4,
+    "answerability_accuracy": 7.8,
+    "abstention_accuracy": 64.3,
+    "false_abstention": 49.9,
+    "spurious_rate": 1.6,
+    "answerable": 876,
+    "unanswerable": 42
+  },
+  "by_category": {
+    "DATE": {
+      "n": 25,
+      "em": 96.0,
+      "f1": 98.3,
+      "avg_confidence": 0.8731
+    },
+    "DIRECT_SPAN": {
+      "n": 86,
+      "em": 5.8,
+      "f1": 21.3,
+      "avg_confidence": 0.63
+    },
+    "ENTITY": {
+      "n": 22,
+      "em": 63.6,
+      "f1": 73.3,
+      "avg_confidence": 0.7524
+    },
+    "LIST_ITEM": {
+      "n": 106,
+      "em": 0.0,
+      "f1": 9.6,
+      "avg_confidence": 0.5852
+    },
+    "LONG_CONTEXT": {
+      "n": 15,
+      "em": 0.0,
+      "f1": 5.3,
+      "avg_confidence": 0.3836
+    },
+    "MULTI_CHUNK": {
+      "n": 26,
+      "em": 0.0,
+      "f1": 1.5,
+      "avg_confidence": 0.7942
+    },
+    "NUMERIC": {
+      "n": 97,
+      "em": 20.6,
+      "f1": 34.3,
+      "avg_confidence": 0.6588
+    },
+    "SECTION_SPECIFIC": {
+      "n": 55,
+      "em": 1.8,
+      "f1": 18.0,
+      "avg_confidence": 0.2682
+    },
+    "TABLE_CELL": {
+      "n": 362,
+      "em": 1.1,
+      "f1": 2.4,
+      "avg_confidence": 0.5395
+    },
+    "TABLE_ROW": {
+      "n": 82,
+      "em": 0.0,
+      "f1": 4.7,
+      "avg_confidence": 0.7705
+    },
+    "UNANSWERABLE": {
+      "n": 42,
+      "em": 0,
+      "f1": 0,
+      "avg_confidence": 0.6775
+    }
+  },
+  "failure_taxonomy": {
+    "total_failures": 823,
+    "failure_rate": 89.7,
+    "by_type": {
+      "ABSTAIN": 437,
+      "EXTRACT": 371,
+      "SPURIOUS": 15
+    }
+  },
+  "confidence_analysis": {
+    "correct_mean": 0.7781,
+    "correct_std": 0.1605,
+    "incorrect_mean": 0.5758,
+    "incorrect_std": 0.2646,
+    "separation": 0.2023,
+    "ECE": "NOT_IMPLEMENTED",
+    "Brier": "NOT_IMPLEMENTED"
+  },
+  "latency_ms": 17.13
+}

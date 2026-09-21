@@ -1,0 +1,236 @@
+{
+  "phase": "4F.5-C",
+  "examples": [
+    {
+      "id": "sec_ef5bba9d",
+      "cat": "SECTION_SPECIFIC",
+      "gold": "Executive Summary",
+      "A0": "consolidated revenue of $ 847. 3 million",
+      "A1": "142. 6 million, or $ 3. 47 per diluted share, compared to $ 118. 2 million, or $ 2. 89 per diluted share, in the prior year period. operating margin improved to 22. 1 percent",
+      "A2": "142. 6 million, or $ 3. 47 per diluted share, compared to $ 118. 2 million, or $ 2. 89 per diluted share, in the prior year period. operating margin improved to 22. 1 percent",
+      "A0_f1": 0.0,
+      "A1_f1": 0.0,
+      "A2_f1": 0.0
+    },
+    {
+      "id": "sec_2ebc9587",
+      "cat": "SECTION_SPECIFIC",
+      "gold": "Revenue Breakdown",
+      "A0": "growth was driven primarily by the enterprise solutions division, which posted revenue of $ 412. 5 million",
+      "A1": "287. 1 million ( 33. 9 percent ), growing 9. 7 percent year - over - year. the professional services segment generated $ 147. 7 million ( 17. 4 percent ), reflecting a modest 4. 2 percent",
+      "A2": "9. 7 percent year - over - year. the professional services segment generated $ 147. 7 million ( 17. 4 percent ), reflecting a modest 4. 2 percent",
+      "A0_f1": 10.5,
+      "A1_f1": 0.0,
+      "A2_f1": 0.0
+    },
+    {
+      "id": "sec_c00a7fc1",
+      "cat": "SECTION_SPECIFIC",
+      "gold": "Operating Expenses",
+      "A0": "operating",
+      "A1": "234. 5 million, up 8. 2 percent",
+      "A2": "14. 8 percent",
+      "A0_f1": 66.7,
+      "A1_f1": 0.0,
+      "A2_f1": 0.0
+    },
+    {
+      "id": "sec_70c7b5b7",
+      "cat": "SECTION_SPECIFIC",
+      "gold": "Forward Guidance",
+      "A0": "forward guidance for the fourth quarter of fiscal year 2025",
+      "A1": "28 to 30 percent",
+      "A2": "28 to 30 percent",
+      "A0_f1": 33.3,
+      "A1_f1": 0.0,
+      "A2_f1": 0.0
+    },
+    {
+      "id": "sec_b86b80ef",
+      "cat": "SECTION_SPECIFIC",
+      "gold": "Parties and Effective Date",
+      "A0": "this software license agreement ( agreement )",
+      "A1": "january 15, 2025, by and between techvault inc., a delaware corporation with principal offices at 1200 innovation drive, suite 400, austin, tx 78701",
+      "A2": "january 15, 2025",
+      "A0_f1": 0.0,
+      "A1_f1": 7.4,
+      "A2_f1": 0.0
+    },
+    {
+      "id": "sec_2204bf8b",
+      "cat": "SECTION_SPECIFIC",
+      "gold": "License Grant",
+      "A0": "non - exclusive, non - transferable, revocable license to install and use the software on up to 50 concurrent devices for licensee ' s internal business purposes only",
+      "A1": "36 months",
+      "A2": "36 months commencing on the effective date and expiring on january 15, 2028",
+      "A0_f1": 7.4,
+      "A1_f1": 0.0,
+      "A2_f1": 0.0
+    },
+    {
+      "id": "sec_e95f766d",
+      "cat": "SECTION_SPECIFIC",
+      "gold": "Fees and Payment",
+      "A0": "all fees are non - refundable",
+      "A1": "61, 250 usd within 30 days of invoice date. late payments shall incur interest at a rate of 1. 5 percent",
+      "A2": "245, 000",
+      "A0_f1": 22.2,
+      "A1_f1": 0.0,
+      "A2_f1": 0.0
+    },
+    {
+      "id": "sec_ac7f0172",
+      "cat": "SECTION_SPECIFIC",
+      "gold": "Intellectual Property",
+      "A0": "the software and all associated intellectual property rights remain the exclusive property of licensor",
+      "A1": "licensor. licensee shall not reverse engineer, decompile, or disassemble the software. any derivative works created by licensee using the software",
+      "A2": "licensor retains all rights in the underlying software. licensee grants licensor a non - exclusive, royalty - free license to use anonymized usage",
+      "A0_f1": 28.6,
+      "A1_f1": 0.0,
+      "A2_f1": 0.0
+    },
+    {
+      "id": "sec_7bd7c2bc",
+      "cat": "SECTION_SPECIFIC",
+      "gold": "Authentication",
+      "A0": "all api requests must include a valid jwt token in the authorization header",
+      "A1": "86400 seconds ( 24 hours",
+      "A2": "86400 seconds ( 24 hours",
+      "A0_f1": 0.0,
+      "A1_f1": 0.0,
+      "A2_f1": 0.0
+    },
+    {
+      "id": "sec_cff07693",
+      "cat": "SECTION_SPECIFIC",
+      "gold": "Rate Limits",
+      "A0": "100 requests per minute for standard accounts and 1000 requests per minute for premium accounts",
+      "A1": "429",
+      "A2": "429 too",
+      "A0_f1": 0.0,
+      "A1_f1": 0.0,
+      "A2_f1": 0.0
+    },
+    {
+      "id": "sec_36174b7c",
+      "cat": "SECTION_SPECIFIC",
+      "gold": "Endpoints",
+      "A0": "the api exposes restful",
+      "A1": "200 items",
+      "A2": "json - encoded. pagina",
+      "A0_f1": 0.0,
+      "A1_f1": 0.0,
+      "A2_f1": 0.0
+    },
+    {
+      "id": "sec_4d47a64a",
+      "cat": "SECTION_SPECIFIC",
+      "gold": "Dataset Overview",
+      "A0": "meteorological observations from 847 weather stations across the continental united states for the period january 1, 2024 to december 31, 2024. the dataset includes 14 atmospheric variables recorded at hourly intervals, resulting in approximately 7. 4 million data points",
+      "A1": "7. 4 million",
+      "A2": "7. 4 million data points. the dataset is released under the creative commons attribution 4. 0",
+      "A0_f1": 5.1,
+      "A1_f1": 0.0,
+      "A2_f1": 11.8
+    },
+    {
+      "id": "sec_5e1deffc",
+      "cat": "SECTION_SPECIFIC",
+      "gold": "Station Distribution",
+      "A0": "station distribution the 847 stations are distributed across 48 states",
+      "A1": "35. 5 % ), and remote ( 134 stations, 15. 8 %",
+      "A2": "342 meters above sea level, with a range from 2 meters",
+      "A0_f1": 33.3,
+      "A1_f1": 0.0,
+      "A2_f1": 0.0
+    },
+    {
+      "id": "sec_4aeb4d54",
+      "cat": "SECTION_SPECIFIC",
+      "gold": "Data Quality",
+      "A0": "99. 1 percent",
+      "A1": "99. 9 % ), while solar radiation has the highest missing data rate ( 2. 1 % ). quality control procedures include range checks, consistency checks, and spatial outlier detection. approximately 0. 4 percent",
+      "A2": "99. 9 %",
+      "A0_f1": 0.0,
+      "A1_f1": 11.8,
+      "A2_f1": 0.0
+    },
+    {
+      "id": "mc_c70ece64",
+      "cat": "MULTI_CHUNK",
+      "gold": "142.6 million",
+      "A0": "",
+      "A1": "142. 6 million, or $ 3. 47 per diluted share, compared to $ 118. 2 million",
+      "A2": "142. 6 million, or $ 3. 47 per diluted share, compared to $ 118. 2 million",
+      "A0_f1": 0.0,
+      "A1_f1": 11.8,
+      "A2_f1": 11.8
+    },
+    {
+      "id": "mc_7d94f7cc",
+      "cat": "MULTI_CHUNK",
+      "gold": "287.1 million",
+      "A0": "",
+      "A1": "287. 1 million ( 33. 9 percent ), growing 9. 7 percent",
+      "A2": "9. 7 percent",
+      "A0_f1": 0.0,
+      "A1_f1": 15.4,
+      "A2_f1": 0.0
+    },
+    {
+      "id": "mc_3c4ff454",
+      "cat": "MULTI_CHUNK",
+      "gold": "234.5 million",
+      "A0": "",
+      "A1": "234. 5 million, up 8. 2 percent. general and administrative expenses were $ 127. 3 million, and amortization of acquired intangibles was $ 100. 0 million",
+      "A2": "100. 0 million",
+      "A0_f1": 0.0,
+      "A1_f1": 8.0,
+      "A2_f1": 40.0
+    },
+    {
+      "id": "mc_f03f1a93",
+      "cat": "MULTI_CHUNK",
+      "gold": "1.5 percent",
+      "A0": "",
+      "A1": "61, 250 usd within 30 days of invoice date. late payments shall incur interest at a rate of 1. 5 percent",
+      "A2": "61, 250 usd within 30 days of invoice date. late payments shall incur interest at a rate of 1. 5 percent",
+      "A0_f1": 0.0,
+      "A1_f1": 9.1,
+      "A2_f1": 9.1
+    },
+    {
+      "id": "mc_42e1f7cf",
+      "cat": "MULTI_CHUNK",
+      "gold": "3600 seconds",
+      "A0": "",
+      "A1": "86400 seconds ( 24 hours",
+      "A2": "86400 seconds ( 24 hours",
+      "A0_f1": 0.0,
+      "A1_f1": 28.6,
+      "A2_f1": 28.6
+    },
+    {
+      "id": "mc_98a6aef8",
+      "cat": "MULTI_CHUNK",
+      "gold": "7.4 million",
+      "A0": "847",
+      "A1": "7. 4 million",
+      "A2": "7. 4 million data points. the dataset is released under the creative commons attribution 4. 0",
+      "A0_f1": 0.0,
+      "A1_f1": 40.0,
+      "A2_f1": 11.8
+    },
+    {
+      "id": "mc_61595d05",
+      "cat": "MULTI_CHUNK",
+      "gold": "99.1 percent",
+      "A0": "99. 1 percent",
+      "A1": "99. 1 percent. the most complete variable is atmospheric pressure ( 99. 9 % ), while solar radiation has the highest missing data rate ( 2. 1 %",
+      "A2": "99. 1 percent",
+      "A0_f1": 40.0,
+      "A1_f1": 0.0,
+      "A2_f1": 40.0
+    }
+  ]
+}

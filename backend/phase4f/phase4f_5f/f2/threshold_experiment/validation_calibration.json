@@ -1,0 +1,30 @@
+{
+  "selected_mode": "null_score",
+  "selected_value": 1.5705,
+  "selected_metrics": {
+    "em": 5.88,
+    "f1": 17.42,
+    "answerable_total": 85,
+    "answerable_correct": 5,
+    "answerable_coverage": 87.06,
+    "false_abstention": 11,
+    "false_abstention_rate": 12.94,
+    "unanswerable_total": 8,
+    "unanswerable_correct": 2,
+    "abstention_rate": 25.0,
+    "spurious": 6,
+    "spurious_rate": 75.0
+  },
+  "null_score_distribution": {
+    "answerable_mean": 1.3856,
+    "answerable_std": 0.1958,
+    "unanswerable_mean": 1.4143,
+    "unanswerable_std": 0.1398
+  },
+  "null_margin_distribution": {
+    "answerable_mean": -2.3653,
+    "answerable_std": 0.7498,
+    "unanswerable_mean": -1.8785,
+    "unanswerable_std": 0.7263
+  }
+}

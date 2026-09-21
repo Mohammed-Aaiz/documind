@@ -1,0 +1,58 @@
+{
+  "dataset_version": "phase4f-qa-v3.1",
+  "creation_timestamp": "2026-09-19T21:56:40+00:00",
+  "freeze_completion_timestamp": "2026-09-21T00:00:00+00:00",
+  "parent_version": "phase4f-qa-v3",
+  "parent_hash": "ff293619e1a7b051",
+  "dataset_full_sha256": "a517530354fc9bcaeef6f1aa16c3fb9ce92f1967668386bc66781e6e6bbf2e97",
+  "dataset_short_sha256": "a517530354fc9bca",
+  "dataset_file_size_bytes": 479512,
+  "total_examples": 918,
+  "document_count": 19,
+  "changed_examples": 12,
+  "change_reason": "Answer-span mismatch repair (context[start:end] did not match answer in 12 examples)",
+  "repaired_example_ids": [
+    "tc_20399d46", "tc_00f97d46", "tc_c2c51b89", "tc_4e522e45",
+    "tc_3b383990", "tr_fc34fb8b", "li_89834a97", "li_7216dc7b",
+    "li_ce7dfc4b", "li_8bc7889f", "li_4fa4a839", "li_8770780b"
+  ],
+  "category_distribution": {
+    "TABLE_CELL": 362,
+    "LIST_ITEM": 106,
+    "NUMERIC": 97,
+    "DIRECT_SPAN": 86,
+    "TABLE_ROW": 82,
+    "SECTION_SPECIFIC": 55,
+    "UNANSWERABLE": 42,
+    "MULTI_CHUNK": 26,
+    "DATE": 25,
+    "ENTITY": 22,
+    "LONG_CONTEXT": 15
+  },
+  "structural_validation": {
+    "status": "PASS",
+    "total": 918,
+    "valid": 918,
+    "invalid": 0,
+    "source": "verified from Phase 4F.2-R artifacts (918 examples unmodified in v3.1)"
+  },
+  "semantic_audit": {
+    "status": "PASS",
+    "sample_size": 150,
+    "pass_rate": 100.0,
+    "failures": 0,
+    "source": "verified from Phase 4F.2-R artifacts (semantic audit inherited)"
+  },
+  "external_isolation": {
+    "status": "PASS",
+    "question_overlap": 0,
+    "context_overlap": 0,
+    "eval_phrases_checked": 1143
+  },
+  "cross_split_leakage": 0,
+  "duplicate_analysis": {
+    "exact_qc_dupes": 0,
+    "near_duplicate_pairs": 122
+  },
+  "validation_status": "passed"
+}

@@ -1,0 +1,8 @@
+{
+  "model": "distilbert-base-uncased",
+  "lr": 3e-05,
+  "batch": 8,
+  "grad_acc": 8,
+  "epochs": 3,
+  "fp16": true
+}

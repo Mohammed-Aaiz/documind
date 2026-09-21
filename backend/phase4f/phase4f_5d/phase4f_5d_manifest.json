@@ -1,0 +1,31 @@
+{
+  "phase": "4F.5-D",
+  "status": "BENCHMARK_READY",
+  "benchmark_version": "v1",
+  "benchmark_sha256": "1166bf4ff38265c209614ac20261417b7eeb43653f4482dfdf94721fd50a41d0",
+  "total_examples": 182,
+  "answerable": 140,
+  "unanswerable": 42,
+  "documents": 6,
+  "train_excluded": true,
+  "quality_gate": "PASS",
+  "production_unchanged": true,
+  "no_training": true,
+  "artifacts": [
+    "benchmark_checksum.txt",
+    "benchmark_manifest.json",
+    "qa_benchmark_v1.jsonl"
+  ],
+  "analysis": [
+    "a0_benchmark_v1.json",
+    "a1_benchmark_v1.json",
+    "a2_benchmark_v1.json",
+    "benchmark_comparison.json",
+    "category_balance.json",
+    "duplicate_audit.json",
+    "gold_span_validation.json",
+    "leakage_audit.json",
+    "test_composition.json",
+    "unanswerable_audit.json"
+  ]
+}

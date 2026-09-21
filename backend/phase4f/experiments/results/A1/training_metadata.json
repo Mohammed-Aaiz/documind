@@ -1,0 +1,44 @@
+{
+  "experiment": "A1_DistilBERT",
+  "model_name": "distilbert-base-cased",
+  "hyperparameters": {
+    "model": "distilbert-base-cased",
+    "lr": 3e-05,
+    "batch": 8,
+    "grad_acc": 8,
+    "train": true,
+    "fp16": true
+  },
+  "training_history": [
+    {
+      "epoch": 1,
+      "loss": 5.358871858016304,
+      "lr": 2.230769230769231e-05,
+      "time_s": 17.94038414955139,
+      "val_em": 0.0,
+      "val_f1": 4.1
+    },
+    {
+      "epoch": 2,
+      "loss": 3.9497685971467393,
+      "lr": 1.153846153846154e-05,
+      "time_s": 18.740673065185547,
+      "val_em": 0.0,
+      "val_f1": 5.3
+    },
+    {
+      "epoch": 3,
+      "loss": 3.6191912236421007,
+      "lr": 7.692307692307693e-07,
+      "time_s": 18.785685777664185,
+      "val_em": 0.0,
+      "val_f1": 5.0
+    }
+  ],
+  "training_time_s": 62.5,
+  "peak_gpu_memory_mb": 1822.0,
+  "checkpoint_hash": "cb923d7b63f8561b",
+  "device": "cuda",
+  "gpu": "NVIDIA GeForce RTX 3050 Laptop GPU",
+  "pytorch_version": "2.6.0+cu124"
+}

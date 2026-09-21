@@ -1,0 +1,64 @@
+{
+  "phase": "4F.5-F2",
+  "status": "EXPERIMENT_COMPLETE",
+  "source_dataset_hash": "a517530354fc9bca",
+  "production_model_checksum": "df592aa8d0ee1a23",
+  "production_unchanged": true,
+  "benchmark_unchanged": true,
+  "derived_dataset_unchanged": true,
+  "training": {
+    "train_answerable": 486,
+    "train_unanswerable": 20,
+    "train_total": 506,
+    "val_answerable": 85,
+    "val_unanswerable": 8,
+    "val_total": 93,
+    "holdout_count": 14,
+    "config": {
+      "model": "distilbert-base-uncased",
+      "lr": 3e-05,
+      "batch": 8,
+      "grad_acc": 8,
+      "epochs": 3,
+      "fp16": true
+    },
+    "training_time_s": 29.6,
+    "peak_gpu_memory_mb": 1844.0,
+    "best_checkpoint": "C:\\Users\\moham\\OneDrive\\Desktop\\stitch_documind_futuristic_3d_ui\\backend\\phase4f\\phase4f_5f\\f2\\checkpoints\\F2\\checkpoint_epoch2",
+    "checkpoint_hash": "416b63642ba80a1c"
+  },
+  "validation_results": {
+    "em": 5.9,
+    "f1": 17.9,
+    "answerability_accuracy": 5.9,
+    "abstention_accuracy": 0.0,
+    "false_abstention": 0.0,
+    "spurious_rate": 8.6,
+    "answerable": 85,
+    "unanswerable": 8
+  },
+  "holdout_results": {
+    "em": 0,
+    "f1": 0,
+    "answerability_accuracy": 0.0,
+    "abstention_accuracy": 0.0,
+    "false_abstention": 0.0,
+    "spurious_rate": 100.0,
+    "answerable": 0,
+    "unanswerable": 14
+  },
+  "benchmark_results": {
+    "em": 2.9,
+    "f1": 19.7,
+    "answerability_accuracy": 2.9,
+    "abstention_accuracy": 0.0,
+    "false_abstention": 0.0,
+    "spurious_rate": 23.1,
+    "answerable": 140,
+    "unanswerable": 42
+  },
+  "training_stability": "STABLE",
+  "decision": "F2_NO_MEANINGFUL_SIGNAL",
+  "decision_reasoning": "Zero abstention across all evaluation sets. 20 unanswerable examples (4.0% ratio) insufficient to teach abstention behavior.",
+  "baseline_comparison_note": "A0/A1/A2 results not available (run_experiment.py never executed)"
+}

@@ -1,0 +1,95 @@
+{
+  "phase": "4F.4-R",
+  "audit_type": "failure_taxonomy_reconciliation",
+  "failure_categories_used": {
+    "RET_MISS": "Retrieval missed relevant passage",
+    "RET_NOISE": "Retrieval returned irrelevant passage",
+    "CTX_TRUNC": "Context truncated, answer lost",
+    "CTX_STARVE": "Context insufficient for answer",
+    "QA_EXTRACT": "QA model failed to extract correct span",
+    "QA_CONF": "QA model low confidence on correct answer",
+    "EVID_OMIT": "Evidence omitted from context",
+    "ABSTAIN": "Model abstained when answer exists",
+    "SPURIOUS": "Model gave answer when none exists",
+    "EXTRACT": "Extraction error (wrong span)",
+    "CHUNK": "Chunk boundary issue",
+    "AMBIG": "Question is ambiguous",
+    "ANNOT": "Annotation issue",
+    "UNKNOWN": "Unclassified failure"
+  },
+  "failure_counts": {
+    "A0_Production": {
+      "total_failures": 823,
+      "failure_rate": 89.7,
+      "by_type": {
+        "ABSTAIN": 437,
+        "EXTRACT": 371,
+        "SPURIOUS": 15
+      },
+      "analysis": "A0's primary failure is ABSTAIN (47.6%) - it refuses to answer when it should. EXTRACT failures (40.4%) represent wrong span selection. SPURIOUS (1.6%) are hallucinated answers on unanswerable questions."
+    },
+    "A1_DistilBERT": {
+      "total_failures": 912,
+      "failure_rate": 99.3,
+      "by_type": {
+        "EXTRACT": 870,
+        "SPURIOUS": 42
+      },
+      "analysis": "A1 eliminated ABSTAIN failures (always answers) but this comes at the cost of 42 SPURIOUS answers (hallucinating on ALL unanswerable questions). EXTRACT failures increased dramatically from 371 to 870. ROOT CAUSE: trained with broken span labels (99.3% wrong)."
+    },
+    "A2_BERT_Base": {
+      "total_failures": 918,
+      "failure_rate": 100.0,
+      "by_type": {
+        "EXTRACT": 876,
+        "SPURIOUS": 42
+      },
+      "analysis": "A2 has 100% failure rate. Same pattern as A1 - eliminated ABSTAIN but increased EXTRACT and SPURIOUS. ROOT CAUSE: same broken span labels."
+    },
+    "A3_DeBERTa_v3": {
+      "total_failures": 876,
+      "failure_rate": 95.4,
+      "by_type": {
+        "ABSTAIN": 876
+      },
+      "analysis": "A3 collapsed entirely - NaN loss from epoch 1 caused model to default to always abstaining. The 4.6% 'non-failure' rate comes from correctly abstaining on 42 unanswerable questions. ROOT CAUSE: NaN training instability."
+    }
+  },
+  "reconciled_categories": {
+    "ABSTAIN": {
+      "A0": 437,
+      "A1": 0,
+      "A2": 0,
+      "A3": 876,
+      "analysis": "A0's ABSTAIN failures are a feature of the production model's conservative behavior. A1/A2 eliminated ABSTAIN by always answering (but this caused SPURIOUS). A3's ABSTAIN is from NaN training collapse."
+    },
+    "EXTRACT": {
+      "A0": 371,
+      "A1": 870,
+      "A2": 876,
+      "A3": 0,
+      "analysis": "A1/A2 have worse EXTRACT than A0 because they were trained with wrong span labels. A3 has 0 EXTRACT because it never extracts anything."
+    },
+    "SPURIOUS": {
+      "A0": 15,
+      "A1": 42,
+      "A2": 42,
+      "A3": 0,
+      "analysis": "A0 has minimal spurious rate. A1/A2 hallucinate on ALL 42 unanswerable questions because they always answer. A3 correctly abstains on unanswerable (but only because it abstains on everything)."
+    },
+    "UNKNOWN": {
+      "A0": 0,
+      "A1": 0,
+      "A2": 0,
+      "A3": 0
+    }
+  },
+  "root_cause_classification": {
+    "primary_root_cause": "BROKEN_SPAN_ALIGNMENT",
+    "description": "The run_experiment.py QADataset does not pass return_offsets_mapping=True to the tokenizer, causing the fallback heuristic to use character offsets as token indices. This results in 99.3% of training examples having wrong start/end position labels.",
+    "secondary_root_cause": "NO_HOLDOUT_SPLIT",
+    "secondary_description": "All 918 examples were used for both training and evaluation, so metrics measure memorization not generalization.",
+    "tertiary_root_cause": "BASE_MODEL_MISMATCH",
+    "tertiary_description": "Production model uses distilbert-base-uncased but A1 was initialized from distilbert-base-cased."
+  }
+}

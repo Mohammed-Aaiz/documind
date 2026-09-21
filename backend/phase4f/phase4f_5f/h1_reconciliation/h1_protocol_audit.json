@@ -1,0 +1,131 @@
+{
+  "audit_version": "4F.5-H1R-protocol-v1",
+  "timestamp": "2026-09-22T00:00:00Z",
+  "phase": "4F.5-H1-R",
+
+  "intended_protocol": {
+    "model_base": "distilbert-base-uncased",
+    "tokenizer": "distilbert-base-uncased",
+    "max_sequence_length": 384,
+    "max_answer_length": 50,
+    "learning_rate": 3e-5,
+    "epochs": 3,
+    "physical_batch": 8,
+    "gradient_accumulation": 8,
+    "effective_batch": 64,
+    "fp16": true,
+    "weight_decay": 0.01,
+    "warmup_ratio": 0.1,
+    "optimizer": "AdamW",
+    "lr_scheduler": "linear_with_warmup",
+    "max_grad_norm": 1.0,
+    "random_seed": 42,
+    "device": "cuda",
+    "gpu": "NVIDIA GeForce RTX 3050 Laptop GPU",
+    "answerable_training": 486,
+    "unanswerable_training": 114,
+    "total_training": 600,
+    "answerable_validation": 85,
+    "unanswerable_validation": 8,
+    "total_validation": 93,
+    "holdout_unanswerable": 14,
+    "benchmark_total": 182,
+    "checkpoint_selection_rule": "Best validation EM (epoch1 selected at 0.0%)",
+    "no_answer_decision": "Raw argmax (no threshold applied)",
+    "answerable_label": "token_span.start_token / token_span.end_token",
+    "unanswerable_label": "CLS token (start=0, end=0)"
+  },
+
+  "actual_execution": {
+    "model_base": "distilbert-base-uncased",
+    "tokenizer": "distilbert-base-uncased",
+    "max_sequence_length": 384,
+    "max_answer_length": 50,
+    "learning_rate": 3e-5,
+    "epochs": 3,
+    "physical_batch": 8,
+    "gradient_accumulation": 8,
+    "effective_batch": 64,
+    "fp16": true,
+    "weight_decay": 0.01,
+    "warmup_ratio": 0.1,
+    "optimizer": "AdamW",
+    "lr_scheduler": "linear_with_warmup",
+    "max_grad_norm": 1.0,
+    "random_seed": 42,
+    "device": "cuda",
+    "gpu": "NVIDIA GeForce RTX 3050 Laptop GPU",
+    "answerable_training": 486,
+    "unanswerable_training": 114,
+    "total_training": 600,
+    "answerable_validation": 85,
+    "unanswerable_validation": 8,
+    "total_validation": 93,
+    "holdout_unanswerable": 22,
+    "benchmark_total": 182,
+    "checkpoint_selection_rule": "Best validation EM (epoch1 selected at 0.0%)",
+    "no_answer_decision": "Raw argmax (no threshold applied)",
+    "answerable_label": "token_span.start_token / token_span.end_token",
+    "unanswerable_label": "CLS token (start=0, end=0)"
+  },
+
+  "hash_verification": {
+    "source_dataset": {
+      "expected": "a517530354fc9bcaeef6f1aa16c3fb9ce92f1967668386bc66781e6e6bbf2e97",
+      "actual": "a517530354fc9bcaeef6f1aa16c3fb9ce92f1967668386bc66781e6e6bbf2e97",
+      "status": "VERIFIED"
+    },
+    "derived_dataset": {
+      "expected": "abcf4182f39f0620fb056eee4167d1872baf9b4c748051eade9d6312332f271f",
+      "actual": "abcf4182f39f0620fb056eee4167d1872baf9b4c748051eade9d6312332f271f",
+      "status": "VERIFIED"
+    },
+    "benchmark": {
+      "expected": "1166bf4ff38265c209614ac20261417b7eeb43653f4482dfdf94721fd50a41d0",
+      "actual": "1166bf4ff38265c209614ac20261417b7eeb43653f4482dfdf94721fd50a41d0",
+      "status": "VERIFIED"
+    },
+    "h20_pool": {
+      "expected": "49defabe24affe40c0a849a8ec451659e9a200adb933643cab1bc01581d0305f",
+      "actual": "49defabe24affe40c0a849a8ec451659e9a200adb933643cab1bc01581d0305f",
+      "status": "VERIFIED"
+    },
+    "production_model": {
+      "expected": "df592aa8d0ee1a235489bd3eead44d4cf0861221339226311960697c1c1512ac",
+      "actual": "df592aa8d0ee1a235489bd3eead44d4cf0861221339226311960697c1c1512ac",
+      "status": "UNCHANGED"
+    }
+  },
+
+  "selected_checkpoint": {
+    "path": "backend/phase4f/phase4f_5f/h1/checkpoints/H1/checkpoint_epoch1",
+    "hash": "854c629cd0418f5e",
+    "epoch": 1,
+    "val_em": 0.0,
+    "selection_rule": "Best validation EM (all epochs had 0.0% EM; epoch1 selected as first)")
+  },
+
+  "discrepancies": {
+    "holdout_count": {
+      "expected": 14,
+      "actual": 22,
+      "root_cause": "get_holdout_examples() uses val_unanswerable_count=20 as the split index, yielding 42-20=22 holdout examples. The F1 reconciliation protocol defines the split at index 28 (20 train + 8 val + 14 holdout). The H1 code does NOT use the 20 derived unanswerable in training (replaced by 114 H20), but still uses index 20 as the boundary, producing 22 instead of 14.",
+      "severity": "MEDIUM",
+      "effect_on_benchmark_conclusions": "LOW — the holdout is a secondary diagnostic; the primary benchmark evaluation (182 examples, frozen) is unaffected"
+    },
+    "validation_unanswerable_ids": {
+      "expected_from_reconciliation": ["unans_0badce8d", "unans_0e172594", "unans_29bba51a", "unans_2a3dd2f6", "unans_4725a75e", "unans_520918ca", "unans_691bae51", "unans_8afe7d03"],
+      "actual_in_run": ["unans_02ea167f", "unans_03d364a3", "unans_04664035", "unans_06ccc9f0", "unans_08af12b6", "unans_0badce8d", "unans_0e172594", "unans_1b510697"],
+      "root_cause": "Reconciliation protocol splits 42 unanswerable into experiment_pool[0:28] (20 train + 8 val) and holdout[28:42] (14). H1 code instead splits into val[0:8] and holdout[20:42], producing different ID sets. 6 of 8 validation unanswerable IDs differ between the two approaches.",
+      "severity": "LOW",
+      "effect": "Different unanswerable examples in validation; benchmark results are not affected"
+    },
+    "unaccounted_examples": {
+      "count": 12,
+      "ids": ["unans_20bbdfeb", "unans_20e56903", "unans_29bba51a", "unans_2a3dd2f6", "unans_39b0bf0c", "unans_3a0430bc", "unans_3b23eb33", "unans_422d6ea0", "unans_4725a75e", "unans_496d4272", "unans_520918ca", "unans_63ece8c5"],
+      "root_cause": "Of 42 derived unanswerable examples: 8 go to validation (indices 0-7), 22 go to holdout (indices 20-41), and 12 (indices 8-19) are placed in neither training, validation, nor holdout. They are silently dropped.",
+      "severity": "LOW",
+      "effect": "12 unanswerable examples unused; does not affect benchmark evaluation"
+    }
+  }
+}

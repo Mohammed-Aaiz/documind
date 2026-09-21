@@ -1,0 +1,90 @@
+{
+  "phase": "4F.4-E",
+  "status": "GPU_ENVIRONMENT_READY",
+  "environment": {
+    "os": "Windows-10-10.0.26200-SP0",
+    "python": "3.11.0 (main, Oct 24 2022, 18:26:48) [MSC v.1933 64 bit (AMD64)]",
+    "pytorch": "2.6.0+cu124",
+    "transformers": "5.16.1",
+    "accelerate": "1.15.0",
+    "datasets": "5.0.1",
+    "tokenizers": "0.23.2",
+    "scikit-learn": "1.9.1",
+    "numpy": "2.4.6",
+    "cuda_version": "12.4",
+    "cuda_available": true,
+    "nvidia_driver": "616.56",
+    "gpu_model": "NVIDIA GeForce RTX 3050 Laptop GPU",
+    "vram_total_mb": 4295,
+    "compute_capability": "8.6",
+    "fp16_support": true,
+    "bf16_support": true,
+    "cuda_smoke_test": "PASSED"
+  },
+  "virtual_environment": {
+    "path": "backend/phase4f_gpu/",
+    "python": "backend/phase4f_gpu/Scripts/python.exe",
+    "isolated_from_production": true
+  },
+  "model_memory_tests": {
+    "A1_distilbert": {
+      "model": "distilbert-base-cased",
+      "inference_peak_mb": 376,
+      "training_batch_1_peak_mb": 1328,
+      "training_batch_2_peak_mb": 1326,
+      "training_batch_4_peak_mb": 1330,
+      "training_batch_8_peak_mb": 1832,
+      "status": "OK"
+    },
+    "A2_bert_base": {
+      "model": "bert-base-cased",
+      "inference_peak_mb": 545,
+      "training_batch_1_peak_mb": 2178,
+      "training_batch_2_peak_mb": 2174,
+      "training_batch_4_peak_mb": 2344,
+      "training_batch_8_peak_mb": 3318,
+      "status": "OK"
+    },
+    "A3_deberta_v3": {
+      "model": "microsoft/deberta-v3-base",
+      "inference_peak_mb": 639,
+      "training_batch_1_peak_mb": 1895,
+      "training_batch_2_peak_mb": 1960,
+      "training_batch_4_peak_mb": 2718,
+      "training_batch_8_peak_mb": 4243,
+      "training_batch_8_status": "OOM (52 MB remaining)",
+      "status": "OK (max safe batch=4)"
+    }
+  },
+  "recommended_batch_sizes": {
+    "A1_distilbert": {
+      "physical_batch": 8,
+      "gradient_accumulation": 8,
+      "effective_batch": 64,
+      "reasoning": "832 MB headroom at batch=8"
+    },
+    "A2_bert_base": {
+      "physical_batch": 8,
+      "gradient_accumulation": 8,
+      "effective_batch": 64,
+      "reasoning": "977 MB headroom at batch=8; tight but feasible"
+    },
+    "A3_deberta_v3": {
+      "physical_batch": 4,
+      "gradient_accumulation": 16,
+      "effective_batch": 64,
+      "reasoning": "batch=8 OOM; batch=4 leaves 1577 MB; grad_acc=16 preserves eff_batch=64"
+    }
+  },
+  "frozen_dataset": {
+    "version": "phase4f-qa-v3.1",
+    "full_sha256": "a517530354fc9bcaeef6f1aa16c3fb9ce92f1967668386bc66781e6e6bbf2e97",
+    "examples": 918,
+    "verified": true
+  },
+  "production_model": {
+    "checksum": "df592aa8d0ee1a235489bd3eead44d4cf0861221339226311960697c1c1512ac",
+    "unchanged": true
+  },
+  "timestamp": "2026-09-21T01:15:00Z"
+}

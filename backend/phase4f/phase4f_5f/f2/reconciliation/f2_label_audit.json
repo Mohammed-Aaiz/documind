@@ -1,0 +1,26 @@
+{
+  "audit_version": "4F.5-F2R-label-audit-v1",
+  "label_encoding_status": "CORRECT",
+  "answerable_labels": {
+    "method": "token_span.start_token / token_span.end_token",
+    "verified_with_tokenizer": true,
+    "decoded_matches_gold": true,
+    "forward_pass_loss_finite": true,
+    "sample_loss": 3.4444
+  },
+  "unanswerable_labels": {
+    "method": "start_positions=0, end_positions=0 (CLS token)",
+    "cls_token_decoded": "",
+    "forward_pass_loss_finite": true,
+    "sample_loss": 4.5603
+  },
+  "cls_logits_after_training": {
+    "cls_start_logit": 0.5634,
+    "cls_end_logit": 0.4958,
+    "max_start_logit": 1.2236,
+    "max_end_logit": 0.7693,
+    "cls_is_argmax_start": false,
+    "cls_is_argmax_end": false
+  },
+  "conclusion": "Labels are correctly encoded and received by the model. The model's CLS logit is positive but not the argmax. The label encoding is NOT the cause of failure."
+}

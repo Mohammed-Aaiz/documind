@@ -1,0 +1,114 @@
+{
+  "phase": "4F.4-R",
+  "audit_type": "manual_forensic_traces",
+  "note": "Traces constructed from code analysis and tokenization audit. On-device GPU inference not possible in current CPU-only environment.",
+  "traces": [
+    {
+      "example_category": "DATE",
+      "question": "When did the maintenance window occur?",
+      "context_length_chars": 30,
+      "gold_answer": "first Saturday of each month",
+      "char_span": "(30, 58)",
+      "tokenized_input_summary": "[CLS] When did the maintenance window occur? [SEP] <context> [SEP] [PAD]...",
+      "gold_token_span_with_offset_mapping": "(17, 21) approximately",
+      "gold_token_span_with_broken_heuristic": "(30, 57) - WRONG, char offsets used as token indices",
+      "decoded_gold_span_correct": "first Saturday of each month",
+      "decoded_gold_span_broken": "truncated/wrong text",
+      "survives_max_length_384": true,
+      "model_a0_prediction": "DATE category: A0 EM=96.0%, strong performer",
+      "model_a1_prediction": "A1 EM=4.0% (catastrophic regression from 96%)",
+      "failure_category_training": "BROKEN_SPAN_ALIGNMENT",
+      "failure_category_inference": "QA_EXTRACT (A1 trained on wrong labels)"
+    },
+    {
+      "example_category": "ENTITY",
+      "question": "Who is the current CEO?",
+      "context_length_chars": 19,
+      "gold_answer": "Dr. Sarah Chen",
+      "char_span": "(19, 33)",
+      "gold_token_span_broken_heuristic": "(19, 32) - char offsets as token indices",
+      "model_a0_performance": "EM=63.6% (strong)",
+      "model_a1_performance": "EM=0.0% (destroyed by wrong training labels)",
+      "failure_category": "BROKEN_SPAN_ALIGNMENT + TRAINING_WITH_WRONG_LABELS"
+    },
+    {
+      "example_category": "DIRECT_SPAN",
+      "question": "What is the memory of the system?",
+      "gold_answer": "8 GB",
+      "char_span": "(11, 15)",
+      "broken_heuristic_tokens": "(11, 13) -> decodes to 'GHz' (WRONG)",
+      "correct_tokens": "(14, 15) with offset_mapping",
+      "model_a0_performance": "EM=5.8% (baseline is weak here)",
+      "model_a1_performance": "EM=0.0%",
+      "failure_category": "BROKEN_SPAN_ALIGNMENT"
+    },
+    {
+      "example_category": "NUMERIC",
+      "question": "How many extraction time were recorded?",
+      "gold_answer": "3.2 seconds",
+      "char_span": "(0, 11)",
+      "model_a0_performance": "EM=20.6%",
+      "model_a1_performance": "EM=4.1%",
+      "failure_category": "BROKEN_SPAN_ALIGNMENT"
+    },
+    {
+      "example_category": "TABLE_CELL",
+      "question": "What is GI-06's no2 (ppb)?",
+      "gold_answer": "35.6",
+      "char_span": "(107, 111)",
+      "model_a0_performance": "EM=1.1% (inherently difficult)",
+      "model_a1_performance": "EM=0.3%",
+      "failure_category": "BROKEN_SPAN_ALIGNMENT + INHERENTLY_DIFFICULT"
+    },
+    {
+      "example_category": "TABLE_ROW",
+      "question": "What are the values for HB-02?",
+      "gold_answer": "HB-02 | 48 | 10.8 | 41.2 | 19.5 | 91",
+      "char_span": "(80, 116)",
+      "model_a0_performance": "EM=0.0% (too long for greedy extraction)",
+      "model_a1_performance": "EM=0.0%",
+      "failure_category": "CTX_STARVE + BROKEN_SPAN_ALIGNMENT"
+    },
+    {
+      "example_category": "LIST_ITEM",
+      "question": "What deployment steps is listed first?",
+      "gold_answer": "1. Pull the latest container images from the registry (registry.documind.internal)",
+      "char_span": "(17, 99)",
+      "model_a0_performance": "EM=0.0% (long answer, extraction fails)",
+      "model_a1_performance": "EM=0.0%",
+      "failure_category": "CTX_STARVE + BROKEN_SPAN_ALIGNMENT"
+    },
+    {
+      "example_category": "SECTION_SPECIFIC",
+      "question": "What is discussed in the Conclusions section?",
+      "gold_answer": "Conclusions",
+      "char_span": "(0, 11)",
+      "model_a0_performance": "EM=1.8%",
+      "model_a1_performance": "EM=0.0%",
+      "failure_category": "BROKEN_SPAN_ALIGNMENT"
+    },
+    {
+      "example_category": "MULTI_CHUNK",
+      "question": "What value is mentioned near the boundary between Section 1 and Section 2?",
+      "gold_answer": "94.2 percent",
+      "char_span": "(150, 162)",
+      "model_a0_performance": "EM=0.0%",
+      "model_a1_performance": "EM=0.0%",
+      "failure_category": "CTX_STARVE + BROKEN_SPAN_ALIGNMENT"
+    },
+    {
+      "example_category": "LONG_CONTEXT",
+      "question": "In the full context, what value is given for metric?",
+      "gold_answer": "2.5 million",
+      "char_span": "(285, 296)",
+      "model_a0_performance": "EM=0.0%",
+      "model_a1_performance": "EM=0.0%",
+      "failure_category": "CTX_STARVE + BROKEN_SPAN_ALIGNMENT"
+    }
+  ],
+  "summary": {
+    "a0_traces": "A0 evaluation is independent of span alignment (uses model's own span prediction). A0 results are valid.",
+    "a1_traces": "A1 was trained with broken span labels. Even if it learned, it learned to predict WRONG positions. The 0.7% EM represents accidental matches.",
+    "note": "Full on-device forensic traces (logits, confidence, exact token positions) require GPU execution in phase4f_gpu environment."
+  }
+}

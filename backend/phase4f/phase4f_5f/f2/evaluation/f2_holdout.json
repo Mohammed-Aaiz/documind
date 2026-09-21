@@ -1,0 +1,34 @@
+{
+  "eval_version": "4F.5-F2-eval-v1",
+  "total_examples": 14,
+  "overall": {
+    "em": 0,
+    "f1": 0,
+    "answerability_accuracy": 0.0,
+    "abstention_accuracy": 0.0,
+    "false_abstention": 0.0,
+    "spurious_rate": 100.0,
+    "answerable": 0,
+    "unanswerable": 14
+  },
+  "by_category": {
+    "UNANSWERABLE": {
+      "n": 14,
+      "em": 0,
+      "f1": 0,
+      "avg_confidence": 0.0269
+    }
+  },
+  "confidence_analysis": {
+    "answerable_correct_mean": 0,
+    "answerable_incorrect_mean": 0,
+    "unanswerable_abstained_mean": 0,
+    "unanswerable_spurious_mean": 0.0269,
+    "separation": 0
+  },
+  "failure_taxonomy": {
+    "by_type": {
+      "SPURIOUS": 14
+    }
+  }
+}

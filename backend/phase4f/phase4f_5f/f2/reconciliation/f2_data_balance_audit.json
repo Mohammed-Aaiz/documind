@@ -1,0 +1,37 @@
+{
+  "audit_version": "4F.5-F2R-data-balance-v1",
+  "unanswerable_fraction": "20/506 = 3.95%",
+  "answerable_fraction": "486/506 = 96.05%",
+  "micro_batch_analysis": {
+    "batch_size": 8,
+    "expected_unanswerable_per_batch": 0.32,
+    "percent_batches_with_unanswerable": 32,
+    "percent_batches_without_unanswerable": 68
+  },
+  "epoch_analysis": {
+    "micro_batches_per_epoch": 63,
+    "total_micro_batches_3_epochs": 189,
+    "expected_batches_with_unanswerable": 60,
+    "expected_batches_without_unanswerable": 129
+  },
+  "ood_analysis": {
+    "unanswerable_source": "unanswerable_corpus (synthetic)",
+    "answerable_source": "real technical documents",
+    "unanswerable_context_lengths": "44-95 chars",
+    "answerable_context_lengths": "much longer, technical",
+    "domain_mismatch": true,
+    "train_subcategory_coverage": {
+      "plausible_unsupported": 10,
+      "entity_absent": 7,
+      "date_absent": 1,
+      "conflicting_distractor": 1,
+      "related_not_supported": 1,
+      "missing": ["number_absent"]
+    },
+    "val_has_number_absent": true,
+    "holdout_has_number_absent": true
+  },
+  "class_weighting_used": false,
+  "sampling_method": "uniform_random",
+  "conclusion": "The 3.95% unanswerable ratio combined with OOD training data results in severely diluted CLS gradient signal. The model cannot learn a strong no-answer representation."
+}

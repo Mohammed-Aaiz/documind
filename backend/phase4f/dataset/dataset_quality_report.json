@@ -1,0 +1,639 @@
+{
+  "phase": "4F.2",
+  "dataset_version": "phase4f-qa-v2",
+  "timestamp": "2026-09-19T21:39:35.924023+00:00",
+  "dataset_hash": "67118e6f29423b9e",
+  "total_examples": 1000,
+  "category_distribution": {
+    "TABLE_CELL": 373,
+    "DIRECT_SPAN": 154,
+    "LIST_ITEM": 106,
+    "NUMERIC": 100,
+    "TABLE_ROW": 82,
+    "SECTION_SPECIFIC": 55,
+    "UNANSWERABLE": 42,
+    "MULTI_CHUNK": 26,
+    "DATE": 25,
+    "ENTITY": 22,
+    "LONG_CONTEXT": 15
+  },
+  "validation": {
+    "total": 1000,
+    "valid": 1000,
+    "invalid": 0,
+    "issues": []
+  },
+  "semantic_audit": {
+    "sample_size": 150,
+    "failures": [],
+    "pass_rate": 100.0
+  },
+  "category_analysis": {
+    "total_examples": 1000,
+    "distribution": {
+      "TABLE_CELL": {
+        "count": 373,
+        "percentage": 37.3,
+        "floor": 100,
+        "meets_floor": true
+      },
+      "DIRECT_SPAN": {
+        "count": 154,
+        "percentage": 15.4,
+        "floor": 100,
+        "meets_floor": true
+      },
+      "LIST_ITEM": {
+        "count": 106,
+        "percentage": 10.6,
+        "floor": 100,
+        "meets_floor": true
+      },
+      "NUMERIC": {
+        "count": 100,
+        "percentage": 10.0,
+        "floor": 100,
+        "meets_floor": true
+      },
+      "TABLE_ROW": {
+        "count": 82,
+        "percentage": 8.2,
+        "floor": 75,
+        "meets_floor": true
+      },
+      "SECTION_SPECIFIC": {
+        "count": 55,
+        "percentage": 5.5,
+        "floor": 75,
+        "meets_floor": false
+      },
+      "UNANSWERABLE": {
+        "count": 42,
+        "percentage": 4.2,
+        "floor": 100,
+        "meets_floor": false
+      },
+      "MULTI_CHUNK": {
+        "count": 26,
+        "percentage": 2.6,
+        "floor": 75,
+        "meets_floor": false
+      },
+      "DATE": {
+        "count": 25,
+        "percentage": 2.5,
+        "floor": 50,
+        "meets_floor": false
+      },
+      "ENTITY": {
+        "count": 22,
+        "percentage": 2.2,
+        "floor": 50,
+        "meets_floor": false
+      },
+      "LONG_CONTEXT": {
+        "count": 15,
+        "percentage": 1.5,
+        "floor": 50,
+        "meets_floor": false
+      }
+    },
+    "floors": {
+      "DIRECT_SPAN": 100,
+      "ENTITY": 50,
+      "DATE": 50,
+      "NUMERIC": 100,
+      "TABLE_CELL": 100,
+      "TABLE_ROW": 75,
+      "LIST_ITEM": 100,
+      "SECTION_SPECIFIC": 75,
+      "LONG_CONTEXT": 50,
+      "MULTI_CHUNK": 75,
+      "UNANSWERABLE": 100
+    },
+    "floor_status": {
+      "TABLE_CELL": "MET",
+      "DIRECT_SPAN": "MET",
+      "LIST_ITEM": "MET",
+      "NUMERIC": "MET",
+      "TABLE_ROW": "MET",
+      "SECTION_SPECIFIC": "BELOW",
+      "UNANSWERABLE": "BELOW",
+      "MULTI_CHUNK": "BELOW",
+      "DATE": "BELOW",
+      "ENTITY": "BELOW",
+      "LONG_CONTEXT": "BELOW"
+    },
+    "imbalance_ratio": 24.87,
+    "max_category": "TABLE_CELL",
+    "min_category": "LONG_CONTEXT"
+  },
+  "near_duplicate_analysis": {
+    "total_pairs": 58,
+    "classifications": {
+      "LEGITIMATE_VARIATION": 54,
+      "DUPLICATE_PATTERN": 4
+    },
+    "details": [
+      {
+        "q1": "What missing % does Visibility have?",
+        "q2": "What mean does Visibility have?",
+        "similarity": 0.866,
+        "classification": "LEGITIMATE_VARIATION"
+      },
+      {
+        "q1": "What is the fifth evaluation metrics?",
+        "q2": "What is the fourth evaluation metrics?",
+        "similarity": 0.933,
+        "classification": "LEGITIMATE_VARIATION"
+      },
+      {
+        "q1": "What does the document say about percentage?",
+        "q2": "What does the document say about endpoints?",
+        "similarity": 0.851,
+        "classification": "LEGITIMATE_VARIATION"
+      },
+      {
+        "q1": "What min does Pressure have?",
+        "q2": "What mean does Pressure have?",
+        "similarity": 0.947,
+        "classification": "LEGITIMATE_VARIATION"
+      },
+      {
+        "q1": "What parameters does ALBERT-xxlarge have?",
+        "q2": "What parameters does DeBERTa-v3-large have?",
+        "similarity": 0.881,
+        "classification": "LEGITIMATE_VARIATION"
+      },
+      {
+        "q1": "What information is recorded for HNSW?",
+        "q2": "What information is recorded for RAM?",
+        "similarity": 0.907,
+        "classification": "LEGITIMATE_VARIATION"
+      },
+      {
+        "q1": "Looking at the table, what variable value does Humidity show?",
+        "q2": "Looking at the table, what unit value does Humidity show?",
+        "similarity": 0.915,
+        "classification": "LEGITIMATE_VARIATION"
+      },
+      {
+        "q1": "How much is the employees of 2008?",
+        "q2": "How much is the year of 2008?",
+        "similarity": 0.857,
+        "classification": "LEGITIMATE_VARIATION"
+      },
+      {
+        "q1": "What are the values for 2001?",
+        "q2": "What are the values for Q4 2025?",
+        "similarity": 0.885,
+        "classification": "LEGITIMATE_VARIATION"
+      },
+      {
+        "q1": "What are the values for Standard?",
+        "q2": "What are the values for Storage?",
+        "similarity": 0.862,
+        "classification": "LEGITIMATE_VARIATION"
+      },
+      {
+        "q1": "What information is recorded for RAM?",
+        "q2": "What information is recorded for PD-01?",
+        "similarity": 0.895,
+        "classification": "LEGITIMATE_VARIATION"
+      },
+      {
+        "q1": "Looking at the table, what days monitored value does GI-06 show?",
+        "q2": "Looking at the table, what days monitored value does HB-02 show?",
+        "similarity": 0.953,
+        "classification": "DUPLICATE_PATTERN"
+      },
+      {
+        "q1": "What information is recorded for PD-01?",
+        "q2": "What information is recorded for 2006?",
+        "similarity": 0.909,
+        "classification": "LEGITIMATE_VARIATION"
+      },
+      {
+        "q1": "What is the value of percentage for the metric?",
+        "q2": "What is the value of percentage for XR-7?",
+        "similarity": 0.864,
+        "classification": "LEGITIMATE_VARIATION"
+      },
+      {
+        "q1": "What is Senior Engineer's monthly cost?",
+        "q2": "What is Junior Engineer's monthly cost?",
+        "similarity": 0.949,
+        "classification": "LEGITIMATE_VARIATION"
+      },
+      {
+        "q1": "Looking at the table, what value value does Storage show?",
+        "q2": "Looking at the table, what variable value does Visibility show?",
+        "similarity": 0.85,
+        "classification": "LEGITIMATE_VARIATION"
+      },
+      {
+        "q1": "What are the values for PA-04?",
+        "q2": "What are the values for 2008?",
+        "similarity": 0.881,
+        "classification": "LEGITIMATE_VARIATION"
+      },
+      {
+        "q1": "What are the values for Q2 2025?",
+        "q2": "What are the values for 2008?",
+        "similarity": 0.885,
+        "classification": "LEGITIMATE_VARIATION"
+      },
+      {
+        "q1": "When did the regulation effective date occur?",
+        "q2": "When did the Agreement effective date occur?",
+        "similarity": 0.854,
+        "classification": "LEGITIMATE_VARIATION"
+      },
+      {
+        "q1": "What are all the values for POST?",
+        "q2": "What are all the values for Ethernet?",
+        "similarity": 0.857,
+        "classification": "LEGITIMATE_VARIATION"
+      },
+      {
+        "q1": "How much is the q3 2024 revenue of Professional Services?",
+        "q2": "What is the q3 2025 revenue for Professional Services?",
+        "similarity": 0.865,
+        "classification": "LEGITIMATE_VARIATION"
+      },
+      {
+        "q1": "According to the table, what is the method for POST?",
+        "q2": "According to the table, what is the network type for Host?",
+        "similarity": 0.873,
+        "classification": "LEGITIMATE_VARIATION"
+      },
+      {
+        "q1": "What maintenance checklist is listed second?",
+        "q2": "What maintenance checklist is listed fifth?",
+        "similarity": 0.874,
+        "classification": "LEGITIMATE_VARIATION"
+      },
+      {
+        "q1": "What are all the values for ACR70 at Week 24?",
+        "q2": "What are the values for ACR50 at Week 24?",
+        "similarity": 0.93,
+        "classification": "LEGITIMATE_VARIATION"
+      },
+      {
+        "q1": "What are the values for HB-02?",
+        "q2": "What are the values for 2003?",
+        "similarity": 0.881,
+        "classification": "LEGITIMATE_VARIATION"
+      },
+      {
+        "q1": "What are the values for HB-02?",
+        "q2": "What are the values for Wi-Fi?",
+        "similarity": 0.867,
+        "classification": "LEGITIMATE_VARIATION"
+      },
+      {
+        "q1": "What are the values for HB-02?",
+        "q2": "What are the values for 2010?",
+        "similarity": 0.881,
+        "classification": "LEGITIMATE_VARIATION"
+      },
+      {
+        "q1": "What information is recorded for Free?",
+        "q2": "What information is recorded for SW-03?",
+        "similarity": 0.883,
+        "classification": "LEGITIMATE_VARIATION"
+      },
+      {
+        "q1": "What are the values for 2003?",
+        "q2": "What are the values for Flat?",
+        "similarity": 0.862,
+        "classification": "LEGITIMATE_VARIATION"
+      },
+      {
+        "q1": "What are the values for 2003?",
+        "q2": "What are the values for 2010?",
+        "similarity": 0.966,
+        "classification": "DUPLICATE_PATTERN"
+      }
+    ]
+  },
+  "document_balance": {
+    "total_documents": 19,
+    "documents": {
+      "company_history_eta": {
+        "total": 89,
+        "categories": {
+          "DIRECT_SPAN": 20,
+          "NUMERIC": 20,
+          "TABLE_CELL": 20,
+          "TABLE_ROW": 5,
+          "LIST_ITEM": 5,
+          "SECTION_SPECIFIC": 4,
+          "LONG_CONTEXT": 12,
+          "MULTI_CHUNK": 3
+        },
+        "category_count": 8
+      },
+      "research_paper_beta": {
+        "total": 80,
+        "categories": {
+          "DIRECT_SPAN": 14,
+          "NUMERIC": 11,
+          "TABLE_CELL": 34,
+          "TABLE_ROW": 7,
+          "LIST_ITEM": 5,
+          "SECTION_SPECIFIC": 5,
+          "LONG_CONTEXT": 1,
+          "MULTI_CHUNK": 3
+        },
+        "category_count": 8
+      },
+      "financial_report_q3": {
+        "total": 77,
+        "categories": {
+          "DIRECT_SPAN": 31,
+          "NUMERIC": 11,
+          "TABLE_CELL": 16,
+          "TABLE_ROW": 4,
+          "LIST_ITEM": 8,
+          "SECTION_SPECIFIC": 4,
+          "MULTI_CHUNK": 3
+        },
+        "category_count": 7
+      },
+      "multi_chunk_doc_xi": {
+        "total": 75,
+        "categories": {
+          "DIRECT_SPAN": 10,
+          "NUMERIC": 11,
+          "TABLE_CELL": 30,
+          "TABLE_ROW": 6,
+          "LIST_ITEM": 11,
+          "SECTION_SPECIFIC": 4,
+          "MULTI_CHUNK": 3
+        },
+        "category_count": 7
+      },
+      "tech_spec_alpha": {
+        "total": 74,
+        "categories": {
+          "DIRECT_SPAN": 18,
+          "NUMERIC": 8,
+          "TABLE_CELL": 28,
+          "TABLE_ROW": 10,
+          "LIST_ITEM": 5,
+          "SECTION_SPECIFIC": 4,
+          "MULTI_CHUNK": 1
+        },
+        "category_count": 7
+      },
+      "api_docs_lambda": {
+        "total": 69,
+        "categories": {
+          "DIRECT_SPAN": 5,
+          "NUMERIC": 4,
+          "TABLE_CELL": 42,
+          "TABLE_ROW": 10,
+          "LIST_ITEM": 4,
+          "SECTION_SPECIFIC": 3,
+          "MULTI_CHUNK": 1
+        },
+        "category_count": 7
+      },
+      "env_monitoring_zeta": {
+        "total": 68,
+        "categories": {
+          "DIRECT_SPAN": 9,
+          "NUMERIC": 11,
+          "TABLE_CELL": 36,
+          "TABLE_ROW": 6,
+          "LIST_ITEM": 4,
+          "SECTION_SPECIFIC": 2
+        },
+        "category_count": 6
+      },
+      "clinical_trial_gamma": {
+        "total": 65,
+        "categories": {
+          "DIRECT_SPAN": 17,
+          "NUMERIC": 7,
+          "TABLE_CELL": 24,
+          "TABLE_ROW": 5,
+          "LIST_ITEM": 5,
+          "SECTION_SPECIFIC": 4,
+          "MULTI_CHUNK": 3
+        },
+        "category_count": 7
+      },
+      "dataset_desc_mu": {
+        "total": 61,
+        "categories": {
+          "DIRECT_SPAN": 4,
+          "TABLE_CELL": 42,
+          "TABLE_ROW": 7,
+          "LIST_ITEM": 3,
+          "SECTION_SPECIFIC": 3,
+          "MULTI_CHUNK": 2
+        },
+        "category_count": 6
+      },
+      "textbook_chapter_theta": {
+        "total": 48,
+        "categories": {
+          "DIRECT_SPAN": 8,
+          "NUMERIC": 6,
+          "TABLE_CELL": 20,
+          "TABLE_ROW": 4,
+          "LIST_ITEM": 5,
+          "SECTION_SPECIFIC": 3,
+          "LONG_CONTEXT": 1,
+          "MULTI_CHUNK": 1
+        },
+        "category_count": 8
+      },
+      "project_proposal_nu": {
+        "total": 48,
+        "categories": {
+          "DIRECT_SPAN": 3,
+          "NUMERIC": 4,
+          "TABLE_CELL": 25,
+          "TABLE_ROW": 5,
+          "LIST_ITEM": 6,
+          "SECTION_SPECIFIC": 3,
+          "MULTI_CHUNK": 2
+        },
+        "category_count": 7
+      },
+      "unanswerable_corpus": {
+        "total": 42,
+        "categories": {
+          "UNANSWERABLE": 42
+        },
+        "category_count": 1
+      },
+      "training_material_omega": {
+        "total": 38,
+        "categories": {
+          "DIRECT_SPAN": 3,
+          "TABLE_CELL": 20,
+          "TABLE_ROW": 4,
+          "LIST_ITEM": 6,
+          "SECTION_SPECIFIC": 3,
+          "LONG_CONTEXT": 1,
+          "MULTI_CHUNK": 1
+        },
+        "category_count": 7
+      },
+      "product_comparison_pi": {
+        "total": 37,
+        "categories": {
+          "TABLE_CELL": 25,
+          "TABLE_ROW": 5,
+          "LIST_ITEM": 5,
+          "SECTION_SPECIFIC": 2
+        },
+        "category_count": 4
+      },
+      "legal_contract_epsilon": {
+        "total": 34,
+        "categories": {
+          "DIRECT_SPAN": 5,
+          "NUMERIC": 5,
+          "TABLE_CELL": 11,
+          "TABLE_ROW": 4,
+          "LIST_ITEM": 4,
+          "SECTION_SPECIFIC": 4,
+          "MULTI_CHUNK": 1
+        },
+        "category_count": 7
+      },
+      "ops_manual_delta": {
+        "total": 31,
+        "categories": {
+          "DIRECT_SPAN": 5,
+          "LIST_ITEM": 20,
+          "SECTION_SPECIFIC": 4,
+          "MULTI_CHUNK": 2
+        },
+        "category_count": 4
+      },
+      "date_corpus": {
+        "total": 25,
+        "categories": {
+          "DATE": 25
+        },
+        "category_count": 1
+      },
+      "entity_corpus": {
+        "total": 22,
+        "categories": {
+          "ENTITY": 22
+        },
+        "category_count": 1
+      },
+      "regulation_doc_iota": {
+        "total": 17,
+        "categories": {
+          "DIRECT_SPAN": 2,
+          "NUMERIC": 2,
+          "LIST_ITEM": 10,
+          "SECTION_SPECIFIC": 3
+        },
+        "category_count": 4
+      }
+    },
+    "splits": {},
+    "max_doc": [
+      "company_history_eta",
+      {
+        "total": 89,
+        "categories": {
+          "DIRECT_SPAN": 20,
+          "NUMERIC": 20,
+          "TABLE_CELL": 20,
+          "TABLE_ROW": 5,
+          "LIST_ITEM": 5,
+          "SECTION_SPECIFIC": 4,
+          "LONG_CONTEXT": 12,
+          "MULTI_CHUNK": 3
+        },
+        "category_count": 8
+      }
+    ],
+    "min_doc": [
+      "regulation_doc_iota",
+      {
+        "total": 17,
+        "categories": {
+          "DIRECT_SPAN": 2,
+          "NUMERIC": 2,
+          "LIST_ITEM": 10,
+          "SECTION_SPECIFIC": 3
+        },
+        "category_count": 4
+      }
+    ],
+    "avg_examples_per_doc": 52.6
+  },
+  "leakage_audit": {
+    "question_overlap": 0,
+    "context_overlap": 0,
+    "eval_phrases_checked": 1143,
+    "status": "NONE_FOUND"
+  },
+  "fix_report": {
+    "original_count": 1000,
+    "corrected_count": 1,
+    "removed_count": 0,
+    "remaining_count": 1000,
+    "fixes_applied": [
+      {
+        "example_id": "num_13df66ed",
+        "action": "corrected",
+        "change": "Replaced short context with richer version",
+        "old_context": "The total project duration is 18 months, spanning from the initial planning phase through final delivery.",
+        "new_context": "The total project duration is 18 months, spanning from the initial planning phase through final delivery."
+      }
+    ]
+  },
+  "gpu_readiness": {
+    "python_version": "3.11.0 (main, Oct 24 2022, 18:26:48) [MSC v.1933 64 bit (AMD64)]",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "machine": "AMD64",
+    "processor": "Intel64 Family 6 Model 154 Stepping 3, GenuineIntel",
+    "pytorch_version": "2.13.0+cpu",
+    "cuda_available": false,
+    "cuda_version": "N/A",
+    "gpu_count": 0,
+    "gpu_name": "N/A",
+    "gpu_memory": "N/A",
+    "transformers_version": "5.16.1",
+    "tokenizer_available": true,
+    "tokenizer_model": "distilbert-base-cased",
+    "mixed_precision_available": false,
+    "training_feasible": false,
+    "block_reason": "GPU unavailable"
+  },
+  "training_configs": {
+    "A1_fine_tune_distilbert": {
+      "valid": true,
+      "issues": []
+    },
+    "A2_fine_tune_bert_base": {
+      "valid": true,
+      "issues": []
+    },
+    "A3_fine_tune_deberta_v3": {
+      "valid": true,
+      "issues": []
+    }
+  },
+  "production_safety": {
+    "production_model_unchanged": true,
+    "production_code_unchanged": true,
+    "production_api_unchanged": true,
+    "retrieval_unchanged": true,
+    "chunking_unchanged": true,
+    "brain_unchanged": true
+  }
+}

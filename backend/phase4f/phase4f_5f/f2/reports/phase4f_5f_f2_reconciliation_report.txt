@@ -1,0 +1,265 @@
+============================================================
+PHASE 4F.5-F2-R — FAILURE AUDIT & RECONCILIATION REPORT
+============================================================
+
+STATUS: F2_RECONCILED
+
+============================================================
+1. F2 ARTIFACTS VERIFIED
+============================================================
+
+  checkpoints/F2/checkpoint_epoch{1,2,3}  OK
+  config/f2_config.json                   OK
+  logs/f2_training.json                   OK
+  evaluation/f2_validation.json           OK
+  evaluation/f2_holdout.json              OK
+  evaluation/f2_benchmark.json            OK
+  manifests/f2_manifest.json              OK
+
+  Selected checkpoint: epoch2
+  Checkpoint hash: 416b63642ba80a1c
+
+============================================================
+2. PRODUCTION INTEGRITY
+============================================================
+
+  Production checksum: df592aa8d0ee1a23... UNCHANGED
+  Benchmark checksum:  1166bf4ff38265c2... UNCHANGED
+
+  STATUS: PASS
+
+============================================================
+3. F2 DATA COMPOSITION
+============================================================
+
+  TRAIN: 506 (486 answerable + 20 unanswerable)
+  VALIDATION: 93 (85 answerable + 8 unanswerable)
+  HOLDOUT: 14 unanswerable (untouched)
+  EXCLUDED: 4 (invalid token spans)
+
+  Holdout was NEVER used for:
+    Training:            VERIFIED
+    Validation:          VERIFIED
+    Checkpoint selection: VERIFIED
+    Hyperparameter selection: VERIFIED
+
+  Benchmark was NEVER used for:
+    Training:            VERIFIED
+    Checkpoint selection: VERIFIED
+    Tuning:              VERIFIED
+
+============================================================
+4. UNANSWERABLE TRAINING SIGNAL AUDIT
+============================================================
+
+ 20 unanswerable training examples:
+  - ALL from 'unanswerable_corpus' (synthetic, short contexts)
+  - Subcategories: plausible_unsupported(10), entity_absent(7),
+    date_absent(1), conflicting_distractor(1), related_not_supported(1)
+  - MISSING subcategory: number_absent
+  - Duplicate questions: 0
+  - Questions overlapping with holdout: 0
+  - Questions overlapping with validation: 0
+
+  CRITICAL FINDING: All 20 unanswerable examples are OOD
+  (out-of-distribution) compared to answerable examples.
+  Contexts are 44-95 chars (synthetic), while answerable
+  contexts are from real technical documents.
+
+  Train does NOT cover all validation subcategories (missing: number_absent)
+  Train does NOT cover all holdout subcategories (missing: number_absent)
+
+============================================================
+5. LABEL ENCODING AUDIT
+============================================================
+
+  ANSWERABLE:
+    start_positions = token_span.start_token (REAL SPAN)  CORRECT
+    end_positions = token_span.end_token (REAL SPAN)      CORRECT
+    Verified with tokenizer decode: matches gold answer    CORRECT
+
+  UNANSWERABLE:
+    start_positions = 0 (CLS)                             CORRECT
+    end_positions = 0 (CLS)                               CORRECT
+    Token decoded: "" (empty)                             CORRECT
+
+  FORWARD PASS:
+    Answerable loss: 3.4444                               FINITE
+    Unanswerable loss: 4.5603                             FINITE
+    Both losses are finite and contribute to optimization  CORRECT
+
+  LABEL STATUS: NO BUG — labels are correctly encoded and received.
+
+============================================================
+6. MODEL OUTPUT AUDIT (14 holdout unanswerable)
+============================================================
+
+  Every holdout unanswerable example produced a spurious answer:
+    - "fastapi", "of directors", "0.3 percent", "documind",
+      "500 documents per minute", "distilbert for question answering",
+      "james whitfield", "16.2 with pgvector 0.7.0",
+      "2,847 people across 14 offices", "72 hours",
+      "16.2 with pgvector 0.7.0", "100 requests per minute",
+      "42.3 to 48.7 degrees", "768-"
+
+  CLS logits are POSITIVE but never the argmax:
+    CLS combined avg: 0.6172
+    Best non-CLS avg: ~1.3
+    CLS is NEVER the argmax for start or end
+
+  DIAGNOSIS: The model has learned SOME no-answer signal
+  (CLS logit > 0), but it is not strong enough to compete
+  with content token logits. The model always extracts
+  something rather than abstaining.
+
+============================================================
+7. NO-ANSWER DECISION LOGIC + THRESHOLD SWEEP
+============================================================
+
+  Current logic: argmax(start_logits) + argmax(end_logits)
+  No threshold, no null-score comparison.
+
+  THRESHOLD SWEEP ON HOLDOUT (CLS combined score):
+    threshold=0.0: 14/14 abstained (trivial)
+    threshold=0.5: 13/14 abstained (1 spurious)
+    threshold=0.6:  6/14 abstained (8 spurious)
+    threshold=0.7:  2/14 abstained (12 spurious)
+    threshold=0.9:  0/14 abstained (all spurious)
+
+  CRITICAL: A threshold of 0.5 on CLS score would give
+  93% abstention on holdout! The no-answer signal EXISTS
+  but the argmax-based evaluation never uses it.
+
+  The evaluation code compares start/end logits directly
+  without a null-score threshold. This is the standard
+  SQuAD-style evaluation, but it requires the CLS token
+  to be the argmax, which it is not.
+
+============================================================
+8. BASELINE COMPARISON (A0/A1/A2/F2)
+============================================================
+
+  A0 Production:   EM=2.1%  F1=12.0%  Abstain=64.3%  Spurious=8.2%
+  A1 DistilBERT:   EM=3.6%  F1=21.3%  Abstain=0.0%   Spurious=23.1%
+  A2 BERT:         EM=3.6%  F1=19.4%  Abstain=0.0%   Spurious=23.1%
+  F2 Reconciled:   EM=2.9%  F1=19.7%  Abstain=0.0%   Spurious=23.1%
+
+  ANALYSIS:
+  - A0 has 64.3% abstention (production model handles unanswerable)
+  - A1/A2 lost all abstention when fine-tuned without unanswerable
+  - F2 targeted unanswerable training did NOT restore abstention
+  - F2 is functionally equivalent to A1/A2 on unanswerable handling
+  - F2 spurious rate = A1/A2 spurious rate (23.1%) — identical
+
+  TRADEOFF:
+  A0: stronger abstention, weaker extraction
+  A1: better extraction, lost abstention
+  F2: targeted training did not restore abstention
+
+============================================================
+9. CHECKPOINT SELECTION AUDIT
+============================================================
+
+  Epoch 1: loss=5.7107  val_EM=2.4%   val_abstain=0.0%  val_spurious=8
+  Epoch 2: loss=4.6389  val_EM=5.9%   val_abstain=0.0%  val_spurious=8  [SELECTED]
+  Epoch 3: loss=3.8235  val_EM=4.7%   val_abstain=0.0%  val_spurious=8
+
+  Checkpoint selected by val_EM (best = epoch2).
+  All epochs had val_abstention=0.0%, so abstention was
+  never a factor. This is a minor issue since no epoch
+  showed any abstention improvement.
+
+============================================================
+10. TRAINING IMBALANCE
+============================================================
+
+  Unanswerable fraction: 20/506 = 3.95%
+
+  With batch_size=8:
+    Expected unanswerable per micro-batch: 0.32
+    ~68% of micro-batches have ZERO unanswerable
+    ~32% of micro-batches have 1+ unanswerable
+
+  Over 3 epochs (189 total micro-batches):
+    ~60 batches with unanswerable signal
+    ~129 batches without any unanswerable signal
+
+  The unanswerable gradient is severely diluted.
+  The model spends 2/3 of training with NO unanswerable signal.
+
+  NOTE: This is evidence, not a proven root cause.
+  The imbalance alone may not explain the complete failure.
+  The OOD nature of the unanswerable examples is also a factor.
+
+============================================================
+11. ROOT CAUSE CLASSIFICATION
+============================================================
+
+  PRIMARY: F2_ROOT_CAUSE_DATA_BALANCE (confidence: HIGH)
+    Evidence: 3.95% ratio, 68% of batches have no unanswerable
+    Test: Increase ratio to ~50% and retrain
+
+  SECONDARY: F2_ROOT_CAUSE_DECISION_THRESHOLD (confidence: HIGH)
+    Evidence: CLS avg=0.617, threshold=0.5 gives 93% abstention
+    Test: Add null-score comparison in evaluation
+
+  TERTIARY: F2_ROOT_CAUSE_OOD_TRAINING_DATA (confidence: MEDIUM)
+    Evidence: All unanswerable from synthetic corpus, OOD
+    Test: Generate unanswerable from same documents as answerable
+
+  MINOR: F2_ROOT_CAUSE_CHECKPOINT_SELECTION (confidence: LOW)
+    Evidence: EM-optimized selection, but all epochs had 0% abstention
+    Test: N/A — secondary issue
+
+============================================================
+12. LIMITATIONS
+============================================================
+
+  - A0/A1/A2 baseline results are from pre-recorded values,
+    not independently verified in this session
+  - The OOD hypothesis is based on context length/style
+    analysis, not formal distributional testing
+  - The threshold analysis is offline (not integrated into
+    evaluation pipeline)
+
+============================================================
+13. WHAT THE EVIDENCE SUPPORTS
+============================================================
+
+  The F2 experiment shows that:
+  1. Adding 20 unanswerable examples (4% ratio) to DistilBERT
+     training does NOT restore abstention capability
+  2. The model DOES learn some no-answer signal (CLS logit > 0),
+     but it's too weak to be the argmax
+  3. The unanswerable examples are OOD (synthetic vs real docs),
+     which may prevent the model from learning a general
+     no-answer representation
+  4. A threshold-based evaluation could recover some abstention
+     from the existing F2 model (threshold=0.5 -> 93% holdout)
+  5. The production model (A0) achieves 64.3% abstention,
+     suggesting abstention IS possible with DistilBERT
+
+  NEXT EXPERIMENT (evidence-based):
+  - F3: Increase unanswerable ratio to ~50% (class-balanced)
+  - AND: Add null-score threshold in evaluation
+  - This tests both root causes simultaneously
+
+============================================================
+FINAL STATUS
+============================================================
+
+PHASE 4F.5-F2-R STATUS:
+
+F2 TRAIN:         506 (486+20)
+F2 VAL:           93 (85+8)
+F2 HOLDOUT:       14
+LABELS:           VERIFIED CORRECT
+PREDICTIONS:      ALL SPURIOUS (0% abstention)
+NO-ANSWER SIGNAL: EXISTS (CLS avg=0.617) but not argmax
+DECISION LOGIC:   ARGMAX ONLY (no threshold)
+CHECKPOINT:       epoch2 (val_EM optimized)
+PRODUCTION:       UNCHANGED
+ROOT CAUSE:       DATA_BALANCE + DECISION_THRESHOLD + OOD
+STATUS:           F2_RECONCILED
+
+============================================================

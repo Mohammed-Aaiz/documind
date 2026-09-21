@@ -1,0 +1,42 @@
+{
+  "audit_version": "4F.5-H1R-nullscore-v1",
+  "timestamp": "2026-09-22T00:00:00Z",
+
+  "verification_of_claimed_values": {
+    "claimed_mean_null_score_unanswerable": 0.00395,
+    "computed_mean_null_score_unanswerable": 0.003950,
+    "claimed_mean_null_margin_unanswerable": -0.000344,
+    "computed_mean_null_margin_unanswerable": -0.000344,
+    "match": true,
+    "note": "Reported values verified from raw null_scores array in h1_null_analysis.json"
+  },
+
+  "all_182_benchmark_examples": {
+    "null_score": {"mean": 0.003921, "median": 0.003942, "std": 0.000152, "min": 0.003462, "max": 0.004308},
+    "best_answer_score": {"mean": 0.004468, "median": 0.004441, "std": 0.000373, "min": 0.003552, "max": 0.005415},
+    "null_margin": {"mean": -0.000547, "median": -0.000516, "std": 0.000400, "min": -0.001686, "max": 0.000355}
+  },
+
+  "140_answerable_examples": {
+    "null_score": {"mean": 0.003913, "median": 0.003917, "std": 0.000155, "min": 0.003462, "max": 0.004275},
+    "best_answer_score": {"mean": 0.004521, "median": 0.004520, "std": 0.000386, "min": 0.003552, "max": 0.005415},
+    "null_margin": {"mean": -0.000608, "median": -0.000590, "std": 0.000414, "min": -0.001686, "max": 0.000355}
+  },
+
+  "42_unanswerable_examples": {
+    "null_score": {"mean": 0.003950, "median": 0.003962, "std": 0.000140, "min": 0.003651, "max": 0.004308},
+    "best_answer_score": {"mean": 0.004294, "median": 0.004272, "std": 0.000287, "min": 0.003793, "max": 0.004962},
+    "null_margin": {"mean": -0.000344, "median": -0.000297, "std": 0.000266, "min": -0.001166, "max": 0.000134},
+    "positive_margin_count": 3,
+    "positive_margin_fraction": "3/42 (7.1%)"
+  },
+
+  "distribution_comparison": {
+    "answerable_vs_unanswerable_null_score_overlap": "HEAVY — mean difference is only 0.000037 (0.003950 vs 0.003913), which is less than 0.25 standard deviations",
+    "answerable_vs_unanswerable_best_answer_gap": "SMALL — answerable mean best_answer=0.004521 vs unanswerable mean=0.004294, gap=0.000227",
+    "separation_quality": "POOR — the distributions overlap heavily with essentially no separability on any metric",
+    "interpretation": "The CLS/null signal is extremely weak. Null scores for unanswerable (mean 0.003950) are nearly identical to answerable (mean 0.003913). Only 3/42 unanswerable examples have a positive null margin (CLS preferred over content). No threshold can achieve meaningful separation."
+  },
+
+  "null_signal_recalculation": "PASS — reported values match computed values exactly"
+}

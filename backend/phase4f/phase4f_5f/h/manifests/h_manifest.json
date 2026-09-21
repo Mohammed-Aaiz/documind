@@ -1,0 +1,55 @@
+{
+  "phase": "4F.5-H",
+  "version": "3",
+  "timestamp": "2026-09-21T17:58:28.206418Z",
+  "status": "H_DATASET_READY",
+  "source_document_count": 18,
+  "eligible_answerable_count": 876,
+  "valid_answerable_training_count": 571,
+  "unique_candidate_count": 1094,
+  "pools": {
+    "H10": {
+      "count": 57,
+      "target": 57,
+      "pct_of_answerable": 10.0
+    },
+    "H20": {
+      "count": 114,
+      "target": 114,
+      "pct_of_answerable": 20.0
+    },
+    "H30": {
+      "count": 171,
+      "target": 171,
+      "pct_of_answerable": 29.9
+    }
+  },
+  "category_coverage": [
+    "ABSENT_FACT",
+    "CONFLICTING_DISTRACTOR",
+    "LIST_ABSENT_ITEM",
+    "MULTI_CHUNK_ABSENT_FACT",
+    "RELATED_NOT_SUPPORTED",
+    "SECTION_ABSENT_FACT",
+    "TABLE_ABSENT_CELL",
+    "TABLE_ABSENT_ROW",
+    "UNSUPPORTED_DATE",
+    "UNSUPPORTED_ENTITY",
+    "UNSUPPORTED_NUMBER"
+  ],
+  "missing_categories": [],
+  "hashes": {
+    "all_candidates.jsonl": "7dcbe4e0fba23d3832564d455efabff8d91ff9746a55ac992cde9b6c30b9d742",
+    "H10": "b5ac22285e7e028197b426792918e5ce9f6881e90b3bdeb8c2ba2a35db4d59d9",
+    "H20": "49defabe24affe40c0a849a8ec451659e9a200adb933643cab1bc01581d0305f",
+    "H30": "e0d1812fe03e6ee4a415e7c2730e7c6bdd690dd28ea37218db45d7f1088e3822"
+  },
+  "recommended_pool": "H20",
+  "recommendation_rationale": "H20 provides 114 examples (20% of answerable training) with all 11 categories covered, 17/18 documents represented, 0 leakage, and reasonable class balance.",
+  "seed": 42,
+  "frozen_artifacts": {
+    "source_dataset": "a517530354fc9bcaeef6f1aa16c3fb9ce92f1967668386bc66781e6e6bbf2e97",
+    "derived_dataset": "abcf4182f39f0620fb056eee4167d1872baf9b4c748051eade9d6312332f271f",
+    "benchmark": "1166bf4ff38265c209614ac20261417b7eeb43653f4482dfdf94721fd50a41d0"
+  }
+}

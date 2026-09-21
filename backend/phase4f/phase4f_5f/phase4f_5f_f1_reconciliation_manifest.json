@@ -1,0 +1,78 @@
+{
+  "manifest_version": "4F.5-F1R-manifest-v1",
+  "phase": "4F.5-F1-R",
+  "timestamp": "2026-09-21T00:00:00Z",
+  "status": "F1_PROTOCOL_READY",
+
+  "source_hashes": {
+    "training_data_v3_1": "a517530354fc9bcaeef6f1aa16c3fb9ce92f1967668386bc66781e6e6bbf2e97",
+    "derived_dataset": "abcf4182f39f0620fb056eee4167d1872baf9b4c748051eade9d6312332f271f",
+    "benchmark": "1166bf4ff38265c209614ac20261417b7eeb43653f4482dfdf94721fd50a41d0"
+  },
+
+  "dataset_summary": {
+    "derived_total": 918,
+    "answerable_source": 575,
+    "excluded_invalid_span": 4,
+    "valid_answerable": 571,
+    "train_answerable": 486,
+    "val_answerable": 85,
+    "train_unanswerable": 20,
+    "val_unanswerable": 8,
+    "final_holdout_unanswerable": 14,
+    "final_train_total": 506,
+    "final_val_total": 93,
+    "val_ratio": "15.5%"
+  },
+
+  "excluded_ids": ["li_4fa4a839", "li_8770780b", "li_8bc7889f", "tc_3b383990"],
+  "exclusion_reason": "INVALID_TOKEN_SPAN — token_span.valid=False",
+
+  "frozen_experiment_definition": {
+    "model": "distilbert-base-uncased",
+    "tokenizer": "distilbert-base-uncased",
+    "max_length": 384,
+    "max_answer_length": 50,
+    "learning_rate": 3e-5,
+    "epochs": 3,
+    "seed": 42,
+    "physical_batch": 8,
+    "gradient_accumulation": 8,
+    "effective_batch": 64,
+    "fp16": true,
+    "weight_decay": 0.01,
+    "warmup_ratio": 0.1,
+    "optimizer": "AdamW",
+    "lr_scheduler": "linear_with_warmup",
+    "max_grad_norm": 1.0
+  },
+
+  "checkpoint_selection_protocol": {
+    "train": "training examples only (506 total)",
+    "validation": "validation examples only (93 total)",
+    "final_evaluation": "Phase 4F.5-D benchmark",
+    "holdout": "14 untouched unanswerable examples",
+    "rule": "Checkpoint selection MUST use validation only. Never use final test/benchmark for checkpoint selection."
+  },
+
+  "label_format": {
+    "answerable": "token_span.valid=True, start_token/end_token used for start_positions/end_positions",
+    "unanswerable": "start_positions=0, end_positions=0 (CLS token), answer='', token_span=null",
+    "all_labels_valid": true,
+    "no_answerable_converted_to_no_answer": true
+  },
+
+  "leakage_check": {
+    "train_val_overlap": 0,
+    "train_holdout_overlap": 0,
+    "val_holdout_overlap": 0,
+    "status": "CLEAN"
+  },
+
+  "training_protocol": "SAFE",
+  "f2_prepared": false,
+
+  "execution_command": "backend/phase4f_gpu/Scripts/python.exe backend/phase4f/phase4f_5f/run_experiment.py",
+
+  "note": "run_experiment.py must be updated to use the reconciled split (exclude 4 invalid examples, create clean train/val split with seed=42). The current code does not implement this reconciliation."
+}

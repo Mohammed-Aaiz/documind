@@ -1,0 +1,72 @@
+{
+  "audit_version": "4F.5-H1R-metrics-v1",
+  "timestamp": "2026-09-22T00:00:00Z",
+
+  "methodology": "Metrics recomputed from saved prediction files (h1_benchmark.json, h1_validation.json, h1_holdout.json) using the exact normalize_text/exact_match/token_f1 functions from run_h1.py. No model re-inference performed.",
+
+  "benchmark_metrics_recalculated": {
+    "overall": {
+      "em": 0.0,
+      "f1": 11.0,
+      "answerable_correct": 0,
+      "answerable_total": 140,
+      "answerability_accuracy": 0.0,
+      "abstention_accuracy": 45.2,
+      "false_abstention": 10.7,
+      "spurious_rate": 54.8,
+      "answerable": 140,
+      "unanswerable": 42
+    },
+    "match_with_reported": true,
+    "note": "All metrics from the saved artifact match the manifest. No discrepancy."
+  },
+
+  "answerable_metrics": {
+    "em": 0.0,
+    "f1": 11.0,
+    "answer_coverage": 89.3,
+    "false_abstention_rate": 10.7,
+    "note": "EM=0.0% means no exact match on any answerable question. F1=11.0% indicates partial token overlap. 89.3% of answerable questions receive a non-empty prediction; 10.7% (15/140) produce empty strings (false abstentions)."
+  },
+
+  "unanswerable_metrics": {
+    "abstention_rate": 45.2,
+    "spurious_rate": 54.8,
+    "note": "19/42 correctly abstain; 23/42 produce spurious answers."
+  },
+
+  "by_category": {
+    "DIRECT_SPAN": {"n": 24, "em": 0.0, "f1": 13.0},
+    "TABLE_CELL": {"n": 24, "em": 0.0, "f1": 5.8},
+    "TABLE_ROW": {"n": 16, "em": 0.0, "f1": 18.0},
+    "LIST_ITEM": {"n": 20, "em": 0.0, "f1": 12.9},
+    "NUMERIC": {"n": 20, "em": 0.0, "f1": 22.6},
+    "SECTION_SPECIFIC": {"n": 16, "em": 0.0, "f1": 3.2},
+    "MULTI_CHUNK": {"n": 10, "em": 0.0, "f1": 3.0},
+    "LONG_CONTEXT": {"n": 10, "em": 0.0, "f1": 1.6},
+    "UNANSWERABLE": {"n": 42, "em": 0.0, "f1": 0.0},
+    "note": "EM=0.0% across all answerable categories. Best F1: NUMERIC (22.6%), TABLE_ROW (18.0%), DIRECT_SPAN (13.0%). Worst: LONG_CONTEXT (1.6%), MULTI_CHUNK (3.0%), SECTION_SPECIFIC (3.2%). Categories DATE, ENTITY are absent from the benchmark."
+  },
+
+  "validation_metrics_recalculated": {
+    "em": 0.0,
+    "f1": 18.7,
+    "answerable_correct": 0,
+    "answerable_total": 85,
+    "abstention_accuracy": 50.0,
+    "spurious_rate": 50.0,
+    "match_with_reported": true
+  },
+
+  "holdout_metrics_recalculated": {
+    "em": 0,
+    "f1": 0,
+    "answerable_total": 0,
+    "unanswerable_total": 22,
+    "abstention_accuracy": 36.4,
+    "spurious_rate": 63.6,
+    "match_with_reported": true
+  },
+
+  "metric_recalculation_status": "PASS"
+}

@@ -270,3 +270,81 @@ export interface ApiReliabilityQueryData {
 export async function apiGetLastQueryReliability(): Promise<ApiReliabilityQueryData> {
   return apiFetch<ApiReliabilityQueryData>('/api/reliability/last-query');
 }
+
+// ---------------------------------------------------------------------------
+// Chat Session API
+// ---------------------------------------------------------------------------
+
+export interface ApiSession {
+  id: string;
+  createdAt: string;
+  preview: string;
+}
+
+export interface ApiSessionList {
+  sessions: ApiSession[];
+}
+
+export async function apiListSessions(): Promise<ApiSession[]> {
+  const res = await apiFetch<ApiSessionList>('/api/chat/sessions');
+  return res.sessions;
+}
+
+export async function apiCreateSession(): Promise<ApiSession> {
+  return apiFetch<ApiSession>('/api/chat/sessions', {
+    method: 'POST',
+    body: JSON.stringify({}),
+  });
+}
+
+export interface ApiPersistedMessage {
+  id: string;
+  sender: string;
+  content: string;
+  createdAt: string;
+}
+
+export interface ApiMessageList {
+  messages: ApiPersistedMessage[];
+}
+
+export async function apiGetSessionMessages(sessionId: string): Promise<ApiPersistedMessage[]> {
+  const res = await apiFetch<ApiMessageList>(`/api/chat/sessions/${sessionId}/messages`);
+  return res.messages;
+}
+
+export async function apiAddSessionMessage(
+  sessionId: string,
+  sender: string,
+  content: string,
+): Promise<ApiPersistedMessage> {
+  return apiFetch<ApiPersistedMessage>(`/api/chat/sessions/${sessionId}/messages`, {
+    method: 'POST',
+    body: JSON.stringify({ sender, content }),
+  });
+}
+
+// ---------------------------------------------------------------------------
+// Settings API
+// ---------------------------------------------------------------------------
+
+export interface ApiSettings {
+  processingDepth: number;
+  contextWindow: 'session' | '24h' | 'persistent';
+  theme: 'dark-cyber' | 'light';
+  density: 'standard' | 'high';
+  glassIntensity: number;
+}
+
+export async function apiGetSettings(): Promise<ApiSettings> {
+  return apiFetch<ApiSettings>('/api/settings');
+}
+
+export async function apiPatchSettings(
+  patch: Partial<ApiSettings>,
+): Promise<ApiSettings> {
+  return apiFetch<ApiSettings>('/api/settings', {
+    method: 'PATCH',
+    body: JSON.stringify(patch),
+  });
+}

@@ -1,0 +1,54 @@
+{
+  "experiment": "H1",
+  "model_name": "distilbert-base-uncased",
+  "config": {
+    "model": "distilbert-base-uncased",
+    "lr": 3e-05,
+    "batch": 8,
+    "grad_acc": 8,
+    "epochs": 3,
+    "fp16": true,
+    "weight_decay": 0.01,
+    "warmup_ratio": 0.1,
+    "seed": 42
+  },
+  "training_history": [
+    {
+      "epoch": 1,
+      "loss": 5.8661,
+      "val_em": 0.0,
+      "val_f1": 18.7,
+      "val_abstention": 50.0,
+      "val_spurious": 50.0,
+      "lr": 1.2272727272727274e-05,
+      "time_s": 10.0
+    },
+    {
+      "epoch": 2,
+      "loss": 5.4136,
+      "val_em": 0.0,
+      "val_f1": 5.8,
+      "val_abstention": 12.5,
+      "val_spurious": 87.5,
+      "lr": 2.454545454545455e-05,
+      "time_s": 9.6
+    },
+    {
+      "epoch": 3,
+      "loss": 4.0454,
+      "val_em": 0.0,
+      "val_f1": 8.6,
+      "val_abstention": 37.5,
+      "val_spurious": 62.5,
+      "lr": 2.9261083743842366e-05,
+      "time_s": 9.6
+    }
+  ],
+  "training_time_s": 35.2,
+  "peak_gpu_memory_mb": 1844.0,
+  "best_checkpoint": "C:\\Users\\moham\\OneDrive\\Desktop\\stitch_documind_futuristic_3d_ui\\backend\\phase4f\\phase4f_5f\\h1\\checkpoints\\H1\\checkpoint_epoch1",
+  "best_val_em": 0.0,
+  "checkpoint_hash": "854c629cd0418f5e",
+  "nan_detected": false,
+  "device": "cuda"
+}

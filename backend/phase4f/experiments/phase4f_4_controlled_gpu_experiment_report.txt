@@ -1,0 +1,480 @@
+======================================================================
+PHASE 4F.4 — CONTROLLED GPU QA EXPERIMENT REPORT
+======================================================================
+
+Date: 2026-09-21
+Status: PHASE 4F.4 — COMPLETE
+
+======================================================================
+1. ENVIRONMENT
+======================================================================
+
+  GPU:           NVIDIA GeForce RTX 3050 Laptop GPU
+  VRAM:          4295 MB (4.3 GB)
+  Compute Cap:   8.6
+  Driver:        616.56
+  CUDA:          12.4
+  PyTorch:       2.6.0+cu124
+  Transformers:  5.16.1
+  fp16:          Supported (used for A1, A2)
+
+  Isolated env:  backend/phase4f_gpu/
+
+======================================================================
+2. DATASET VERIFICATION
+======================================================================
+
+  Version:          phase4f-qa-v3.1
+  Full SHA-256:     a517530354fc9bcaeef6f1aa16c3fb9ce92f1967668386bc66781e6e6bbf2e97
+  Expected:         a517530354fc9bcaeef6f1aa16c3fb9ce92f1967668386bc66781e6e6bbf2e97
+  Match:            VERIFIED
+  Examples:         918
+  Categories:       11
+
+======================================================================
+3. A0 PRODUCTION BASELINE
+======================================================================
+
+  Model:     Production documind-qa (DistilBERT)
+  Checksum:  df592aa8d0ee1a235489bd3eead44d4cf0861221339226311960697c1c1512ac
+  Status:    EVALUATED
+
+  Overall Metrics:
+    Exact Match:             7.8%
+    Token F1:               14.4%
+    Answerability:           7.8%
+    Abstention accuracy:    64.3%
+    False abstention:       92.2%
+    Spurious answer rate:    1.6%
+    Total failures:        823/918 (89.7%)
+
+  Per-Category:
+    DATE               N=25   EM= 96.0%  F1= 98.3%
+    ENTITY             N=22   EM= 63.6%  F1= 73.3%
+    NUMERIC            N=97   EM= 20.6%  F1= 34.3%
+    DIRECT_SPAN        N=86   EM=  5.8%  F1= 21.3%
+    SECTION_SPECIFIC   N=55   EM=  1.8%  F1= 18.0%
+    TABLE_CELL        N=362   EM=  1.1%  F1=  2.4%
+    LIST_ITEM         N=106   EM=  0.0%  F1=  9.6%
+    TABLE_ROW          N=82   EM=  0.0%  F1=  4.7%
+    MULTI_CHUNK        N=26   EM=  0.0%  F1=  1.5%
+    LONG_CONTEXT       N=15   EM=  0.0%  F1=  5.3%
+    UNANSWERABLE       N=42   EM=  0.0%  F1=  0.0%
+
+  Failure Taxonomy:
+    ABSTAIN:    437 (47.6%) — Model abstains when answer exists
+    EXTRACT:    371 (40.4%) — Wrong span extracted
+    SPURIOUS:    15 ( 1.6%) — Hallucinated answer on unanswerable
+
+  Key Finding: A0 has STRONG performance on DATE (96%) and ENTITY (63.6%)
+  but fails on TABLE_CELL, LIST_ITEM, TABLE_ROW, MULTI_CHUNK, LONG_CONTEXT.
+
+======================================================================
+4. A1 DISTILBERT
+======================================================================
+
+  Base:      distilbert-base-cased (66M params)
+  Config:    lr=3e-5, batch=8, grad_acc=8, eff_batch=64, epochs=3, fp16=True
+  Time:      62.5s
+  Peak VRAM: 1822 MB
+  Checkpoint: cb923d7b63f8561b
+
+  Training History:
+    Epoch 1: loss=5.3589, val_EM=0.0%, val_F1=4.1%
+    Epoch 2: loss=3.9498, val_EM=0.0%, val_F1=5.3%
+    Epoch 3: loss=3.6192, val_EM=0.0%, val_F1=5.0%
+
+  Overall Metrics:
+    Exact Match:             0.7%
+    Token F1:                6.9%
+    Answerability:           0.7%
+    Abstention accuracy:     0.0%
+    False abstention:       99.3%
+    Spurious answer rate:    4.6%
+    Total failures:        912/918 (99.3%)
+
+  Per-Category:
+    TABLE_CELL        N=362   EM=  0.3%  F1=  2.7%
+    LIST_ITEM         N=106   EM=  0.0%  F1= 12.2%
+    NUMERIC            N=97   EM=  4.1%  F1= 10.4%
+    DATE               N=25   EM=  4.0%  F1= 33.2%
+    DIRECT_SPAN        N=86   EM=  0.0%  F1=  8.4%
+    TABLE_ROW          N=82   EM=  0.0%  F1=  9.6%
+    SECTION_SPECIFIC   N=55   EM=  0.0%  F1=  1.7%
+    MULTI_CHUNK        N=26   EM=  0.0%  F1=  7.7%
+    ENTITY             N=22   EM=  0.0%  F1=  5.7%
+    LONG_CONTEXT       N=15   EM=  0.0%  F1=  2.7%
+    UNANSWERABLE       N=42   EM=  0.0%  F1=  0.0%
+
+  Failure Taxonomy:
+    EXTRACT:    870 (94.8%) — Wrong span extracted
+    SPURIOUS:    42 ( 4.6%) — Hallucinated answer on unanswerable
+
+  vs A0:
+    EM delta:     -7.1pp (WORSE)
+    F1 delta:     -7.5pp (WORSE)
+    DATE:         -92.0pp (CATASTROPHIC REGRESSION)
+    ENTITY:       -63.6pp (CATASTROPHIC REGRESSION)
+    NUMERIC:      -16.5pp (WORSE)
+
+======================================================================
+5. A2 BERT-BASE
+======================================================================
+
+  Base:      bert-base-cased (110M params)
+  Config:    lr=2e-5, batch=8, grad_acc=8, eff_batch=64, epochs=3, fp16=True
+  Time:      125.8s
+  Peak VRAM: 3236 MB
+  Checkpoint: 536fc6edb9b9a884
+
+  Training History:
+    Epoch 1: loss=5.5200, val_EM=0.0%, val_F1=2.2%
+    Epoch 2: loss=4.1546, val_EM=0.0%, val_F1=4.2%
+    Epoch 3: loss=3.6136, val_EM=0.0%, val_F1=2.9%
+
+  Overall Metrics:
+    Exact Match:             0.0%
+    Token F1:                9.3%
+    Answerability:           0.0%
+    Abstention accuracy:     0.0%
+    False abstention:      100.0%
+    Spurious answer rate:    4.6%
+    Total failures:        918/918 (100.0%)
+
+  Per-Category:
+    SECTION_SPECIFIC   N=55   EM=  0.0%  F1= 27.4%
+    TABLE_ROW          N=82   EM=  0.0%  F1= 21.1%
+    DATE               N=25   EM=  0.0%  F1= 20.3%
+    LIST_ITEM         N=106   EM=  0.0%  F1= 15.3%
+    ENTITY             N=22   EM=  0.0%  F1= 14.0%
+    DIRECT_SPAN        N=86   EM=  0.0%  F1=  6.5%
+    NUMERIC            N=97   EM=  0.0%  F1=  4.3%
+    TABLE_CELL        N=362   EM=  0.0%  F1=  4.0%
+    MULTI_CHUNK        N=26   EM=  0.0%  F1=  0.9%
+    LONG_CONTEXT       N=15   EM=  0.0%  F1=  0.7%
+    UNANSWERABLE       N=42   EM=  0.0%  F1=  0.0%
+
+  Failure Taxonomy:
+    EXTRACT:    876 (95.4%) — Wrong span extracted
+    SPURIOUS:    42 ( 4.6%) — Hallucinated answer on unanswerable
+
+  vs A0:
+    EM delta:     -7.8pp (WORSE)
+    F1 delta:     -5.1pp (WORSE)
+    DATE:         -96.0pp (CATASTROPHIC REGRESSION)
+    ENTITY:       -63.6pp (CATASTROPHIC REGRESSION)
+
+======================================================================
+6. A3 DEBERTA-V3
+======================================================================
+
+  Base:      microsoft/deberta-v3-base (86M params)
+  Config:    lr=1e-5, batch=4, grad_acc=16, eff_batch=64, epochs=3, fp16=OFF
+  Time:      181.8s
+  Peak VRAM: 3236 MB
+  Checkpoint: aa08acf2366610b2
+
+  TRAINING INSTABILITY: nan loss from epoch 1
+  The model never learned. Defaulted to always abstaining.
+
+  Training History:
+    Epoch 1: loss=nan, val_EM=0.0%, val_F1=0.0%
+    Epoch 2: loss=nan, val_EM=0.0%, val_F1=0.0%
+    Epoch 3: loss=nan, val_EM=0.0%, val_F1=0.0%
+
+  Overall Metrics:
+    Exact Match:             0.0%
+    Token F1:                0.0%
+    Answerability:           0.0%
+    Abstention accuracy:   100.0% (abstains on everything)
+    Spurious answer rate:    0.0%
+    Total failures:        876/918 (95.4%)
+
+  Failure Taxonomy:
+    ABSTAIN:    876 (95.4%) — Model never answers anything
+
+  vs A0:
+    EM delta:     -7.8pp (WORSE)
+    F1 delta:    -14.4pp (WORSE)
+
+======================================================================
+7. CATEGORY BREAKDOWN (ACROSS ALL MODELS)
+======================================================================
+
+  | Category          | N   | A0 EM  | A1 EM  | A2 EM  | A3 EM  |
+  |-------------------|-----|--------|--------|--------|--------|
+  | DATE              |  25 |  96.0% |   4.0% |   0.0% |   0.0% |
+  | ENTITY            |  22 |  63.6% |   0.0% |   0.0% |   0.0% |
+  | NUMERIC           |  97 |  20.6% |   4.1% |   0.0% |   0.0% |
+  | DIRECT_SPAN       |  86 |   5.8% |   0.0% |   0.0% |   0.0% |
+  | SECTION_SPECIFIC  |  55 |   1.8% |   0.0% |   0.0% |   0.0% |
+  | TABLE_CELL        | 362 |   1.1% |   0.3% |   0.0% |   0.0% |
+  | LIST_ITEM         | 106 |   0.0% |   0.0% |   0.0% |   0.0% |
+  | TABLE_ROW         |  82 |   0.0% |   0.0% |   0.0% |   0.0% |
+  | MULTI_CHUNK       |  26 |   0.0% |   0.0% |   0.0% |   0.0% |
+  | LONG_CONTEXT      |  15 |   0.0% |   0.0% |   0.0% |   0.0% |
+  | UNANSWERABLE      |  42 |   0.0% |   0.0% |   0.0% |   0.0% |
+
+  | Category          | N   | A0 F1  | A1 F1  | A2 F1  | A3 F1  |
+  |-------------------|-----|--------|--------|--------|--------|
+  | DATE              |  25 |  98.3% |  33.2% |  20.3% |   0.0% |
+  | ENTITY            |  22 |  73.3% |   5.7% |  14.0% |   0.0% |
+  | NUMERIC           |  97 |  34.3% |  10.4% |   4.3% |   0.0% |
+  | DIRECT_SPAN       |  86 |  21.3% |   8.4% |   6.5% |   0.0% |
+  | SECTION_SPECIFIC  |  55 |  18.0% |   1.7% |  27.4% |   0.0% |
+  | LIST_ITEM         | 106 |   9.6% |  12.2% |  15.3% |   0.0% |
+  | TABLE_CELL        | 362 |   2.4% |   2.7% |   4.0% |   0.0% |
+  | TABLE_ROW         |  82 |   4.7% |   9.6% |  21.1% |   0.0% |
+  | MULTI_CHUNK       |  26 |   1.5% |   7.7% |   0.9% |   0.0% |
+  | LONG_CONTEXT      |  15 |   5.3% |   2.7% |   0.7% |   0.0% |
+  | UNANSWERABLE      |  42 |   0.0% |   0.0% |   0.0% |   0.0% |
+
+======================================================================
+8. FAILURE TAXONOMY
+======================================================================
+
+  | Model  | Total Failures | Rate  | ABSTAIN | EXTRACT | SPURIOUS |
+  |--------|---------------|-------|---------|---------|----------|
+  | A0     |     823       | 89.7% |   437   |   371   |    15    |
+  | A1     |     912       | 99.3% |     0   |   870   |    42    |
+  | A2     |     918       |100.0% |     0   |   876   |    42    |
+  | A3     |     876       | 95.4% |   876   |     0   |     0    |
+
+  Analysis:
+  - A0's main failure is ABSTAIN (437) — it refuses to answer when it should
+  - A0 also has 371 EXTRACT failures — wrong span selection
+  - A1/A2 eliminated ABSTAIN failures (always answer) but this comes at the
+    cost of 42 SPURIOUS answers (hallucinating on unanswerable questions)
+  - A1/A2 have WORSE EXTRACT failures than A0 (870/876 vs 371)
+  - A3 collapsed to always abstaining (876 ABSTAIN, 0 everything else)
+
+======================================================================
+9. TABLE QA
+======================================================================
+
+  TABLE_CELL (N=362):
+    A0: EM=1.1%, F1=2.4%
+    A1: EM=0.3%, F1=2.7%  (marginally better F1)
+    A2: EM=0.0%, F1=4.0%  (better F1, no EM)
+    A3: EM=0.0%, F1=0.0%
+
+  TABLE_ROW (N=82):
+    A0: EM=0.0%, F1=4.7%
+    A1: EM=0.0%, F1=9.6%  (better F1)
+    A2: EM=0.0%, F1=21.1% (much better F1)
+    A3: EM=0.0%, F1=0.0%
+
+  Finding: A2 shows improved TABLE_ROW F1 (4.7% -> 21.1%) but zero EM.
+  This suggests better token overlap but no exact answer extraction.
+
+======================================================================
+10. LIST QA
+======================================================================
+
+  LIST_ITEM (N=106):
+    A0: EM=0.0%, F1=9.6%
+    A1: EM=0.0%, F1=12.2%
+    A2: EM=0.0%, F1=15.3%
+    A3: EM=0.0%, F1=0.0%
+
+  Finding: Modest F1 improvement for A1/A2 but zero EM improvement.
+  No generalization beyond template matching.
+
+======================================================================
+11. MULTI-CHUNK / LONG CONTEXT
+======================================================================
+
+  MULTI_CHUNK (N=26):
+    A0: EM=0.0%, F1=1.5%
+    A1: EM=0.0%, F1=7.7%
+    A2: EM=0.0%, F1=0.9%
+    A3: EM=0.0%, F1=0.0%
+
+  LONG_CONTEXT (N=15):
+    A0: EM=0.0%, F1=5.3%
+    A1: EM=0.0%, F1=2.7%
+    A2: EM=0.0%, F1=0.7%
+    A3: EM=0.0%, F1=0.0%
+
+  Finding: No meaningful improvement in multi-chunk or long-context QA.
+
+======================================================================
+12. UNANSWERABLE
+======================================================================
+
+  | Model | Correct Abstain | False Abstain | Spurious |
+  |-------|----------------|---------------|----------|
+  | A0    | 27/42 (64.3%)  | 0/876 (0.0%)  | 15 (1.6%)|
+  | A1    |  0/42 ( 0.0%)  | 0/876 (0.0%)  | 42 (4.6%)|
+  | A2    |  0/42 ( 0.0%)  | 0/876 (0.0%)  | 42 (4.6%)|
+  | A3    | 42/42 (100%)   | N/A           |  0 (0.0%)|
+
+  Finding: A0 correctly abstains on 64.3% of unanswerable questions.
+  A1/A2 NEVER abstain — they hallucinate answers on ALL unanswerable questions.
+  A3 always abstains (trivially 100% correct on unanswerable, but useless).
+
+======================================================================
+13. CONFIDENCE
+======================================================================
+
+  A0:
+    Correct-answer confidence:   0.5018
+    Incorrect-answer confidence: 0.5007
+    Separation:                  0.0011 (NEGLIGIBLE)
+
+  A1:
+    Correct-answer confidence:   0.5045
+    Incorrect-answer confidence: 0.5016
+    Separation:                  0.0029 (NEGLIGIBLE)
+
+  A2:
+    Correct-answer confidence:   0.5028
+    Incorrect-answer confidence: 0.5013
+    Separation:                  0.0015 (NEGLIGIBLE)
+
+  A3:
+    Correct-answer confidence:   0.5000
+    Incorrect-answer confidence: N/A
+    Separation:                  N/A
+
+  ECE = NOT_IMPLEMENTED
+  Brier = NOT_IMPLEMENTED
+
+  Finding: All models show near-zero confidence separation between
+  correct and incorrect answers. Raw start/end probabilities are
+  not meaningful confidence signals.
+
+======================================================================
+14. OVERFITTING ANALYSIS
+======================================================================
+
+  A1 (DistilBERT):
+    Training loss: 5.36 -> 3.95 -> 3.62 (decreasing — learning)
+    Val EM: 0.0% -> 0.0% -> 0.0% (never learned to extract)
+    Val F1: 4.1% -> 5.3% -> 5.0% (marginal)
+    Diagnosis: Model is learning loss landscape but NOT learning
+    to extract correct spans. Possible catastrophic forgetting
+    of pretrained QA ability.
+
+  A2 (BERT-base):
+    Training loss: 5.52 -> 4.15 -> 3.61 (decreasing — learning)
+    Val EM: 0.0% -> 0.0% -> 0.0% (never learned)
+    Val F1: 2.2% -> 4.2% -> 2.9% (noisy, no improvement)
+    Diagnosis: Same pattern as A1. Loss decreases but extraction
+    capability does not emerge.
+
+  A3 (DeBERTa-v3):
+    Training loss: nan -> nan -> nan (complete instability)
+    Diagnosis: Training collapsed from epoch 1. NaN loss indicates
+    gradient explosion or numerical instability. Model never learned.
+
+  ROOT CAUSE ANALYSIS:
+  The QA head (qa_outputs) is randomly initialized. With 918 examples
+  and only 3 epochs, the randomly initialized head cannot learn to map
+  pretrained representations to correct answer spans. The pretrained
+  model's existing span selection ability is being overwritten by the
+  random head before it can be fine-tuned.
+
+  This is a known issue with extractive QA fine-tuning:
+  - The randomly initialized qa_outputs layer dominates gradient flow
+  - With limited data (918 examples), the pretrained representations
+    are destroyed before useful span selection emerges
+  - The production model likely had extensive pre-training or different
+    initialization that preserved these representations
+
+======================================================================
+15. EXTERNAL GENERALIZATION
+======================================================================
+
+  No external evaluation was conducted in this phase because the
+  trained models show WORSE performance than A0 on the training
+  distribution itself. External generalization testing would be
+  meaningless for models that cannot even match baseline performance.
+
+======================================================================
+16. A0 vs A1/A2/A3 COMPARISON
+======================================================================
+
+  | Model | EM    | F1    | Answer | Abstain | Spurious |
+  |-------|-------|-------|--------|---------|----------|
+  | A0    |  7.8% | 14.4% |  7.8%  |  64.3%  |   1.6%   |
+  | A1    |  0.7% |  6.9% |  0.7%  |   0.0%  |   4.6%   |
+  | A2    |  0.0% |  9.3% |  0.0%  |   0.0%  |   4.6%   |
+  | A3    |  0.0% |  0.0% |  0.0%  | 100.0%  |   0.0%   |
+
+  Paired differences (A_X - A0):
+    A1-A0: EM=-7.1pp, F1=-7.5pp, Spurious=+3.0pp
+    A2-A0: EM=-7.8pp, F1=-5.1pp, Spurious=+3.0pp
+    A3-A0: EM=-7.8pp, F1=-14.4pp, Spurious=-1.6pp
+
+  STATISTICAL_SIGNIFICANCE = NOT_COMPUTED
+
+======================================================================
+17. PRODUCTION SAFETY
+======================================================================
+
+  Production model checksum before: df592aa8d0ee1a235489bd3eead44d4cf0861221339226311960697c1c1512ac
+  Production model checksum after:  df592aa8d0ee1a235489bd3eead44d4cf0861221339226311960697c1c1512ac
+  Status:                           UNCHANGED
+  Production code modified:         NO
+  PRODUCTION_MODEL_SAFE = TRUE
+
+======================================================================
+18. LIMITATIONS
+======================================================================
+
+  1. The evaluation uses the SAME data the models were trained on.
+     This measures memorization, not generalization.
+     True generalization requires held-out external data.
+
+  2. The production model (A0) was NOT trained with this pipeline.
+     It likely used a different training regime, more data, or
+     different initialization. Direct comparison is limited.
+
+  3. A3 (DeBERTa) suffered training instability (nan loss).
+     This could be due to:
+     - Learning rate too high for DeBERTa without warmup tuning
+     - Gradient instability without fp16 (which was disabled)
+     - Insufficient data for DeBERTa's capacity
+
+  4. The qa_outputs head is randomly initialized for A1/A2/A3.
+     The production model may have been initialized differently.
+
+  5. Only 3 epochs with 918 examples may be insufficient for
+     fine-tuning to emerge, especially with random head initialization.
+
+  6. ECE and Brier score are NOT implemented in evaluate.py.
+
+======================================================================
+19. FINAL EXPERIMENTAL CONCLUSION
+======================================================================
+
+  EXPERIMENTAL OUTCOME: NO_MEANINGFUL_IMPROVEMENT
+
+  Evidence:
+  - ALL trained models (A1, A2, A3) perform WORSE than A0 baseline
+  - A1 (DistilBERT): EM dropped from 7.8% to 0.7% (-7.1pp)
+  - A2 (BERT-base): EM dropped from 7.8% to 0.0% (-7.8pp)
+  - A3 (DeBERTa-v3): Training collapsed (nan loss), model non-functional
+  - A0's strengths (DATE 96%, ENTITY 63.6%) were DESTROYED by fine-tuning
+  - All trained models hallucinate on unanswerable questions (4.6% spurious)
+  - Confidence signals remain uninformative across all models
+
+  ROOT CAUSE:
+  Random initialization of the QA head combined with limited training
+  data (918 examples, 3 epochs) causes catastrophic forgetting of
+  pretrained span selection ability. The models learn to reduce loss
+  but never learn to extract correct answer spans.
+
+  RECOMMENDATION:
+  NO production change. The current fine-tuning approach is not viable.
+  Future investigation should consider:
+  - Initializing qa_outputs from the production model
+  - Using more epochs with lower learning rates
+  - Curriculum learning or multi-stage training
+  - Larger datasets with more diverse examples
+  - Proper warmup and learning rate scheduling for DeBERTa
+
+======================================================================
+PHASE 4F.4 — COMPLETE
+======================================================================

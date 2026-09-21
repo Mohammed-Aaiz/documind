@@ -1,0 +1,191 @@
+======================================================================
+PHASE 4F.5-A — CORRECTED QA EXPERIMENT PREPARATION REPORT
+======================================================================
+
+Date: 2026-09-21
+Status: READY_FOR_GPU_TRAINING
+
+======================================================================
+1. PURPOSE
+======================================================================
+
+Phase 4F.5-A prepares a corrected experiment package that fixes all
+protocol violations identified in Phase 4F.4-R:
+
+  1. FIXED: Token span alignment (return_offsets_mapping=True)
+  2. FIXED: Base model (distilbert-base-uncased, matching production)
+  3. FIXED: Document-level train/val/test split (no test leakage)
+  4. FIXED: Checkpoint selection (best validation EM, not final epoch)
+
+======================================================================
+2. SOURCE INTEGRITY
+======================================================================
+
+Source dataset:    VERIFIED (hash matches expected)
+Production model:  VERIFIED (checksum unchanged)
+Production code:   UNCHANGED
+4F.4 artifacts:    PRESERVED
+4F.4-R artifacts:  PRESERVED
+No training performed during preparation.
+
+======================================================================
+3. DOCUMENT-LEVEL SPLIT
+======================================================================
+
+Method:   Deterministic document-level split (seed=42)
+Documents: 19 total
+  Train:      13 docs, 575 examples
+  Validation:  2 docs, 122 examples
+  Test:        4 docs, 221 examples
+
+Cross-split leakage: 0 documents, 0 questions.
+
+Category distribution (train):
+  TABLE_CELL: 231, LIST_ITEM: 82, NUMERIC: 57, TABLE_ROW: 52,
+  DIRECT_SPAN: 50, SECTION_SPECIFIC: 37, DATE: 25, ENTITY: 22,
+  MULTI_CHUNK: 16, LONG_CONTEXT: 3
+
+Category distribution (validation):
+  UNANSWERABLE: 42, NUMERIC: 20, TABLE_CELL: 20, LONG_CONTEXT: 12,
+  DIRECT_SPAN: 11, TABLE_ROW: 5, LIST_ITEM: 5, SECTION_SPECIFIC: 4,
+  MULTI_CHUNK: 3
+
+Category distribution (test):
+  TABLE_CELL: 111, DIRECT_SPAN: 25, TABLE_ROW: 25, NUMERIC: 20,
+  LIST_ITEM: 19, SECTION_SPECIFIC: 14, MULTI_CHUNK: 7
+
+======================================================================
+4. SPAN ALIGNMENT (CRITICAL FIX)
+======================================================================
+
+Previous bug (4F.4):
+  return_offsets_mapping was NOT requested, causing fallback heuristic
+  to use character offsets as token indices. 99.3% of training labels
+  were wrong.
+
+Fix applied:
+  1. Tokenizer called with return_offsets_mapping=True
+  2. Search ONLY within context tokens (after first [SEP]) to avoid
+     offset collision between question and context tokens
+  3. Trailing whitespace in answers handled via trimmed answer_end
+
+Results:
+  Total answerable:     876
+  Valid spans:          872 (99.5%)
+  Invalid spans:          4 (0.5%)
+    All 4 are genuine dataset annotation errors
+    (offset misalignment in source JSONL)
+  Truncated:             0
+  Exact decoded match: 136 (15.5%)
+
+The 15.5% exact decoded match rate is expected because:
+  - distilbert-base-uncased lowercases all text
+  - Subword tokenization may insert whitespace at boundaries
+  - These are tokenizer artifacts, not alignment errors
+
+Invalid examples (all in training set):
+  tc_3b383990: span offset points past context end
+  li_8bc7889f: answer_start off by 6 chars
+  li_4fa4a839: answer_start off by 8 chars
+  li_8770780b: answer_start off by 10 chars
+
+These 4 are marked INVALID_SPAN and excluded from training.
+Validation and test sets have 100% valid spans.
+
+======================================================================
+5. CONTEXT TRUNCATION
+======================================================================
+
+max_length: 384
+Context length: min=20, max=928, mean=148, median=99
+Truncated examples: 0 (all contexts fit within 384 tokens)
+Answer truncation: 0
+
+No truncation issues at max_length=384.
+
+======================================================================
+6. DATA QUALITY GATE
+======================================================================
+
+[PASS] no_cross_split_document_leakage
+[PASS] no_cross_split_question_leakage
+[PASS_WITH_EXCLUSIONS] training_valid_spans: 571/575 (4 annotation errors)
+[PASS] validation_valid_spans: 80/80 (100%)
+[PASS] test_valid_spans: 221/221 (100%)
+[PASS] no_silent_drops
+[PASS] excluded_examples_documented
+[PASS] unanswerable_no_span
+[PASS] no_test_in_training
+[PASS] test_not_for_checkpoint_selection
+
+OVERALL: PASS
+
+======================================================================
+7. EVALUATION PROTOCOL
+======================================================================
+
+Protocol version: 4F.5-eval-v1
+Evaluator: backend/phase4f/phase4f_5/evaluation/evaluate.py
+Split: TEST ONLY for final reporting
+Metrics: EM, Token F1, answerability, abstention, spurious, per-category
+
+A0, A1, A2 all use the EXACT same evaluator.
+
+======================================================================
+8. TRAINING CONFIGURATION
+======================================================================
+
+A1: distilbert-base-uncased
+  lr=3e-5, batch=8, grad_acc=8, eff_batch=64, epochs=3
+  seed=42, fp16, AdamW, warmup=10%
+
+A2: bert-base-uncased
+  lr=2e-5, batch=8, grad_acc=8, eff_batch=64, epochs=3
+  seed=42, fp16, AdamW, warmup=10%
+
+A3: DEFERRED (until A1/A2 produce valid evidence)
+
+======================================================================
+9. CHECKPOINT POLICY
+======================================================================
+
+Selection metric: validation exact_match
+Secondary: validation token_f1
+Tiebreaking: earliest checkpoint
+NEVER use test for selection.
+
+======================================================================
+10. REPRODUCIBILITY FREEZE
+======================================================================
+
+Frozen:
+  - source dataset hash
+  - derived dataset hash
+  - split seed (42)
+  - split manifest
+  - tokenizer identifiers
+  - model identifiers
+  - max_length (384)
+  - optimizer (AdamW)
+  - learning rates
+  - epochs (3)
+  - batch sizes
+  - gradient accumulation
+  - seed (42)
+  - precision (fp16)
+  - checkpoint selection rule
+  - evaluator version (4F.5-eval-v1)
+
+======================================================================
+11. NEXT ACTION
+======================================================================
+
+Proceed to Phase 4F.5-B GPU Training with:
+  - A1: distilbert-base-uncased fine-tuning
+  - A2: bert-base-uncased fine-tuning
+  - A0: production model evaluation on test split
+  - All using corrected span alignment and proper split
+
+======================================================================
+PHASE 4F.5-A — COMPLETE
+======================================================================

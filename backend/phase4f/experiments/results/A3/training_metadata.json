@@ -1,0 +1,44 @@
+{
+  "experiment": "A3_DeBERTa_v3",
+  "model_name": "microsoft/deberta-v3-base",
+  "hyperparameters": {
+    "model": "microsoft/deberta-v3-base",
+    "lr": 1e-05,
+    "batch": 4,
+    "grad_acc": 16,
+    "train": true,
+    "fp16": false
+  },
+  "training_history": [
+    {
+      "epoch": 1,
+      "loss": NaN,
+      "lr": 7.435897435897437e-06,
+      "time_s": 56.79098153114319,
+      "val_em": 0.0,
+      "val_f1": 0.0
+    },
+    {
+      "epoch": 2,
+      "loss": NaN,
+      "lr": 3.846153846153847e-06,
+      "time_s": 56.31138038635254,
+      "val_em": 0.0,
+      "val_f1": 0.0
+    },
+    {
+      "epoch": 3,
+      "loss": NaN,
+      "lr": 2.564102564102564e-07,
+      "time_s": 56.52024269104004,
+      "val_em": 0.0,
+      "val_f1": 0.0
+    }
+  ],
+  "training_time_s": 181.8,
+  "peak_gpu_memory_mb": 3236.0,
+  "checkpoint_hash": "aa08acf2366610b2",
+  "device": "cuda",
+  "gpu": "NVIDIA GeForce RTX 3050 Laptop GPU",
+  "pytorch_version": "2.6.0+cu124"
+}

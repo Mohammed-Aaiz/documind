@@ -1,0 +1,48 @@
+{
+  "reconciliation_version": "4F.5-H1R-counts-v1",
+  "timestamp": "2026-09-22T00:00:00Z",
+
+  "source_data": {
+    "derived_dataset_total": 918,
+    "derived_split": {"train": 575, "test": 221, "validation": 122},
+    "derived_question_kinds": {
+      "DIRECT_SPAN": 86, "ENTITY": 22, "DATE": 25, "NUMERIC": 97,
+      "TABLE_CELL": 362, "TABLE_ROW": 82, "LIST_ITEM": 106,
+      "SECTION_SPECIFIC": 55, "LONG_CONTEXT": 15, "MULTI_CHUNK": 26,
+      "UNANSWERABLE": 42
+    },
+    "unanswerable_derived_split": {"validation": 42},
+    "answerable_derived_split": {"train": 575, "test": 221, "validation": 80},
+    "excluded_invalid_spans": 4,
+    "h20_pool_size": 114,
+    "benchmark_total": 182,
+    "benchmark_answerable": 140,
+    "benchmark_unanswerable": 42
+  },
+
+  "count_table": [
+    {"metric": "answerable_train", "expected": 486, "actual": 486, "difference": 0, "explanation": "F1 reconciled split from f1_reconciled_ids.json"},
+    {"metric": "unanswerable_train", "expected": 114, "actual": 114, "difference": 0, "explanation": "All 114 H20 document-grounded negatives added to training"},
+    {"metric": "total_train", "expected": 600, "actual": 600, "difference": 0, "explanation": "486 + 114 = 600"},
+    {"metric": "answerable_validation", "expected": 85, "actual": 85, "difference": 0, "explanation": "F1 reconciled split"},
+    {"metric": "unanswerable_validation", "expected": 8, "actual": 8, "difference": 0, "explanation": "First 8 derived unanswerable sorted by ID"},
+    {"metric": "total_validation", "expected": 93, "actual": 93, "difference": 0, "explanation": "85 + 8 = 93"},
+    {"metric": "held_out_unanswerable", "expected": 14, "actual": 22, "difference": "+8", "explanation": "get_holdout_examples() uses split index 20 instead of 28, yielding 42-20=22 instead of 42-28=14"},
+    {"metric": "benchmark_answerable", "expected": 140, "actual": 140, "difference": 0, "explanation": "Frozen benchmark, not modified"},
+    {"metric": "benchmark_unanswerable", "expected": 42, "actual": 42, "difference": 0, "explanation": "Frozen benchmark, not modified"},
+    {"metric": "benchmark_total", "expected": 182, "actual": 182, "difference": 0, "explanation": "Frozen benchmark, not modified"},
+    {"metric": "unanswerable_derived_not_used", "expected": 0, "actual": 12, "difference": "+12", "explanation": "12 unanswerable examples at indices 8-19 of sorted derived unanswerable are in neither training, validation, nor holdout"}
+  ],
+
+  "holdout_discrepancy_analysis": {
+    "root_cause": "run_h1.py defines get_holdout_examples(derived, val_unanswerable_count=20) which returns val_unanswerable_sorted[20:]. The F1 protocol defined the holdout as val_unanswerable_sorted[28:] (after the 20 train + 8 val experiment pool). The H1 code does not use the 20 derived unanswerable in training (H20 replaces them), so it repurposes the split at index 20 for the holdout boundary.",
+    "protocol_split": "indices 0-19 = experiment_pool (20 train + 8 val), indices 20-41 = holdout (14 actual)",
+    "actual_split": "indices 0-7 = validation (8), indices 8-19 = UNUSED (12), indices 20-41 = holdout (22)",
+    "extra_8_holdout_ids": [
+      "unans_67e1a2fc", "unans_691bae51", "unans_7a4e5b72", "unans_7a9ef8c8",
+      "unans_7b46d69d", "unans_885f9d0e", "unans_89493393", "unans_8afe7d03"
+    ],
+    "effect_on_benchmark": "NONE — benchmark evaluation uses 182 frozen examples and is independent of holdout split",
+    "effect_on_h1_conclusions": "LOW — the holdout is a secondary diagnostic. H1 abstention on 22 holdout (36.4%) is directionally consistent with the 14-example holdout subset (which would be the last 14 of the 22)"
+  }
+}

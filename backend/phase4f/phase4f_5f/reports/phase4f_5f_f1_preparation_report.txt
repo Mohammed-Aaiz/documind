@@ -1,0 +1,238 @@
+============================================================
+PHASE 4F.5-F1 — F1 DATASET PREPARATION REPORT
+============================================================
+
+STATUS: F1_PREPARATION_READY (with notes)
+
+============================================================
+STEP 1 — SOURCE DATA VERIFICATION
+============================================================
+
+Source dataset:    a517530354fc9bcaeef6f1aa16c3fb9ce92f1967668386bc66781e6e6bbf2e97
+Expected:          a517530354fc9bcaeef6f1aa16c3fb9ce92f1967668386bc66781e6e6bbf2e97
+Status:            MATCH
+
+Derived dataset:   abcf4182f39f0620fb056eee4167d1872baf9b4c748051eade9d6312332f271f
+Expected:          abcf4182f39f0620fb056eee4167d1872baf9b4c748051eade9d6312332f271f
+Status:            MATCH
+
+============================================================
+STEP 2 — TRAINING POOL
+============================================================
+
+Total examples in derived dataset: 918
+Split distribution: train=575, test=221, validation=122
+
+Training pool:
+  Answerable:       575 (expected 571, +4 discrepancy)
+  Unanswerable:     0
+  All IDs unique:   YES
+  Documents:        13
+
+NOTE: The derived dataset has 575 answerable training examples,
+not 571 as originally specified. This is a +4 discrepancy.
+
+============================================================
+STEP 3 — UNANSWERABLE EXAMPLES (42 total)
+============================================================
+
+All 42 unanswerable examples verified:
+  - All in validation split
+  - All have empty answer
+  - All have null token_span
+  - All have is_impossible=true
+  - All have valid context
+
+Subcategories:
+  entity_absent:           11
+  plausible_unsupported:   13
+  related_not_supported:    6
+  conflicting_distractor:  2
+  date_absent:             3
+  number_absent:           7
+
+============================================================
+STEP 4 — DETERMINISTIC SPLIT
+============================================================
+
+Method: Sort all 42 unanswerable by example_id, take first 28 for
+training, last 14 for held-out.
+
+TRAIN unanswerable (28):
+  unans_02ea167f, unans_03d364a3, unans_04664035, unans_06ccc9f0,
+  unans_08af12b6, unans_0badce8d, unans_0e172594, unans_1b510697,
+  unans_20bbdfeb, unans_20e56903, unans_29bba51a, unans_2a3dd2f6,
+  unans_39b0bf0c, unans_3a0430bc, unans_3b23eb33, unans_422d6ea0,
+  unans_4725a75e, unans_496d4272, unans_520918ca, unans_63ece8c5,
+  unans_67e1a2fc, unans_691bae51, unans_7a4e5b72, unans_7a9ef8c8,
+  unans_7b46d69d, unans_885f9d0e, unans_89493393, unans_8afe7d03
+
+HELD-OUT unanswerable (14):
+  unans_a042521b, unans_a334de2c, unans_a603100e, unans_a60eda2e,
+  unans_a7ad9d04, unans_b415e6a3, unans_d7480687, unans_de20050d,
+  unans_e1454d12, unans_e25b96fd, unans_ecebc88c, unans_ee310eea,
+  unans_f6563cea, unans_fb3b3426
+
+Intersection: EMPTY (0 overlap)
+
+============================================================
+STEP 5 — VALIDATION SET
+============================================================
+
+Validation answerable:  80 (from original validation split)
+Validation unanswerable: 0 (held-out excluded per instructions)
+Total validation:       80
+
+Categories:
+  DIRECT_SPAN:     11
+  NUMERIC:         20
+  TABLE_CELL:      20
+  TABLE_ROW:        5
+  LIST_ITEM:        5
+  SECTION_SPECIFIC: 4
+  MULTI_CHUNK:      3
+  LONG_CONTEXT:    12
+
+DISCREPANCY: run_experiment.py currently includes 14 held-out
+unanswerable in validation. Instructions say these must NOT be
+used for validation. This needs to be addressed before running.
+
+============================================================
+STEP 6 — DATA LEAKAGE CHECK
+============================================================
+
+Train answerable vs Validation answerable:  0 overlap
+Train answerable vs Held-out documents:     0 overlap
+Train answerable vs Held-out questions:     0 overlap
+Train unanswerable vs Held-out:             0 overlap
+Validation vs Held-out:                     0 overlap
+
+STATUS: CLEAN — No data leakage detected.
+
+============================================================
+STEP 7 — QA LABEL VALIDATION
+============================================================
+
+Answerable training examples: 575
+  Valid labels:                563
+  With offset issues:          12
+    - 8 with valid token_span (offset mismatch is cosmetic)
+    - 4 with invalid token_span (CLS fallback in training code)
+
+Unanswerable examples: 42
+  All valid: empty answer, no token_span, is_impossible=true
+
+LABEL FORMAT: All cases handled correctly by run_experiment.py
+  - Valid token_span: uses token span positions
+  - Invalid token_span: CLS fallback (start=0, end=0)
+  - Unanswerable: CLS fallback (start=0, end=0)
+
+============================================================
+STEP 8 — TRAINING FORMAT VALIDATION
+============================================================
+
+FDataset.__getitem__ correctly handles:
+  ANSWERABLE:
+    - If token_span.valid=True: uses start_token/end_token
+    - If token_span.valid=False: start=0, end=0 (CLS)
+  UNANSWERABLE:
+    - start=0, end=0 (CLS token)
+    - answer="" (empty)
+
+STATUS: SUPPORTED — Training code correctly represents both formats.
+
+============================================================
+STEP 9 — CLASS DISTRIBUTION
+============================================================
+
+TRAIN (603 total):
+  DIRECT_SPAN:      50
+  ENTITY:           22
+  DATE:             25
+  NUMERIC:          57
+  TABLE_CELL:      231
+  TABLE_ROW:        52
+  LIST_ITEM:        82
+  SECTION_SPECIFIC: 37
+  MULTI_CHUNK:      16
+  LONG_CONTEXT:      3
+  UNANSWERABLE:     28
+
+VALIDATION (80 total):
+  DIRECT_SPAN:      11
+  NUMERIC:          20
+  TABLE_CELL:       20
+  TABLE_ROW:         5
+  LIST_ITEM:         5
+  SECTION_SPECIFIC:  4
+  MULTI_CHUNK:       3
+  LONG_CONTEXT:     12
+
+HELD_OUT (14 total):
+  UNANSWERABLE:     14
+
+============================================================
+STEP 10 — MANIFEST FILES CREATED
+============================================================
+
+  dataset/experiment_f1_manifest.json
+  dataset/experiment_f1_split.json
+  dataset/experiment_f1_quality_report.json
+  reports/phase4f_5f_f1_preparation_report.txt
+
+============================================================
+STEP 11 — INTEGRITY VERIFICATION
+============================================================
+
+Production model:     UNCHANGED
+Production code:      UNCHANGED
+Source dataset:       UNCHANGED
+Derived dataset:      UNCHANGED
+Phase 4F.5-D benchmark: UNCHANGED
+Phase 4F.5-B results: UNCHANGED
+Training performed:   NO
+Checkpoints created:  NO
+
+============================================================
+DISCREPANCIES
+============================================================
+
+1. ANSWERABLE COUNT: 575 (not 571 as expected)
+   The derived dataset has 4 more answerable training examples
+   than originally specified. This does not affect correctness.
+
+2. VALIDATION SET: run_experiment.py includes 14 held-out
+   unanswerable in validation, but instructions say these must
+   be excluded. The run_experiment.py needs to be updated to
+   construct validation as: 80 answerable only (no held-out
+   unanswerable).
+
+============================================================
+FINAL STATUS
+============================================================
+
+PHASE 4F.5-F1 STATUS:
+
+SOURCE:              VERIFIED (both checksums match)
+ANSWERABLE TRAIN:    575 (expected 571, +4 discrepancy)
+UNANSWERABLE TRAIN:  28 (correct)
+VALIDATION:          80 answerable (held-out excluded)
+HELD-OUT UNANSWERABLE: 14 (correct)
+LEAKAGE:             CLEAN (zero overlaps)
+LABEL VALIDATION:    PASS (all cases handled)
+CATEGORY DISTRIBUTION: COMPLETE
+TRAINING FORMAT:     SUPPORTED
+PRODUCTION:          UNCHANGED
+DATASET:             UNCHANGED
+TRAINING:            NOT PERFORMED
+CHECKPOINTS:         NONE
+
+STATUS:              F1_PREPARATION_READY (with notes)
+
+ACTION NEEDED:       Update run_experiment.py to exclude 14
+                     held-out unanswerable from validation set
+
+NEXT STEP:           Fix validation set in run_experiment.py,
+                     then proceed to Phase 4F.5-F2 (training)
+
+============================================================

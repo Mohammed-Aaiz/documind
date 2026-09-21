@@ -1,0 +1,45 @@
+{
+  "exact_duplicates": 10,
+  "examples": [
+    {
+      "question": "What was the reported monetary value?",
+      "count": 6
+    },
+    {
+      "question": "What is the value of percentage for the metric?",
+      "count": 2
+    },
+    {
+      "question": "According to the document, what is the percentage?",
+      "count": 2
+    },
+    {
+      "question": "What is the monetary value for the amount?",
+      "count": 2
+    },
+    {
+      "question": "In the full context, what value is given for metric?",
+      "count": 3
+    },
+    {
+      "question": "What does the document say about monetary value?",
+      "count": 3
+    },
+    {
+      "question": "What does the detailed section say about financial figure?",
+      "count": 2
+    },
+    {
+      "question": "What is the value of monetary value for the amount?",
+      "count": 2
+    },
+    {
+      "question": "What is the value of duration for the process?",
+      "count": 2
+    },
+    {
+      "question": "What does the document say about percentage?",
+      "count": 2
+    }
+  ]
+}

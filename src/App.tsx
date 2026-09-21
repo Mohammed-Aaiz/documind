@@ -33,15 +33,19 @@ const App: React.FC = () => {
     );
   }
 
-  // App shell — sidebar + topnav + page content
+  const isWorkspace = currentPage === 'workspace';
+
+  // App shell — sidebar only for non-workspace pages
   return (
     <div className="relative min-h-screen w-screen bg-void-black text-on-surface font-body-base overflow-x-hidden">
       <CosmicBackground />
-      <SideNavBar currentPage={currentPage} onNavigate={handleNavigate} />
+      {!isWorkspace && (
+        <SideNavBar currentPage={currentPage} onNavigate={handleNavigate} />
+      )}
       <TopNavBar currentPage={currentPage} onNavigate={handleNavigate} />
 
-      {/* Main content shifted right of sidebar */}
-      <main className="ml-64 min-h-screen">
+      {/* Main content */}
+      <main className={isWorkspace ? 'min-h-screen' : 'ml-64 min-h-screen'}>
         {currentPage === 'workspace' && <WorkspacePage onNavigate={handleNavigate} />}
         {currentPage === 'verification' && <VerificationPage onNavigate={handleNavigate} />}
         {currentPage === 'reliability' && <ReliabilityPage onNavigate={handleNavigate} />}

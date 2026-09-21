@@ -1,0 +1,100 @@
+{
+  "model_label": "A1_DistilBERT",
+  "total_examples": 918,
+  "overall": {
+    "em": 0.7,
+    "f1": 6.9,
+    "answerability_accuracy": 0.7,
+    "abstention_accuracy": 0.0,
+    "false_abstention": 0.0,
+    "spurious_rate": 4.6,
+    "answerable": 876,
+    "unanswerable": 42
+  },
+  "by_category": {
+    "DATE": {
+      "n": 25,
+      "em": 4.0,
+      "f1": 33.2,
+      "avg_confidence": 0.0899
+    },
+    "DIRECT_SPAN": {
+      "n": 86,
+      "em": 0.0,
+      "f1": 8.4,
+      "avg_confidence": 0.0757
+    },
+    "ENTITY": {
+      "n": 22,
+      "em": 0.0,
+      "f1": 5.7,
+      "avg_confidence": 0.0851
+    },
+    "LIST_ITEM": {
+      "n": 106,
+      "em": 0.0,
+      "f1": 12.2,
+      "avg_confidence": 0.0266
+    },
+    "LONG_CONTEXT": {
+      "n": 15,
+      "em": 0.0,
+      "f1": 2.7,
+      "avg_confidence": 0.0207
+    },
+    "MULTI_CHUNK": {
+      "n": 26,
+      "em": 0.0,
+      "f1": 7.7,
+      "avg_confidence": 0.0311
+    },
+    "NUMERIC": {
+      "n": 97,
+      "em": 4.1,
+      "f1": 10.4,
+      "avg_confidence": 0.1125
+    },
+    "SECTION_SPECIFIC": {
+      "n": 55,
+      "em": 0.0,
+      "f1": 1.7,
+      "avg_confidence": 0.0248
+    },
+    "TABLE_CELL": {
+      "n": 362,
+      "em": 0.3,
+      "f1": 2.7,
+      "avg_confidence": 0.061
+    },
+    "TABLE_ROW": {
+      "n": 82,
+      "em": 0.0,
+      "f1": 9.6,
+      "avg_confidence": 0.0656
+    },
+    "UNANSWERABLE": {
+      "n": 42,
+      "em": 0,
+      "f1": 0,
+      "avg_confidence": 0.0774
+    }
+  },
+  "failure_taxonomy": {
+    "total_failures": 912,
+    "failure_rate": 99.3,
+    "by_type": {
+      "EXTRACT": 870,
+      "SPURIOUS": 42
+    }
+  },
+  "confidence_analysis": {
+    "correct_mean": 0.1026,
+    "correct_std": 0.0256,
+    "incorrect_mean": 0.0617,
+    "incorrect_std": 0.0314,
+    "separation": 0.0409,
+    "ECE": "NOT_IMPLEMENTED",
+    "Brier": "NOT_IMPLEMENTED"
+  },
+  "latency_ms": 20.67
+}

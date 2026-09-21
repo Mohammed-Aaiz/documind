@@ -1,0 +1,52 @@
+{
+  "phase": "4F.5-G",
+  "status": "EXPERIMENT_COMPLETE",
+  "selected_mode": "null_score",
+  "selected_value": 1.5705,
+  "validation_metrics": {
+    "em": 5.88,
+    "f1": 17.42,
+    "answerable_total": 85,
+    "answerable_correct": 5,
+    "answerable_coverage": 87.06,
+    "false_abstention": 11,
+    "false_abstention_rate": 12.94,
+    "unanswerable_total": 8,
+    "unanswerable_correct": 2,
+    "abstention_rate": 25.0,
+    "spurious": 6,
+    "spurious_rate": 75.0
+  },
+  "holdout_metrics": {
+    "em": 0,
+    "f1": 0,
+    "answerable_total": 0,
+    "answerable_correct": 0,
+    "answerable_coverage": 0.0,
+    "false_abstention": 0,
+    "false_abstention_rate": 0.0,
+    "unanswerable_total": 14,
+    "unanswerable_correct": 2,
+    "abstention_rate": 14.29,
+    "spurious": 12,
+    "spurious_rate": 85.71
+  },
+  "benchmark_metrics": {
+    "em": 2.86,
+    "f1": 16.92,
+    "answerable_total": 140,
+    "answerable_correct": 4,
+    "answerable_coverage": 72.14,
+    "false_abstention": 39,
+    "false_abstention_rate": 27.86,
+    "unanswerable_total": 42,
+    "unanswerable_correct": 8,
+    "abstention_rate": 19.05,
+    "spurious": 34,
+    "spurious_rate": 80.95
+  },
+  "stability": "UNSTABLE",
+  "source_hash": "a517530354fc9bca",
+  "production_unchanged": true,
+  "benchmark_hash": "1166bf4ff38265c2"
+}

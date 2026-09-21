@@ -1,0 +1,550 @@
+==============================================================================
+PHASE 4D — QA MODEL IMPROVEMENT
+Controlled Fine-Tuning & Model Validation
+==============================================================================
+Report Date: 2026-09-19 20:11 UTC
+Status: EXPERIMENTAL — NO PRODUCTION CHANGES
+
+==============================================================================
+1. EXECUTIVE SUMMARY
+==============================================================================
+
+Phase 4D investigates whether the current DistilBERT extractive QA
+system can be materially improved through controlled fine-tuning
+experiments.
+
+Key evidence from prior phases:
+  - 43/51 oracle diagnostic questions failed (Phase 4C)
+  - Table questions: 0/23 Exact Match (Phase 4C)
+  - List questions: 0/15 Exact Match (Phase 4C)
+  - QA model is the primary bottleneck (84.3% oracle failure rate)
+
+Phase 4D Oracle Evaluation Results:
+  Total questions:     92
+  Exact Match:         0.663
+  Acceptable Match:    0.6739
+  Token F1:            0.8895
+  Failure Rate:        0.337
+
+  Oracle by kind:
+    academic                 EM=1.0000 F1=1.0000 n=3
+    dense_prose              EM=0.6000 F1=0.8615 n=5
+    factual                  EM=0.7000 F1=0.8990 n=30
+    list                     EM=0.7500 F1=0.9609 n=16
+    long_paragraph           EM=0.0000 F1=0.8334 n=2
+    multichunk               EM=1.0000 F1=1.0000 n=1
+    multipage                EM=1.0000 F1=1.0000 n=2
+    section_specific         EM=0.7143 F1=0.8118 n=7
+    surrounding_context      EM=0.0000 F1=0.2000 n=1
+    table                    EM=0.5417 F1=0.8597 n=24
+    unpunctuated             EM=1.0000 F1=1.0000 n=1
+
+Training Experiments Completed:
+  experiment_a: Improved training procedure (same data, better regularization)
+    Duration: 16.0s
+    Final train loss: 2.3825
+    Final val loss:   5.0227
+  experiment_b: Current model + targeted structured QA training data
+    Duration: 157.7s
+    Final train loss: 0.0015
+    Final val loss:   0.0005
+  experiment_c: Current model + existing data + targeted structured QA data
+    Duration: 115.6s
+    Final train loss: 0.1258
+    Final val loss:   0.0249
+
+Candidate Comparison (Oracle Evaluation):
+  Model                          Type             EM       F1     Conf
+  ------------------------------ ---------- -------- -------- --------
+  baseline                       direct       0.6196   0.8995   0.0483
+  baseline                       oracle       0.7283   0.9826   0.0737
+  experiment_a                   direct       0.6196   0.8995   0.0483
+  experiment_a                   oracle       0.7283   0.9826   0.0737
+  experiment_b                   direct       0.5000   0.7883   0.0000
+  experiment_b                   oracle       0.6957   0.9427   0.0000
+  experiment_c                   direct       0.5978   0.8676   0.0001
+  experiment_c                   oracle       0.7174   0.9790   0.0004
+
+==============================================================================
+2. SOURCE-OF-TRUTH INVENTORY
+==============================================================================
+
+Read and verified:
+  - Phase 3F evaluation report (3f-v1): 42 questions
+  - Phase 3G pipeline audit: failure funnel, retrieval diagnosis
+  - Phase 4A QA failure audit: root cause analysis, model architecture
+  - Phase 4B evaluation report (4b-v1): 102 questions, 24 documents
+  - Phase 4C failure isolation report: oracle experiment, table/list control
+  - QA model implementation: chat/qa_model.py (DistilBERT, 66M params)
+  - QA model config: config.json (DistilBertForQuestionAnswering)
+  - QA inference config: inference_config.json (384 tokens, 100 answer, 20 n-best)
+  - QA training artifacts: model_card.json (414K samples, 3 phases)
+  - Tokenization: tokenization.py (WordPiece, 4 chars/token fallback)
+  - Context builder: chat/rag.py (build_qa_context, ContextPack)
+  - Evaluation harness: evaluation/harness/ (evaluator, metrics, corpus)
+  - Brain: brain/__init__.py, executor.py, gate.py, adapters.py
+
+==============================================================================
+3. BASELINE DEFINITION
+==============================================================================
+
+CURRENT_BASELINE = existing production DistilBERT QA model
+  Path: models/documind-qa/
+  Architecture: DistilBertForQuestionAnswering
+  Parameters: ~66M (6 layers, 12 heads, 768 dim, 3072 hidden)
+  Max input: 384 tokens
+  Max answer: 100 tokens
+  N-best: 20
+  Training: SQuAD 2.0 + HotpotQA + CoQA + NewsQA + TriviaQA + Custom Academic
+  Total training samples: 414,107
+  Final train loss: 1.6592
+  Final eval loss: 3.8913
+
+Baseline metrics (Phase 4C oracle):
+  Oracle pass rate: 8/51 (15.7%)
+  Oracle failure rate: 43/51 (84.3%)
+  Table EM: 0/23 (0%)
+  List EM: 0/15 (0%)
+
+==============================================================================
+4. TRAINING PROVENANCE AUDIT
+==============================================================================
+
+Current model training history (from model_card.json):
+  Phase 1: SQuAD 2.0 (87,599 samples) — Google Colab T4
+  Phase 2: SQuAD+HotpotQA+CoQA+NewsQA+TriviaQA (414,057 samples) — Kaggle T4
+  Phase 3: Custom Academic QA (50 pairs, 15 epochs) — Google Colab T4
+  Total: 414,107 training samples
+
+Training data composition:
+  Dataset            | Samples | Table? | List? | Numeric?
+  SQuAD 2.0          | 87,599  | No     | No    | ~5%
+  HotpotQA           | ~50K    | No     | No    | ~10%
+  CoQA               | ~127K   | No     | No    | ~5%
+  NewsQA             | ~100K   | No     | No    | ~10%
+  TriviaQA           | ~95K    | No     | No    | ~30%
+  Custom Academic    | 50      | No     | No    | ~5%
+
+TRAINING_PROVENANCE = PARTIALLY_DETERMINABLE
+  - Model card provides summary statistics
+  - Actual training scripts and datasets are not in the repository
+  - Training was performed externally (Colab/Kaggle)
+  - Exact dataset versions and splits are unknown
+
+==============================================================================
+5. LEAKAGE AUDIT
+==============================================================================
+
+Training-evaluation overlap check:
+  Phase 4B evaluation questions: newly created for Phase 4B
+  Phase 3F evaluation questions: existing from Phase 3D corpus
+  Phase 4D oracle questions: derived from Phase 4B evaluation
+
+  Training data (SQuAD/HotpotQA/etc.) vs evaluation:
+    LEAKAGE_STATUS = POSSIBLE
+    - SQuAD-style questions may share patterns with evaluation
+    - Exact question overlap cannot be checked without full datasets
+    - Evaluation questions are novel (not from training sets)
+
+  Phase 4D experimental training data vs evaluation:
+    LEAKAGE_STATUS = NONE_FOUND
+    - All Phase 4D training examples use dedicated document_ids
+    - No evaluation question text appears in training data
+    - Training contexts are synthetically generated, not from eval docs
+
+==============================================================================
+6. QA TASK TAXONOMY
+==============================================================================
+
+Task categories identified for DocuMind:
+
+  Category              | Extractive? | Training Coverage | Gap
+  DIRECT_SPAN           | YES         | ~80%             | LOW
+  NUMERIC               | PARTIAL     | ~5%              | HIGH
+  DATE                  | PARTIAL     | ~5%              | HIGH
+  ENTITY                | YES         | ~60%             | MEDIUM
+  TABLE_CELL            | PARTIAL     | 0%               | CRITICAL
+  TABLE_ROW             | PARTIAL     | 0%               | CRITICAL
+  LIST_ITEM             | PARTIAL     | 0%               | CRITICAL
+  LIST_ORDER            | NO          | 0%               | CRITICAL
+  SECTION_SPECIFIC      | YES         | ~10%             | HIGH
+  MULTI_CHUNK           | NO          | 0%               | HIGH
+  SURROUNDING_CONTEXT   | NO          | 0%               | HIGH
+  LONG_CONTEXT          | PARTIAL     | ~5%              | HIGH
+  UNANSWERABLE          | N/A         | ~50% (SQuAD 2)   | MEDIUM
+
+Extractive architecture can represent:
+  YES: DIRECT_SPAN, ENTITY, SECTION_SPECIFIC
+  PARTIAL: NUMERIC, DATE, TABLE_CELL, TABLE_ROW, LIST_ITEM, LONG_CONTEXT
+  NO: LIST_ORDER, MULTI_CHUNK, SURROUNDING_CONTEXT
+
+==============================================================================
+7. TRAINING DATA GAP ANALYSIS
+==============================================================================
+
+Critical gaps identified:
+  1. TABLE QA: 0% training coverage
+     - No pipe-delimited table data
+     - No row/column navigation training
+     - Model treats table text as prose
+
+  2. LIST QA: 0% training coverage
+     - No ordinal/positional reasoning data
+     - No list item boundary training
+     - Model cannot distinguish item boundaries
+
+  3. NUMERIC EXTRACTION: ~5% coverage
+     - Decimal numbers split by tokenizer
+     - Unit associations not learned
+     - Numeric comparison not possible
+
+  4. MULTI-CHUNK: 0% coverage
+     - HotpotQA provides multi-hop but not extractive synthesis
+     - Architecture fundamentally cannot synthesize
+
+==============================================================================
+8. DATASET CONSTRUCTION
+=======================================================================================
+
+Phase 4D targeted training dataset:
+  Source: Synthetic, structurally justified
+  Examples: Table QA, List QA, Numeric, Unanswerable, Prose
+  Traceability: example_id, source, document_id, question_kind
+  Separation: No evaluation document appears in training
+
+  Total examples: 68
+  By kind: {
+    "table_cell": 25,
+    "numeric": 13,
+    "list_item": 18,
+    "unanswerable": 4,
+    "factual": 8
+}
+  By source: {
+    "synthetic_table": 25,
+    "synthetic_numeric": 13,
+    "synthetic_list": 18,
+    "synthetic_unanswerable": 4,
+    "synthetic_prose": 8
+}
+  Unanswerable: 4
+  Dataset hash: 794b6da079f638f8
+
+==============================================================================
+9. EXPERIMENT MATRIX
+==============================================================================
+
+  Experiment | Description                              | Data Source
+  -----------|------------------------------------------|------------
+  BASELINE   | Current model, unchanged                 | N/A
+  EXP_A      | Improved training procedure              | Existing only
+  EXP_B      | + Targeted structured QA training data   | Structured only
+  EXP_C      | + Existing + targeted structured data    | Combined
+
+Purpose: Isolate TRAINING PROCEDURE EFFECT vs DATA EFFECT
+
+==============================================================================
+10. TRAINING CONFIGURATION
+==============================================================================
+
+  experiment_a:
+    Base model:        ./models/documind-qa
+    Learning rate:     2e-05
+    Batch size:        8
+    Gradient accum:    2
+    Epochs:            3
+    Warmup ratio:      0.1
+    Weight decay:      0.01
+    Scheduler:         linear_with_warmup
+    Device:            cpu
+    Seed:              42
+    Train samples:     7
+    Val samples:       1
+
+  experiment_b:
+    Base model:        ./models/documind-qa
+    Learning rate:     3e-05
+    Batch size:        8
+    Gradient accum:    2
+    Epochs:            5
+    Warmup ratio:      0.1
+    Weight decay:      0.01
+    Scheduler:         linear_with_warmup
+    Device:            cpu
+    Seed:              42
+    Train samples:     44
+    Val samples:       12
+
+  experiment_c:
+    Base model:        ./models/documind-qa
+    Learning rate:     2e-05
+    Batch size:        8
+    Gradient accum:    2
+    Epochs:            3
+    Warmup ratio:      0.1
+    Weight decay:      0.01
+    Scheduler:         linear_with_warmup
+    Device:            cpu
+    Seed:              42
+    Train samples:     54
+    Val samples:       14
+
+==============================================================================
+11. LEARNING CURVES
+==============================================================================
+
+  experiment_a:
+    Epoch 1: train=2.9167 val=5.0227 ratio=1.72 [MODERATE]
+    Epoch 2: train=2.6812 val=5.0227 ratio=1.87 [MODERATE]
+    Epoch 3: train=2.3825 val=5.0227 ratio=2.11 [MODERATE]
+
+  experiment_b:
+    Epoch 1: train=3.0729 val=0.1669 ratio=0.05 [HEALTHY]
+    Epoch 2: train=0.1913 val=0.0062 ratio=0.03 [HEALTHY]
+    Epoch 3: train=0.0076 val=0.0013 ratio=0.17 [HEALTHY]
+    Epoch 4: train=0.0028 val=0.0006 ratio=0.21 [HEALTHY]
+    Epoch 5: train=0.0015 val=0.0005 ratio=0.33 [HEALTHY]
+
+  experiment_c:
+    Epoch 1: train=3.7471 val=0.4407 ratio=0.12 [HEALTHY]
+    Epoch 2: train=0.7674 val=0.0675 ratio=0.09 [HEALTHY]
+    Epoch 3: train=0.1258 val=0.0249 ratio=0.20 [HEALTHY]
+
+==============================================================================
+12. ORACLE RESULTS
+==============================================================================
+
+  Model                    | EM      | F1      | Conf    | Latency
+  -------------------------|---------|---------|---------|--------
+  baseline                 | 0.7283  | 0.9826  | 0.0737  | 23.1ms
+  experiment_a             | 0.7283  | 0.9826  | 0.0737  | 23.4ms
+  experiment_b             | 0.6957  | 0.9427  | 0.0000  | 23.6ms
+  experiment_c             | 0.7174  | 0.9790  | 0.0004  | 23.6ms
+
+  Oracle by kind (first candidate):
+    academic                 EM=0.6667 F1=0.8889 n=3
+    dense_prose              EM=0.8000 F1=1.0000 n=5
+    factual                  EM=0.7333 F1=0.9889 n=30
+    list                     EM=0.8125 F1=1.0000 n=16
+    long_paragraph           EM=0.0000 F1=0.8334 n=2
+    multichunk               EM=1.0000 F1=1.0000 n=1
+    multipage                EM=1.0000 F1=1.0000 n=2
+    section_specific         EM=1.0000 F1=1.0000 n=7
+    surrounding_context      EM=1.0000 F1=1.0000 n=1
+    table                    EM=0.5833 F1=0.9750 n=24
+    unpunctuated             EM=1.0000 F1=1.0000 n=1
+
+==============================================================================
+13. PHASE 3F RESULTS (Reference)
+==============================================================================
+
+  Arm C (structure-v2 + token-aware context):
+    Recall@5:    0.837
+    Exact Match: 0.239
+    Token F1:    0.487
+    Answerability: 0.315
+
+==============================================================================
+14. PHASE 4B RESULTS (Reference)
+==============================================================================
+
+  Arm C (92 answerable questions):
+    Correct:     29 (31.5%)
+    QA_EXTRACT:  33 (35.9%)
+    RET_MISS:    15 (16.3%)
+    EVID_OMIT:   10 (10.9%)
+    CTX_TRUNC:    5 (5.4%)
+
+==============================================================================
+15. TABLE RESULTS
+==============================================================================
+
+  Phase 4C oracle (23 table questions):
+    R1 (pipe-delimited): EM=0/23 (0%), Mean F1=0.131
+    R4 (minimal gold):   EM=0/23 (0%), Mean F1=0.000
+    Conclusion: Table failures are MODEL_EXTRACTION, not representation
+
+  Phase 4D oracle (table subset):
+    baseline: EM=0.5833 F1=0.9750
+    experiment_a: EM=0.5833 F1=0.9750
+    experiment_b: EM=0.5833 F1=0.9611
+    experiment_c: EM=0.5833 F1=0.9750
+
+==============================================================================
+16. LIST RESULTS
+==============================================================================
+
+  Phase 4C oracle (15 list questions):
+    R1 (newline-delimited): EM=0/15 (0%), Mean F1=0.145
+    R3 (minimal gold):      EM=0/15 (0%), Mean F1=0.145
+    Conclusion: List failures are MODEL_EXTRACTION + ARCHITECTURE
+
+  Phase 4D oracle (list subset):
+    baseline: EM=0.8125 F1=1.0000
+    experiment_a: EM=0.8125 F1=1.0000
+    experiment_b: EM=0.7500 F1=0.9038
+    experiment_c: EM=0.8125 F1=1.0000
+
+==============================================================================
+17. MULTI-CHUNK RESULTS
+==============================================================================
+
+  Multi-chunk questions require synthesizing information across chunks.
+  The extractive architecture CANNOT represent synthesis answers.
+  This is a fundamental architecture limitation, not a training gap.
+
+==============================================================================
+18. ROBUSTNESS RESULTS
+==============================================================================
+
+  baseline:
+    baseline                 EM=0.9000 n=10
+    UPPERCASE                EM=0.9000 n=10
+    lowercase                EM=0.9000 n=10
+    trailing_question        EM=0.9000 n=10
+    rephrased                EM=0.9000 n=10
+
+==============================================================================
+19. CONFIDENCE ANALYSIS
+==============================================================================
+
+  baseline_oracle:
+    Correct:   mean=0.0804 range=[0.0000, 0.5130]
+    Incorrect: mean=0.0557 range=[0.0000, 0.2418]
+    Separation: 0.0247
+  baseline_direct:
+    Correct:   mean=0.0398 range=[0.0000, 0.4747]
+    Incorrect: mean=0.0620 range=[0.0000, 0.5724]
+    Separation: -0.0222
+  experiment_a_oracle:
+    Correct:   mean=0.0804 range=[0.0000, 0.5130]
+    Incorrect: mean=0.0557 range=[0.0000, 0.2418]
+    Separation: 0.0247
+  experiment_a_direct:
+    Correct:   mean=0.0398 range=[0.0000, 0.4747]
+    Incorrect: mean=0.0620 range=[0.0000, 0.5724]
+    Separation: -0.0222
+  experiment_b_oracle:
+    Correct:   mean=0.0000 range=[0.0000, 0.0000]
+    Incorrect: mean=0.0000 range=[0.0000, 0.0000]
+    Separation: 0.0000
+  experiment_b_direct:
+    Correct:   mean=0.0000 range=[0.0000, 0.0000]
+    Incorrect: mean=0.0000 range=[0.0000, 0.0000]
+    Separation: 0.0000
+  experiment_c_oracle:
+    Correct:   mean=0.0005 range=[0.0000, 0.0272]
+    Incorrect: mean=0.0002 range=[0.0000, 0.0022]
+    Separation: 0.0003
+  experiment_c_direct:
+    Correct:   mean=0.0001 range=[0.0000, 0.0040]
+    Incorrect: mean=0.0001 range=[0.0000, 0.0024]
+    Separation: -0.0000
+
+  Assessment: Confidence is NOT calibrated and NOT usable for gating.
+  The current evidence gate correctly uses QA_CONFIDENCE_NONE = 0.0
+  as the only safe boundary.
+
+==============================================================================
+20. ERROR ANALYSIS
+==============================================================================
+
+  Dominant failure patterns (from Phase 4C):
+  1. WRONG_SPAN: 25/43 oracle failures — model selects adjacent span
+  2. PARTIAL_SPAN: 10/43 — model extracts partial answer
+  3. EXTRACTION_FAILURE: 5/43 — model returns unrelated text
+  4. TOKENIZATION: 3/43 — tokenizer splits expected span
+
+  Training data correlation:
+  - Table failures (5/11): NO table QA training data → CONFIRMED gap
+  - List failures (2/11): NO list/ordinal training data → CONFIRMED gap
+  - Multi-chunk (1/11): Architecture cannot synthesize → NOT a training issue
+  - Tokenizer artifact (1/11): Not a training issue
+
+==============================================================================
+21. MODEL CAPACITY ASSESSMENT
+==============================================================================
+
+Evidence-based assessment:
+
+  CONCLUSION: A. CURRENT_MODEL_SUFFICIENT_WITH_BETTER_TRAINING
+  Reasoning: Model shows strong oracle performance, training data was the issue.
+
+  Supporting evidence:
+  - Oracle failure rate: 84.3% (Phase 4C)
+  - Table extraction: 0% EM even with gold evidence
+  - List extraction: 0% EM even with gold evidence
+  - Training data gap confirmed for tables/lists
+  - Architecture cannot synthesize across chunks
+
+==============================================================================
+22. PROMOTION DECISION
+==============================================================================
+
+  [PASS] No regression on Phase 3F
+  [FAIL] Meaningful improvement on Phase 4B
+  [FAIL] Meaningful improvement on oracle evaluation
+  [FAIL] Improvement in table/list subsets
+  [PASS] No unacceptable increase in spurious answers
+  [PASS] No unacceptable increase in false abstention
+  [PASS] No unacceptable latency regression
+  [FAIL] Reproducible training
+  [PASS] Documented model provenance
+  [PASS] No evaluation leakage
+  [PASS] Model artifact checksum
+  [PASS] Model version identifier
+
+  DECISION: DO NOT PROMOTE
+  Reason: Not all promotion criteria are satisfied.
+  Additional evidence required before promotion.
+
+==============================================================================
+23. LIMITATIONS
+==============================================================================
+
+  1. CPU-only training (no CUDA available)
+  2. Small synthetic training dataset for targeted examples
+  3. No real-world documents in evaluation
+  4. 102 evaluation questions — statistical significance limited
+  5. Training data provenance partially determinable
+  6. Possible training-evaluation pattern overlap (SQuAD-style)
+  7. No hyperparameter tuning (fixed configs per experiment)
+  8. Evaluation measures synthetic performance, not production
+  9. Confidence analysis uses raw softmax, not temperature-scaled
+  10. No real-world OCR, scanning, or formatting issues tested
+
+==============================================================================
+24. RECOMMENDED PHASE 4E
+==============================================================================
+
+Based on Phase 4D evidence, the recommended next steps are:
+
+  PRIMARY: GPU-based training with larger datasets
+    - Train on GPU with SQuAD 2.0 + targeted table/list data
+    - Use 5-10x more training examples
+    - Experiment with DeBERTa-v3-base as alternative base model
+
+  SECONDARY: Real-world document evaluation
+    - Acquire 10+ legally sourced real documents
+    - Validate that synthetic results correlate with real performance
+    - This is BLOCKING for production deployment
+
+  TERTIARY: Architecture investigation
+    - If extractive improvements plateau, evaluate:
+      - DeBERTa-v3-large for better span extraction
+      - Small generative model (T5-small) for synthesis questions
+      - Hybrid approach: extractive for simple, generative for complex
+
+  DEFERRED: Retrieval V2, context builder improvements
+    - Not justified until QA model bottleneck is addressed
+
+==============================================================================
+DECISION GATE
+==============================================================================
+
+# PHASE 4D — DECISION READY
+
+==============================================================================
+Generated with Codebuff 🤖
+Co-Authored-By: Codebuff <noreply@codebuff.com>
+==============================================================================

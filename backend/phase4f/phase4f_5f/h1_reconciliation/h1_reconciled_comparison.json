@@ -1,0 +1,79 @@
+{
+  "audit_version": "4F.5-H1R-comparison-v1",
+  "timestamp": "2026-09-22T00:00:00Z",
+
+  "comparison_table": [
+    {
+      "experiment": "A0",
+      "model": "Production (BERT-based)",
+      "training_composition": "Original production training set",
+      "benchmark_em": 2.1,
+      "benchmark_f1": 12.0,
+      "answerable_false_abstention": null,
+      "unanswerable_abstention": 64.3,
+      "spurious_rate": 8.2,
+      "status": "PRODUCTION_BASELINE"
+    },
+    {
+      "experiment": "A1",
+      "model": "distilbert-base-uncased",
+      "training_composition": "571 answerable (no unanswerable)",
+      "benchmark_em": 3.6,
+      "benchmark_f1": 21.3,
+      "answerable_false_abstention": 0.0,
+      "unanswerable_abstention": 0.0,
+      "spurious_rate": 23.1,
+      "status": "NO_ABSTENTION_LEARNED"
+    },
+    {
+      "experiment": "A2",
+      "model": "bert-base-uncased",
+      "training_composition": "571 answerable (no unanswerable)",
+      "benchmark_em": 0.0,
+      "benchmark_f1": 9.3,
+      "answerable_false_abstention": 0.0,
+      "unanswerable_abstention": 0.0,
+      "spurious_rate": 4.6,
+      "status": "NO_ABSTENTION_LEARNED"
+    },
+    {
+      "experiment": "F2",
+      "model": "distilbert-base-uncased",
+      "training_composition": "486 answerable + 20 synthetic unanswerable + 190 resampled = 696 total",
+      "benchmark_em": 2.9,
+      "benchmark_f1": 19.7,
+      "answerable_false_abstention": 0.0,
+      "unanswerable_abstention": 0.0,
+      "spurious_rate": 23.1,
+      "status": "NO_ABSTENTION_LEARNED"
+    },
+    {
+      "experiment": "H1",
+      "model": "distilbert-base-uncased",
+      "training_composition": "486 answerable + 114 H20 document-grounded unanswerable = 600 total",
+      "benchmark_em": 0.0,
+      "benchmark_f1": 11.0,
+      "answerable_false_abstention": 10.7,
+      "unanswerable_abstention": 45.2,
+      "spurious_rate": 54.8,
+      "status": "MODEL_COLLAPSED"
+    }
+  ],
+
+  "verification_notes": {
+    "A0": "Results from experiments/results/A0/evaluation_results.json — benchmark EM=7.8 on 918 examples (full dataset, not frozen benchmark). The 2.1% EM cited in prior reports uses the frozen benchmark subset. Discrepancy due to different evaluation sets.",
+    "A1": "Results from experiments/results/A1/evaluation_results.json — benchmark EM=0.7 on 918 examples. The 3.6% cited in prior reports may use a different evaluation set.",
+    "F2": "Results from phase4f_5f/f2/evaluation/f2_benchmark.json — 182 frozen benchmark examples. EM=2.9%, F1=19.7%, abstention=0.0%, spurious=23.1%.",
+    "H1": "Results from phase4f_5f/h1/evaluation/h1_benchmark.json — 182 frozen benchmark examples. EM=0.0%, F1=11.0%, abstention=45.2%, spurious=54.8%."
+  },
+
+  "tradeoff_analysis": {
+    "A0_best_abstention": "A0 achieves the highest abstention (64.3%) with the lowest spurious rate (8.2%), but this is due to the production model's inherent bias, not learned abstention",
+    "A1_A2_F2_best_f1": "A1 achieves the highest F1 (21.3%) but zero abstention — the model always predicts something",
+    "H1_moderate_abstention": "H1 achieves 45.2% abstention but at the cost of 54.8% spurious rate and complete EM collapse (0.0%)",
+    "h1_abstention_quality": "H1's abstention is NOT targeted — the model is producing empty predictions on BOTH answerable (10.7% false abstention) and unanswerable examples (54.8% spurious), indicating general prediction collapse rather than learned no-answer behavior"
+  },
+
+  "no_winner_declared": true,
+  "no_ranking": true
+}

@@ -1,0 +1,152 @@
+======================================================================
+PHASE 4F.4-E — CUDA ENVIRONMENT REPORT
+======================================================================
+
+Date: 2026-09-21
+Status: PHASE 4F.4-E — GPU ENVIRONMENT READY
+
+======================================================================
+1. ENVIRONMENT
+======================================================================
+
+  OS:            Windows-10-10.0.26200-SP0
+  Python:        3.11.0 (main, Oct 24 2022, 18:26:48) [MSC v.1933 64 bit]
+  PyTorch:       2.6.0+cu124
+  Transformers:  5.16.1
+  Accelerate:    1.15.0
+  Datasets:      5.0.1
+  Tokenizers:    0.23.2
+  scikit-learn:  1.9.1
+  NumPy:         2.4.6
+
+  CUDA version:  12.4
+  CUDA available: True
+  NVIDIA driver: 616.56
+
+  GPU:           NVIDIA GeForce RTX 3050 Laptop GPU
+  VRAM:          4295 MB (4.3 GB)
+  Compute Cap:   8.6
+  fp16 support:  True
+  bf16 support:  True
+
+  CUDA smoke test: PASSED (tensor allocation + matmul on GPU)
+
+======================================================================
+2. VIRTUAL ENVIRONMENT
+======================================================================
+
+  Path:      backend/phase4f_gpu/
+  Python:    backend/phase4f_gpu/Scripts/python.exe
+  Isolated:  YES (separate from production venv)
+
+======================================================================
+3. DATASET VERIFICATION
+======================================================================
+
+  File:      backend/phase4f/dataset/training_data_v3_1.jsonl
+  SHA-256:   a517530354fc9bcaeef6f1aa16c3fb9ce92f1967668386bc66781e6e6bbf2e97
+  Expected:  a517530354fc9bcaeef6f1aa16c3fb9ce92f1967668386bc66781e6e6bbf2e97
+  Match:     VERIFIED
+  Examples:  918
+
+======================================================================
+4. PRODUCTION MODEL SAFETY
+======================================================================
+
+  Checksum:  df592aa8d0ee1a235489bd3eead44d4cf0861221339226311960697c1c1512ac
+  Status:    UNCHANGED
+  Modified:  NO
+
+======================================================================
+5. MODEL MEMORY TESTS (Inference)
+======================================================================
+
+  Model                  | batch=1 | batch=2 | batch=4 | batch=8
+  -----------------------|---------|---------|---------|--------
+  A1 DistilBERT (66M)    |  286 MB |  297 MB |  322 MB |  376 MB
+  A2 BERT-base (110M)    |  456 MB |  466 MB |  492 MB |  545 MB
+  A3 DeBERTa-v3 (86M)    |  419 MB |  451 MB |  514 MB |  639 MB
+
+  All models: OK at all tested batch sizes for inference.
+
+======================================================================
+6. MODEL MEMORY TESTS (Training: forward + backward + optimizer)
+======================================================================
+
+  Model                  | batch=1 | batch=2 | batch=4 | batch=8
+  -----------------------|---------|---------|---------|--------
+  A1 DistilBERT (66M)    | 1328 MB | 1326 MB | 1330 MB | 1832 MB
+  A2 BERT-base (110M)    | 2178 MB | 2174 MB | 2344 MB | 3318 MB
+  A3 DeBERTa-v3 (86M)    | 1895 MB | 1960 MB | 2718 MB | OOM (4243 MB)
+
+  Remaining VRAM after batch=8 training:
+    A1 DistilBERT: 2463 MB (SAFE)
+    A2 BERT-base:   977 MB (TIGHT)
+    A3 DeBERTa-v3:   52 MB (OOM)
+
+======================================================================
+7. RECOMMENDED BATCH CONFIGURATIONS
+======================================================================
+
+  A1 DistilBERT:
+    physical_batch_size = 8
+    gradient_accumulation_steps = 8
+    effective_batch_size = 64
+    Reason: 2463 MB remaining; stable
+
+  A2 BERT-base:
+    physical_batch_size = 8
+    gradient_accumulation_steps = 8
+    effective_batch_size = 64
+    Reason: 977 MB remaining; tight but feasible
+
+  A3 DeBERTa-v3:
+    physical_batch_size = 4
+    gradient_accumulation_steps = 16
+    effective_batch_size = 64
+    Reason: batch=8 OOM; batch=4 leaves 1577 MB; grad_acc=16 preserves eff_batch=64
+
+  NOTE: The effective_batch_size=64 is PRESERVED for all models.
+  Only the physical batch and gradient accumulation differ.
+
+======================================================================
+8. MIXED PRECISION
+======================================================================
+
+  fp16:  SUPPORTED (Compute Capability 8.6)
+  bf16:  SUPPORTED (Compute Capability 8.6)
+
+  fp16 = True can be used for all experiments.
+
+======================================================================
+9. INSTALLATION NOTES
+======================================================================
+
+  - Created isolated venv: backend/phase4f_gpu/
+  - Installed PyTorch 2.6.0+cu124 (CUDA-enabled)
+  - Downgraded transformers from 5.17.0 to 5.16.1 (compatibility)
+  - Installed protobuf (required for DeBERTa tokenizer)
+  - Installed sentencepiece, tiktoken (DeBERTa tokenizer deps)
+  - Production venv (backend/venv/) UNCHANGED
+
+======================================================================
+10. BLOCKING ISSUES
+======================================================================
+
+  None. GPU environment is ready for Phase 4F.4.
+
+======================================================================
+FINAL STATUS
+======================================================================
+
+PHASE 4F.4-E — GPU ENVIRONMENT READY
+
+Environment: backend/phase4f_gpu/
+CUDA: 12.4 (RTX 3050, 4.3 GB, CC 8.6)
+fp16: Supported
+All 3 models: Memory-tested and feasible
+Effective batch size 64: Preserved for all experiments
+Dataset: Verified (a517530354fc9bca)
+Production model: Unchanged
+
+STOP. Do NOT start Phase 4F.4 training automatically.

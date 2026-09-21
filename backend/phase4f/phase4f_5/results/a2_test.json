@@ -1,0 +1,75 @@
+{
+  "model_label": "A2_BERT",
+  "eval_version": "4F.5-eval-v1",
+  "split": "test",
+  "total_examples": 221,
+  "overall": {
+    "em": 0.9,
+    "f1": 12.3,
+    "answerability_accuracy": 0.9,
+    "abstention_accuracy": 0.0,
+    "false_abstention": 0.0,
+    "spurious_rate": 0.0,
+    "answerable": 221,
+    "unanswerable": 0
+  },
+  "by_category": {
+    "DIRECT_SPAN": {
+      "n": 25,
+      "em": 4.0,
+      "f1": 36.6,
+      "avg_confidence": 0.1318
+    },
+    "LIST_ITEM": {
+      "n": 19,
+      "em": 0.0,
+      "f1": 15.4,
+      "avg_confidence": 0.041
+    },
+    "MULTI_CHUNK": {
+      "n": 7,
+      "em": 0.0,
+      "f1": 19.4,
+      "avg_confidence": 0.0456
+    },
+    "NUMERIC": {
+      "n": 20,
+      "em": 5.0,
+      "f1": 39.1,
+      "avg_confidence": 0.1639
+    },
+    "SECTION_SPECIFIC": {
+      "n": 14,
+      "em": 0.0,
+      "f1": 2.0,
+      "avg_confidence": 0.0363
+    },
+    "TABLE_CELL": {
+      "n": 111,
+      "em": 0.0,
+      "f1": 2.1,
+      "avg_confidence": 0.0946
+    },
+    "TABLE_ROW": {
+      "n": 25,
+      "em": 0.0,
+      "f1": 12.9,
+      "avg_confidence": 0.094
+    }
+  },
+  "failure_taxonomy": {
+    "total_failures": 219,
+    "failure_rate": 99.1,
+    "by_type": {
+      "EXTRACT": 219
+    }
+  },
+  "confidence_analysis": {
+    "correct_mean": 0.1442,
+    "correct_std": 0.0035,
+    "incorrect_mean": 0.0947,
+    "incorrect_std": 0.0418,
+    "separation": 0.0494
+  },
+  "latency_ms": 32.39
+}

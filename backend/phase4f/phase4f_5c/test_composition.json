@@ -1,0 +1,22 @@
+{
+  "phase": "4F.5-C",
+  "total": 221,
+  "answerable": 221,
+  "unanswerable": 0,
+  "documents": [
+    "api_docs_lambda",
+    "financial_report_q3",
+    "dataset_desc_mu",
+    "legal_contract_epsilon"
+  ],
+  "category_distribution": {
+    "DIRECT_SPAN": 25,
+    "NUMERIC": 20,
+    "TABLE_CELL": 111,
+    "TABLE_ROW": 25,
+    "LIST_ITEM": 19,
+    "SECTION_SPECIFIC": 14,
+    "MULTI_CHUNK": 7
+  },
+  "note": "ZERO unanswerable. Abstention/spurious NOT EVALUABLE."
+}

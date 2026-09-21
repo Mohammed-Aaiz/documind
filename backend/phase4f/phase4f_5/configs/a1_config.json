@@ -1,0 +1,38 @@
+{
+  "experiment": "A1_DistilBERT_Uncased",
+  "base_model": "distilbert-base-uncased",
+  "architecture": "DistilBertForQuestionAnswering",
+  "max_length": 384,
+  "epochs": 3,
+  "learning_rate": 3e-05,
+  "physical_batch_size": 8,
+  "gradient_accumulation": 8,
+  "effective_batch_size": 64,
+  "seed": 42,
+  "optimizer": "AdamW",
+  "weight_decay": 0.01,
+  "warmup_ratio": 0.1,
+  "max_grad_norm": 1.0,
+  "precision": "fp16 (torch.amp.autocast, verified in 4F.4-E)",
+  "trainable_layers": "ALL",
+  "dataset": "backend/phase4f/phase4f_5/dataset/derived_dataset.jsonl",
+  "train_filter": "split == 'train' AND question_kind != 'UNANSWERABLE' AND token_span.valid == true",
+  "validation_filter": "split == 'validation'",
+  "test_filter": "split == 'test'",
+  "train_examples": 571,
+  "validation_examples": 122,
+  "test_examples": 221,
+  "invalid_examples_excluded": ["tc_3b383990", "li_8bc7889f", "li_4fa4a839", "li_8770780b"],
+  "span_alignment": {
+    "method": "return_offsets_mapping=True",
+    "context_only": true,
+    "trailing_space_handling": "trimmed_answer_end",
+    "valid_rate": "99.5% (872/876 answerable)"
+  },
+  "checkpoint_policy": {
+    "selection_metric": "validation_exact_match",
+    "save_best_only": true,
+    "tiebreaking": "earliest checkpoint",
+    "never_use_test_for_selection": true
+  }
+}

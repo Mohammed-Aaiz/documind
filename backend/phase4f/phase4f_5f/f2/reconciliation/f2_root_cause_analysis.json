@@ -1,0 +1,61 @@
+{
+  "analysis_version": "4F.5-F2R-root-cause-v1",
+  "timestamp": "2026-09-21T00:00:00Z",
+  "decision": "F2_NO_MEANINGFUL_SIGNAL",
+
+  "root_causes": [
+    {
+      "cause": "F2_ROOT_CAUSE_DATA_BALANCE",
+      "confidence": "HIGH",
+      "evidence": [
+        "Unanswerable fraction = 20/506 = 3.95%",
+        "With batch_size=8, expected unanswerable per micro-batch = 0.32",
+        "68% of micro-batches contain ZERO unanswerable examples",
+        "CLS gradient is diluted by 96% answerable signal",
+        "Model never learns strong CLS preference",
+        "CLS avg logit = 0.617 but max non-CLS logit = 1.0-2.3"
+      ],
+      "what_to_test": "Increase unanswerable ratio to 25-50% and retrain"
+    },
+    {
+      "cause": "F2_ROOT_CAUSE_DECISION_THRESHOLD",
+      "confidence": "HIGH",
+      "evidence": [
+        "Model HAS learned some no-answer signal (CLS avg=0.617)",
+        "CLS is never the argmax (other tokens have higher logits)",
+        "Threshold sweep shows: at threshold=0.5, 13/14 holdout abstained",
+        "At threshold=0.6, 6/14 abstained",
+        "Current evaluation uses argmax (no threshold)",
+        "The no-answer signal exists but is not the strongest logit"
+      ],
+      "what_to_test": "Add null-score comparison in evaluation (compare CLS score vs best answer score)"
+    },
+    {
+      "cause": "F2_ROOT_CAUSE_OOD_TRAINING_DATA",
+      "confidence": "MEDIUM",
+      "evidence": [
+        "All 20 unanswerable training examples from 'unanswerable_corpus'",
+        "Contexts are short (44-95 chars), synthetic, generic",
+        "Answerable contexts are long, technical, from real documents",
+        "Domain mismatch: unanswerable examples look nothing like answerable",
+        "Model may associate unanswerable with context style, not semantics"
+      ],
+      "what_to_test": "Generate unanswerable examples from the same documents as answerable examples"
+    },
+    {
+      "cause": "F2_ROOT_CAUSE_CHECKPOINT_SELECTION",
+      "confidence": "LOW",
+      "evidence": [
+        "Checkpoint selected by val_EM (primary metric)",
+        "All 3 epochs had val_abstention=0.0%",
+        "Abstention was never a factor in selection",
+        "Would not have changed outcome since all epochs had 0% abstention"
+      ],
+      "what_to_test": "N/A — this is a secondary issue"
+    }
+  ],
+
+  "summary": "The F2 experiment failed because (1) the 3.95% unanswerable ratio is too low to produce a strong CLS signal, (2) the evaluation uses argmax which never selects CLS even when some no-answer signal exists, and (3) the unanswerable training examples are out-of-distribution compared to the answerable examples.",
+
+  "next_experiment_recommendation": "Test whether increasing unanswerable ratio to ~50% (F3) restores abstention. Separately test whether threshold-based evaluation (comparing CLS score vs best answer score) can recover abstention from the existing F2 model."
+}

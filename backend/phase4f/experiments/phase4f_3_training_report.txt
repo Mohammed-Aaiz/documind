@@ -1,0 +1,68 @@
+======================================================================
+PHASE 4F.3 — TRAINING REPORT
+======================================================================
+
+Date: 2026-09-19 21:56:40 UTC
+Status: PHASE 4F.3 — BLOCKED_BY_COMPUTE
+
+1. Dataset Verification
+----------------------------------------
+  Version: phase4f-qa-v3
+  Hash: 00377e8acce1b430
+  Examples: 918
+  Production model checksum: df592aa8d0ee1a23
+
+2. GPU Environment
+----------------------------------------
+  CUDA available: False
+  PyTorch: 2.13.0+cpu
+  Transformers: 5.16.1
+  GPU: N/A
+  VRAM: N/A
+
+3. Experiment Configuration
+----------------------------------------
+  A0: Current production baseline (DistilBERT, frozen)
+  A1: DistilBERT targeted fine-tune (lr=3e-5, eff_batch=64, 3 epochs)
+  A2: BERT-base targeted fine-tune (lr=2e-5, eff_batch=64, 3 epochs)
+  A3: DeBERTa-v3 targeted fine-tune (lr=1e-5, eff_batch=64, 3 epochs)
+
+4. Training Status
+----------------------------------------
+  A0: BASELINE_RECORDED (no training needed)
+  A1: BLOCKED_BY_COMPUTE
+  A2: BLOCKED_BY_COMPUTE
+  A3: BLOCKED_BY_COMPUTE
+
+5. GPU Execution Package
+----------------------------------------
+  Created: backend/phase4f/experiments/
+  Contents:
+    - train.py (training script)
+    - evaluate.py (evaluation script)
+    - requirements.txt
+    - experiment_manifest.json
+    - training_data_v3.jsonl (reference)
+
+  To run on GPU:
+    pip install -r requirements.txt
+    python train.py --experiment a1 --data_dir ../dataset --output_dir ./a1_distilbert
+    python train.py --experiment a2 --data_dir ../dataset --output_dir ./a2_bert_base
+    python train.py --experiment a3 --data_dir ../dataset --output_dir ./a3_deberta_v3
+    python evaluate.py --model_dir ./a1_distilbert --data_dir ../dataset
+
+6. Production Safety
+----------------------------------------
+  Production model checksum: df592aa8d0ee1a23
+  Production model directory: backend/models/documind-qa/
+  Status: UNCHANGED
+
+7. Remaining Limitations
+----------------------------------------
+  - GPU unavailable; training cannot execute
+  - No experimental results to report
+  - Model selection pending GPU execution
+
+======================================================================
+PHASE 4F.3 — BLOCKED_BY_COMPUTE
+======================================================================

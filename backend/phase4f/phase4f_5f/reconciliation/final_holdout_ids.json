@@ -1,0 +1,21 @@
+{
+  "version": "4F.5-F1R-holdout-v1",
+  "unanswerable_ids": [
+    "unans_a042521b",
+    "unans_a334de2c",
+    "unans_a603100e",
+    "unans_a60eda2e",
+    "unans_a7ad9d04",
+    "unans_b415e6a3",
+    "unans_d7480687",
+    "unans_de20050d",
+    "unans_e1454d12",
+    "unans_e25b96fd",
+    "unans_ecebc88c",
+    "unans_ee310eea",
+    "unans_f6563cea",
+    "unans_fb3b3426"
+  ],
+  "total": 14,
+  "note": "These 14 unanswerable examples must remain completely untouched until final evaluation"
+}

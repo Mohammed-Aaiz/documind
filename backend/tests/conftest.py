@@ -52,21 +52,30 @@ class _StringUUID(types.TypeDecorator):
         return uuid.UUID(value)
 
 
-def _patch_uuid_columns():
-    """Monkey-patch the UUID columns on every model so SQLite can store them."""
+def _patch_pg_columns():
+    """Monkey-patch PostgreSQL-specific column types so SQLite can store them.
+
+    * UUID  -> String(36)  (with UUID round-trip)
+    * JSONB -> JSON        (SQLite supports JSON natively)
+    """
     from auth.models import User
     from documents.models import Document, DocumentChunk
     from chat.models import ChatSession, ChatMessage
     from verification.models import VerificationResult
-    from reliability.models import SourceRef
+    from reliability.models import ReliabilityLog, SourceRef
     from user.models import UserSettings
 
-    for model in (User, Document, DocumentChunk, ChatSession, ChatMessage,
-                  VerificationResult, SourceRef, UserSettings):
+    all_models = (
+        User, Document, DocumentChunk, ChatSession, ChatMessage,
+        VerificationResult, ReliabilityLog, SourceRef, UserSettings,
+    )
+    for model in all_models:
         for col in model.__table__.columns:
             if isinstance(col.type, postgresql.UUID):
                 col.type = _StringUUID()
                 col._user_defined_foreign_key = col.foreign_keys  # preserve FKs
+            elif isinstance(col.type, postgresql.JSONB):
+                col.type = types.JSON()
 
 
 # ---------------------------------------------------------------------------
@@ -99,7 +108,7 @@ async def _test_engine():
 @pytest_asyncio.fixture(scope="session")
 async def _create_tables(_test_engine):
     """Create all tables once for the whole test session."""
-    _patch_uuid_columns()
+    _patch_pg_columns()
     from storage.database import Base
 
     async with _test_engine.begin() as conn:

@@ -1,0 +1,41 @@
+{
+  "model": "A0",
+  "traces": [
+    {
+      "prediction": "",
+      "em": false,
+      "f1": 0,
+      "confidence": 0.8238,
+      "question": "What is the percentage for the metric?",
+      "gold": "1.5 percent",
+      "category": "DIRECT_SPAN"
+    },
+    {
+      "prediction": "$ 3. 47",
+      "em": false,
+      "f1": 0,
+      "confidence": 0.6735,
+      "question": "What was the earnings per share?",
+      "gold": "$3.47",
+      "category": "NUMERIC"
+    },
+    {
+      "prediction": "| $ 412. 5m | $ 348. 7m | + 18. 3 %",
+      "em": false,
+      "f1": 0,
+      "confidence": 0.3395,
+      "question": "What is the yoy growth for Enterprise Solutions?",
+      "gold": "+18.3%",
+      "category": "TABLE_CELL"
+    },
+    {
+      "prediction": "uses internal data analysis and reporting integration with licensee ' s proprietary platforms use by licensee ' s employees and authorized contractors testing and quality assurance in non - production environments",
+      "em": false,
+      "f1": 32.3,
+      "confidence": 0.3309,
+      "question": "What permitted uses is listed first?",
+      "gold": "Internal data analysis and reporting",
+      "category": "LIST_ITEM"
+    }
+  ]
+}

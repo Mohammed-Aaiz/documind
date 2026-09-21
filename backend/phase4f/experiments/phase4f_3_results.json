@@ -1,0 +1,25 @@
+{
+  "phase": "4F.3",
+  "status": "BLOCKED_BY_COMPUTE",
+  "dataset_hash": "00377e8acce1b430",
+  "production_model_checksum": "df592aa8d0ee1a23",
+  "experiments": {
+    "a0": {
+      "status": "BASELINE_RECORDED",
+      "results": null
+    },
+    "a1": {
+      "status": "BLOCKED_BY_COMPUTE",
+      "results": null
+    },
+    "a2": {
+      "status": "BLOCKED_BY_COMPUTE",
+      "results": null
+    },
+    "a3": {
+      "status": "BLOCKED_BY_COMPUTE",
+      "results": null
+    }
+  },
+  "timestamp": "2026-09-19T21:56:40Z"
+}

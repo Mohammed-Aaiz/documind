@@ -1,0 +1,13 @@
+{
+  "phase": "4F.5-C",
+  "official_em": {
+    "A0": 3.2,
+    "A1": 1.8,
+    "A2": 0.9
+  },
+  "findings": {
+    "subword_decimal": "12/20 NUMERIC: WordPiece splits 20.3 -> [20, ., 3] producing '20. 3'. Under relaxed normalization ~12 more A1 predictions match.",
+    "currency": "5 NUMERIC: $ signs are separate tokens, predictions often drop/add $",
+    "punctuation_only": "0 near-misses fixable by punctuation removal alone"
+  }
+}

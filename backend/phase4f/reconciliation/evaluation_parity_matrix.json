@@ -1,0 +1,99 @@
+{
+  "phase": "4F.4-R",
+  "audit_type": "evaluation_parity_matrix",
+  "parity_status": "PASS",
+  "note": "All four models (A0/A1/A2/A3) were evaluated using the SAME evaluate_model() function in run_experiment.py with IDENTICAL parameters. The evaluation code is identical for all models.",
+  "matrix": {
+    "A0_Production": {
+      "question_set": "all_918_examples",
+      "context": "original_context_from_jsonl",
+      "tokenizer": "production_tokenizer (distilbert-base-uncased vocab)",
+      "max_length": 384,
+      "stride": "N/A (no sliding window)",
+      "answer_decoding": "tokenizer.decode(input_ids[start:end+1], skip_special_tokens=True)",
+      "normalization": "strip().lower()",
+      "exact_match": "normalize_text(pred) == normalize_text(gold)",
+      "token_f1": "set-based token overlap F1",
+      "answerability": "pred != '' for answerable questions",
+      "abstention": "pred == '' for unanswerable questions",
+      "spurious_detection": "pred != '' for unanswerable questions",
+      "category_mapping": "question_kind field",
+      "device": "cuda"
+    },
+    "A1_DistilBERT": {
+      "question_set": "all_918_examples",
+      "context": "original_context_from_jsonl",
+      "tokenizer": "distilbert-base-cased tokenizer",
+      "max_length": 384,
+      "stride": "N/A",
+      "answer_decoding": "IDENTICAL to A0",
+      "normalization": "IDENTICAL to A0",
+      "exact_match": "IDENTICAL to A0",
+      "token_f1": "IDENTICAL to A0",
+      "answerability": "IDENTICAL to A0",
+      "abstention": "IDENTICAL to A0",
+      "spurious_detection": "IDENTICAL to A0",
+      "category_mapping": "IDENTICAL to A0",
+      "device": "cuda"
+    },
+    "A2_BERT_Base": {
+      "question_set": "all_918_examples",
+      "context": "original_context_from_jsonl",
+      "tokenizer": "bert-base-cased tokenizer",
+      "max_length": 384,
+      "stride": "N/A",
+      "answer_decoding": "IDENTICAL to A0",
+      "normalization": "IDENTICAL to A0",
+      "exact_match": "IDENTICAL to A0",
+      "token_f1": "IDENTICAL to A0",
+      "answerability": "IDENTICAL to A0",
+      "abstention": "IDENTICAL to A0",
+      "spurious_detection": "IDENTICAL to A0",
+      "category_mapping": "IDENTICAL to A0",
+      "device": "cuda"
+    },
+    "A3_DeBERTa_v3": {
+      "question_set": "all_918_examples",
+      "context": "original_context_from_jsonl",
+      "tokenizer": "deberta-v3-base tokenizer",
+      "max_length": 384,
+      "stride": "N/A",
+      "answer_decoding": "IDENTICAL to A0",
+      "normalization": "IDENTICAL to A0",
+      "exact_match": "IDENTICAL to A0",
+      "token_f1": "IDENTICAL to A0",
+      "answerability": "IDENTICAL to A0",
+      "abstention": "IDENTICAL to A0",
+      "spurious_detection": "IDENTICAL to A0",
+      "category_mapping": "IDENTICAL to A0",
+      "device": "cuda"
+    }
+  },
+  "identified_differences": [
+    {
+      "component": "tokenizer",
+      "difference": "Each model uses its own tokenizer (uncased for A0, cased for A1/A2, different vocab for A3)",
+      "impact": "Expected and correct - each model should use its own tokenizer",
+      "severity": "none"
+    },
+    {
+      "component": "evaluation function",
+      "difference": "None - all models use the same evaluate_model() function",
+      "impact": "Evaluation is fair",
+      "severity": "none"
+    },
+    {
+      "component": "max_answer_length",
+      "difference": "Hardcoded to 50 in evaluate_model(), not configurable",
+      "impact": "Consistent across all models",
+      "severity": "none"
+    },
+    {
+      "component": "span_finding_strategy",
+      "difference": "All models use argmax(start_logits) then argmax(end_logits within max_ans_len=50)",
+      "impact": "Consistent across all models. Note: this is a simple greedy strategy, not n-best",
+      "severity": "none"
+    }
+  ],
+  "evaluation_parity": "PASS - the evaluation protocol is identical across A0/A1/A2/A3"
+}

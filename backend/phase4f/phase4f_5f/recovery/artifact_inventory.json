@@ -1,0 +1,68 @@
+{
+  "phase": "4F.5-F",
+  "inventory_type": "COMPLETE",
+  "timestamp": "2026-09-21T00:00:00Z",
+  "directory": "backend/phase4f/phase4f_5f/",
+  "pre_execution_files": [
+    {
+      "path": "run_experiment.py",
+      "type": "SCRIPT",
+      "status": "EXISTS",
+      "lines": 479,
+      "description": "Phase 4F.5-F experiment script — trains F1 (natural ratio) and F2 (class-balanced) on distilbert-base-uncased"
+    }
+  ],
+  "post_execution_artifacts": {
+    "results_directory": {
+      "exists": false,
+      "expected_files": [
+        "a0_benchmark.json",
+        "a1_benchmark.json",
+        "f1_benchmark.json",
+        "f2_benchmark.json",
+        "f1_threshold_sweep.json",
+        "f2_threshold_sweep.json",
+        "comparison.json",
+        "unanswerable_analysis.json",
+        "f1_dataset_manifest.json",
+        "f2_dataset_manifest.json"
+      ]
+    },
+    "checkpoints_directory": {
+      "exists": false,
+      "expected_subdirectories": [
+        "F1/checkpoint_epoch1/",
+        "F1/checkpoint_epoch2/",
+        "F1/checkpoint_epoch3/",
+        "F2/checkpoint_epoch1/",
+        "F2/checkpoint_epoch2/",
+        "F2/checkpoint_epoch3/"
+      ]
+    },
+    "logs_directory": {
+      "exists": false,
+      "expected_files": [
+        "f1_training.json",
+        "f2_training.json"
+      ]
+    },
+    "recovery_directory": {
+      "exists": true,
+      "created_by": "RECOVERY_AUDIT",
+      "files": [
+        "phase4f_5f_recovery_report.txt",
+        "recovery_manifest.json",
+        "artifact_inventory.json"
+      ]
+    },
+    "top_level_artifacts": {
+      "phase4f_5f_manifest.json": false
+    }
+  },
+  "partial_artifacts": [],
+  "error_artifacts": [],
+  "temporary_files": [],
+  "intermediate_directories": [],
+  "total_output_files_created_by_previous_execution": 0,
+  "conclusion": "No output artifacts from the experiment exist. The script was never executed or failed before producing any output."
+}

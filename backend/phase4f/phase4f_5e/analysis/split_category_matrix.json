@@ -1,0 +1,79 @@
+{
+  "DATE": {
+    "total": 25,
+    "train": 25,
+    "validation": 0,
+    "test": 0,
+    "benchmark": 0
+  },
+  "DIRECT_SPAN": {
+    "total": 86,
+    "train": 50,
+    "validation": 11,
+    "test": 25,
+    "benchmark": 24
+  },
+  "ENTITY": {
+    "total": 22,
+    "train": 22,
+    "validation": 0,
+    "test": 0,
+    "benchmark": 0
+  },
+  "LIST_ITEM": {
+    "total": 106,
+    "train": 82,
+    "validation": 5,
+    "test": 19,
+    "benchmark": 20
+  },
+  "LONG_CONTEXT": {
+    "total": 15,
+    "train": 3,
+    "validation": 12,
+    "test": 0,
+    "benchmark": 10
+  },
+  "MULTI_CHUNK": {
+    "total": 26,
+    "train": 16,
+    "validation": 3,
+    "test": 7,
+    "benchmark": 10
+  },
+  "NUMERIC": {
+    "total": 97,
+    "train": 57,
+    "validation": 20,
+    "test": 20,
+    "benchmark": 20
+  },
+  "SECTION_SPECIFIC": {
+    "total": 55,
+    "train": 37,
+    "validation": 4,
+    "test": 14,
+    "benchmark": 16
+  },
+  "TABLE_CELL": {
+    "total": 362,
+    "train": 231,
+    "validation": 20,
+    "test": 111,
+    "benchmark": 24
+  },
+  "TABLE_ROW": {
+    "total": 82,
+    "train": 52,
+    "validation": 5,
+    "test": 25,
+    "benchmark": 16
+  },
+  "UNANSWERABLE": {
+    "total": 42,
+    "train": 0,
+    "validation": 42,
+    "test": 0,
+    "benchmark": 42
+  }
+}

@@ -1,0 +1,446 @@
+{
+  "phase": "4F.5-C",
+  "findings": [
+    {
+      "id": "ds_1efed7c7",
+      "cat": "DIRECT_SPAN",
+      "gold": "20.3 percent",
+      "A1_pred": "20. 3 percent",
+      "type": "EXTRA_OR_MISSING_WORDS"
+    },
+    {
+      "id": "ds_b1acb91a",
+      "cat": "DIRECT_SPAN",
+      "gold": "753.8 million ",
+      "A1_pred": "753. 8 million",
+      "type": "EXTRA_OR_MISSING_WORDS"
+    },
+    {
+      "id": "ds_0ea2924f",
+      "cat": "DIRECT_SPAN",
+      "gold": "142.6 million",
+      "A1_pred": "142. 6 million",
+      "type": "EXTRA_OR_MISSING_WORDS"
+    },
+    {
+      "id": "ds_c8d09ef8",
+      "cat": "DIRECT_SPAN",
+      "gold": "118.2 million",
+      "A1_pred": "118. 2 million",
+      "type": "EXTRA_OR_MISSING_WORDS"
+    },
+    {
+      "id": "ds_9e3b4897",
+      "cat": "DIRECT_SPAN",
+      "gold": "48.7 percent",
+      "A1_pred": "48. 7 percent",
+      "type": "EXTRA_OR_MISSING_WORDS"
+    },
+    {
+      "id": "ds_ec1fd0a5",
+      "cat": "DIRECT_SPAN",
+      "gold": "18.3 percent",
+      "A1_pred": "18. 3 percent",
+      "type": "EXTRA_OR_MISSING_WORDS"
+    },
+    {
+      "id": "ds_df08a5cf",
+      "cat": "DIRECT_SPAN",
+      "gold": "9.7 percent",
+      "A1_pred": "9. 7 percent",
+      "type": "EXTRA_OR_MISSING_WORDS"
+    },
+    {
+      "id": "ds_81ce24c7",
+      "cat": "DIRECT_SPAN",
+      "gold": "4.2 percent",
+      "A1_pred": "4. 2 percent",
+      "type": "EXTRA_OR_MISSING_WORDS"
+    },
+    {
+      "id": "ds_77360f42",
+      "cat": "DIRECT_SPAN",
+      "gold": "412.5 million ",
+      "A1_pred": "412. 5 million",
+      "type": "EXTRA_OR_MISSING_WORDS"
+    },
+    {
+      "id": "ds_740681ab",
+      "cat": "DIRECT_SPAN",
+      "gold": "14.8 percent",
+      "A1_pred": "14. 8 percent",
+      "type": "EXTRA_OR_MISSING_WORDS"
+    },
+    {
+      "id": "ds_65dd1749",
+      "cat": "DIRECT_SPAN",
+      "gold": "660.1 million",
+      "A1_pred": "660. 1 million",
+      "type": "EXTRA_OR_MISSING_WORDS"
+    },
+    {
+      "id": "ds_98c13a6f",
+      "cat": "DIRECT_SPAN",
+      "gold": "127.3 million",
+      "A1_pred": "127. 3 million",
+      "type": "EXTRA_OR_MISSING_WORDS"
+    },
+    {
+      "id": "ds_d8cd4ce5",
+      "cat": "DIRECT_SPAN",
+      "gold": "100.0 million",
+      "A1_pred": "100. 0 million",
+      "type": "EXTRA_OR_MISSING_WORDS"
+    },
+    {
+      "id": "ds_abba258f",
+      "cat": "DIRECT_SPAN",
+      "gold": "30 percent",
+      "A1_pred": "28 to 30 percent",
+      "type": "PARTIAL_SPAN"
+    },
+    {
+      "id": "ds_59f2d6c6",
+      "cat": "DIRECT_SPAN",
+      "gold": "3.35 billion ",
+      "A1_pred": "3. 35 billion",
+      "type": "EXTRA_OR_MISSING_WORDS"
+    },
+    {
+      "id": "ds_dbc2f9ba",
+      "cat": "DIRECT_SPAN",
+      "gold": "3.42 billion",
+      "A1_pred": "35 billion",
+      "type": "EXTRA_OR_MISSING_WORDS"
+    },
+    {
+      "id": "ds_025dc00e",
+      "cat": "DIRECT_SPAN",
+      "gold": "3.35 billion",
+      "A1_pred": "25 billion",
+      "type": "EXTRA_OR_MISSING_WORDS"
+    },
+    {
+      "id": "ds_17a97902",
+      "cat": "DIRECT_SPAN",
+      "gold": "1.5 percent",
+      "A1_pred": "1. 5 percent",
+      "type": "EXTRA_OR_MISSING_WORDS"
+    },
+    {
+      "id": "ds_b4e49165",
+      "cat": "DIRECT_SPAN",
+      "gold": "1 hour",
+      "A1_pred": "3600 seconds ( 1 hour",
+      "type": "PARTIAL_SPAN"
+    },
+    {
+      "id": "ds_199662bc",
+      "cat": "DIRECT_SPAN",
+      "gold": "0.4 percent",
+      "A1_pred": "0. 4 percent",
+      "type": "EXTRA_OR_MISSING_WORDS"
+    },
+    {
+      "id": "num_f45fb016",
+      "cat": "NUMERIC",
+      "gold": "$847.3 million",
+      "A1_pred": "847. 3 million",
+      "type": "EXTRA_OR_MISSING_WORDS"
+    },
+    {
+      "id": "num_6b7e6d26",
+      "cat": "NUMERIC",
+      "gold": "12.4 percent",
+      "A1_pred": "12. 4 percent",
+      "type": "EXTRA_OR_MISSING_WORDS"
+    },
+    {
+      "id": "num_ebb0173c",
+      "cat": "NUMERIC",
+      "gold": "$142.6 million",
+      "A1_pred": "142. 6 million",
+      "type": "EXTRA_OR_MISSING_WORDS"
+    },
+    {
+      "id": "num_58a9ce17",
+      "cat": "NUMERIC",
+      "gold": "22.1 percent",
+      "A1_pred": "22. 1 percent",
+      "type": "EXTRA_OR_MISSING_WORDS"
+    },
+    {
+      "id": "num_40784c07",
+      "cat": "NUMERIC",
+      "gold": "$412.5 million",
+      "A1_pred": "412. 5 million",
+      "type": "EXTRA_OR_MISSING_WORDS"
+    },
+    {
+      "id": "num_ae8b0a75",
+      "cat": "NUMERIC",
+      "gold": "$198.3 million",
+      "A1_pred": "198. 3 million",
+      "type": "EXTRA_OR_MISSING_WORDS"
+    },
+    {
+      "id": "num_1910985d",
+      "cat": "NUMERIC",
+      "gold": "$2.1 billion",
+      "A1_pred": "2. 1 billion",
+      "type": "EXTRA_OR_MISSING_WORDS"
+    },
+    {
+      "id": "num_d9547a42",
+      "cat": "NUMERIC",
+      "gold": "$1.8 billion",
+      "A1_pred": "1. 8 billion",
+      "type": "EXTRA_OR_MISSING_WORDS"
+    },
+    {
+      "id": "num_b0d1c66d",
+      "cat": "NUMERIC",
+      "gold": "$3.35 billion to $3.42 billion",
+      "A1_pred": "3. 35 billion",
+      "type": "EXTRA_OR_MISSING_WORDS"
+    },
+    {
+      "id": "num_f3265264",
+      "cat": "NUMERIC",
+      "gold": "1.5 percent",
+      "A1_pred": "1. 5 percent",
+      "type": "EXTRA_OR_MISSING_WORDS"
+    },
+    {
+      "id": "num_c0cf5c80",
+      "cat": "NUMERIC",
+      "gold": "1000",
+      "A1_pred": "1000 requests per minute",
+      "type": "PARTIAL_SPAN"
+    },
+    {
+      "id": "num_4460eb2e",
+      "cat": "NUMERIC",
+      "gold": "50",
+      "A1_pred": "50 items",
+      "type": "PARTIAL_SPAN"
+    },
+    {
+      "id": "num_95ee7e56",
+      "cat": "NUMERIC",
+      "gold": "200",
+      "A1_pred": "200 items",
+      "type": "PARTIAL_SPAN"
+    },
+    {
+      "id": "num_994b099e",
+      "cat": "NUMERIC",
+      "gold": "3600",
+      "A1_pred": "3600 seconds",
+      "type": "PARTIAL_SPAN"
+    },
+    {
+      "id": "tc_27595301",
+      "cat": "TABLE_CELL",
+      "gold": "Custom",
+      "A1_pred": "rate limit | burst limit | monthly quota enterprise | custom | custom",
+      "type": "PARTIAL_SPAN"
+    },
+    {
+      "id": "tc_85d54fcd",
+      "cat": "TABLE_CELL",
+      "gold": "Custom",
+      "A1_pred": "burst limit | monthly quota enterprise | custom | custom",
+      "type": "PARTIAL_SPAN"
+    },
+    {
+      "id": "tc_1a6849f8",
+      "cat": "TABLE_CELL",
+      "gold": "POST",
+      "A1_pred": "auth required post | / auth / token",
+      "type": "PARTIAL_SPAN"
+    },
+    {
+      "id": "tc_4179f602",
+      "cat": "TABLE_CELL",
+      "gold": "Obtain access token",
+      "A1_pred": "auth / token",
+      "type": "EXTRA_OR_MISSING_WORDS"
+    },
+    {
+      "id": "tc_629ae7df",
+      "cat": "TABLE_CELL",
+      "gold": "GET",
+      "A1_pred": "auth required get | / documents | list all documents",
+      "type": "PARTIAL_SPAN"
+    },
+    {
+      "id": "tc_c4e0c677",
+      "cat": "TABLE_CELL",
+      "gold": "List all documents",
+      "A1_pred": "auth required get | / documents | list all documents",
+      "type": "PARTIAL_SPAN"
+    },
+    {
+      "id": "tc_e75b3a72",
+      "cat": "TABLE_CELL",
+      "gold": "POST",
+      "A1_pred": "auth required post | / documents",
+      "type": "PARTIAL_SPAN"
+    },
+    {
+      "id": "tc_08b98fbc",
+      "cat": "TABLE_CELL",
+      "gold": "GET",
+      "A1_pred": "id } | get document details",
+      "type": "PARTIAL_SPAN"
+    },
+    {
+      "id": "tc_2607c15e",
+      "cat": "TABLE_CELL",
+      "gold": "Get document details",
+      "A1_pred": "id } | get document details",
+      "type": "PARTIAL_SPAN"
+    },
+    {
+      "id": "tc_d39f0a68",
+      "cat": "TABLE_CELL",
+      "gold": "DELETE",
+      "A1_pred": "id } | delete a document",
+      "type": "PARTIAL_SPAN"
+    },
+    {
+      "id": "tc_4b140a6a",
+      "cat": "TABLE_CELL",
+      "gold": "POST",
+      "A1_pred": "auth required post | / qa",
+      "type": "PARTIAL_SPAN"
+    },
+    {
+      "id": "tc_b8ce0c6e",
+      "cat": "TABLE_CELL",
+      "gold": "%",
+      "A1_pred": "67. 8 | 0. 5 %",
+      "type": "PARTIAL_SPAN"
+    },
+    {
+      "id": "tr_38d24c64",
+      "cat": "TABLE_ROW",
+      "gold": "POST | /auth/token | Obtain access token | No",
+      "A1_pred": "auth required post | / auth / token",
+      "type": "EXTRA_OR_MISSING_WORDS"
+    },
+    {
+      "id": "tr_aaa9536f",
+      "cat": "TABLE_ROW",
+      "gold": "GET | /documents | List all documents | Yes",
+      "A1_pred": "auth required get | / documents | list all documents",
+      "type": "EXTRA_OR_MISSING_WORDS"
+    },
+    {
+      "id": "tr_e3808938",
+      "cat": "TABLE_ROW",
+      "gold": "POST | /documents | Upload a new document | Yes",
+      "A1_pred": "auth required post | / documents",
+      "type": "EXTRA_OR_MISSING_WORDS"
+    },
+    {
+      "id": "tr_7e68327d",
+      "cat": "TABLE_ROW",
+      "gold": "GET | /documents/{id} | Get document details | Yes",
+      "A1_pred": "id } | get document details",
+      "type": "EXTRA_OR_MISSING_WORDS"
+    },
+    {
+      "id": "tr_b0ffbc0f",
+      "cat": "TABLE_ROW",
+      "gold": "DELETE | /documents/{id} | Delete a document | Yes",
+      "A1_pred": "id } | delete a document",
+      "type": "EXTRA_OR_MISSING_WORDS"
+    },
+    {
+      "id": "tr_ddbb3252",
+      "cat": "TABLE_ROW",
+      "gold": "POST | /qa/ask | Ask a question | Yes",
+      "A1_pred": "auth required post | / qa",
+      "type": "EXTRA_OR_MISSING_WORDS"
+    },
+    {
+      "id": "tr_f4cfd386",
+      "cat": "TABLE_ROW",
+      "gold": "Humidity | % | 2.1 | 100.0 | 67.8 | 0.5%",
+      "A1_pred": "67. 8 | 0. 5 %",
+      "type": "EXTRA_OR_MISSING_WORDS"
+    },
+    {
+      "id": "li_cc7f84c3",
+      "cat": "LIST_ITEM",
+      "gold": "Revenue: $847.3 million (+12.4% YoY)",
+      "A1_pred": "847. 3 million",
+      "type": "EXTRA_OR_MISSING_WORDS"
+    },
+    {
+      "id": "li_f17cfdc6",
+      "cat": "LIST_ITEM",
+      "gold": "Net Income: $142.6 million (+20.6% YoY)",
+      "A1_pred": "847. 3 million",
+      "type": "EXTRA_OR_MISSING_WORDS"
+    },
+    {
+      "id": "li_417011c7",
+      "cat": "LIST_ITEM",
+      "gold": "Internal data analysis and reporting",
+      "A1_pred": "data analysis and reporting integration with licensee ' s proprietary platforms use by licensee ' s employees and authorized contractors testing and quality assurance in non - production environments",
+      "type": "EXTRA_OR_MISSING_WORDS"
+    },
+    {
+      "id": "li_5a304295",
+      "cat": "LIST_ITEM",
+      "gold": "Integration with Licensee's proprietary platforms",
+      "A1_pred": "data analysis and reporting integration with licensee ' s proprietary platforms use by licensee ' s employees and authorized contractors testing and quality assurance in non - production environments",
+      "type": "EXTRA_OR_MISSING_WORDS"
+    },
+    {
+      "id": "li_624603d6",
+      "cat": "LIST_ITEM",
+      "gold": "Use by Licensee's employees and authorized contractors",
+      "A1_pred": "data analysis and reporting integration with licensee ' s proprietary platforms use by licensee ' s employees and authorized contractors testing and quality assurance in non - production environments",
+      "type": "EXTRA_OR_MISSING_WORDS"
+    },
+    {
+      "id": "li_af6e2596",
+      "cat": "LIST_ITEM",
+      "gold": "Testing and quality assurance in non-production environments",
+      "A1_pred": "data analysis and reporting integration with licensee ' s proprietary platforms use by licensee ' s employees and authorized contractors testing and quality assurance in non - production environments",
+      "type": "EXTRA_OR_MISSING_WORDS"
+    },
+    {
+      "id": "li_48a0f64c",
+      "cat": "LIST_ITEM",
+      "gold": "JWT Bearer Token: standard for web applications",
+      "A1_pred": "jwt bearer token : standard for web applications api key : for server - to - server communication ( x - api - key header ) oauth 2. 0 : for third - party integrations mtls : for high - security environments",
+      "type": "EXTRA_OR_MISSING_WORDS"
+    },
+    {
+      "id": "mc_42e1f7cf",
+      "cat": "MULTI_CHUNK",
+      "gold": "3600 seconds",
+      "A1_pred": "86400 seconds ( 24 hours",
+      "type": "EXTRA_OR_MISSING_WORDS"
+    },
+    {
+      "id": "mc_98a6aef8",
+      "cat": "MULTI_CHUNK",
+      "gold": "7.4 million",
+      "A1_pred": "7. 4 million",
+      "type": "EXTRA_OR_MISSING_WORDS"
+    }
+  ],
+  "summary": {
+    "total": 62,
+    "by_type": {
+      "EXTRA_OR_MISSING_WORDS": 45,
+      "PARTIAL_SPAN": 17
+    }
+  }
+}

@@ -1,0 +1,201 @@
+============================================================
+PHASE 4F.5-G — NO-ANSWER DECISION EXPERIMENT REPORT
+============================================================
+
+STATUS: THRESHOLD_UNSTABLE
+
+============================================================
+1. SELECTED DECISION RULE
+============================================================
+
+  Mode: null_score (cls_start + cls_end)
+  Threshold: 1.5705
+  Rule: ABSTAIN if null_score >= 1.5705
+
+  Why selected: Best abstention (25%) with coverage >= 80%
+  and false abstention <= 15% on validation set.
+
+============================================================
+2. VALIDATION METRICS
+============================================================
+
+  EM:              5.88%
+  F1:             17.42%
+  Coverage:       87.06%
+  False abstention: 12.94%
+  Abstention:     25.00% (2/8 unanswerable)
+  Spurious:       75.00% (6/8)
+
+============================================================
+3. HOLDOUT METRICS (14 unanswerable)
+============================================================
+
+  Abstained:       2/14 (14.29%)
+  Spurious:       12/14 (85.71%)
+
+  NOTE: Holdout abstention (14.3%) is LOWER than validation
+  (25.0%), suggesting the threshold is not well-calibrated
+  for the holdout distribution.
+
+============================================================
+4. FROZEN BENCHMARK METRICS
+============================================================
+
+  Overall:
+    EM:             2.86%
+    F1:            16.92%
+    Coverage:      72.14%
+    False abstention: 27.86%
+    Abstention:    19.05% (8/42 unanswerable)
+    Spurious:      80.95% (34/42)
+
+  Per-Category:
+    DIRECT_SPAN:     EM=12.5%  F1=46.3%  cov=95.8%  n=24
+    NUMERIC:         EM=5.0%   F1=39.8%  cov=100%   n=20
+    TABLE_CELL:      EM=0.0%   F1=1.2%   cov=91.7%  n=24
+    TABLE_ROW:       EM=0.0%   F1=11.1%  cov=100%   n=16
+    LIST_ITEM:       EM=0.0%   F1=10.8%  cov=70.0%  n=20
+    SECTION_SPECIFIC: EM=0.0%  F1=0.0%   cov=18.8%  n=16
+    MULTI_CHUNK:     EM=0.0%   F1=4.0%   cov=30.0%  n=10
+    LONG_CONTEXT:    EM=0.0%   F1=0.0%   cov=0.0%   n=10
+    UNANSWERABLE:    abstain=19.1%  spurious=81.0%  n=42
+
+============================================================
+5. ANSWERABLE COVERAGE ANALYSIS
+============================================================
+
+  Overall coverage: 72.14% — 27.86% of answerable questions
+  are falsely abstained.
+
+  Worst affected categories:
+    LONG_CONTEXT:     0.0% coverage (ALL falsely abstained)
+    SECTION_SPECIFIC: 18.8% coverage
+    MULTI_CHUNK:      30.0% coverage
+    LIST_ITEM:        70.0% coverage
+
+  Best preserved:
+    NUMERIC:          100% coverage
+    TABLE_ROW:        100% coverage
+    DIRECT_SPAN:      95.8% coverage
+
+  The threshold disproportionately affects LONG_CONTEXT,
+  SECTION_SPECIFIC, and MULTI_CHUNK — categories where the
+  model is less confident even for answerable questions.
+
+============================================================
+6. BASELINE COMPARISON
+============================================================
+
+  Model                              EM      F1   Abstain  Spurious
+  ----------------------------------------------------------------
+  A0 Production                    2.1%   12.0%    64.3%     8.2%
+  A1 DistilBERT                    3.6%   21.3%     0.0%    23.1%
+  A2 BERT                          3.6%   19.4%     0.0%    23.1%
+  F2 raw (argmax)                  2.9%   19.7%     0.0%    23.1%
+  F2 + null_score=1.5705           2.9%   16.9%    19.1%    81.0%
+
+  ANALYSIS:
+  - F2+threshold improves abstention from 0% to 19.1%
+  - But spurious rate WORSENS from 23.1% to 81.0%
+  - Coverage drops from ~100% to 72.1%
+  - A0 still has much better abstention (64.3%) and lower
+    spurious (8.2%) than F2+threshold
+  - The threshold trades answerable coverage for unanswerable
+    abstention, but the tradeoff is unfavorable
+
+============================================================
+7. MARGIN-BASED ABSTENTION
+============================================================
+
+  MARGIN RESULT: COMPLETELY FAILED
+
+  All margin thresholds (0.0 to 2.0) produced 0% abstention.
+  The null_margin is ALWAYS negative for every example.
+
+  This means: CLS score is always LOWER than best answer score.
+  The model never prefers CLS over content tokens.
+  Margin-based abstention is not viable with this model.
+
+============================================================
+8. STABILITY ANALYSIS
+============================================================
+
+  Threshold ±0.1 causes 25% abstention shift.
+  Threshold ±0.05 causes 12.5% abstention shift.
+
+  The threshold is UNSTABLE. A tiny change causes
+  unacceptable behavioral instability.
+
+  The score distributions for answerable and unanswerable
+  overlap significantly, making clean separation impossible.
+
+============================================================
+9. NULL SCORE DISTRIBUTION
+============================================================
+
+  Validation answerable mean: ~1.5
+  Validation unanswerable mean: ~0.6
+  Gap: ~0.9 (insufficient for clean separation)
+
+  The distributions overlap heavily. No threshold can
+  achieve high abstention without high false abstention.
+
+============================================================
+10. LIMITATIONS
+============================================================
+
+  1. The F2 model was not trained with null-score optimization
+  2. The CLS signal is weak (avg 0.6 vs best answer 1.3)
+  3. The unanswerable examples are OOD (synthetic contexts)
+  4. Only 3.95% of training was unanswerable
+  5. No class weighting or focal loss was used
+  6. The evaluation pipeline doesn't natively support null comparison
+
+============================================================
+11. CONCLUSION
+============================================================
+
+  THRESHOLD_UNSTABLE
+
+  The F2 model's CLS/no-answer signal is:
+  - WEAK (CLS avg 0.6 vs best answer 1.3)
+  - UNCALIBRATED (answerable/unanswerable distributions overlap)
+  - UNSTABLE (tiny threshold changes cause large behavioral shifts)
+
+  The threshold approach can recover ~19% abstention on benchmark
+  but at the cost of 28% false abstention on answerable questions
+  and 81% spurious rate on unanswerable questions.
+
+  This is WORSE than the production model (A0) which achieves
+  64.3% abstention with only 8.2% spurious rate.
+
+  The root cause is NOT the decision rule — it's the underlying
+  model's weak CLS signal. No threshold can compensate for a
+  model that doesn't learn a strong no-answer representation.
+
+  RECOMMENDED NEXT EXPERIMENT:
+  Train a model with much higher unanswerable ratio (~50%)
+  using class-balanced sampling, which should produce a
+  stronger CLS signal that makes thresholding viable.
+
+============================================================
+FINAL STATUS
+============================================================
+
+PHASE 4F.5-G STATUS:
+
+SELECTED RULE:     null_score >= 1.5705
+VALIDATION:        EM=5.88% F1=17.42% abstain=25%
+HOLDOUT:           abstain=14.29% spur=85.71%
+BENCHMARK:         EM=2.86% F1=16.92% abstain=19.05%
+COVERAGE:          72.14%
+FALSE ABSTENTION:  27.86%
+UNANSWERABLE ABSTAIN: 19.05%
+SPURIOUS RATE:     81.0%
+A0 COMPARISON:     A0 is better (64.3% abstain, 8.2% spur)
+STABILITY:         UNSTABLE (25% shift per ±0.1)
+SIGNAL:            MARGIN_FAILED, THRESHOLD_UNSTABLE
+STATUS:            THRESHOLD_UNSTABLE
+PRODUCTION:        UNCHANGED
+
+============================================================

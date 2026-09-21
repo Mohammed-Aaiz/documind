@@ -1,0 +1,1526 @@
+[
+  {
+    "candidate_id": "h_cand_0001",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0002",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0003",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0004",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0009",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0010",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0015",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0016",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0021",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0022",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0027",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0028",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0033",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0034",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0037",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0038",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0043",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0044",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0049",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0050",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0055",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0056",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0079",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 1
+  },
+  {
+    "candidate_id": "h_cand_0080",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0081",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0082",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 1
+  },
+  {
+    "candidate_id": "h_cand_0083",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 1
+  },
+  {
+    "candidate_id": "h_cand_0084",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 1
+  },
+  {
+    "candidate_id": "h_cand_0085",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 1
+  },
+  {
+    "candidate_id": "h_cand_0086",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 1
+  },
+  {
+    "candidate_id": "h_cand_0087",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 1
+  },
+  {
+    "candidate_id": "h_cand_0088",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0089",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0090",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 1
+  },
+  {
+    "candidate_id": "h_cand_0091",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 1
+  },
+  {
+    "candidate_id": "h_cand_0092",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 1
+  },
+  {
+    "candidate_id": "h_cand_0093",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 2
+  },
+  {
+    "candidate_id": "h_cand_0106",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 1
+  },
+  {
+    "candidate_id": "h_cand_0107",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 3
+  },
+  {
+    "candidate_id": "h_cand_0116",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 1
+  },
+  {
+    "candidate_id": "h_cand_0117",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 2
+  },
+  {
+    "candidate_id": "h_cand_0124",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 1
+  },
+  {
+    "candidate_id": "h_cand_0125",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0134",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 1
+  },
+  {
+    "candidate_id": "h_cand_0135",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0155",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 1
+  },
+  {
+    "candidate_id": "h_cand_0160",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 1
+  },
+  {
+    "candidate_id": "h_cand_0161",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 1
+  },
+  {
+    "candidate_id": "h_cand_0162",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 1
+  },
+  {
+    "candidate_id": "h_cand_0163",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 1
+  },
+  {
+    "candidate_id": "h_cand_0164",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0165",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 1
+  },
+  {
+    "candidate_id": "h_cand_0166",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 1
+  },
+  {
+    "candidate_id": "h_cand_0167",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 1
+  },
+  {
+    "candidate_id": "h_cand_0168",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 1
+  },
+  {
+    "candidate_id": "h_cand_0169",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 1
+  },
+  {
+    "candidate_id": "h_cand_0170",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 1
+  },
+  {
+    "candidate_id": "h_cand_0173",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0174",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0175",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0178",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 1
+  },
+  {
+    "candidate_id": "h_cand_0179",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0181",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0185",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0187",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0188",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0190",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0193",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 1
+  },
+  {
+    "candidate_id": "h_cand_0203",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0204",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0219",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0220",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0247",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 2
+  },
+  {
+    "candidate_id": "h_cand_0248",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 1
+  },
+  {
+    "candidate_id": "h_cand_0278",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0279",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0280",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 2
+  },
+  {
+    "candidate_id": "h_cand_0281",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 1
+  },
+  {
+    "candidate_id": "h_cand_0292",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 1
+  },
+  {
+    "candidate_id": "h_cand_0293",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 1
+  },
+  {
+    "candidate_id": "h_cand_0304",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 1
+  },
+  {
+    "candidate_id": "h_cand_0305",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 1
+  },
+  {
+    "candidate_id": "h_cand_0316",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 1
+  },
+  {
+    "candidate_id": "h_cand_0317",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 1
+  },
+  {
+    "candidate_id": "h_cand_0328",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 1
+  },
+  {
+    "candidate_id": "h_cand_0329",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 1
+  },
+  {
+    "candidate_id": "h_cand_0340",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 1
+  },
+  {
+    "candidate_id": "h_cand_0341",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 1
+  },
+  {
+    "candidate_id": "h_cand_0364",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 1
+  },
+  {
+    "candidate_id": "h_cand_0368",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 2
+  },
+  {
+    "candidate_id": "h_cand_0373",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0376",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0377",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 2
+  },
+  {
+    "candidate_id": "h_cand_0379",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0389",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0391",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 1
+  },
+  {
+    "candidate_id": "h_cand_0392",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0396",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0397",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0398",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0455",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 3
+  },
+  {
+    "candidate_id": "h_cand_0456",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 2
+  },
+  {
+    "candidate_id": "h_cand_0466",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0472",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0473",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0474",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0475",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0501",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 1
+  },
+  {
+    "candidate_id": "h_cand_0502",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 1
+  },
+  {
+    "candidate_id": "h_cand_0504",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0505",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0506",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0507",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 1
+  },
+  {
+    "candidate_id": "h_cand_0508",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0509",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0518",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0519",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0528",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 1
+  },
+  {
+    "candidate_id": "h_cand_0529",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0538",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0543",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 1
+  },
+  {
+    "candidate_id": "h_cand_0548",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0562",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 1
+  },
+  {
+    "candidate_id": "h_cand_0563",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 2
+  },
+  {
+    "candidate_id": "h_cand_0564",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 1
+  },
+  {
+    "candidate_id": "h_cand_0565",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 2
+  },
+  {
+    "candidate_id": "h_cand_0566",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 2
+  },
+  {
+    "candidate_id": "h_cand_0567",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 1
+  },
+  {
+    "candidate_id": "h_cand_0570",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0572",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0585",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0597",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 1
+  },
+  {
+    "candidate_id": "h_cand_0616",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 1
+  },
+  {
+    "candidate_id": "h_cand_0693",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0694",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 1
+  },
+  {
+    "candidate_id": "h_cand_0695",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0696",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0697",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0698",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0699",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0708",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0709",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0718",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0719",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0728",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 1
+  },
+  {
+    "candidate_id": "h_cand_0729",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0738",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0739",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0758",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0764",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 1
+  },
+  {
+    "candidate_id": "h_cand_0765",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0766",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 1
+  },
+  {
+    "candidate_id": "h_cand_0767",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 1
+  },
+  {
+    "candidate_id": "h_cand_0768",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0771",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0776",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 1
+  },
+  {
+    "candidate_id": "h_cand_0777",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0778",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0779",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0780",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0781",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0782",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0783",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0784",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0785",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0786",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0787",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0788",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0789",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0790",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0791",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 1
+  },
+  {
+    "candidate_id": "h_cand_0792",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0793",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0794",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0795",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0796",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0797",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 1
+  },
+  {
+    "candidate_id": "h_cand_0798",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0799",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0808",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0809",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0818",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 2
+  },
+  {
+    "candidate_id": "h_cand_0819",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0828",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0829",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0838",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0839",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0858",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 2
+  },
+  {
+    "candidate_id": "h_cand_0859",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 2
+  },
+  {
+    "candidate_id": "h_cand_0860",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0861",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 2
+  },
+  {
+    "candidate_id": "h_cand_0866",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0871",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 1
+  },
+  {
+    "candidate_id": "h_cand_0872",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 3
+  },
+  {
+    "candidate_id": "h_cand_0873",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 2
+  },
+  {
+    "candidate_id": "h_cand_0874",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 2
+  },
+  {
+    "candidate_id": "h_cand_0875",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0876",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0877",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0878",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0879",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0880",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0881",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0882",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0883",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0884",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0885",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0886",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0887",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0888",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0889",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0890",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0891",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0892",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0893",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0894",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0895",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0896",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0897",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0898",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0899",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0900",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0901",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0902",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0903",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0904",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0905",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0906",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0907",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0908",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0909",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0910",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0911",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0912",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0913",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0914",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 1
+  },
+  {
+    "candidate_id": "h_cand_0915",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0916",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0917",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0918",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0919",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0920",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0921",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0922",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0923",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0924",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0928",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0929",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0930",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0931",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 2
+  },
+  {
+    "candidate_id": "h_cand_0932",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 2
+  },
+  {
+    "candidate_id": "h_cand_0933",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0936",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  },
+  {
+    "candidate_id": "h_cand_0938",
+    "semantic_valid": true,
+    "notes": "Context verified: answer genuinely absent",
+    "meaningful_overlap_count": 0
+  }
+]

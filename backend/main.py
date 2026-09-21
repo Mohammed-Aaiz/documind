@@ -24,13 +24,15 @@ from verification.routes import router as verification_router
 from reliability.routes import router as reliability_router
 from user.routes import router as user_router
 from embeddings.routes import router as embeddings_router
+from settings.routes import router as settings_router
 
 settings = get_settings()
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Startup: create upload directory
+    # Startup: validate security configuration
+    settings.require_production_jwt_secret()
     settings.upload_path.mkdir(parents=True, exist_ok=True)
     yield
     # Shutdown: dispose engine
@@ -60,6 +62,7 @@ app.include_router(verification_router)
 app.include_router(reliability_router)
 app.include_router(user_router)
 app.include_router(embeddings_router)
+app.include_router(settings_router)
 
 
 @app.get("/api/health", tags=["health"])

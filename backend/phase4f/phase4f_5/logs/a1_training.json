@@ -1,0 +1,55 @@
+{
+  "experiment": "A1_DistilBERT_Uncased",
+  "model_name": "distilbert-base-uncased",
+  "hyperparameters": {
+    "model": "distilbert-base-uncased",
+    "lr": 3e-05,
+    "batch": 8,
+    "grad_acc": 8,
+    "epochs": 3,
+    "fp16": true
+  },
+  "training_history": [
+    {
+      "epoch": 1,
+      "loss": 5.6384,
+      "val_em": 5.0,
+      "val_f1": 18.5,
+      "val_count": 80,
+      "lr": 2.16e-05,
+      "time_s": 9.3,
+      "val_time_s": 2.0
+    },
+    {
+      "epoch": 2,
+      "loss": 4.329,
+      "val_em": 7.5,
+      "val_f1": 24.0,
+      "val_count": 80,
+      "lr": 1.08e-05,
+      "time_s": 9.0,
+      "val_time_s": 2.0
+    },
+    {
+      "epoch": 3,
+      "loss": 3.4867,
+      "val_em": 8.8,
+      "val_f1": 22.7,
+      "val_count": 80,
+      "lr": 0.0,
+      "time_s": 9.1,
+      "val_time_s": 2.0
+    }
+  ],
+  "training_time_s": 34.5,
+  "peak_gpu_memory_mb": 1842.0,
+  "best_checkpoint": "C:\\Users\\moham\\OneDrive\\Desktop\\stitch_documind_futuristic_3d_ui\\backend\\phase4f\\phase4f_5\\checkpoints\\A1\\checkpoint_epoch3",
+  "best_val_em": 8.8,
+  "checkpoint_hash": "7735d1c8f39e6d39",
+  "nan_detected": false,
+  "overflow_count": 0,
+  "device": "cuda",
+  "gpu": "NVIDIA GeForce RTX 3050 Laptop GPU",
+  "pytorch_version": "2.6.0+cu124",
+  "transformers_version": "5.16.1"
+}

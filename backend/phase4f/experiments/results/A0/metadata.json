@@ -1,0 +1,8 @@
+{
+  "experiment": "A0_Production_Baseline",
+  "model_dir": "C:\\Users\\moham\\OneDrive\\Desktop\\stitch_documind_futuristic_3d_ui\\backend\\models\\documind-qa",
+  "checkpoint_hash": "df592aa8d0ee1a23",
+  "full_checksum": "df592aa8d0ee1a235489bd3eead44d4cf0861221339226311960697c1c1512ac",
+  "device": "cuda",
+  "gpu": "NVIDIA GeForce RTX 3050 Laptop GPU"
+}

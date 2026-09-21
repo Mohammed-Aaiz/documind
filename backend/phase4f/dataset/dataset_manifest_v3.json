@@ -1,0 +1,26 @@
+{
+  "dataset_version": "phase4f-qa-v3",
+  "creation_timestamp": "2026-09-19T21:48:18.586993+00:00",
+  "dataset_hash": "ff293619e1a7b051",
+  "total_examples": 918,
+  "category_distribution": {
+    "TABLE_CELL": 362,
+    "LIST_ITEM": 106,
+    "NUMERIC": 97,
+    "DIRECT_SPAN": 86,
+    "TABLE_ROW": 82,
+    "SECTION_SPECIFIC": 55,
+    "UNANSWERABLE": 42,
+    "MULTI_CHUNK": 26,
+    "DATE": 25,
+    "ENTITY": 22,
+    "LONG_CONTEXT": 15
+  },
+  "semantic_audit_pass_rate": 100.0,
+  "duplicate_audit": {
+    "exact_qc": 0,
+    "near_dupes": 122
+  },
+  "leakage_result": "PASS",
+  "validation_status": "passed"
+}

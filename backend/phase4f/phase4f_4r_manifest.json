@@ -1,0 +1,83 @@
+{
+  "phase": "4F.4-R",
+  "status": "PROTOCOL_INVALID_REQUIRES_RERUN",
+  "timestamp": "2026-09-21",
+  "dataset_hash": "a517530354fc9bcaeef6f1aa16c3fb9ce92f1967668386bc66781e6e6bbf2e97",
+  "dataset_hash_verified": true,
+  "production_model_checksum": "df592aa8d0ee1a235489bd3eead44d4cf0861221339226311960697c1c1512ac",
+  "production_model_checksum_verified": true,
+  "production_model_unchanged": true,
+  "production_code_unchanged": true,
+  "no_training_performed": true,
+  "no_dataset_modification": true,
+  "no_model_weights_copied": true,
+  "experiment_artifacts": {
+    "phase4f_4_experiment_manifest": "backend/phase4f/experiments/phase4f_4_experiment_manifest.json",
+    "phase4f_4_results": "backend/phase4f/experiments/phase4f_4_results.json",
+    "all_results": "backend/phase4f/experiments/results/all_results.json",
+    "experiment_report": "backend/phase4f/experiments/phase4f_4_controlled_gpu_experiment_report.txt",
+    "a0_results": "backend/phase4f/experiments/results/A0/evaluation_results.json",
+    "a1_results": "backend/phase4f/experiments/results/A1/evaluation_results.json",
+    "a1_checkpoint": "backend/phase4f/experiments/results/A1/checkpoint_best/",
+    "a2_results": "backend/phase4f/experiments/results/A2/evaluation_results.json",
+    "a2_checkpoint": "backend/phase4f/experiments/results/A2/checkpoint_best/",
+    "a3_results": "backend/phase4f/experiments/results/A3/evaluation_results.json",
+    "a3_checkpoint": "backend/phase4f/experiments/results/A3/checkpoint_best/"
+  },
+  "audits_completed": [
+    "experiment_artifact_inventory",
+    "dataset_label_audit",
+    "token_span_audit",
+    "model_initialization_audit",
+    "training_configuration_audit",
+    "checkpoint_audit",
+    "evaluation_parity_matrix",
+    "a0_reproduction_analysis",
+    "manual_forensic_traces",
+    "cross_phase_evaluation_compatibility",
+    "failure_taxonomy_reconciliation"
+  ],
+  "discrepancies": [
+    {
+      "severity": "CRITICAL",
+      "finding": "Token span alignment is fundamentally broken",
+      "detail": "run_experiment.py does not pass return_offsets_mapping=True to tokenizer, causing fallback heuristic to use character offsets as token indices. 99.3% of training labels are wrong.",
+      "impact": "Invalidates all A1/A2/A3 training results"
+    },
+    {
+      "severity": "MODERATE",
+      "finding": "Base model mismatch between production and experiment",
+      "detail": "Production model uses distilbert-base-uncased (vocab 30522). A1 was initialized from distilbert-base-cased (vocab 28996). These are different models.",
+      "impact": "A1 is not fine-tuning the production model; it's training a different model"
+    },
+    {
+      "severity": "MODERATE",
+      "finding": "No train/test split",
+      "detail": "All 918 examples used for both training and evaluation. No held-out test set.",
+      "impact": "Metrics measure memorization, not generalization"
+    },
+    {
+      "severity": "LOW",
+      "finding": "Checkpoint selection saves final epoch only",
+      "detail": "No best-model selection based on validation metrics. Overwrites each epoch.",
+      "impact": "May not save the best checkpoint"
+    }
+  ],
+  "conclusion": "PROTOCOL_INVALID_REQUIRES_RERUN",
+  "conclusion_detail": "The Phase 4F.4 experiment has a critical protocol violation (broken token span alignment) that invalidates all A1/A2/A3 training results. The A0 baseline evaluation is valid. A rerun with corrected span alignment, correct base model, proper train/test split, and best-model checkpoint selection is required.",
+  "next_action": "PHASE_4F.5 — Corrected GPU experiment with fixed span alignment (return_offsets_mapping=True), correct base model (distilbert-base-uncased), proper train/test split, and best-model checkpoint selection",
+  "reconciliation_artifacts": [
+    "backend/phase4f/reconciliation/experiment_artifact_inventory.json",
+    "backend/phase4f/reconciliation/dataset_label_audit.json",
+    "backend/phase4f/reconciliation/token_span_audit.json",
+    "backend/phase4f/reconciliation/model_initialization_audit.json",
+    "backend/phase4f/reconciliation/training_configuration_audit.json",
+    "backend/phase4f/reconciliation/checkpoint_audit.json",
+    "backend/phase4f/reconciliation/evaluation_parity_matrix.json",
+    "backend/phase4f/reconciliation/a0_reproduction.json",
+    "backend/phase4f/reconciliation/manual_forensic_traces.json",
+    "backend/phase4f/reconciliation/cross_phase_evaluation_compatibility.json",
+    "backend/phase4f/reconciliation/failure_taxonomy_reconciliation.json",
+    "backend/phase4f/reconciliation/phase4f_4r_reconciliation_report.txt"
+  ]
+}

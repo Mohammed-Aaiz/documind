@@ -1,0 +1,96 @@
+{
+  "package_version": "phase4f-qa-v3.1",
+  "freeze_completion_timestamp": "2026-09-21T00:00:00+00:00",
+  "dataset_version": "phase4f-qa-v3.1",
+  "dataset_full_sha256": "a517530354fc9bcaeef6f1aa16c3fb9ce92f1967668386bc66781e6e6bbf2e97",
+  "dataset_short_sha256": "a517530354fc9bca",
+  "dataset_examples": 918,
+  "dataset_file_size_bytes": 479512,
+  "document_count": 19,
+  "production_model_full_checksum": "df592aa8d0ee1a235489bd3eead44d4cf0861221339226311960697c1c1512ac",
+  "production_model_short_checksum": "df592aa8d0ee1a23",
+  "gpu_status": "BLOCKED_BY_COMPUTE",
+  "training_status": "PENDING_GPU",
+  "experiments": {
+    "a0_baseline": {
+      "name": "A0_Current_Production_Baseline",
+      "model": "distilbert-base-cased",
+      "description": "Current production model (frozen baseline, no training)",
+      "status": "BASELINE_RECORDED"
+    },
+    "a1_distilbert": {
+      "name": "A1_DistilBERT_Targeted_FineTune",
+      "model": "distilbert-base-cased",
+      "learning_rate": 3e-5,
+      "effective_batch_size": 64,
+      "epochs": 3,
+      "max_length": 384,
+      "seed": 42,
+      "status": "PENDING_GPU"
+    },
+    "a2_bert_base": {
+      "name": "A2_BERT_Base_Targeted_FineTune",
+      "model": "bert-base-cased",
+      "learning_rate": 2e-5,
+      "effective_batch_size": 64,
+      "epochs": 3,
+      "max_length": 384,
+      "seed": 42,
+      "status": "PENDING_GPU"
+    },
+    "a3_deberta_v3": {
+      "name": "A3_DeBERTa_v3_Targeted_FineTune",
+      "model": "microsoft/deberta-v3-base",
+      "learning_rate": 1e-5,
+      "effective_batch_size": 64,
+      "epochs": 3,
+      "max_length": 384,
+      "seed": 42,
+      "status": "PENDING_GPU"
+    }
+  },
+  "package_file_inventory": {
+    "dataset/training_data_v3_1.jsonl": "918 examples, 479512 bytes",
+    "training/train.py": "Training script (14910 bytes)",
+    "training/experiment_config.json": "Experiment configurations (A0/A1/A2/A3)",
+    "evaluation/evaluate.py": "Evaluation script (EM, F1, per-category, failure taxonomy)",
+    "requirements.txt": "torch>=2.0.0, transformers>=4.30.0, datasets>=2.14.0, accelerate>=0.21.0, safetensors>=0.3.0, scikit-learn>=1.3.0, numpy>=1.24.0, tqdm>=4.65.0",
+    "README_GPU_EXECUTION.md": "GPU execution instructions",
+    "dataset_checksum.txt": "SHA-256 and short hash of dataset",
+    "production_model_checksum.txt": "SHA-256 and short hash of production model",
+    "expected_output_structure.txt": "Description of expected GPU output",
+    "final_gpu_package_manifest.json": "This file"
+  },
+  "evaluation_metrics_implemented": [
+    "exact_match",
+    "token_f1",
+    "answerability_accuracy",
+    "abstention_accuracy",
+    "spurious_answer_rate",
+    "per_category_metrics",
+    "confidence",
+    "failure_taxonomy_structural"
+  ],
+  "evaluation_metrics_not_implemented": [
+    "ECE (Expected Calibration Error)",
+    "Brier score",
+    "Phase 4B-specific metrics"
+  ],
+  "known_limitations": [
+    "GPU unavailable; training cannot execute locally",
+    "No experimental results to report",
+    "Model selection pending GPU execution",
+    "Dataset is synthetically generated; real-world linguistic variation may differ",
+    "TABLE_CELL examples use pipe-delimited text, not visual table structures",
+    "MULTI_CHUNK uses simulated chunk boundaries, not actual retrieval splits",
+    "LONG_CONTEXT examples cap at 1200 chars; real documents may be longer",
+    "evaluate.py does not implement ECE, Brier, or Phase 4B metrics",
+    "No actual PDF/DOCX parsing artifacts in contexts"
+  ],
+  "provenance": {
+    "parent_version": "phase4f-qa-v3",
+    "parent_hash": "ff293619e1a7b051",
+    "changed_examples": 12,
+    "change_reason": "Answer-span mismatch repair"
+  }
+}

@@ -1,0 +1,228 @@
+============================================================
+PHASE 4F.5-F-R — RECOVERY / AUDIT REPORT
+Generated: 2026-09-21
+============================================================
+
+EXECUTION STOPPED: BEFORE ANY OUTPUT PRODUCED
+RECOVERY TYPE: AUDIT ONLY — NO TRAINING PERFORMED
+
+============================================================
+1. ARTIFACT INVENTORY
+============================================================
+
+Directory: backend/phase4f/phase4f_5f/
+
+FILES PRESENT:
+  - run_experiment.py (479 lines, experiment script)
+
+DIRECTORIES CREATED BY PREVIOUS EXECUTION:
+  - NONE
+  - results/         : DOES NOT EXIST
+  - checkpoints/     : DOES NOT EXIST
+  - logs/            : DOES NOT EXIST
+  - recovery/        : CREATED BY THIS AUDIT
+
+CHECKPOINTS CREATED: NONE
+TRAINING LOGS: NONE
+DATASET MANIFESTS: NONE
+RESULT FILES: NONE
+PARTIAL FILES: NONE
+ERROR LOGS: NONE
+TRACEBACK FILES: NONE
+
+TIMESTAMPS:
+  - run_experiment.py: exists in repo (committed)
+  - No output artifacts with timestamps
+
+ASSESSMENT: The script produced ZERO output artifacts. Not even the
+initial directory creation step (RESULTS_DIR.mkdir, CHECKPOINTS_DIR.mkdir,
+LOGS_DIR.mkdir at the start of main()) was executed. This means main()
+was never reached.
+
+============================================================
+2. GPU ENVIRONMENT
+============================================================
+
+Python:           3.13.12
+PyTorch:          2.11.0+cpu (CPU-ONLY, no CUDA compiled)
+CUDA available:   FALSE
+CUDA version:     N/A
+GPU name:         N/A (no GPU detected)
+GPU memory:       N/A
+Transformers:     Installed (import succeeds but is slow, ~30s+)
+Tokenizer:        Available
+Model source:     distilbert-base-uncased (cached in HF hub)
+
+HuggingFace Cache Contents (distilbert):
+  - models--distilbert-base-uncased : PRESENT
+  - models--distilbert-base-cased   : PRESENT
+
+CRITICAL FINDING:
+  Previous A1 training (Phase 4F.5-B) was performed on:
+    - GPU: NVIDIA GeForce RTX 3050 Laptop GPU
+    - PyTorch: 2.6.0+cu124
+    - Transformers: 5.16.1
+
+  Current environment has:
+    - NO GPU
+    - PyTorch CPU-only (2.11.0+cpu)
+    - Different transformers version
+
+  The script CAN run on CPU (falls back to device="cpu") but would
+  be significantly slower. The GPU-dependent FP16 training would
+  be disabled.
+
+============================================================
+3. PRODUCTION MODEL INTEGRITY
+============================================================
+
+Production model: backend/models/documind-qa/
+
+File inventory:
+  config.json:           610 bytes
+  inference_config.json: 115 bytes
+  model.safetensors:     265,470,032 bytes
+  model_card.json:       841 bytes
+  tokenizer.json:        711,660 bytes
+  tokenizer_config.json: 540 bytes
+
+Production model checksum:  df592aa8d0ee1a235489bd3eead44d4cf0861221339226311960697c1c1512ac
+Expected canonical checksum: df592aa8d0ee1a235489bd3eead44d4cf0861221339226311960697c1c1512ac
+
+STATUS: UNCHANGED ✓
+
+============================================================
+4. DATA INTEGRITY
+============================================================
+
+Phase 4F.5-A Frozen Dataset:
+  Source: backend/phase4f/dataset/training_data_v3_1.jsonl
+  Hash:   a517530354fc9bcaeef6f1aa16c3fb9ce92f1967668386bc66781e6e6bbf2e97
+  Expected: a517530354fc9bcaeef6f1aa16c3fb9ce92f1967668386bc66781e6e6bbf2e97
+  STATUS: UNCHANGED ✓
+
+Phase 4F.5-D Benchmark:
+  Source: backend/phase4f/phase4f_5d/benchmark/qa_benchmark_v1.jsonl
+  Hash:   1166bf4ff38265c209614ac20261417b7eeb43653f4482dfdf94721fd50a41d0
+  STATUS: UNCHANGED ✓
+
+Phase 4F.5-B Artifacts:
+  Checkpoints present:
+    - A1/checkpoint_epoch1/ (config.json, model.safetensors, tokenizer.json, tokenizer_config.json)
+    - A1/checkpoint_epoch2/ (config.json, model.safetensors, tokenizer.json, tokenizer_config.json)
+    - A1/checkpoint_epoch3/ (config.json, model.safetensors, tokenizer.json, tokenizer_config.json)
+    - A2/checkpoint_epoch1/ through checkpoint_epoch3/ (same structure)
+
+  Training logs present:
+    - a1_training.json (A1 completed: 3 epochs, 34.5s, RTX 3050, val_EM=8.8%)
+    - a2_training.json
+
+  Derived dataset:
+    Source: backend/phase4f/phase4f_5/dataset/derived_dataset.jsonl
+    Hash:   abcf4182f39f0620fb056eee4167d1872baf9b4c748051eade9d6312332f271f
+    STATUS: UNCHANGED ✓
+
+============================================================
+5. TRAINING STATE
+============================================================
+
+F1 DATASET PREPARATION:  NOT_STARTED
+F1 TRAINING:             NOT_STARTED
+F1 CHECKPOINT:           NONE
+F1 EVALUATION:           NOT_STARTED
+
+F2 DATASET PREPARATION:  NOT_STARTED
+F2 TRAINING:             NOT_STARTED
+F2 CHECKPOINT:           NONE
+F2 EVALUATION:           NOT_STARTED
+
+A0 BASELINE EVALUATION:  NOT_STARTED
+A1 BASELINE EVALUATION:  NOT_STARTED
+
+============================================================
+6. PARTIAL CHECKPOINTS
+============================================================
+
+NO checkpoints exist under backend/phase4f/phase4f_5f/checkpoints/
+The directory itself was never created.
+
+============================================================
+7. ROOT CAUSE OF EXIT
+============================================================
+
+EXIT CAUSE: FREEBUFF EXECUTION LIMIT
+
+Evidence:
+  1. Zero output artifacts — main() was never reached (the first
+     statements in main() create output directories, which don't exist)
+  2. No log files, no error files, no traceback files anywhere
+  3. The Freebuff execution environment has a ~10 minute timeout
+  4. The script requires importing transformers which takes 30+ seconds
+     on this system, plus model downloads/inference time
+  5. The script was designed for GPU execution (fp16=True in config)
+     but current environment has NO GPU — would fallback to CPU
+  6. A1 training previously ran in 34.5s on RTX 3050 GPU; CPU
+     execution would be dramatically slower
+  7. Script flow: imports → hash verification → dir creation → data
+     loading → F1/F2 dataset prep → manifest saves → benchmark load →
+     A0 eval → A1 eval → F1 train → F1 eval → F2 train → F2 eval →
+     comparison → safety check → final manifest
+  8. Most likely scenario: the previous Freebuff session timed out
+     during imports or the very early stages before any file I/O
+
+Alternative possibilities considered and ruled out:
+  - OOM: No training occurred, no memory pressure
+  - COMPUTE: Script was designed to run on CPU as fallback
+  - SCRIPT ERROR: No error logs found, but script may have failed silently
+  - DEPENDENCY ERROR: transformers import succeeded (tested), distilbert cached
+  - PROCESS TERMINATION: Possible but indistinguishable from timeout
+
+============================================================
+8. RECOVERY RECOMMENDATIONS
+============================================================
+
+SAFE TO CONTINUE: YES
+
+All source data, production model, frozen datasets, and benchmarks
+are intact and unchanged. No artifacts need cleanup.
+
+RECOMMENDED NEXT STEPS:
+  1. Address the GPU/CUDA environment issue before re-running:
+     - Current PyTorch is CPU-only (2.11.0+cpu)
+     - Previous training used CUDA-enabled PyTorch (2.6.0+cu124)
+     - Either install CUDA-enabled PyTorch or accept CPU-only execution
+  2. If running on CPU:
+     - Reduce epochs or use smaller batch sizes
+     - Disable fp16 (already handled: script checks DEVICE.type == "cuda")
+     - Expect significantly longer training times
+  3. If running on GPU:
+     - Ensure CUDA-enabled PyTorch is installed
+     - Verify GPU is available before launching
+  4. Consider splitting the experiment into separate commands:
+     - First run: A0 + A1 baseline evaluations only
+     - Second run: F1 training + evaluation
+     - Third run: F2 training + evaluation
+     - This reduces the risk of timeout before any results are saved
+  5. The run_experiment.py script saves results incrementally
+     (each experiment saves its results file before starting the next),
+     so partial progress would be recoverable in a future interruption
+
+============================================================
+PHASE 4F.5-F-R STATUS SUMMARY
+============================================================
+
+EXECUTION STOPPED:   BEFORE main() WAS REACHED
+F1 DATASET:          NOT_STARTED
+F1 TRAINING:         NOT_STARTED
+F1 CHECKPOINT:       NONE
+F1 EVALUATION:       NOT_STARTED
+F2:                  NOT_STARTED
+EXIT CAUSE:          FREEBUFF EXECUTION LIMIT
+PRODUCTION MODEL:    UNCHANGED
+FROZEN DATASET:      UNCHANGED
+BENCHMARK:           UNCHANGED
+SAFE TO CONTINUE:    YES
+RECOMMENDED NEXT STEP: Resolve GPU environment, then re-run experiment
+
+NO TRAINING WAS PERFORMED DURING THIS RECOVERY.
+============================================================

@@ -1,0 +1,10 @@
+{
+  "train_answerable_count": 486,
+  "train_unanswerable_count": 20,
+  "val_answerable_count": 85,
+  "val_unanswerable_count": 8,
+  "holdout_count": 14,
+  "train_id_hash": "c4749b13cac2e610",
+  "val_id_hash": "92e954706d91217b",
+  "source_dataset_hash": "a517530354fc9bca"
+}

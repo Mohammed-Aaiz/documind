@@ -1,0 +1,111 @@
+{
+  "phase": "4F.3-R",
+  "dataset_version": "phase4f-qa-v3.1",
+  "freeze_completion_timestamp": "2026-09-21T00:00:00+00:00",
+  "dataset_hash_full": "a517530354fc9bcaeef6f1aa16c3fb9ce92f1967668386bc66781e6e6bbf2e97",
+  "dataset_hash_short": "a517530354fc9bca",
+  "total_examples": 918,
+  "parent_version": "phase4f-qa-v3",
+  "parent_hash": "ff293619e1a7b051",
+  "provenance": {
+    "v3_audit_timestamp": "2026-09-19T21:48:18.584987+00:00",
+    "changed_examples": 12,
+    "change_reason": "Answer-span mismatch repair",
+    "repaired_example_ids": [
+      "tc_20399d46", "tc_00f97d46", "tc_c2c51b89", "tc_4e522e45",
+      "tc_3b383990", "tr_fc34fb8b", "li_89834a97", "li_7216dc7b",
+      "li_ce7dfc4b", "li_8bc7889f", "li_4fa4a839", "li_8770780b"
+    ]
+  },
+  "structural_validation": {
+    "total": 918,
+    "valid": 918,
+    "invalid": 0,
+    "issues": [],
+    "status": "PASS",
+    "source": "verified from Phase 4F.2-R artifacts"
+  },
+  "semantic_audit": {
+    "sample_size": 150,
+    "failures": [],
+    "pass_rate": 100.0,
+    "status": "PASS",
+    "source": "verified from Phase 4F.2-R artifacts (not independently re-audited during freeze completion)"
+  },
+  "high_risk_audit": {
+    "TABLE_ROW": { "total": 82, "pass_rate": 100.0, "issues": 0 },
+    "TABLE_CELL": { "total": 362, "pass_rate": 100.0, "issues": 0 },
+    "LIST_ITEM": { "total": 106, "pass_rate": 100.0, "issues": 0 },
+    "MULTI_CHUNK": { "total": 26, "pass_rate": 100.0, "issues": 0 },
+    "LONG_CONTEXT": { "total": 15, "pass_rate": 100.0, "issues": 0 },
+    "UNANSWERABLE": { "total": 42, "pass_rate": 100.0, "issues": 0 },
+    "SECTION_SPECIFIC": { "total": 55, "pass_rate": 100.0, "issues": 0 },
+    "source": "verified from Phase 4F.2-R artifacts"
+  },
+  "category_distribution": {
+    "TABLE_CELL": 362,
+    "LIST_ITEM": 106,
+    "NUMERIC": 97,
+    "DIRECT_SPAN": 86,
+    "TABLE_ROW": 82,
+    "SECTION_SPECIFIC": 55,
+    "UNANSWERABLE": 42,
+    "MULTI_CHUNK": 26,
+    "DATE": 25,
+    "ENTITY": 22,
+    "LONG_CONTEXT": 15
+  },
+  "duplicate_analysis": {
+    "exact_question_dupes": 35,
+    "exact_question_dupes_total_extra": 87,
+    "exact_context_dupes": 125,
+    "exact_context_dupes_total_extra": 488,
+    "exact_qc_dupes": 0,
+    "exact_qa_dupes": 0,
+    "near_duplicate_pairs": 122,
+    "cross_split_leakage_count": 0,
+    "source": "verified from Phase 4F.2-R artifacts"
+  },
+  "external_isolation": {
+    "status": "PASS",
+    "question_overlap": 0,
+    "context_overlap": 0,
+    "eval_phrases_checked": 1143,
+    "source": "verified from Phase 4F.2-R artifacts"
+  },
+  "document_balance": {
+    "total_documents": 19,
+    "single_doc_categories": {
+      "ENTITY": "entity_corpus",
+      "DATE": "date_corpus",
+      "UNANSWERABLE": "unanswerable_corpus"
+    },
+    "source": "verified from Phase 4F.2-R artifacts"
+  },
+  "gpu_readiness": {
+    "cuda_available": false,
+    "pytorch_version": "2.13.0+cpu",
+    "transformers_version": "5.16.1",
+    "gpu_name": "N/A",
+    "training_feasible": false
+  },
+  "training_configs": {
+    "A1_distilbert": { "valid": true, "issues": [] },
+    "A2_bert_base": { "valid": true, "issues": [] },
+    "A3_deberta_v3": { "valid": true, "issues": [] }
+  },
+  "remediation_history": {
+    "v2_to_v3": {
+      "original": 1000,
+      "corrected": 0,
+      "removed": 82,
+      "remaining": 918
+    },
+    "v3_to_v3_1": {
+      "repaired": 12,
+      "removed": 0,
+      "remaining": 918,
+      "reason": "Answer-span mismatch repair"
+    }
+  }
+}

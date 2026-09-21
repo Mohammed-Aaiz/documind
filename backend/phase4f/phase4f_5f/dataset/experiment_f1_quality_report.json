@@ -1,0 +1,84 @@
+{
+  "quality_version": "4F.5-F1-quality-v1",
+  "total_examples_in_derived": 918,
+  "total_answerable": 876,
+  "total_unanswerable": 42,
+
+  "answerable_training_quality": {
+    "total": 575,
+    "valid_labels": 563,
+    "invalid_labels": 12,
+    "invalid_details": {
+      "offset_mismatch_only": 8,
+      "offsets_out_of_bounds_only": 1,
+      "offset_mismatch_and_token_span_invalid": 2,
+      "offsets_out_of_bounds_and_token_span_invalid": 1
+    },
+    "token_span_valid": 571,
+    "token_span_invalid": 4,
+    "training_safety": "All 12 invalid examples are handled correctly by token_span.valid fallback in run_experiment.py",
+    "note": "8 examples have character offset mismatches (encoding issues with special chars like >=, -, <) but have valid token spans. 4 examples have invalid token spans and will use CLS fallback (start=0, end=0)."
+  },
+
+  "unanswerable_quality": {
+    "total": 42,
+    "empty_answer": 42,
+    "no_token_span": 42,
+    "is_impossible_true": 42,
+    "all_valid": true
+  },
+
+  "data_leakage": {
+    "train_vs_validation": 0,
+    "train_vs_held_out_documents": 0,
+    "train_vs_held_out_questions": 0,
+    "train_unanswerable_vs_held_out": 0,
+    "status": "CLEAN"
+  },
+
+  "class_distribution": {
+    "train": {
+      "DIRECT_SPAN": 50,
+      "ENTITY": 22,
+      "DATE": 25,
+      "NUMERIC": 57,
+      "TABLE_CELL": 231,
+      "TABLE_ROW": 52,
+      "LIST_ITEM": 82,
+      "SECTION_SPECIFIC": 37,
+      "MULTI_CHUNK": 16,
+      "LONG_CONTEXT": 3,
+      "UNANSWERABLE": 28
+    },
+    "validation": {
+      "DIRECT_SPAN": 11,
+      "NUMERIC": 20,
+      "TABLE_CELL": 20,
+      "TABLE_ROW": 5,
+      "LIST_ITEM": 5,
+      "SECTION_SPECIFIC": 4,
+      "MULTI_CHUNK": 3,
+      "LONG_CONTEXT": 12
+    },
+    "held_out": {
+      "UNANSWERABLE": 14
+    }
+  },
+
+  "discrepancies": [
+    {
+      "field": "expected_answerable_count",
+      "expected": 571,
+      "actual": 575,
+      "note": "Derived dataset has 575 answerable training examples, not 571 as originally specified. 4 more examples exist in the training split."
+    },
+    {
+      "field": "validation_set_composition",
+      "issue": "run_experiment.py includes 14 held-out unanswerable in validation",
+      "instructions_say": "14 held-out unanswerable must NOT be used for validation",
+      "action_needed": "Modify run_experiment.py to exclude held-out unanswerable from validation set"
+    }
+  ],
+
+  "overall_quality": "ACCEPTABLE_WITH_NOTES"
+}

@@ -1,0 +1,4643 @@
+[
+  {
+    "id": "ds_1efed7c7",
+    "cat": "DIRECT_SPAN",
+    "q": "What does the document say about percentage?",
+    "gold": "20.3 percent",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "20. 3 percent",
+      "em": false,
+      "f1": 40.0
+    },
+    "A2": {
+      "pred": "20. 3 percent",
+      "em": false,
+      "f1": 40.0
+    }
+  },
+  {
+    "id": "ds_b1acb91a",
+    "cat": "DIRECT_SPAN",
+    "q": "What was the reported monetary value?",
+    "gold": "753.8 million ",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "753. 8 million",
+      "em": false,
+      "f1": 40.0
+    },
+    "A2": {
+      "pred": "753. 8 million",
+      "em": false,
+      "f1": 40.0
+    }
+  },
+  {
+    "id": "ds_0ea2924f",
+    "cat": "DIRECT_SPAN",
+    "q": "What was the reported monetary value?",
+    "gold": "142.6 million",
+    "A0": {
+      "pred": "$ 142. 6 million",
+      "em": false,
+      "f1": 33.3
+    },
+    "A1": {
+      "pred": "142. 6 million",
+      "em": false,
+      "f1": 40.0
+    },
+    "A2": {
+      "pred": "142. 6 million",
+      "em": false,
+      "f1": 40.0
+    }
+  },
+  {
+    "id": "ds_c8d09ef8",
+    "cat": "DIRECT_SPAN",
+    "q": "What is the value of monetary value for the amount?",
+    "gold": "118.2 million",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "118. 2 million",
+      "em": false,
+      "f1": 40.0
+    },
+    "A2": {
+      "pred": "118. 2 million",
+      "em": false,
+      "f1": 40.0
+    }
+  },
+  {
+    "id": "ds_9e3b4897",
+    "cat": "DIRECT_SPAN",
+    "q": "What is the percentage of the metric?",
+    "gold": "48.7 percent",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "48. 7 percent",
+      "em": false,
+      "f1": 40.0
+    },
+    "A2": {
+      "pred": "48. 7 percent",
+      "em": false,
+      "f1": 40.0
+    }
+  },
+  {
+    "id": "ds_ec1fd0a5",
+    "cat": "DIRECT_SPAN",
+    "q": "According to the document, what is the percentage?",
+    "gold": "18.3 percent",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "18. 3 percent",
+      "em": false,
+      "f1": 40.0
+    },
+    "A2": {
+      "pred": "18. 3 percent",
+      "em": false,
+      "f1": 40.0
+    }
+  },
+  {
+    "id": "ds_df08a5cf",
+    "cat": "DIRECT_SPAN",
+    "q": "What does the document say about percentage?",
+    "gold": "9.7 percent",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "9. 7 percent",
+      "em": false,
+      "f1": 40.0
+    },
+    "A2": {
+      "pred": "9. 7 percent",
+      "em": false,
+      "f1": 40.0
+    }
+  },
+  {
+    "id": "ds_81ce24c7",
+    "cat": "DIRECT_SPAN",
+    "q": "What is the value of percentage for the metric?",
+    "gold": "4.2 percent",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "4. 2 percent",
+      "em": false,
+      "f1": 40.0
+    },
+    "A2": {
+      "pred": "4. 2 percent",
+      "em": false,
+      "f1": 40.0
+    }
+  },
+  {
+    "id": "ds_77360f42",
+    "cat": "DIRECT_SPAN",
+    "q": "What was the reported monetary value?",
+    "gold": "412.5 million ",
+    "A0": {
+      "pred": "$ 412. 5 million",
+      "em": false,
+      "f1": 33.3
+    },
+    "A1": {
+      "pred": "412. 5 million",
+      "em": false,
+      "f1": 40.0
+    },
+    "A2": {
+      "pred": "412. 5 million",
+      "em": false,
+      "f1": 40.0
+    }
+  },
+  {
+    "id": "ds_740681ab",
+    "cat": "DIRECT_SPAN",
+    "q": "What is the percentage of the metric?",
+    "gold": "14.8 percent",
+    "A0": {
+      "pred": "what is the percentage of the metric? research and development expenses increased 14. 8 percent to $ 198",
+      "em": false,
+      "f1": 10.5
+    },
+    "A1": {
+      "pred": "14. 8 percent",
+      "em": false,
+      "f1": 40.0
+    },
+    "A2": {
+      "pred": "14. 8 percent",
+      "em": false,
+      "f1": 40.0
+    }
+  },
+  {
+    "id": "ds_65dd1749",
+    "cat": "DIRECT_SPAN",
+    "q": "What is the value of monetary value for the amount?",
+    "gold": "660.1 million",
+    "A0": {
+      "pred": "$ 660. 1 million, compared to $ 600",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "660. 1 million",
+      "em": false,
+      "f1": 40.0
+    },
+    "A2": {
+      "pred": "660. 1 million",
+      "em": false,
+      "f1": 40.0
+    }
+  },
+  {
+    "id": "ds_98c13a6f",
+    "cat": "DIRECT_SPAN",
+    "q": "What does the document say about monetary value?",
+    "gold": "127.3 million",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "127. 3 million",
+      "em": false,
+      "f1": 40.0
+    },
+    "A2": {
+      "pred": "127. 3 million",
+      "em": false,
+      "f1": 40.0
+    }
+  },
+  {
+    "id": "ds_d8cd4ce5",
+    "cat": "DIRECT_SPAN",
+    "q": "What is the value of monetary value for the amount?",
+    "gold": "100.0 million",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "100. 0 million",
+      "em": false,
+      "f1": 40.0
+    },
+    "A2": {
+      "pred": "100. 0 million",
+      "em": false,
+      "f1": 40.0
+    }
+  },
+  {
+    "id": "ds_abba258f",
+    "cat": "DIRECT_SPAN",
+    "q": "According to the document, what is the percentage?",
+    "gold": "30 percent",
+    "A0": {
+      "pred": "28 to 30 percent",
+      "em": false,
+      "f1": 66.7
+    },
+    "A1": {
+      "pred": "28 to 30 percent",
+      "em": false,
+      "f1": 66.7
+    },
+    "A2": {
+      "pred": "880 million to $ 910 million and adjusted ebitda margin of 28 to 30 percent",
+      "em": false,
+      "f1": 26.7
+    }
+  },
+  {
+    "id": "ds_836b6624",
+    "cat": "DIRECT_SPAN",
+    "q": "What was the reported monetary value?",
+    "gold": "880 million ",
+    "A0": {
+      "pred": "$ 880 million to $ 910 million",
+      "em": false,
+      "f1": 57.1
+    },
+    "A1": {
+      "pred": "28 to 30 percent",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "880 million to $ 910 million and adjusted ebitda margin of 28 to 30 percent",
+      "em": false,
+      "f1": 26.7
+    }
+  },
+  {
+    "id": "ds_91da3093",
+    "cat": "DIRECT_SPAN",
+    "q": "What is the monetary value for the amount?",
+    "gold": "910 million ",
+    "A0": {
+      "pred": "$ 880 million to $ 910 million",
+      "em": false,
+      "f1": 57.1
+    },
+    "A1": {
+      "pred": "28 to 30 percent",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "880 million to $ 910 million and adjusted ebitda margin of 28 to 30 percent",
+      "em": false,
+      "f1": 26.7
+    }
+  },
+  {
+    "id": "ds_59f2d6c6",
+    "cat": "DIRECT_SPAN",
+    "q": "What was the reported monetary value?",
+    "gold": "3.35 billion ",
+    "A0": {
+      "pred": "$ 3. 35 billion",
+      "em": false,
+      "f1": 33.3
+    },
+    "A1": {
+      "pred": "3. 35 billion",
+      "em": false,
+      "f1": 40.0
+    },
+    "A2": {
+      "pred": "3. 35 billion",
+      "em": false,
+      "f1": 40.0
+    }
+  },
+  {
+    "id": "ds_dbc2f9ba",
+    "cat": "DIRECT_SPAN",
+    "q": "What was the reported monetary value?",
+    "gold": "3.42 billion",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "35 billion",
+      "em": false,
+      "f1": 50.0
+    },
+    "A2": {
+      "pred": "3. 42 billion",
+      "em": false,
+      "f1": 40.0
+    }
+  },
+  {
+    "id": "ds_025dc00e",
+    "cat": "DIRECT_SPAN",
+    "q": "What is the value of monetary value for the amount?",
+    "gold": "3.35 billion",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "25 billion",
+      "em": false,
+      "f1": 50.0
+    },
+    "A2": {
+      "pred": "25 billion",
+      "em": false,
+      "f1": 50.0
+    }
+  },
+  {
+    "id": "ds_85294528",
+    "cat": "DIRECT_SPAN",
+    "q": "What is the value of duration for the process?",
+    "gold": "36 months",
+    "A0": {
+      "pred": "36 months",
+      "em": true,
+      "f1": 100.0
+    },
+    "A1": {
+      "pred": "36 months",
+      "em": true,
+      "f1": 100.0
+    },
+    "A2": {
+      "pred": "36 months commencing on the effective date and expiring on january 15, 2028",
+      "em": false,
+      "f1": 28.6
+    }
+  },
+  {
+    "id": "ds_17a97902",
+    "cat": "DIRECT_SPAN",
+    "q": "What is the percentage for the metric?",
+    "gold": "1.5 percent",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "1. 5 percent",
+      "em": false,
+      "f1": 40.0
+    },
+    "A2": {
+      "pred": "1. 5 percent",
+      "em": false,
+      "f1": 40.0
+    }
+  },
+  {
+    "id": "ds_9e814812",
+    "cat": "DIRECT_SPAN",
+    "q": "What is the value of duration for the process?",
+    "gold": "30 days",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "61, 250 usd",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "245, 000",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "ds_b4e49165",
+    "cat": "DIRECT_SPAN",
+    "q": "What was the reported duration?",
+    "gold": "1 hour",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "3600 seconds ( 1 hour",
+      "em": false,
+      "f1": 57.1
+    },
+    "A2": {
+      "pred": "3600 seconds",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "ds_02be1eaa",
+    "cat": "DIRECT_SPAN",
+    "q": "What is the value of duration for the process?",
+    "gold": "86400 seconds",
+    "A0": {
+      "pred": "86400 seconds ( 24 hours )",
+      "em": false,
+      "f1": 50.0
+    },
+    "A1": {
+      "pred": "86400 seconds",
+      "em": true,
+      "f1": 100.0
+    },
+    "A2": {
+      "pred": "86400 seconds",
+      "em": true,
+      "f1": 100.0
+    }
+  },
+  {
+    "id": "ds_199662bc",
+    "cat": "DIRECT_SPAN",
+    "q": "According to the document, what is the percentage?",
+    "gold": "0.4 percent",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "0. 4 percent",
+      "em": false,
+      "f1": 40.0
+    },
+    "A2": {
+      "pred": "0. 4 percent",
+      "em": false,
+      "f1": 40.0
+    }
+  },
+  {
+    "id": "num_f45fb016",
+    "cat": "NUMERIC",
+    "q": "How much is the quarterly revenue?",
+    "gold": "$847.3 million",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "847. 3 million",
+      "em": false,
+      "f1": 40.0
+    },
+    "A2": {
+      "pred": "847. 3 million",
+      "em": false,
+      "f1": 40.0
+    }
+  },
+  {
+    "id": "num_6b7e6d26",
+    "cat": "NUMERIC",
+    "q": "How much is the revenue growth rate?",
+    "gold": "12.4 percent",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "12. 4 percent",
+      "em": false,
+      "f1": 40.0
+    },
+    "A2": {
+      "pred": "12. 4 percent",
+      "em": false,
+      "f1": 40.0
+    }
+  },
+  {
+    "id": "num_ebb0173c",
+    "cat": "NUMERIC",
+    "q": "How many net income were recorded?",
+    "gold": "$142.6 million",
+    "A0": {
+      "pred": "$ 142. 6 million",
+      "em": false,
+      "f1": 33.3
+    },
+    "A1": {
+      "pred": "142. 6 million",
+      "em": false,
+      "f1": 40.0
+    },
+    "A2": {
+      "pred": "142. 6 million",
+      "em": false,
+      "f1": 40.0
+    }
+  },
+  {
+    "id": "num_7dcf1702",
+    "cat": "NUMERIC",
+    "q": "What was the earnings per share?",
+    "gold": "$3.47",
+    "A0": {
+      "pred": "$ 3. 47",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "3. 47",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "3. 47",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "num_58a9ce17",
+    "cat": "NUMERIC",
+    "q": "How much is the operating margin?",
+    "gold": "22.1 percent",
+    "A0": {
+      "pred": "22. 1 percent",
+      "em": false,
+      "f1": 40.0
+    },
+    "A1": {
+      "pred": "22. 1 percent",
+      "em": false,
+      "f1": 40.0
+    },
+    "A2": {
+      "pred": "22. 1 percent",
+      "em": false,
+      "f1": 40.0
+    }
+  },
+  {
+    "id": "num_40784c07",
+    "cat": "NUMERIC",
+    "q": "What was the division revenue?",
+    "gold": "$412.5 million",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "412. 5 million",
+      "em": false,
+      "f1": 40.0
+    },
+    "A2": {
+      "pred": "412. 5 million",
+      "em": false,
+      "f1": 40.0
+    }
+  },
+  {
+    "id": "num_ae8b0a75",
+    "cat": "NUMERIC",
+    "q": "How much is the R&D spending?",
+    "gold": "$198.3 million",
+    "A0": {
+      "pred": "$ 198. 3 million",
+      "em": false,
+      "f1": 33.3
+    },
+    "A1": {
+      "pred": "198. 3 million",
+      "em": false,
+      "f1": 40.0
+    },
+    "A2": {
+      "pred": "198. 3 million",
+      "em": false,
+      "f1": 40.0
+    }
+  },
+  {
+    "id": "num_1910985d",
+    "cat": "NUMERIC",
+    "q": "What value was reported for cash position?",
+    "gold": "$2.1 billion",
+    "A0": {
+      "pred": "$ 2. 1 billion",
+      "em": false,
+      "f1": 33.3
+    },
+    "A1": {
+      "pred": "2. 1 billion",
+      "em": false,
+      "f1": 40.0
+    },
+    "A2": {
+      "pred": "2. 1 billion",
+      "em": false,
+      "f1": 40.0
+    }
+  },
+  {
+    "id": "num_d9547a42",
+    "cat": "NUMERIC",
+    "q": "What was the total debt?",
+    "gold": "$1.8 billion",
+    "A0": {
+      "pred": "$ 1. 8 billion",
+      "em": false,
+      "f1": 33.3
+    },
+    "A1": {
+      "pred": "1. 8 billion",
+      "em": false,
+      "f1": 40.0
+    },
+    "A2": {
+      "pred": "1. 8 billion",
+      "em": false,
+      "f1": 40.0
+    }
+  },
+  {
+    "id": "num_61c30a9d",
+    "cat": "NUMERIC",
+    "q": "How much is the dividend per share?",
+    "gold": "$0.52",
+    "A0": {
+      "pred": "$ 0. 52",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "$ 0. 52 per share",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "0. 52 per share",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "num_b0d1c66d",
+    "cat": "NUMERIC",
+    "q": "What is the annual revenue guidance?",
+    "gold": "$3.35 billion to $3.42 billion",
+    "A0": {
+      "pred": "$ 3. 35 billion to $ 3. 42 billion",
+      "em": false,
+      "f1": 40.0
+    },
+    "A1": {
+      "pred": "3. 35 billion",
+      "em": false,
+      "f1": 28.6
+    },
+    "A2": {
+      "pred": "3. 35 billion",
+      "em": false,
+      "f1": 28.6
+    }
+  },
+  {
+    "id": "num_69073ebd",
+    "cat": "NUMERIC",
+    "q": "What value was reported for annual license fee?",
+    "gold": "$245,000",
+    "A0": {
+      "pred": "$ 245, 000 usd annually",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "245, 000",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "245, 000",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "num_f3f6dba6",
+    "cat": "NUMERIC",
+    "q": "What is the quarterly payment?",
+    "gold": "$61,250",
+    "A0": {
+      "pred": "$ 61, 250 usd",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "61, 250 usd",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "61, 250",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "num_1d8c3d79",
+    "cat": "NUMERIC",
+    "q": "What is the license term?",
+    "gold": "36 months",
+    "A0": {
+      "pred": "36 months",
+      "em": true,
+      "f1": 100.0
+    },
+    "A1": {
+      "pred": "36 months",
+      "em": true,
+      "f1": 100.0
+    },
+    "A2": {
+      "pred": "36 months",
+      "em": true,
+      "f1": 100.0
+    }
+  },
+  {
+    "id": "num_f3265264",
+    "cat": "NUMERIC",
+    "q": "How many late payment interest were recorded?",
+    "gold": "1.5 percent",
+    "A0": {
+      "pred": "1. 5 percent per month",
+      "em": false,
+      "f1": 28.6
+    },
+    "A1": {
+      "pred": "1. 5 percent",
+      "em": false,
+      "f1": 40.0
+    },
+    "A2": {
+      "pred": "1. 5 percent",
+      "em": false,
+      "f1": 40.0
+    }
+  },
+  {
+    "id": "num_23f01fe6",
+    "cat": "NUMERIC",
+    "q": "What was the annual increase?",
+    "gold": "5 percent",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "5 percent",
+      "em": true,
+      "f1": 100.0
+    },
+    "A2": {
+      "pred": "5 percent",
+      "em": true,
+      "f1": 100.0
+    }
+  },
+  {
+    "id": "num_c0cf5c80",
+    "cat": "NUMERIC",
+    "q": "How many premium rate limit were recorded?",
+    "gold": "1000",
+    "A0": {
+      "pred": "1000",
+      "em": true,
+      "f1": 100.0
+    },
+    "A1": {
+      "pred": "1000 requests per minute",
+      "em": false,
+      "f1": 40.0
+    },
+    "A2": {
+      "pred": "premium rate limit were recorded? 1000 requests per minute",
+      "em": false,
+      "f1": 20.0
+    }
+  },
+  {
+    "id": "num_4460eb2e",
+    "cat": "NUMERIC",
+    "q": "How much is the default page size?",
+    "gold": "50",
+    "A0": {
+      "pred": "50 items",
+      "em": false,
+      "f1": 66.7
+    },
+    "A1": {
+      "pred": "50 items",
+      "em": false,
+      "f1": 66.7
+    },
+    "A2": {
+      "pred": "much is the default page size? default page size of 50 items",
+      "em": false,
+      "f1": 18.2
+    }
+  },
+  {
+    "id": "num_95ee7e56",
+    "cat": "NUMERIC",
+    "q": "What is the maximum page size?",
+    "gold": "200",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "200 items",
+      "em": false,
+      "f1": 66.7
+    },
+    "A2": {
+      "pred": "200 items per request",
+      "em": false,
+      "f1": 40.0
+    }
+  },
+  {
+    "id": "num_994b099e",
+    "cat": "NUMERIC",
+    "q": "How many token TTL were recorded?",
+    "gold": "3600",
+    "A0": {
+      "pred": "3600 seconds",
+      "em": false,
+      "f1": 66.7
+    },
+    "A1": {
+      "pred": "3600 seconds",
+      "em": false,
+      "f1": 66.7
+    },
+    "A2": {
+      "pred": "3600 seconds",
+      "em": false,
+      "f1": 66.7
+    }
+  },
+  {
+    "id": "tc_479dca78",
+    "cat": "TABLE_CELL",
+    "q": "According to the table, what is the division for Enterprise Solutions?",
+    "gold": "Enterprise Solutions",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "412. 5m | $ 348. 7m | + 18. 3 %",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "412. 5m | $ 348. 7m | + 18. 3 %",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_9f0d3d7c",
+    "cat": "TABLE_CELL",
+    "q": "What is Enterprise Solutions's q3 2025 revenue?",
+    "gold": "$412.5M",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "412. 5m | $ 348. 7m | + 18. 3 %",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "412. 5m | $ 348. 7m | + 18. 3 %",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_86920624",
+    "cat": "TABLE_CELL",
+    "q": "How much is the q3 2024 revenue of Enterprise Solutions?",
+    "gold": "$348.7M",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "412. 5m | $ 348. 7m | + 18. 3 %",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "412. 5m | $ 348. 7m | + 18. 3 %",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_d840424a",
+    "cat": "TABLE_CELL",
+    "q": "What is the yoy growth for Enterprise Solutions?",
+    "gold": "+18.3%",
+    "A0": {
+      "pred": "| $ 412. 5m | $ 348. 7m | + 18. 3 %",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "412. 5m | $ 348. 7m | + 18. 3 %",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "412. 5m | $ 348. 7m | + 18. 3 %",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_d1903d1a",
+    "cat": "TABLE_CELL",
+    "q": "What is the division for Cloud Services?",
+    "gold": "Cloud Services",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "287. 1m | $ 261. 7m | + 9. 7 %",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "9. 7 %",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_e04eccbd",
+    "cat": "TABLE_CELL",
+    "q": "Looking at the table, what q3 2025 revenue value does Cloud Services show?",
+    "gold": "$287.1M",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "261. 7m | + 9. 7 %",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "9. 7 %",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_50f1be30",
+    "cat": "TABLE_CELL",
+    "q": "What is Cloud Services's q3 2024 revenue?",
+    "gold": "$261.7M",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "261. 7m | + 9. 7 %",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "9. 7 %",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_535e6a95",
+    "cat": "TABLE_CELL",
+    "q": "How much is the yoy growth of Cloud Services?",
+    "gold": "+9.7%",
+    "A0": {
+      "pred": "$ 287. 1m",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "261. 7m | + 9. 7 %",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "9. 7 %",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_254eaa89",
+    "cat": "TABLE_CELL",
+    "q": "What is the division for Professional Services?",
+    "gold": "Professional Services",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "147. 7m | $ 141. 8m | + 4. 2 %",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "147. 7m | $ 141. 8m | + 4. 2 %",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_b9240328",
+    "cat": "TABLE_CELL",
+    "q": "What is the q3 2025 revenue for Professional Services?",
+    "gold": "$147.7M",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "141. 8m | + 4. 2 %",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "147. 7m | $ 141. 8m | + 4. 2 %",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_6e842038",
+    "cat": "TABLE_CELL",
+    "q": "How much is the q3 2024 revenue of Professional Services?",
+    "gold": "$141.8M",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "141. 8m | + 4. 2 %",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "141. 8m | + 4. 2 %",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_06f5c7e8",
+    "cat": "TABLE_CELL",
+    "q": "What yoy growth does Professional Services have?",
+    "gold": "+4.2%",
+    "A0": {
+      "pred": "|",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "141. 8m | + 4. 2 %",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "141. 8m | + 4. 2 %",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_03298034",
+    "cat": "TABLE_CELL",
+    "q": "Looking at the table, what division value does Other show?",
+    "gold": "Other",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "100. 0 %",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "100. 0 %",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_78ac63a0",
+    "cat": "TABLE_CELL",
+    "q": "How much is the q3 2025 revenue of Other?",
+    "gold": "$0.0M",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "100. 0 %",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "100. 0 %",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_42513ae0",
+    "cat": "TABLE_CELL",
+    "q": "What q3 2024 revenue does Other have?",
+    "gold": "$1.6M",
+    "A0": {
+      "pred": "| yoy growth",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "100. 0 %",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "100. 0 %",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_d99cbb1a",
+    "cat": "TABLE_CELL",
+    "q": "Looking at the table, what yoy growth value does Other show?",
+    "gold": "-100.0%",
+    "A0": {
+      "pred": "| $ 0. 0m | $ 1. 6m | - 100. 0 %",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "100. 0 %",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "100. 0 %",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_5525d696",
+    "cat": "TABLE_CELL",
+    "q": "What payment schedule does Q1 2025 have?",
+    "gold": "Q1 2025",
+    "A0": {
+      "pred": "| amount ( usd )",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "61, 250",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "61, 250",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_0133d3d5",
+    "cat": "TABLE_CELL",
+    "q": "Looking at the table, what amount (usd) value does Q1 2025 show?",
+    "gold": "$61,250",
+    "A0": {
+      "pred": "$ 61, 250",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "61, 250",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "61, 250",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_9507228f",
+    "cat": "TABLE_CELL",
+    "q": "What is the due date for Q1 2025?",
+    "gold": "April 15, 2025",
+    "A0": {
+      "pred": "april 15, 2025",
+      "em": true,
+      "f1": 100.0
+    },
+    "A1": {
+      "pred": "61, 250",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "61, 250",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_a7432939",
+    "cat": "TABLE_CELL",
+    "q": "How much is the payment schedule of Q2 2025?",
+    "gold": "Q2 2025",
+    "A0": {
+      "pred": "$ 61, 250",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "61, 250",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "61, 250",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_fceaa66a",
+    "cat": "TABLE_CELL",
+    "q": "According to the table, what is the amount (usd) for Q2 2025?",
+    "gold": "$61,250",
+    "A0": {
+      "pred": "$ 61, 250",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "61, 250",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "61, 250",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_d3cb27c3",
+    "cat": "TABLE_CELL",
+    "q": "What is Q2 2025's due date?",
+    "gold": "July 15, 2025",
+    "A0": {
+      "pred": "july 15, 2025",
+      "em": true,
+      "f1": 100.0
+    },
+    "A1": {
+      "pred": "61, 250",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "61, 250",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_5496087e",
+    "cat": "TABLE_CELL",
+    "q": "According to the table, what is the payment schedule for Q3 2025?",
+    "gold": "Q3 2025",
+    "A0": {
+      "pred": "due date",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "61, 250",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "61, 250",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_f4d37b70",
+    "cat": "TABLE_CELL",
+    "q": "What due date does Q3 2025 have?",
+    "gold": "October 15, 2025",
+    "A0": {
+      "pred": "october 15, 2025",
+      "em": true,
+      "f1": 100.0
+    },
+    "A1": {
+      "pred": "61, 250",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "61, 250",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_24334a40",
+    "cat": "TABLE_CELL",
+    "q": "What payment schedule does Q4 2025 have?",
+    "gold": "Q4 2025",
+    "A0": {
+      "pred": "| amount ( usd )",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "61, 250",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "61, 250",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_29764366",
+    "cat": "TABLE_CELL",
+    "q": "What amount (usd) does Q4 2025 have?",
+    "gold": "$61,250",
+    "A0": {
+      "pred": "$ 61, 250",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "61, 250",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "61, 250",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_53a75e7c",
+    "cat": "TABLE_CELL",
+    "q": "What due date does Q4 2025 have?",
+    "gold": "January 15, 2026",
+    "A0": {
+      "pred": "january 15, 2026",
+      "em": true,
+      "f1": 100.0
+    },
+    "A1": {
+      "pred": "61, 250",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "61, 250",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_fa1ad564",
+    "cat": "TABLE_CELL",
+    "q": "According to the table, what is the tier for Free?",
+    "gold": "Free",
+    "A0": {
+      "pred": "| rate limit | burst limit | monthly quota free",
+      "em": false,
+      "f1": 25.0
+    },
+    "A1": {
+      "pred": "10, 000",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "10, 000",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_6dd05b59",
+    "cat": "TABLE_CELL",
+    "q": "How much is the rate limit of Free?",
+    "gold": "20 req/min",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "10, 000",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "10, 000",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_9a20892c",
+    "cat": "TABLE_CELL",
+    "q": "Looking at the table, what burst limit value does Free show?",
+    "gold": "30 req/min",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "10, 000",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "10, 000",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_1118d26c",
+    "cat": "TABLE_CELL",
+    "q": "What is the monthly quota for Free?",
+    "gold": "10,000 requests",
+    "A0": {
+      "pred": "| 20 req / min",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "10, 000",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "10, 000",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_2197451c",
+    "cat": "TABLE_CELL",
+    "q": "Looking at the table, what tier value does Standard show?",
+    "gold": "Standard",
+    "A0": {
+      "pred": "looking at the table, what tier value does standard show? tier | rate limit | burst limit | monthly quota standard",
+      "em": false,
+      "f1": 11.8
+    },
+    "A1": {
+      "pred": "500, 000",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "500, 000",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_1e0e5ec6",
+    "cat": "TABLE_CELL",
+    "q": "How much is the rate limit of Standard?",
+    "gold": "100 req/min",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "500, 000",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "150 req / min",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_8de1e7aa",
+    "cat": "TABLE_CELL",
+    "q": "According to the table, what is the burst limit for Standard?",
+    "gold": "150 req/min",
+    "A0": {
+      "pred": "monthly quota standard | 100 req / min",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "500, 000",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "500, 000",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_115f3133",
+    "cat": "TABLE_CELL",
+    "q": "How much is the monthly quota of Standard?",
+    "gold": "500,000 requests",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "500, 000",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "150 req / min",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_43026c60",
+    "cat": "TABLE_CELL",
+    "q": "Looking at the table, what tier value does Premium show?",
+    "gold": "Premium",
+    "A0": {
+      "pred": "monthly quota",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "5, 000, 000",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "1, 500 req / min | 5, 000, 000",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_8340538b",
+    "cat": "TABLE_CELL",
+    "q": "What is Premium's rate limit?",
+    "gold": "1,000 req/min",
+    "A0": {
+      "pred": "monthly quota premium | 1, 000 req / min",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "5, 000, 000",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "1, 500 req / min | 5, 000, 000",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_7fbe7d96",
+    "cat": "TABLE_CELL",
+    "q": "How much is the burst limit of Premium?",
+    "gold": "1,500 req/min",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "5, 000, 000",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "1, 500 req / min | 5, 000, 000",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_3ead9e14",
+    "cat": "TABLE_CELL",
+    "q": "What is Premium's monthly quota?",
+    "gold": "5,000,000 requests",
+    "A0": {
+      "pred": "| 1, 000 req / min",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "5, 000, 000",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "1, 500 req / min | 5, 000, 000",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_964a4daf",
+    "cat": "TABLE_CELL",
+    "q": "Looking at the table, what tier value does Enterprise show?",
+    "gold": "Enterprise",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "tier | rate limit",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "monthly quota enterprise | custom | custom",
+      "em": false,
+      "f1": 33.3
+    }
+  },
+  {
+    "id": "tc_27595301",
+    "cat": "TABLE_CELL",
+    "q": "How much is the rate limit of Enterprise?",
+    "gold": "Custom",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "rate limit | burst limit | monthly quota enterprise | custom | custom",
+      "em": false,
+      "f1": 22.2
+    },
+    "A2": {
+      "pred": "burst limit | monthly quota enterprise | custom | custom",
+      "em": false,
+      "f1": 25.0
+    }
+  },
+  {
+    "id": "tc_85d54fcd",
+    "cat": "TABLE_CELL",
+    "q": "According to the table, what is the burst limit for Enterprise?",
+    "gold": "Custom",
+    "A0": {
+      "pred": "monthly quota",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "burst limit | monthly quota enterprise | custom | custom",
+      "em": false,
+      "f1": 25.0
+    },
+    "A2": {
+      "pred": "burst limit | monthly quota enterprise | custom | custom",
+      "em": false,
+      "f1": 25.0
+    }
+  },
+  {
+    "id": "tc_663a0780",
+    "cat": "TABLE_CELL",
+    "q": "What monthly quota does Enterprise have?",
+    "gold": "Unlimited",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "rate limit | burst limit | monthly quota enterprise | custom | custom",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "monthly quota does enterprise have? tier",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_1a6849f8",
+    "cat": "TABLE_CELL",
+    "q": "What method does POST have?",
+    "gold": "POST",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "auth required post | / auth / token",
+      "em": false,
+      "f1": 28.6
+    },
+    "A2": {
+      "pred": "auth required post | / auth",
+      "em": false,
+      "f1": 33.3
+    }
+  },
+  {
+    "id": "tc_aaa486d5",
+    "cat": "TABLE_CELL",
+    "q": "What is POST's endpoint?",
+    "gold": "/auth/token",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "auth required post | / auth / token",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "auth required post | / auth",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_4179f602",
+    "cat": "TABLE_CELL",
+    "q": "Looking at the table, what description value does POST show?",
+    "gold": "Obtain access token",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "auth / token",
+      "em": false,
+      "f1": 33.3
+    },
+    "A2": {
+      "pred": "auth required post | / auth",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_0849d764",
+    "cat": "TABLE_CELL",
+    "q": "What is POST's auth required?",
+    "gold": "No",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "auth required post | / auth / token",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "auth required post | / auth / token",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_629ae7df",
+    "cat": "TABLE_CELL",
+    "q": "Looking at the table, what method value does GET show?",
+    "gold": "GET",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "auth required get | / documents | list all documents",
+      "em": false,
+      "f1": 22.2
+    },
+    "A2": {
+      "pred": "auth",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_c250d363",
+    "cat": "TABLE_CELL",
+    "q": "Looking at the table, what endpoint value does GET show?",
+    "gold": "/documents",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "auth required get | / documents | list all documents",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "auth",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_c4e0c677",
+    "cat": "TABLE_CELL",
+    "q": "What description does GET have?",
+    "gold": "List all documents",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "auth required get | / documents | list all documents",
+      "em": false,
+      "f1": 54.5
+    },
+    "A2": {
+      "pred": "auth",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_cf6648ee",
+    "cat": "TABLE_CELL",
+    "q": "According to the table, what is the auth required for GET?",
+    "gold": "Yes",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "auth required get | / documents | list all documents",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "auth",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_e75b3a72",
+    "cat": "TABLE_CELL",
+    "q": "According to the table, what is the method for POST?",
+    "gold": "POST",
+    "A0": {
+      "pred": "| endpoint | description | auth required",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "auth required post | / documents",
+      "em": false,
+      "f1": 28.6
+    },
+    "A2": {
+      "pred": "auth",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_2ea63ab4",
+    "cat": "TABLE_CELL",
+    "q": "How much is the endpoint of POST?",
+    "gold": "/documents",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "auth required post | / documents",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "endpoint | description",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_b15d3914",
+    "cat": "TABLE_CELL",
+    "q": "What is POST's description?",
+    "gold": "Upload a new document",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "auth required post | / documents",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "auth",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_08b98fbc",
+    "cat": "TABLE_CELL",
+    "q": "What is the method for GET?",
+    "gold": "GET",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "id } | get document details",
+      "em": false,
+      "f1": 28.6
+    },
+    "A2": {
+      "pred": "auth required get | / documents / { id } | get document details",
+      "em": false,
+      "f1": 16.7
+    }
+  },
+  {
+    "id": "tc_8f04a4a1",
+    "cat": "TABLE_CELL",
+    "q": "How much is the endpoint of GET?",
+    "gold": "/documents/{id}",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "id } | get document details",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "auth required get | / documents / { id } | get document details",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_2607c15e",
+    "cat": "TABLE_CELL",
+    "q": "How much is the description of GET?",
+    "gold": "Get document details",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "id } | get document details",
+      "em": false,
+      "f1": 66.7
+    },
+    "A2": {
+      "pred": "auth required get | / documents / { id } | get document details",
+      "em": false,
+      "f1": 42.9
+    }
+  },
+  {
+    "id": "tc_bba5b637",
+    "cat": "TABLE_CELL",
+    "q": "What auth required does GET have?",
+    "gold": "Yes",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "auth required get | / documents / { id } | get document details",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "auth required get | / documents / { id } | get document details",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_d39f0a68",
+    "cat": "TABLE_CELL",
+    "q": "What is DELETE's method?",
+    "gold": "DELETE",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "id } | delete a document",
+      "em": false,
+      "f1": 28.6
+    },
+    "A2": {
+      "pred": "endpoint | description",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_249b98ec",
+    "cat": "TABLE_CELL",
+    "q": "According to the table, what is the endpoint for DELETE?",
+    "gold": "/documents/{id}",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "id",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "id",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_d0a714af",
+    "cat": "TABLE_CELL",
+    "q": "According to the table, what is the description for DELETE?",
+    "gold": "Delete a document",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "id",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "auth",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_a42dce2e",
+    "cat": "TABLE_CELL",
+    "q": "Looking at the table, what auth required value does DELETE show?",
+    "gold": "Yes",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "auth required delete | / documents",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "auth required delete | / documents",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_4b140a6a",
+    "cat": "TABLE_CELL",
+    "q": "How much is the method of POST?",
+    "gold": "POST",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "auth required post | / qa",
+      "em": false,
+      "f1": 28.6
+    },
+    "A2": {
+      "pred": "qa",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_a9325c33",
+    "cat": "TABLE_CELL",
+    "q": "What is POST's endpoint?",
+    "gold": "/qa/ask",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "auth required post | / qa",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "endpoint | description",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_5c9beebf",
+    "cat": "TABLE_CELL",
+    "q": "What is POST's description?",
+    "gold": "Ask a question",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "auth required post | / qa",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "qa",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_1059748e",
+    "cat": "TABLE_CELL",
+    "q": "What is POST's auth required?",
+    "gold": "Yes",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "auth required post | / qa",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "auth",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_0bfff1bd",
+    "cat": "TABLE_CELL",
+    "q": "What endpoint does GET have?",
+    "gold": "/embeddings/status",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "auth required get | / embeddings / status",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "endpoint does get have? method | endpoint | description",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_a80c8c66",
+    "cat": "TABLE_CELL",
+    "q": "According to the table, what is the description for GET?",
+    "gold": "Check embedding status",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "auth required get | / embeddings / status",
+      "em": false,
+      "f1": 20.0
+    },
+    "A2": {
+      "pred": "auth required get | / embeddings / status",
+      "em": false,
+      "f1": 20.0
+    }
+  },
+  {
+    "id": "tc_645eb7fe",
+    "cat": "TABLE_CELL",
+    "q": "What is GET's auth required?",
+    "gold": "Yes",
+    "A0": {
+      "pred": "| / embeddings / status",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "auth required get | / embeddings / status",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "auth required get | / embeddings / status",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_5f43398e",
+    "cat": "TABLE_CELL",
+    "q": "Looking at the table, what variable value does Temperature show?",
+    "gold": "Temperature",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "42. 3 | 48. 7 | 12. 4 | 0. 3 %",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "12. 4 | 0. 3 %",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_84b6849d",
+    "cat": "TABLE_CELL",
+    "q": "What unit does Temperature have?",
+    "gold": "degrees Celsius",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "42. 3 | 48. 7 | 12. 4 | 0. 3 %",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "12. 4 | 0. 3 %",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_a5ec1a23",
+    "cat": "TABLE_CELL",
+    "q": "Looking at the table, what min value does Temperature show?",
+    "gold": "-42.3",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "42. 3 | 48. 7 | 12. 4 | 0. 3 %",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "12. 4 | 0. 3 %",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_c6bb193a",
+    "cat": "TABLE_CELL",
+    "q": "What is the max for Temperature?",
+    "gold": "48.7",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "42. 3 | 48. 7 | 12. 4 | 0. 3 %",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "12. 4 | 0. 3 %",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_0c464fcb",
+    "cat": "TABLE_CELL",
+    "q": "How much is the mean of Temperature?",
+    "gold": "12.4",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "42. 3 | 48. 7 | 12. 4 | 0. 3 %",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "12. 4 | 0. 3 %",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_6629496f",
+    "cat": "TABLE_CELL",
+    "q": "According to the table, what is the missing % for Temperature?",
+    "gold": "0.3%",
+    "A0": {
+      "pred": "| degrees celsius",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "42. 3 | 48. 7 | 12. 4 | 0. 3 %",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "12. 4 | 0. 3 %",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_c8954194",
+    "cat": "TABLE_CELL",
+    "q": "Looking at the table, what variable value does Humidity show?",
+    "gold": "Humidity",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "67. 8 | 0. 5 %",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "67. 8 | 0. 5 %",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_b8ce0c6e",
+    "cat": "TABLE_CELL",
+    "q": "Looking at the table, what unit value does Humidity show?",
+    "gold": "%",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "67. 8 | 0. 5 %",
+      "em": false,
+      "f1": 28.6
+    },
+    "A2": {
+      "pred": "67. 8 | 0. 5 %",
+      "em": false,
+      "f1": 28.6
+    }
+  },
+  {
+    "id": "tc_43fb1739",
+    "cat": "TABLE_CELL",
+    "q": "According to the table, what is the min for Humidity?",
+    "gold": "2.1",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "67. 8 | 0. 5 %",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "67. 8 | 0. 5 %",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_e099d5c0",
+    "cat": "TABLE_CELL",
+    "q": "How much is the max of Humidity?",
+    "gold": "100.0",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "67. 8 | 0. 5 %",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "67. 8 | 0. 5 %",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_a1242505",
+    "cat": "TABLE_CELL",
+    "q": "What is the mean for Humidity?",
+    "gold": "67.8",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "67. 8 | 0. 5 %",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "67. 8 | 0. 5 %",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_e354ce56",
+    "cat": "TABLE_CELL",
+    "q": "What missing % does Humidity have?",
+    "gold": "0.5%",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "67. 8 | 0. 5 %",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "67. 8 | 0. 5 %",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_4d15e2c6",
+    "cat": "TABLE_CELL",
+    "q": "Looking at the table, what variable value does Pressure show?",
+    "gold": "Pressure",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "1013. 2 | 0. 1 %",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "954. 2 | 1083. 8 | 1013. 2 | 0. 1 %",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_7f6cf52d",
+    "cat": "TABLE_CELL",
+    "q": "How much is the unit of Pressure?",
+    "gold": "hPa",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "954. 2 | 1083. 8 | 1013. 2 | 0. 1 %",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "954. 2 | 1083. 8 | 1013. 2 | 0. 1 %",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_ecf59722",
+    "cat": "TABLE_CELL",
+    "q": "What min does Pressure have?",
+    "gold": "954.2",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "954. 2 | 1083. 8 | 1013. 2 | 0. 1 %",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "954. 2 | 1083. 8 | 1013. 2 | 0. 1 %",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_401e77da",
+    "cat": "TABLE_CELL",
+    "q": "What max does Pressure have?",
+    "gold": "1083.8",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "954. 2 | 1083. 8 | 1013. 2 | 0. 1 %",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "954. 2 | 1083. 8 | 1013. 2 | 0. 1 %",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_5feb1a98",
+    "cat": "TABLE_CELL",
+    "q": "What mean does Pressure have?",
+    "gold": "1013.2",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "954. 2 | 1083. 8 | 1013. 2 | 0. 1 %",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "954. 2 | 1083. 8 | 1013. 2 | 0. 1 %",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_778a8c23",
+    "cat": "TABLE_CELL",
+    "q": "What is the missing % for Pressure?",
+    "gold": "0.1%",
+    "A0": {
+      "pred": "what is the missing % for pressure? variable | unit | min | max | mean | missing % pressure | hpa | 954. 2",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "954. 2 | 1083. 8 | 1013. 2 | 0. 1 %",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "954. 2 | 1083. 8 | 1013. 2 | 0. 1 %",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_4367bf4e",
+    "cat": "TABLE_CELL",
+    "q": "What is the variable for Wind Speed?",
+    "gold": "Wind Speed",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "58. 4 | 4. 2 | 0. 2 %",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "4. 2 | 0. 2 %",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_708fbd46",
+    "cat": "TABLE_CELL",
+    "q": "What unit does Wind Speed have?",
+    "gold": "m/s",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "58. 4 | 4. 2 | 0. 2 %",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "4. 2 | 0. 2 %",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_a12c6ab4",
+    "cat": "TABLE_CELL",
+    "q": "What is Wind Speed's min?",
+    "gold": "0.0",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "58. 4 | 4. 2 | 0. 2 %",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "4. 2 | 0. 2 %",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_89c73632",
+    "cat": "TABLE_CELL",
+    "q": "According to the table, what is the max for Wind Speed?",
+    "gold": "58.4",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "58. 4 | 4. 2 | 0. 2 %",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "4. 2 | 0. 2 %",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_1658c1fb",
+    "cat": "TABLE_CELL",
+    "q": "What is the mean for Wind Speed?",
+    "gold": "4.2",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "58. 4 | 4. 2 | 0. 2 %",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "4. 2 | 0. 2 %",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_24a71aed",
+    "cat": "TABLE_CELL",
+    "q": "What is Wind Speed's missing %?",
+    "gold": "0.2%",
+    "A0": {
+      "pred": "| m / s | 0. 0",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "58. 4 | 4. 2 | 0. 2 %",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "4. 2 | 0. 2 %",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_3e0b8ecb",
+    "cat": "TABLE_CELL",
+    "q": "What is Precipitation's variable?",
+    "gold": "Precipitation",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "127. 3 | 0. 8 | 1. 2 %",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "127. 3 | 0. 8 | 1. 2 %",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_f3617604",
+    "cat": "TABLE_CELL",
+    "q": "Looking at the table, what unit value does Precipitation show?",
+    "gold": "mm",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "127. 3 | 0. 8 | 1. 2 %",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "1. 2 %",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_73dfa83e",
+    "cat": "TABLE_CELL",
+    "q": "According to the table, what is the min for Precipitation?",
+    "gold": "0.0",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "127. 3 | 0. 8 | 1. 2 %",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "127. 3 | 0. 8 | 1. 2 %",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_7c80c42b",
+    "cat": "TABLE_CELL",
+    "q": "What max does Precipitation have?",
+    "gold": "127.3",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "127. 3 | 0. 8 | 1. 2 %",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "127. 3 | 0. 8 | 1. 2 %",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_1807a7aa",
+    "cat": "TABLE_CELL",
+    "q": "Looking at the table, what mean value does Precipitation show?",
+    "gold": "0.8",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "127. 3 | 0. 8 | 1. 2 %",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "1. 2 %",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_dcc6b88d",
+    "cat": "TABLE_CELL",
+    "q": "Looking at the table, what missing % value does Precipitation show?",
+    "gold": "1.2%",
+    "A0": {
+      "pred": "mm | 0. 0",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "127. 3 | 0. 8 | 1. 2 %",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "127. 3 | 0. 8 | 1. 2 %",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_01e7c2c9",
+    "cat": "TABLE_CELL",
+    "q": "What is Solar Radiation's variable?",
+    "gold": "Solar Radiation",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "2. 1 %",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "198. 4 | 2. 1 %",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_075eb74d",
+    "cat": "TABLE_CELL",
+    "q": "What is Solar Radiation's unit?",
+    "gold": "W/m2",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "2. 1 %",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "198. 4 | 2. 1 %",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_45022d0b",
+    "cat": "TABLE_CELL",
+    "q": "What is Solar Radiation's min?",
+    "gold": "0.0",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "2. 1 %",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "198. 4",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_d2697074",
+    "cat": "TABLE_CELL",
+    "q": "What max does Solar Radiation have?",
+    "gold": "1,361.0",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "2. 1 %",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "2. 1",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_87f00ad1",
+    "cat": "TABLE_CELL",
+    "q": "What mean does Solar Radiation have?",
+    "gold": "198.4",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "2. 1 %",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "2. 1",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_ea31a998",
+    "cat": "TABLE_CELL",
+    "q": "Looking at the table, what missing % value does Solar Radiation show?",
+    "gold": "2.1%",
+    "A0": {
+      "pred": "| w / m2 | 0. 0",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "2. 1 %",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "2. 1 %",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_9d636b66",
+    "cat": "TABLE_CELL",
+    "q": "Looking at the table, what variable value does Visibility show?",
+    "gold": "Visibility",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "14. 7 | 0. 8 %",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "14. 7 | 0. 8 %",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_c7763cee",
+    "cat": "TABLE_CELL",
+    "q": "What is the unit for Visibility?",
+    "gold": "km",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "50. 0 | 14. 7 | 0. 8 %",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "14. 7 | 0. 8 %",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_38bd4879",
+    "cat": "TABLE_CELL",
+    "q": "What is the min for Visibility?",
+    "gold": "0.1",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "50. 0 | 14. 7 | 0. 8 %",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "14. 7 | 0. 8 %",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_38f371c9",
+    "cat": "TABLE_CELL",
+    "q": "What is Visibility's max?",
+    "gold": "50.0",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "50. 0 | 14. 7 | 0. 8 %",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "14. 7 | 0. 8 %",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_35f80647",
+    "cat": "TABLE_CELL",
+    "q": "What mean does Visibility have?",
+    "gold": "14.7",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "50. 0 | 14. 7 | 0. 8 %",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "14. 7 | 0. 8 %",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tc_3ddf0308",
+    "cat": "TABLE_CELL",
+    "q": "What missing % does Visibility have?",
+    "gold": "0.8%",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "50. 0 | 14. 7 | 0. 8 %",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "14. 7 | 0. 8 %",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tr_5102e64f",
+    "cat": "TABLE_ROW",
+    "q": "What are all the values for Enterprise Solutions?",
+    "gold": "Enterprise Solutions | $412.5M | $348.7M | +18.3%",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "412. 5m | $ 348. 7m | + 18. 3 %",
+      "em": false,
+      "f1": 12.5
+    },
+    "A2": {
+      "pred": "412. 5m | $ 348. 7m | + 18. 3 %",
+      "em": false,
+      "f1": 12.5
+    }
+  },
+  {
+    "id": "tr_175064d5",
+    "cat": "TABLE_ROW",
+    "q": "What are all the values for Cloud Services?",
+    "gold": "Cloud Services | $287.1M | $261.7M | +9.7%",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "261. 7m | + 9. 7 %",
+      "em": false,
+      "f1": 15.4
+    },
+    "A2": {
+      "pred": "9. 7 %",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tr_c9fd7fdb",
+    "cat": "TABLE_ROW",
+    "q": "What are all the values for Professional Services?",
+    "gold": "Professional Services | $147.7M | $141.8M | +4.2%",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "141. 8m | + 4. 2 %",
+      "em": false,
+      "f1": 15.4
+    },
+    "A2": {
+      "pred": "141. 8m | + 4. 2 %",
+      "em": false,
+      "f1": 15.4
+    }
+  },
+  {
+    "id": "tr_34f90438",
+    "cat": "TABLE_ROW",
+    "q": "List all data for Other?",
+    "gold": "Other | $0.0M | $1.6M | -100.0%",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "100. 0 %",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "100. 0 %",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tr_cc5255c0",
+    "cat": "TABLE_ROW",
+    "q": "What information is recorded for Q1 2025?",
+    "gold": "Q1 2025 | $61,250 | April 15, 2025",
+    "A0": {
+      "pred": "payment schedule | amount ( usd ) | due date q1 2025 | $ 61, 250",
+      "em": false,
+      "f1": 30.0
+    },
+    "A1": {
+      "pred": "61, 250",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "61, 250",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tr_cba8e060",
+    "cat": "TABLE_ROW",
+    "q": "What are the values for Q2 2025?",
+    "gold": "Q2 2025 | $61,250 | July 15, 2025",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "61, 250",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "61, 250",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tr_1b1273ff",
+    "cat": "TABLE_ROW",
+    "q": "What are all the values for Q3 2025?",
+    "gold": "Q3 2025 | $61,250 | October 15, 2025",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "61, 250",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "61, 250",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tr_805c4436",
+    "cat": "TABLE_ROW",
+    "q": "What are the values for Q4 2025?",
+    "gold": "Q4 2025 | $61,250 | January 15, 2026",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "61, 250",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "61, 250",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tr_230aea89",
+    "cat": "TABLE_ROW",
+    "q": "What information is recorded for Free?",
+    "gold": "Free | 20 req/min | 30 req/min | 10,000 requests",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "10, 000",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "10, 000",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tr_a50b71eb",
+    "cat": "TABLE_ROW",
+    "q": "What are the values for Standard?",
+    "gold": "Standard | 100 req/min | 150 req/min | 500,000 requests",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "500, 000",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "150 req / min",
+      "em": false,
+      "f1": 18.2
+    }
+  },
+  {
+    "id": "tr_6e8707f7",
+    "cat": "TABLE_ROW",
+    "q": "What are all the values for Premium?",
+    "gold": "Premium | 1,000 req/min | 1,500 req/min | 5,000,000 requests",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "5, 000, 000",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "1, 500 req / min | 5, 000, 000",
+      "em": false,
+      "f1": 12.5
+    }
+  },
+  {
+    "id": "tr_a13c7cd2",
+    "cat": "TABLE_ROW",
+    "q": "What information is recorded for Enterprise?",
+    "gold": "Enterprise | Custom | Custom | Unlimited",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "rate limit",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "monthly quota enterprise | custom | custom",
+      "em": false,
+      "f1": 66.7
+    }
+  },
+  {
+    "id": "tr_38d24c64",
+    "cat": "TABLE_ROW",
+    "q": "What are all the values for POST?",
+    "gold": "POST | /auth/token | Obtain access token | No",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "auth required post | / auth / token",
+      "em": false,
+      "f1": 46.2
+    },
+    "A2": {
+      "pred": "auth required post | / auth",
+      "em": false,
+      "f1": 33.3
+    }
+  },
+  {
+    "id": "tr_aaa9536f",
+    "cat": "TABLE_ROW",
+    "q": "What are all the values for GET?",
+    "gold": "GET | /documents | List all documents | Yes",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "auth required get | / documents | list all documents",
+      "em": false,
+      "f1": 66.7
+    },
+    "A2": {
+      "pred": "auth",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tr_e3808938",
+    "cat": "TABLE_ROW",
+    "q": "What are the values for POST?",
+    "gold": "POST | /documents | Upload a new document | Yes",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "auth required post | / documents",
+      "em": false,
+      "f1": 28.6
+    },
+    "A2": {
+      "pred": "auth",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tr_7e68327d",
+    "cat": "TABLE_ROW",
+    "q": "What information is recorded for GET?",
+    "gold": "GET | /documents/{id} | Get document details | Yes",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "id } | get document details",
+      "em": false,
+      "f1": 66.7
+    },
+    "A2": {
+      "pred": "auth required get | / documents / { id } | get document details",
+      "em": false,
+      "f1": 47.1
+    }
+  },
+  {
+    "id": "tr_b0ffbc0f",
+    "cat": "TABLE_ROW",
+    "q": "What information is recorded for DELETE?",
+    "gold": "DELETE | /documents/{id} | Delete a document | Yes",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "id } | delete a document",
+      "em": false,
+      "f1": 66.7
+    },
+    "A2": {
+      "pred": "endpoint | description",
+      "em": false,
+      "f1": 22.2
+    }
+  },
+  {
+    "id": "tr_ddbb3252",
+    "cat": "TABLE_ROW",
+    "q": "What information is recorded for POST?",
+    "gold": "POST | /qa/ask | Ask a question | Yes",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "auth required post | / qa",
+      "em": false,
+      "f1": 30.8
+    },
+    "A2": {
+      "pred": "qa",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tr_11a2c534",
+    "cat": "TABLE_ROW",
+    "q": "What are the values for Temperature?",
+    "gold": "Temperature | degrees Celsius | -42.3 | 48.7 | 12.4 | 0.3%",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "42. 3 | 48. 7 | 12. 4 | 0. 3 %",
+      "em": false,
+      "f1": 11.8
+    },
+    "A2": {
+      "pred": "12. 4 | 0. 3 %",
+      "em": false,
+      "f1": 14.3
+    }
+  },
+  {
+    "id": "tr_f4cfd386",
+    "cat": "TABLE_ROW",
+    "q": "What are the values for Humidity?",
+    "gold": "Humidity | % | 2.1 | 100.0 | 67.8 | 0.5%",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "67. 8 | 0. 5 %",
+      "em": false,
+      "f1": 30.8
+    },
+    "A2": {
+      "pred": "67. 8 | 0. 5 %",
+      "em": false,
+      "f1": 30.8
+    }
+  },
+  {
+    "id": "tr_a4210d62",
+    "cat": "TABLE_ROW",
+    "q": "What are all the values for Pressure?",
+    "gold": "Pressure | hPa | 954.2 | 1083.8 | 1013.2 | 0.1%",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "954. 2 | 1083. 8 | 1013. 2 | 0. 1 %",
+      "em": false,
+      "f1": 12.5
+    },
+    "A2": {
+      "pred": "954. 2 | 1083. 8 | 1013. 2 | 0. 1 %",
+      "em": false,
+      "f1": 12.5
+    }
+  },
+  {
+    "id": "tr_9c678d5b",
+    "cat": "TABLE_ROW",
+    "q": "What are the values for Wind Speed?",
+    "gold": "Wind Speed | m/s | 0.0 | 58.4 | 4.2 | 0.2%",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "58. 4 | 4. 2 | 0. 2 %",
+      "em": false,
+      "f1": 13.3
+    },
+    "A2": {
+      "pred": "4. 2 | 0. 2 %",
+      "em": false,
+      "f1": 15.4
+    }
+  },
+  {
+    "id": "tr_5cc553db",
+    "cat": "TABLE_ROW",
+    "q": "What information is recorded for Precipitation?",
+    "gold": "Precipitation | mm | 0.0 | 127.3 | 0.8 | 1.2%",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "127. 3 | 0. 8 | 1. 2 %",
+      "em": false,
+      "f1": 13.3
+    },
+    "A2": {
+      "pred": "127. 3 | 0. 8 | 1. 2 %",
+      "em": false,
+      "f1": 13.3
+    }
+  },
+  {
+    "id": "tr_7a665cb2",
+    "cat": "TABLE_ROW",
+    "q": "What are the values for Solar Radiation?",
+    "gold": "Solar Radiation | W/m2 | 0.0 | 1,361.0 | 198.4 | 2.1%",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "2. 1 %",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "198. 4",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "tr_70ecedca",
+    "cat": "TABLE_ROW",
+    "q": "What are all the values for Visibility?",
+    "gold": "Visibility | km | 0.1 | 50.0 | 14.7 | 0.8%",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "50. 0 | 14. 7 | 0. 8 %",
+      "em": false,
+      "f1": 13.3
+    },
+    "A2": {
+      "pred": "14. 7 | 0. 8 %",
+      "em": false,
+      "f1": 15.4
+    }
+  },
+  {
+    "id": "li_cc7f84c3",
+    "cat": "LIST_ITEM",
+    "q": "What is the first key financial highlights?",
+    "gold": "Revenue: $847.3 million (+12.4% YoY)",
+    "A0": {
+      "pred": "revenue",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "847. 3 million",
+      "em": false,
+      "f1": 25.0
+    },
+    "A2": {
+      "pred": "22. 1 % free cash flow : $ 189. 4 million cash and equivalents : $ 2. 1 billion",
+      "em": false,
+      "f1": 10.0
+    }
+  },
+  {
+    "id": "li_f17cfdc6",
+    "cat": "LIST_ITEM",
+    "q": "What key financial highlights is listed second?",
+    "gold": "Net Income: $142.6 million (+20.6% YoY)",
+    "A0": {
+      "pred": "revenue",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "847. 3 million",
+      "em": false,
+      "f1": 22.2
+    },
+    "A2": {
+      "pred": "22. 1 % free cash flow : $ 189. 4 million cash and equivalents : $ 2. 1 billion",
+      "em": false,
+      "f1": 9.5
+    }
+  },
+  {
+    "id": "li_050b38c1",
+    "cat": "LIST_ITEM",
+    "q": "What is the third key financial highlights?",
+    "gold": "EPS (Diluted): $3.47",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "847. 3 million",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "22. 1 % free cash flow : $ 189. 4 million cash and equivalents : $ 2. 1 billion",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "li_1f72c296",
+    "cat": "LIST_ITEM",
+    "q": "Which key financial highlights handles operating margin: 22.1%?",
+    "gold": "Operating Margin: 22.1%",
+    "A0": {
+      "pred": "eps ( diluted ) : $ 3. 47",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "142. 6 million ( + 20. 6 % yoy ) eps ( diluted ) : $ 3. 47 operating margin : 22. 1 % free cash flow : $ 189. 4 million cash and equivalents : $ 2. 1 billion",
+      "em": false,
+      "f1": 6.5
+    },
+    "A2": {
+      "pred": "142. 6 million ( + 20. 6 % yoy ) eps ( diluted ) : $ 3. 47 operating margin : 22. 1 % free cash flow : $ 189. 4 million cash and equivalents : $ 2. 1 billion",
+      "em": false,
+      "f1": 6.5
+    }
+  },
+  {
+    "id": "li_631f3671",
+    "cat": "LIST_ITEM",
+    "q": "Name the fifth key financial highlights?",
+    "gold": "Free Cash Flow: $189.4 million",
+    "A0": {
+      "pred": "revenue",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "142. 6 million ( + 20. 6 % yoy ) eps ( diluted ) : $ 3. 47 operating margin : 22. 1 % free cash flow : $ 189. 4 million cash and equivalents : $ 2. 1 billion",
+      "em": false,
+      "f1": 18.2
+    },
+    "A2": {
+      "pred": "22. 1 % free cash flow : $ 189. 4 million cash and equivalents : $ 2. 1 billion",
+      "em": false,
+      "f1": 30.0
+    }
+  },
+  {
+    "id": "li_1cd424f2",
+    "cat": "LIST_ITEM",
+    "q": "Which key financial highlights handles cash and equivalents:?",
+    "gold": "Cash and Equivalents: $2.1 billion",
+    "A0": {
+      "pred": "$ 2. 1 billion total debt",
+      "em": false,
+      "f1": 18.2
+    },
+    "A1": {
+      "pred": "142. 6 million ( + 20. 6 % yoy ) eps ( diluted ) : $ 3. 47 operating margin : 22. 1 % free cash flow : $ 189. 4 million cash and equivalents : $ 2. 1 billion",
+      "em": false,
+      "f1": 18.2
+    },
+    "A2": {
+      "pred": "22. 1 % free cash flow : $ 189. 4 million",
+      "em": false,
+      "f1": 12.5
+    }
+  },
+  {
+    "id": "li_c09855de",
+    "cat": "LIST_ITEM",
+    "q": "What comes seventh in the key financial highlights?",
+    "gold": "Total Debt: $1.8 billion",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "847. 3 million",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "22. 1 % free cash flow : $ 189. 4 million cash and equivalents : $ 2. 1 billion",
+      "em": false,
+      "f1": 10.5
+    }
+  },
+  {
+    "id": "li_70d2f27a",
+    "cat": "LIST_ITEM",
+    "q": "What key financial highlights is listed eighth?",
+    "gold": "Dividend: $0.52 per share (paid October 15, 2025)",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "847. 3 million",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "22. 1 % free cash flow : $ 189. 4 million cash and equivalents : $ 2. 1 billion",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "li_417011c7",
+    "cat": "LIST_ITEM",
+    "q": "What permitted uses is listed first?",
+    "gold": "Internal data analysis and reporting",
+    "A0": {
+      "pred": "uses internal data analysis and reporting integration with licensee ' s proprietary platforms use by licensee ' s employees and authorized contractors testing and quality assurance in non - production environments",
+      "em": false,
+      "f1": 32.3
+    },
+    "A1": {
+      "pred": "data analysis and reporting integration with licensee ' s proprietary platforms use by licensee ' s employees and authorized contractors testing and quality assurance in non - production environments",
+      "em": false,
+      "f1": 27.6
+    },
+    "A2": {
+      "pred": "data analysis and reporting integration with licensee ' s proprietary platforms use by licensee ' s employees and authorized contractors testing and quality assurance in non - production environments",
+      "em": false,
+      "f1": 27.6
+    }
+  },
+  {
+    "id": "li_5a304295",
+    "cat": "LIST_ITEM",
+    "q": "What permitted uses is listed second?",
+    "gold": "Integration with Licensee's proprietary platforms",
+    "A0": {
+      "pred": "uses internal data analysis and reporting integration with licensee ' s proprietary platforms use by licensee ' s employees and authorized contractors testing and quality assurance",
+      "em": false,
+      "f1": 30.8
+    },
+    "A1": {
+      "pred": "data analysis and reporting integration with licensee ' s proprietary platforms use by licensee ' s employees and authorized contractors testing and quality assurance in non - production environments",
+      "em": false,
+      "f1": 27.6
+    },
+    "A2": {
+      "pred": "data analysis and reporting integration with licensee ' s proprietary platforms use by licensee ' s employees and authorized contractors testing and quality assurance in non - production environments",
+      "em": false,
+      "f1": 27.6
+    }
+  },
+  {
+    "id": "li_624603d6",
+    "cat": "LIST_ITEM",
+    "q": "What permitted uses is listed third?",
+    "gold": "Use by Licensee's employees and authorized contractors",
+    "A0": {
+      "pred": "what permitted uses is listed third? permitted uses internal data analysis and reporting integration with licensee ' s proprietary platforms use by licensee ' s employees and authorized contractors testing and quality assurance",
+      "em": false,
+      "f1": 36.4
+    },
+    "A1": {
+      "pred": "data analysis and reporting integration with licensee ' s proprietary platforms use by licensee ' s employees and authorized contractors testing and quality assurance in non - production environments",
+      "em": false,
+      "f1": 38.7
+    },
+    "A2": {
+      "pred": "data analysis and reporting integration with licensee ' s proprietary platforms use by licensee ' s employees and authorized contractors testing and quality assurance in non - production environments",
+      "em": false,
+      "f1": 38.7
+    }
+  },
+  {
+    "id": "li_af6e2596",
+    "cat": "LIST_ITEM",
+    "q": "What comes fourth in the permitted uses?",
+    "gold": "Testing and quality assurance in non-production environments",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "data analysis and reporting integration with licensee ' s proprietary platforms use by licensee ' s employees and authorized contractors testing and quality assurance in non - production environments",
+      "em": false,
+      "f1": 38.7
+    },
+    "A2": {
+      "pred": "data analysis and reporting integration with licensee ' s proprietary platforms use by licensee ' s employees and authorized contractors testing and quality assurance in non - production environments",
+      "em": false,
+      "f1": 38.7
+    }
+  },
+  {
+    "id": "li_48a0f64c",
+    "cat": "LIST_ITEM",
+    "q": "What comes first in the supported authentication methods?",
+    "gold": "JWT Bearer Token: standard for web applications",
+    "A0": {
+      "pred": "jwt bearer token",
+      "em": false,
+      "f1": 40.0
+    },
+    "A1": {
+      "pred": "jwt bearer token : standard for web applications api key : for server - to - server communication ( x - api - key header ) oauth 2. 0 : for third - party integrations mtls : for high - security environments",
+      "em": false,
+      "f1": 34.3
+    },
+    "A2": {
+      "pred": "jwt bearer token : standard for web applications api key : for server - to - server communication ( x - api - key header ) oauth 2. 0",
+      "em": false,
+      "f1": 42.9
+    }
+  },
+  {
+    "id": "li_82648128",
+    "cat": "LIST_ITEM",
+    "q": "What comes second in the supported authentication methods?",
+    "gold": "API Key: for server-to-server communication (X-API-Key header)",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "jwt bearer token : standard for web applications api key : for server - to - server communication ( x - api - key header ) oauth 2. 0 : for third - party integrations mtls : for high - security environments",
+      "em": false,
+      "f1": 17.1
+    },
+    "A2": {
+      "pred": "jwt bearer token : standard for web applications api key : for server - to - server communication ( x - api - key header ) oauth 2. 0",
+      "em": false,
+      "f1": 21.4
+    }
+  },
+  {
+    "id": "li_1241980d",
+    "cat": "LIST_ITEM",
+    "q": "What supported authentication methods is listed third?",
+    "gold": "OAuth 2.0: for third-party integrations",
+    "A0": {
+      "pred": "jwt bearer token : standard for web applications api key : for server - to - server communication ( x - api - key header ) oauth 2. 0",
+      "em": false,
+      "f1": 15.4
+    },
+    "A1": {
+      "pred": "jwt bearer token : standard for web applications api key : for server - to - server communication ( x - api - key header ) oauth 2. 0 : for third - party integrations mtls : for high - security environments",
+      "em": false,
+      "f1": 18.2
+    },
+    "A2": {
+      "pred": "jwt bearer token : standard for web applications api key : for server - to - server communication ( x - api - key header ) oauth 2. 0",
+      "em": false,
+      "f1": 15.4
+    }
+  },
+  {
+    "id": "li_a4eb60b5",
+    "cat": "LIST_ITEM",
+    "q": "What is the fourth supported authentication methods?",
+    "gold": "mTLS: for high-security environments (mutual TLS client certificates)",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "jwt bearer token : standard for web applications api key : for server - to - server communication ( x - api - key header ) oauth 2. 0 : for third - party integrations mtls : for high - security environments",
+      "em": false,
+      "f1": 11.1
+    },
+    "A2": {
+      "pred": "jwt bearer token : standard for web applications api key : for server - to - server communication ( x - api - key header ) oauth 2. 0",
+      "em": false,
+      "f1": 6.9
+    }
+  },
+  {
+    "id": "li_3927464a",
+    "cat": "LIST_ITEM",
+    "q": "What comes first in the citation?",
+    "gold": "Smith, J.A., Johnson, M.K., and Williams, R.T. (2025).",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "r. t. ( 2025 ). geoclimate - 2024 : a comprehensive meteorological dataset for the continental united states. journal of climate data, 12 ( 3 ), 45 - 67. doi : 10. 1234",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "r. t. ( 2025 ). geoclimate",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "li_39ef9936",
+    "cat": "LIST_ITEM",
+    "q": "What citation is listed second?",
+    "gold": "GeoClimate-2024: A Comprehensive Meteorological Dataset for the Continental United States.",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "r. t. ( 2025",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "m. k., and williams, r. t. ( 2025 ). geoclimate",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "li_938c278e",
+    "cat": "LIST_ITEM",
+    "q": "What citation is listed third?",
+    "gold": "Journal of Climate Data, 12(3), 45-67. DOI: 10.1234/jcd.2025.0123",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "r. t. ( 2025",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "m. k., and williams, r. t. ( 2025 ). geoclimate",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "sec_ef5bba9d",
+    "cat": "SECTION_SPECIFIC",
+    "q": "What is discussed in the Executive Summary section?",
+    "gold": "Executive Summary",
+    "A0": {
+      "pred": "consolidated revenue of $ 847. 3 million",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "142. 6 million, or $ 3. 47 per diluted share, compared to $ 118. 2 million, or $ 2. 89 per diluted share, in the prior year period. operating margin improved to 22. 1 percent",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "142. 6 million, or $ 3. 47 per diluted share, compared to $ 118. 2 million, or $ 2. 89 per diluted share, in the prior year period. operating margin improved to 22. 1 percent",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "sec_2ebc9587",
+    "cat": "SECTION_SPECIFIC",
+    "q": "What is covered in the Revenue Breakdown section?",
+    "gold": "Revenue Breakdown",
+    "A0": {
+      "pred": "growth was driven primarily by the enterprise solutions division, which posted revenue of $ 412. 5 million",
+      "em": false,
+      "f1": 10.5
+    },
+    "A1": {
+      "pred": "287. 1 million ( 33. 9 percent ), growing 9. 7 percent year - over - year. the professional services segment generated $ 147. 7 million ( 17. 4 percent ), reflecting a modest 4. 2 percent",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "9. 7 percent year - over - year. the professional services segment generated $ 147. 7 million ( 17. 4 percent ), reflecting a modest 4. 2 percent",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "sec_c00a7fc1",
+    "cat": "SECTION_SPECIFIC",
+    "q": "Which section covers operating expenses?",
+    "gold": "Operating Expenses",
+    "A0": {
+      "pred": "operating",
+      "em": false,
+      "f1": 66.7
+    },
+    "A1": {
+      "pred": "234. 5 million, up 8. 2 percent",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "14. 8 percent",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "sec_70c7b5b7",
+    "cat": "SECTION_SPECIFIC",
+    "q": "What information is provided in Forward Guidance?",
+    "gold": "Forward Guidance",
+    "A0": {
+      "pred": "forward guidance for the fourth quarter of fiscal year 2025",
+      "em": false,
+      "f1": 33.3
+    },
+    "A1": {
+      "pred": "28 to 30 percent",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "28 to 30 percent",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "sec_b86b80ef",
+    "cat": "SECTION_SPECIFIC",
+    "q": "What is discussed in the Parties and Effective Date section?",
+    "gold": "Parties and Effective Date",
+    "A0": {
+      "pred": "this software license agreement ( agreement )",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "january 15, 2025, by and between techvault inc., a delaware corporation with principal offices at 1200 innovation drive, suite 400, austin, tx 78701",
+      "em": false,
+      "f1": 7.4
+    },
+    "A2": {
+      "pred": "january 15, 2025",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "sec_2204bf8b",
+    "cat": "SECTION_SPECIFIC",
+    "q": "What information is provided in License Grant?",
+    "gold": "License Grant",
+    "A0": {
+      "pred": "non - exclusive, non - transferable, revocable license to install and use the software on up to 50 concurrent devices for licensee ' s internal business purposes only",
+      "em": false,
+      "f1": 7.4
+    },
+    "A1": {
+      "pred": "36 months",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "36 months commencing on the effective date and expiring on january 15, 2028",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "sec_e95f766d",
+    "cat": "SECTION_SPECIFIC",
+    "q": "What information is provided in Fees and Payment?",
+    "gold": "Fees and Payment",
+    "A0": {
+      "pred": "all fees are non - refundable",
+      "em": false,
+      "f1": 22.2
+    },
+    "A1": {
+      "pred": "61, 250 usd within 30 days of invoice date. late payments shall incur interest at a rate of 1. 5 percent",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "245, 000",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "sec_ac7f0172",
+    "cat": "SECTION_SPECIFIC",
+    "q": "What is discussed in the Intellectual Property section?",
+    "gold": "Intellectual Property",
+    "A0": {
+      "pred": "the software and all associated intellectual property rights remain the exclusive property of licensor",
+      "em": false,
+      "f1": 28.6
+    },
+    "A1": {
+      "pred": "licensor. licensee shall not reverse engineer, decompile, or disassemble the software. any derivative works created by licensee using the software",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "licensor retains all rights in the underlying software. licensee grants licensor a non - exclusive, royalty - free license to use anonymized usage",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "sec_7bd7c2bc",
+    "cat": "SECTION_SPECIFIC",
+    "q": "What is covered in the Authentication section?",
+    "gold": "Authentication",
+    "A0": {
+      "pred": "all api requests must include a valid jwt token in the authorization header",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "86400 seconds ( 24 hours",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "86400 seconds ( 24 hours",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "sec_cff07693",
+    "cat": "SECTION_SPECIFIC",
+    "q": "What is covered in the Rate Limits section?",
+    "gold": "Rate Limits",
+    "A0": {
+      "pred": "100 requests per minute for standard accounts and 1000 requests per minute for premium accounts",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "429",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "429 too",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "sec_36174b7c",
+    "cat": "SECTION_SPECIFIC",
+    "q": "What does the document say about endpoints?",
+    "gold": "Endpoints",
+    "A0": {
+      "pred": "the api exposes restful",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "200 items",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "json - encoded. pagina",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "sec_4d47a64a",
+    "cat": "SECTION_SPECIFIC",
+    "q": "What is covered in the Dataset Overview section?",
+    "gold": "Dataset Overview",
+    "A0": {
+      "pred": "meteorological observations from 847 weather stations across the continental united states for the period january 1, 2024 to december 31, 2024. the dataset includes 14 atmospheric variables recorded at hourly intervals, resulting in approximately 7. 4 million data points",
+      "em": false,
+      "f1": 5.1
+    },
+    "A1": {
+      "pred": "7. 4 million",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "7. 4 million data points. the dataset is released under the creative commons attribution 4. 0",
+      "em": false,
+      "f1": 11.8
+    }
+  },
+  {
+    "id": "sec_5e1deffc",
+    "cat": "SECTION_SPECIFIC",
+    "q": "What information is provided in Station Distribution?",
+    "gold": "Station Distribution",
+    "A0": {
+      "pred": "station distribution the 847 stations are distributed across 48 states",
+      "em": false,
+      "f1": 33.3
+    },
+    "A1": {
+      "pred": "35. 5 % ), and remote ( 134 stations, 15. 8 %",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "342 meters above sea level, with a range from 2 meters",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "sec_4aeb4d54",
+    "cat": "SECTION_SPECIFIC",
+    "q": "What information is provided in Data Quality?",
+    "gold": "Data Quality",
+    "A0": {
+      "pred": "99. 1 percent",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "99. 9 % ), while solar radiation has the highest missing data rate ( 2. 1 % ). quality control procedures include range checks, consistency checks, and spatial outlier detection. approximately 0. 4 percent",
+      "em": false,
+      "f1": 11.8
+    },
+    "A2": {
+      "pred": "99. 9 %",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "mc_c70ece64",
+    "cat": "MULTI_CHUNK",
+    "q": "What value is mentioned near the boundary between Executive Summary and Revenue Breakdown?",
+    "gold": "142.6 million",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "142. 6 million, or $ 3. 47 per diluted share, compared to $ 118. 2 million",
+      "em": false,
+      "f1": 11.8
+    },
+    "A2": {
+      "pred": "142. 6 million, or $ 3. 47 per diluted share, compared to $ 118. 2 million",
+      "em": false,
+      "f1": 11.8
+    }
+  },
+  {
+    "id": "mc_7d94f7cc",
+    "cat": "MULTI_CHUNK",
+    "q": "What value is mentioned near the boundary between Revenue Breakdown and Operating Expenses?",
+    "gold": "287.1 million",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "287. 1 million ( 33. 9 percent ), growing 9. 7 percent",
+      "em": false,
+      "f1": 15.4
+    },
+    "A2": {
+      "pred": "9. 7 percent",
+      "em": false,
+      "f1": 0.0
+    }
+  },
+  {
+    "id": "mc_3c4ff454",
+    "cat": "MULTI_CHUNK",
+    "q": "What value is mentioned near the boundary between Operating Expenses and Forward Guidance?",
+    "gold": "234.5 million",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "234. 5 million, up 8. 2 percent. general and administrative expenses were $ 127. 3 million, and amortization of acquired intangibles was $ 100. 0 million",
+      "em": false,
+      "f1": 8.0
+    },
+    "A2": {
+      "pred": "100. 0 million",
+      "em": false,
+      "f1": 40.0
+    }
+  },
+  {
+    "id": "mc_f03f1a93",
+    "cat": "MULTI_CHUNK",
+    "q": "What value is mentioned near the boundary between Fees and Payment and Intellectual Property?",
+    "gold": "1.5 percent",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "61, 250 usd within 30 days of invoice date. late payments shall incur interest at a rate of 1. 5 percent",
+      "em": false,
+      "f1": 9.1
+    },
+    "A2": {
+      "pred": "61, 250 usd within 30 days of invoice date. late payments shall incur interest at a rate of 1. 5 percent",
+      "em": false,
+      "f1": 9.1
+    }
+  },
+  {
+    "id": "mc_42e1f7cf",
+    "cat": "MULTI_CHUNK",
+    "q": "What value is mentioned near the boundary between Authentication and Rate Limits?",
+    "gold": "3600 seconds",
+    "A0": {
+      "pred": "",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "86400 seconds ( 24 hours",
+      "em": false,
+      "f1": 28.6
+    },
+    "A2": {
+      "pred": "86400 seconds ( 24 hours",
+      "em": false,
+      "f1": 28.6
+    }
+  },
+  {
+    "id": "mc_98a6aef8",
+    "cat": "MULTI_CHUNK",
+    "q": "What value is mentioned near the boundary between Dataset Overview and Station Distribution?",
+    "gold": "7.4 million",
+    "A0": {
+      "pred": "847",
+      "em": false,
+      "f1": 0.0
+    },
+    "A1": {
+      "pred": "7. 4 million",
+      "em": false,
+      "f1": 40.0
+    },
+    "A2": {
+      "pred": "7. 4 million data points. the dataset is released under the creative commons attribution 4. 0",
+      "em": false,
+      "f1": 11.8
+    }
+  },
+  {
+    "id": "mc_61595d05",
+    "cat": "MULTI_CHUNK",
+    "q": "What value is mentioned near the boundary between Station Distribution and Data Quality?",
+    "gold": "99.1 percent",
+    "A0": {
+      "pred": "99. 1 percent",
+      "em": false,
+      "f1": 40.0
+    },
+    "A1": {
+      "pred": "99. 1 percent. the most complete variable is atmospheric pressure ( 99. 9 % ), while solar radiation has the highest missing data rate ( 2. 1 %",
+      "em": false,
+      "f1": 0.0
+    },
+    "A2": {
+      "pred": "99. 1 percent",
+      "em": false,
+      "f1": 40.0
+    }
+  }
+]

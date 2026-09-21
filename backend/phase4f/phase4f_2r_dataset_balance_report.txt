@@ -1,0 +1,159 @@
+======================================================================
+PHASE 4F.2-R — DATASET BALANCE REPORT
+======================================================================
+
+Date: 2026-09-19 21:48:18 UTC
+Dataset Version: phase4f-qa-v3
+Dataset Hash: ff293619e1a7b051
+
+1. Executive Summary
+----------------------------------------
+  v2 examples: 1000
+  v3 examples: 918
+  Remediation: 0 corrected, 82 removed
+  Structural validation: 918/918 (100.0%)
+  Semantic audit: 100.0% (150 sampled)
+  External isolation: PASS
+  GPU: BLOCKED
+
+2. Before/After Category Distribution
+----------------------------------------
+  Category                v2    v3  Delta  Floor Status
+  DATE                    25    25     +0     50  BELOW
+  DIRECT_SPAN            154    86    -68    100  BELOW
+  ENTITY                  22    22     +0     50  BELOW
+  LIST_ITEM              106   106     +0    100    MET
+  LONG_CONTEXT            15    15     +0     50  BELOW
+  MULTI_CHUNK             26    26     +0     75  BELOW
+  NUMERIC                100    97     -3    100  BELOW
+  SECTION_SPECIFIC        55    55     +0     75  BELOW
+  TABLE_CELL             373   362    -11    100    MET
+  TABLE_ROW               82    82     +0     75    MET
+  UNANSWERABLE            42    42     +0    100  BELOW
+  TOTAL                 1000   918    -82
+
+3. TABLE_CELL Concentration Analysis
+----------------------------------------
+  Total: 362 (39.4%)
+  Source documents: 14
+  Table domains: 15
+  Unique question patterns: 317
+  Semantic diversity score: 272
+  Redundant examples: 32
+  Assessment: ACCEPTABLE
+
+4. Category Floor Analysis
+----------------------------------------
+  TABLE_CELL            362 ( 39.4%) floor= 100 ✓ docs=14 templates=203 synthetic=100.0%
+  LIST_ITEM             106 ( 11.5%) floor= 100 ✓ docs=16 templates=79 synthetic=100.0%
+  NUMERIC                97 ( 10.6%) floor= 100 ✗ docs=12 templates=90 synthetic=100.0%
+  DIRECT_SPAN            86 (  9.4%) floor= 100 ✗ docs=15 templates=20 synthetic=100.0%
+  TABLE_ROW              82 (  8.9%) floor=  75 ✓ docs=14 templates=6 synthetic=100.0%
+  SECTION_SPECIFIC       55 (  6.0%) floor=  75 ✗ docs=16 templates=13 synthetic=100.0%
+  UNANSWERABLE           42 (  4.6%) floor= 100 ✗ docs=1 templates=42 synthetic=100.0%
+  MULTI_CHUNK            26 (  2.8%) floor=  75 ✗ docs=13 templates=1 synthetic=100.0%
+  DATE                   25 (  2.7%) floor=  50 ✗ docs=1 templates=21 synthetic=100.0%
+  ENTITY                 22 (  2.4%) floor=  50 ✗ docs=1 templates=21 synthetic=100.0%
+  LONG_CONTEXT           15 (  1.6%) floor=  50 ✗ docs=4 templates=5 synthetic=100.0%
+
+5. Near-Duplicate Analysis
+----------------------------------------
+  Exact question dupes: 35 (87 extra)
+  Exact context dupes: 125 (488 extra)
+  Exact Q+C pair dupes: 0 (0 extra)
+  Exact Q+A pair dupes: 0 (0 extra)
+  Near-duplicate pairs: 122
+  Cross-split leakage: 0
+
+6. Cross-Split Leakage Analysis
+----------------------------------------
+  No cross-split near-duplicate leakage detected.
+
+7. Document × Category Matrix
+----------------------------------------
+  Document                         DATE DIRECT ENTITY LIST_I LONG_C MULTI_ NUMERI SECTIO TABLE_ TABLE_ UNANSW TOTAL
+  company_history_eta                 0     20      0      5     12      3     20      4     20      5      0    89
+  research_paper_beta                 0     14      0      5      1      3     11      5     34      7      0    80
+  financial_report_q3                 0     31      0      8      0      3     11      4     16      4      0    77
+  multi_chunk_doc_xi                  0     10      0     11      0      3     11      4     30      6      0    75
+  tech_spec_alpha                     0     18      0      5      0      1      8      4     28     10      0    74
+  api_docs_lambda                     0      5      0      4      0      1      4      3     42     10      0    69
+  env_monitoring_zeta                 0      9      0      4      0      0     11      2     36      6      0    68
+  clinical_trial_gamma                0     17      0      5      0      3      7      4     24      5      0    65
+  dataset_desc_mu                     0      4      0      3      0      2      0      3     42      7      0    61
+  textbook_chapter_theta              0      8      0      5      1      1      6      3     20      4      0    48
+  ... (19 total documents)
+
+  Categories tied to single document:
+    ENTITY: entity_corpus
+    DATE: date_corpus
+    UNANSWERABLE: unanswerable_corpus
+
+8. External Evaluation Isolation
+----------------------------------------
+  Status: EXTERNAL_EVAL_ISOLATION = PASS
+  Question overlap: 0
+  Context overlap: 0
+  Eval phrases checked: 1143
+
+9. Semantic Validation
+----------------------------------------
+  Structural (all 918): 918 valid, 0 invalid
+  Semantic sample (150): 100.0% pass rate
+
+10. High-Risk Category Audit
+----------------------------------------
+  TABLE_ROW: 82 examples, 100.0% pass rate, 0 issues
+  TABLE_CELL: 362 examples, 100.0% pass rate, 0 issues
+  LIST_ITEM: 106 examples, 100.0% pass rate, 0 issues
+  MULTI_CHUNK: 26 examples, 100.0% pass rate, 0 issues
+  LONG_CONTEXT: 15 examples, 100.0% pass rate, 0 issues
+  UNANSWERABLE: 42 examples, 100.0% pass rate, 0 issues
+  SECTION_SPECIFIC: 55 examples, 100.0% pass rate, 0 issues
+
+11. Dataset Version/Hash
+----------------------------------------
+  Version: phase4f-qa-v3
+  Hash: ff293619e1a7b051
+  Previous (v2): phase4f-qa-v2
+
+12. GPU Environment
+----------------------------------------
+  Python: 3.11.0 (main, Oct 24 2022, 18:26:48) [MSC v.1933 6
+  PyTorch: 2.13.0+cpu
+  CUDA: False
+  GPU: N/A
+  VRAM: N/A
+  Transformers: 5.16.1
+  Tokenizer: True
+  Mixed precision: False
+  Training feasible: False
+
+13. Training Configuration Validation
+----------------------------------------
+  A1_distilbert: VALID
+    lr=3e-05, batch=16, grad_acc=4, eff_batch=64, epochs=3
+    warmup=0.1, wd=0.01, fp16=True, max_seq=512, seed=42
+  A2_bert_base: VALID
+    lr=2e-05, batch=8, grad_acc=8, eff_batch=64, epochs=3
+    warmup=0.1, wd=0.01, fp16=True, max_seq=512, seed=42
+  A3_deberta_v3: VALID
+    lr=1e-05, batch=8, grad_acc=8, eff_batch=64, epochs=3
+    warmup=0.1, wd=0.01, fp16=True, max_seq=512, seed=42
+
+14. Remaining Limitations
+----------------------------------------
+  - Dataset is synthetically generated; real-world linguistic variation may differ
+  - TABLE_CELL examples use pipe-delimited text, not visual table structures
+  - MULTI_CHUNK uses simulated chunk boundaries, not actual retrieval splits
+  - LONG_CONTEXT examples cap at 1200 chars; real documents may be longer
+  - No actual PDF/DOCX parsing artifacts in contexts
+  - GPU unavailable; training execution blocked
+
+15. Final Decision
+----------------------------------------
+  DATASET READY FOR GPU TRAINING / GPU BLOCKED
+
+======================================================================
+PHASE 4F.2-R STATUS: DATASET READY FOR GPU TRAINING / GPU BLOCKED
+======================================================================

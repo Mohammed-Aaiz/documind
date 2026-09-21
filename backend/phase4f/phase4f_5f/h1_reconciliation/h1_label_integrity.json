@@ -1,0 +1,56 @@
+{
+  "audit_version": "4F.5-H1R-labels-v1",
+  "timestamp": "2026-09-22T00:00:00Z",
+
+  "answerable_label_integrity": {
+    "total_answerable_checked": 571,
+    "valid_token_span": 571,
+    "invalid_token_span": 0,
+    "cls_labeled_as_answerable": 0,
+    "answerable_labeled_as_impossible": 0,
+    "status": "PASS",
+    "detail": "All 486 training + 85 validation answerable examples have valid token_span.valid=True with start_token > 0 and end_token > 0. Zero examples use CLS fallback for answerable. The 4 excluded examples (li_4fa4a839, li_8770780b, li_8bc7889f, tc_3b383990) have token_span.valid=False and are correctly excluded from both training and validation."
+  },
+
+  "unanswerable_label_integrity": {
+    "total_unanswerable_training": 114,
+    "all_h20_format_correct": true,
+    "h20_training_label": "CLS (start=0, end=0) via is_unanswerable=True flag",
+    "h20_training_answer_empty": true,
+    "h20_training_token_span_null": true,
+    "total_unanswerable_validation": 8,
+    "all_derived_format_correct": true,
+    "derived_validation_label": "CLS (start=0, end=0) via question_kind=UNANSWERABLE",
+    "derived_validation_answer_empty": true,
+    "derived_validation_token_span_null": true,
+    "no_answer_span_accidentally_supplied": false,
+    "status": "PASS"
+  },
+
+  "code_analysis": {
+    "h1_dataset_getitem": {
+      "unanswerable_path": "start_positions=0, end_positions=0 (CLS)",
+      "answerable_path": "start_positions=token_span.start_token, end_positions=token_span.end_token",
+      "cls_fallback_for_invalid_answerable": "EXCLUDED by dataset filtering — 4 invalid examples removed before training",
+      "safe": true
+    },
+    "h20_conversion": {
+      "sets_question_kind": "UNANSWERABLE",
+      "sets_is_unanswerable": true,
+      "sets_answer_empty": true,
+      "sets_token_span_null": true,
+      "safe": true
+    }
+  },
+
+  "invalid_examples_excluded": {
+    "count": 4,
+    "ids": ["li_4fa4a839", "li_8770780b", "li_8bc7889f", "tc_3b383990"],
+    "reason": "token_span.valid=False, cannot compute training labels",
+    "excluded_from": "training, validation, and all evaluation"
+  },
+
+  "answerable_alignment_valid": "571/571 (100%)",
+  "unanswerable_labels_valid": "122/122 (100%) — 114 H20 training + 8 derived validation",
+  "label_integrity": "PASS"
+}

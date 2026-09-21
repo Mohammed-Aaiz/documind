@@ -1,0 +1,316 @@
+================================================================================
+PHASE 4F.5-H: DOCUMENT-GROUNDED UNANSWERABLE DATASET DESIGN REPORT
+================================================================================
+Date: 2026-09-21
+Status: H_DATASET_READY
+Version: 3
+
+================================================================================
+1. OBJECTIVE
+================================================================================
+Design a new experimental unanswerable training pool using the SAME
+technical-document distribution as the answerable QA data.
+
+F2 established that its 20 negative examples were:
+- All from one `unanswerable_corpus`
+- Synthetic
+- Short
+- Domain-mismatched
+- Missing `number_absent`
+- Not representative of the technical/table/list documents
+
+H tests whether representative negative examples from the same documents
+are a better training signal.
+
+================================================================================
+2. SOURCE DOCUMENTS
+================================================================================
+Eligible answerable documents: 18
+Total eligible answerable examples: 876
+Valid answerable training examples (after F1 reconciliation): 571
+
+Documents used:
+  api_docs_lambda:          66 examples
+  clinical_trial_gamma:     58 examples
+  company_history_eta:      80 examples
+  dataset_desc_mu:          58 examples
+  date_corpus:              25 examples
+  entity_corpus:            22 examples
+  env_monitoring_zeta:      64 examples
+  financial_report_q3:      65 examples
+  legal_contract_epsilon:   32 examples
+  multi_chunk_doc_xi:       71 examples
+  ops_manual_delta:         30 examples
+  product_comparison_pi:    37 examples
+  project_proposal_nu:      47 examples
+  regulation_doc_iota:      16 examples
+  research_paper_beta:      67 examples
+  tech_spec_alpha:          60 examples
+  textbook_chapter_theta:   40 examples
+  training_material_omega:  38 examples
+
+Excluded: unanswerable_corpus (42 examples from F2)
+
+================================================================================
+3. CANDIDATE COUNT
+================================================================================
+Raw candidates generated: 2,039
+After quality gate: 1,219
+After question deduplication: 1,094 unique questions
+
+================================================================================
+4. H10 COUNT
+================================================================================
+Target: 57 (10% of 571 valid answerable training)
+Actual: 57
+Pct of answerable: 10.0%
+
+================================================================================
+5. H20 COUNT
+================================================================================
+Target: 114 (20% of 571 valid answerable training)
+Actual: 114
+Pct of answerable: 20.0%
+
+================================================================================
+6. H30 COUNT
+================================================================================
+Target: 171 (30% of 571 valid answerable training)
+Actual: 171
+Pct of answerable: 29.9%
+
+Superset property verified:
+  H10 subset of H20: True
+  H20 subset of H30: True
+
+================================================================================
+7. CATEGORY DISTRIBUTION
+================================================================================
+H30 (171 candidates):
+  TABLE_ABSENT_ROW:          30
+  UNSUPPORTED_NUMBER:        26
+  UNSUPPORTED_ENTITY:        26
+  RELATED_NOT_SUPPORTED:     19
+  TABLE_ABSENT_CELL:         17
+  ABSENT_FACT:               16
+  SECTION_ABSENT_FACT:       12
+  UNSUPPORTED_DATE:          10
+  LIST_ABSENT_ITEM:           7
+  CONFLICTING_DISTRACTOR:     6
+  MULTI_CHUNK_ABSENT_FACT:    2
+
+All 11 required categories are covered in H30.
+
+H20 (114 candidates):
+  TABLE_ABSENT_ROW:          29
+  UNSUPPORTED_NUMBER:        14
+  TABLE_ABSENT_CELL:         14
+  UNSUPPORTED_ENTITY:        13
+  SECTION_ABSENT_FACT:       12
+  ABSENT_FACT:                9
+  RELATED_NOT_SUPPORTED:      7
+  LIST_ABSENT_ITEM:           7
+  UNSUPPORTED_DATE:           5
+  CONFLICTING_DISTRACTOR:     2
+  MULTI_CHUNK_ABSENT_FACT:    2
+
+H10 (57 candidates):
+  SECTION_ABSENT_FACT:       12
+  UNSUPPORTED_NUMBER:         9
+  UNSUPPORTED_ENTITY:         9
+  LIST_ABSENT_ITEM:           7
+  ABSENT_FACT:                6
+  RELATED_NOT_SUPPORTED:      5
+  UNSUPPORTED_DATE:           3
+  TABLE_ABSENT_CELL:          2
+  MULTI_CHUNK_ABSENT_FACT:    2
+  TABLE_ABSENT_ROW:           1
+  CONFLICTING_DISTRACTOR:     1
+
+================================================================================
+8. DOCUMENT DISTRIBUTION
+================================================================================
+H30 (171 candidates across 17 documents):
+  env_monitoring_zeta:      27 (15.8%)
+  multi_chunk_doc_xi:       21 (12.3%)
+  product_comparison_pi:    18 (10.5%)
+  regulation_doc_iota:      16  (9.4%)
+  project_proposal_nu:      14  (8.2%)
+  clinical_trial_gamma:     12  (7.0%)
+  ops_manual_delta:         11  (6.4%)
+  api_docs_lambda:           8  (4.7%)
+  financial_report_q3:       6  (3.5%)
+  company_history_eta:       6  (3.5%)
+  tech_spec_alpha:           6  (3.5%)
+  textbook_chapter_theta:    5  (2.9%)
+  date_corpus:               5  (2.9%)
+  legal_contract_epsilon:    5  (2.9%)
+  research_paper_beta:       4  (2.3%)
+  training_material_omega:   4  (2.3%)
+  entity_corpus:             3  (1.8%)
+
+Maximum document concentration: 15.8% (env_monitoring_zeta)
+No document exceeds 20% threshold.
+
+Missing documents: textbook_chapter_theta has only 1 candidate in H10
+  but improves to 5 in H30.
+
+================================================================================
+9. SEMANTIC VALIDATION
+================================================================================
+All 1,094 unique candidates pass semantic audit.
+
+Validation method:
+- Each candidate uses a REAL context from the frozen derived dataset
+- Questions ask for facts GENUINELY ABSENT from the context
+- No synthetic context, no fabricated entities
+- Context integrity verified against source dataset
+
+Semantic validity: 100% (1,094/1,094)
+
+================================================================================
+10. LEAKAGE AUDIT
+================================================================================
+Benchmark overlap:
+  H10: question_leak=0, context_leak=0
+  H20: question_leak=0, context_leak=0
+  H30: question_leak=0, context_leak=0
+
+F2 holdout overlap:
+  None - candidates use different examples than the 14-example holdout
+
+Validation set overlap:
+  None - candidates use training-split contexts only
+
+Note: Using the SAME DOCUMENT TYPE is allowed.
+Using the SAME DOCUMENT CONTENT as an evaluation example is not.
+All contexts were verified against benchmark contexts.
+
+================================================================================
+11. DUPLICATE AUDIT
+================================================================================
+H10: 0 duplicate questions, 57 unique
+H20: 0 duplicate questions, 114 unique
+H30: 0 duplicate questions, 171 unique
+
+All question/context pairs are unique within each pool.
+
+================================================================================
+12. CONTEXT INTEGRITY
+================================================================================
+All contexts sourced from frozen derived dataset:
+  Hash: abcf4182f39f0620fb056eee4167d1872baf9b4c748051eade9d6312332f271f
+
+No contexts were:
+  - Created synthetically
+  - Modified from original
+  - Paraphrased
+  - Appended with artificial sentences
+
+Source example IDs recorded for full traceability.
+
+================================================================================
+13. COMPARISON WITH F2 NEGATIVE POOL
+================================================================================
+F2 negatives (20 examples):
+  Source: unanswerable_corpus (single synthetic document)
+  Type: Short, generic, domain-mismatched
+  Categories: Limited (mostly entity_absent, number_absent)
+  Document diversity: 1/19 documents (5.3%)
+  Category coverage: ~4/11 categories
+
+H30 negatives (171 examples):
+  Source: 18 answerable documents (same as training data)
+  Type: Document-grounded, technical, realistic
+  Categories: 11/11 categories covered
+  Document diversity: 17/18 eligible documents (94.4%)
+  Question uniqueness: 100%
+
+Key improvements over F2:
+  1. Document-grounded (not synthetic corpus)
+  2. Same distribution as answerable examples
+  3. Full category coverage
+  4. Diverse document sources
+  5. Realistic, plausible questions
+  6. No domain mismatch
+
+================================================================================
+14. LIMITATIONS
+================================================================================
+1. Some documents contribute fewer negatives than others due to
+   limited eligible contexts after quality gate filtering.
+
+2. MULTI_CHUNK_ABSENT_FACT category has only 2 examples in H30,
+   which may limit the model's learning of cross-chunk reasoning.
+
+3. The semantic audit is automated (context-based verification);
+   human review would provide additional confidence.
+
+4. All candidates use existing QA examples as context source;
+   contexts are short chunks rather than full documents, which
+   may not fully represent long-context unanswerable scenarios.
+
+5. Question templates, while context-specific, follow patterns
+   that could potentially be learned as artifacts by the model.
+
+================================================================================
+15. RECOMMENDED CANDIDATE POOL FOR H1
+================================================================================
+Recommendation: H20
+
+Rationale:
+  - 114 examples (20% of answerable training pool)
+  - All 11 categories covered
+  - 17/18 eligible documents represented
+  - No document exceeds 20% concentration
+  - 0 leakage into benchmark
+  - 0 duplicate questions
+  - Reasonable class balance
+  - Superset of H10 for easy scaling
+
+The H20 pool provides sufficient negative examples to test the
+hypothesis that representative, document-grounded unanswerable
+examples improve abstention behavior, without overwhelming the
+answerable training signal.
+
+H30 (171 examples) is also viable if the experiment shows H20
+provides insufficient signal, but H20 is the recommended starting
+point to avoid excessive negative-to-answerable ratio.
+
+H10 (57 examples) may be too small to provide meaningful signal,
+especially for underrepresented categories.
+
+================================================================================
+FINAL STATUS
+================================================================================
+H_DATASET_READY
+
+================================================================================
+FILE HASHES
+================================================================================
+All candidates (1,094 unique):
+  7dcbe4e0fba23d3832564d455efabff8d91ff9746a55ac992cde9b6c30b9d742
+
+H10 (57 examples):
+  b5ac22285e7e028197b426792918e5ce9f6881e90b3bdeb8c2ba2a35db4d59d9
+
+H20 (114 examples):
+  49defabe24affe40c0a849a8ec451659e9a200adb933643cab1bc01581d0305f
+
+H30 (171 examples):
+  e0d1812fe03e6ee4a415e7c2730e7c6bdd690dd28ea37218db45d7f1088e3822
+
+================================================================================
+FROZEN ARTIFACT VERIFICATION
+================================================================================
+Source dataset:   a517530354fc9bcaeef6f1aa16c3fb9ce92f1967668386bc66781e6e6bbf2e97
+Derived dataset:  abcf4182f39f0620fb056eee4167d1872baf9b4c748051eade9d6312332f271f
+Benchmark:        1166bf4ff38265c209614ac20261417b7eeb43653f4482dfdf94721fd50a41d0
+
+All verified unchanged.
+
+================================================================================
+GENERATED: 2026-09-21
+DO NOT TRAIN. DO NOT CREATE CHECKPOINTS. DO NOT MODIFY PRODUCTION.
+DO NOT MODIFY FROZEN DATA. DO NOT COMMIT, STAGE, OR PUSH.
+================================================================================

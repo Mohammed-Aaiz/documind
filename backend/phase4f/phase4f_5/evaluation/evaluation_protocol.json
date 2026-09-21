@@ -1,0 +1,77 @@
+{
+  "phase": "4F.5",
+  "version": "4F.5-eval-v1",
+  "description": "Canonical evaluation protocol for A0/A1/A2 comparison",
+  "models_evaluated": ["A0_production", "A1_distilbert", "A2_bert"],
+  "evaluation_split": "test",
+  "dataset_path": "backend/phase4f/phase4f_5/dataset/derived_dataset.jsonl",
+  "test_filter": "split == 'test'",
+  "tokenizer_per_model": {
+    "A0_production": "production tokenizer (backend/models/documind-qa/)",
+    "A1_distilbert": "distilbert-base-uncased",
+    "A2_bert": "bert-base-uncased"
+  },
+  "max_length": 384,
+  "max_answer_length": 50,
+  "inference": {
+    "method": "greedy_argmax",
+    "start_logits": "argmax over all positions",
+    "end_logits": "argmax over positions[start:start+max_answer_length]",
+    "answer_decoding": "tokenizer.decode(input_ids[start:end+1], skip_special_tokens=True).strip()"
+  },
+  "metrics": {
+    "exact_match": {
+      "definition": "normalize_text(pred) == normalize_text(gold)",
+      "normalization": "strip().lower() then collapse whitespace"
+    },
+    "token_f1": {
+      "definition": "2 * precision * recall / (precision + recall) on word tokens",
+      "normalization": "strip().lower().split() then set intersection"
+    },
+    "answerability": {
+      "definition": "fraction of answerable examples where pred != ''",
+      "scope": "answerable examples only (question_kind != UNANSWERABLE)"
+    },
+    "abstention_accuracy": {
+      "definition": "fraction of unanswerable examples where pred == ''",
+      "scope": "unanswerable examples only"
+    },
+    "false_abstention": {
+      "definition": "fraction of answerable examples where pred == ''",
+      "scope": "answerable examples only"
+    },
+    "spurious_answers": {
+      "definition": "fraction of all examples where question_kind == UNANSWERABLE and pred != ''",
+      "scope": "all examples"
+    },
+    "per_category_em": {
+      "definition": "exact_match computed per question_kind category"
+    },
+    "per_category_f1": {
+      "definition": "token_f1 computed per question_kind category"
+    },
+    "confidence": {
+      "definition": "average of softmax(start_logits)[start_idx] and softmax(end_logits)[end_idx]",
+      "note": "raw probability, not calibrated"
+    },
+    "latency_ms": {
+      "definition": "average inference time per example in milliseconds"
+    }
+  },
+  "failure_taxonomy": {
+    "ABSTAIN": "pred == '' when question_kind != UNANSWERABLE",
+    "EXTRACT": "pred != '' and pred != gold and question_kind != UNANSWERABLE",
+    "SPURIOUS": "pred != '' and question_kind == UNANSWERABLE"
+  },
+  "checkpoint_selection": {
+    "metric": "exact_match on validation set",
+    "secondary": "token_f1 on validation set (diagnostic)",
+    "tiebreaking": "earliest checkpoint",
+    "test_usage": "NEVER for selection. TEST is for final reporting only."
+  },
+  "reporting": {
+    "primary_comparison": "A0 vs A1 vs A2 on TEST split",
+    "no_training_or_validation_comparison": true,
+    "statistical_significance": "NOT_COMPUTED (insufficient sample size)"
+  }
+}

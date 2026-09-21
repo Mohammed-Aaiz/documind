@@ -1,0 +1,47 @@
+{
+  "phase": "4F.5-A",
+  "tokenizer": "distilbert-base-uncased",
+  "max_length": 384,
+  "return_offsets_mapping_used": true,
+  "total_answerable": 876,
+  "valid_spans": 872,
+  "invalid_spans": 4,
+  "truncated_answers": 0,
+  "answer_not_found": 4,
+  "exact_decode_match": 136,
+  "non_exact_decode": 736,
+  "valid_span_rate": 99.5,
+  "invalid_span_rate": 0.5,
+  "exact_decode_rate": 15.5,
+  "invalid_details": [
+    {
+      "example_id": "tc_3b383990",
+      "reason": "NOT_FOUND",
+      "start_token": 79,
+      "end_token": null,
+      "answer": "<0.001"
+    },
+    {
+      "example_id": "li_8bc7889f",
+      "reason": "NOT_FOUND",
+      "start_token": null,
+      "end_token": 75,
+      "answer": "docker stop <container> \u2014 Stop a running"
+    },
+    {
+      "example_id": "li_4fa4a839",
+      "reason": "NOT_FOUND",
+      "start_token": 77,
+      "end_token": null,
+      "answer": "docker compose up -d \u2014 Start services de"
+    },
+    {
+      "example_id": "li_8770780b",
+      "reason": "NOT_FOUND",
+      "start_token": 96,
+      "end_token": null,
+      "answer": "docker image prune -a \u2014 Remove all unuse"
+    }
+  ],
+  "non_exact_decode_note": "Subword tokenization may insert whitespace (e.g., '2.5 amps' -> '2. 5 amps'). These are valid spans that decode differently due to tokenizer behavior, not alignment errors."
+}

@@ -1,0 +1,38 @@
+{
+  "audit_version": "4F.5-F2R-no-answer-logic-v1",
+  "current_logic": "argmax(start_logits) + argmax(end_logits) — no null comparison",
+  "null_score_calculation": "CLS logit (token 0) from start_logits and end_logits",
+  "answer_score_calculation": "Best non-CLS start logit + corresponding end logit",
+  "comparison": "None — CLS is just another token in argmax",
+  "threshold": "N/A (argmax selects highest logit regardless)",
+  "learned_threshold": false,
+  "calibrated": false,
+  "same_across_eval_sets": true,
+
+  "cls_score_analysis": {
+    "holdout_unanswerable": {
+      "mean_cls_combined": 0.6172,
+      "min_cls_combined": 0.4889,
+      "max_cls_combined": 0.8446,
+      "mean_best_non_cls": 1.3168,
+      "cls_is_always_weaker": true
+    }
+  },
+
+  "threshold_sweep": [
+    {"threshold": 0.0, "abstained": 14, "spurious": 0},
+    {"threshold": 0.1, "abstained": 14, "spurious": 0},
+    {"threshold": 0.2, "abstained": 14, "spurious": 0},
+    {"threshold": 0.3, "abstained": 14, "spurious": 0},
+    {"threshold": 0.4, "abstained": 14, "spurious": 0},
+    {"threshold": 0.5, "abstained": 13, "spurious": 1},
+    {"threshold": 0.6, "abstained": 6, "spurious": 8},
+    {"threshold": 0.7, "abstained": 2, "spurious": 12},
+    {"threshold": 0.8, "abstained": 2, "spurious": 12},
+    {"threshold": 0.9, "abstained": 0, "spurious": 14}
+  ],
+
+  "key_finding": "A threshold of 0.5 on CLS combined score would give 93% abstention on holdout. The no-answer signal EXISTS but the argmax evaluation never uses it.",
+
+  "diagnosis": "MODEL_B"
+}

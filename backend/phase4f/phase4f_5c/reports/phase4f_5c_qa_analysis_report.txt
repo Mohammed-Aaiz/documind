@@ -1,0 +1,324 @@
+======================================================================
+PHASE 4F.5-C — QA RESULT ANALYSIS & DATA/TASK GAP AUDIT
+======================================================================
+
+Date: 2026-09-21
+Status: ANALYSIS_COMPLETE
+
+======================================================================
+1. TEST SET COMPOSITION
+======================================================================
+
+  Total:         221 examples
+  Answerable:    221 (100%)
+  Unanswerable:    0 (0%)
+
+  CRITICAL: The test set contains ZERO unanswerable examples.
+  Abstention and spurious metrics are NOT EVALUABLE on this test set.
+
+  Documents: 4
+    api_docs_lambda:       66 examples (TABLE_CELL:42, TABLE_ROW:10, ...)
+    financial_report_q3:   65 examples (DIRECT_SPAN:19, NUMERIC:11, ...)
+    dataset_desc_mu:       58 examples (TABLE_CELL:42, TABLE_ROW:7, ...)
+    legal_contract_epsilon: 32 examples (TABLE_CELL:11, NUMERIC:5, ...)
+
+  Category distribution:
+    TABLE_CELL:      111 (50.2%)  <- DOMINANT, hardest for all models
+    DIRECT_SPAN:      25 (11.3%)
+    TABLE_ROW:        25 (11.3%)
+    NUMERIC:          20  (9.0%)
+    LIST_ITEM:        19  (8.6%)
+    SECTION_SPECIFIC: 14  (6.3%)
+    MULTI_CHUNK:       7  (3.2%)
+
+======================================================================
+2. PER-CATEGORY COMPARISON
+======================================================================
+
+  | Category         | N  | A0 EM | A1 EM | A2 EM | A0 F1  | A1 F1  | A2 F1  | dA1_F1 | dA2_F1 |
+  |------------------|----|-------|-------|-------|--------|--------|--------|--------|--------|
+  | DIRECT_SPAN      | 25 |  4.0% |  8.0% |  4.0% |  17.7% |  42.6% |  36.6% | +24.9  | +18.9  |
+  | LIST_ITEM        | 19 |  0.0% |  0.0% |  0.0% |   9.1% |  16.0% |  15.4% |  +6.9  |  +6.3  |
+  | MULTI_CHUNK       | 7 |  0.0% |  0.0% |  0.0% |   5.7% |  16.1% |  19.4% | +10.4  | +13.7  |
+  | NUMERIC          | 20 | 10.0% | 10.0% |  5.0% |  28.8% |  41.4% |  39.1% | +12.6  | +10.3  |
+  | SECTION_SPECIFIC | 14 |  0.0% |  0.0% |  0.0% |  14.8% |   1.4% |   2.0% | -13.4  | -12.8  |
+  | TABLE_CELL      | 111 |  3.6% |  0.0% |  0.0% |   3.9% |   3.7% |   2.1% |  -0.2  |  -1.8  |
+  | TABLE_ROW        | 25 |  0.0% |  0.0% |  0.0% |   1.2% |  17.8% |  12.9% | +16.6  | +11.7  |
+
+  KEY FINDINGS:
+  - A1 improves F1 on 5/7 categories (DIRECT_SPAN, LIST_ITEM, MULTI_CHUNK, NUMERIC, TABLE_ROW)
+  - A1 REGRESSES on SECTION_SPECIFIC (F1 drops 13.4pp) — production advantage
+  - TABLE_CELL: all models near zero — hardest category, 50% of test set
+  - A2 never exceeds A1 on any category
+
+======================================================================
+3. EM vs F1 GAP ANALYSIS
+======================================================================
+
+  A1 achieves high F1 (>30%) but no EM on 15 examples.
+  Dominant mismatch type: SUBWORD_TOKENIZATION (12/15)
+
+  Example pattern:
+    Gold:  "20.3 percent"
+    A1:    "20. 3 percent"
+    F1:    40.0% (3/5 tokens match)
+    EM:    False (space inserted by WordPiece)
+
+  This is NOT a model failure — it is a tokenizer artifact.
+  The model correctly identifies the answer span but WordPiece
+  splits "20.3" into tokens ["20", ".", "3"], which decode with
+  spaces as "20. 3".
+
+  Under relaxed normalization (ignoring whitespace around dots),
+  ~12 additional A1 predictions would become exact matches.
+
+======================================================================
+4. NUMERIC QA AUDIT
+======================================================================
+
+  20 test examples. Error type distribution:
+    CORRECT:           2 (A1 gets right)
+    SUBWORD_DECIMAL:  12 (correct span, tokenizer splits decimals)
+    PARTIAL_OVERLAP:   4 (wrong number but some token overlap)
+    WRONG:             2 (completely wrong)
+
+  Common patterns:
+  - "$847.3 million" -> "847. 3 million" (decimal split + currency)
+  - "$245,000" -> "245, 000" (comma creates separate tokens)
+  - "$3.47" -> "3. 47" (decimal split, no surrounding context)
+  - "1000" -> "1000 requests per minute" (extra context words)
+
+  Root cause: WordPiece tokenization at character boundaries.
+  This is a REPRESENTATION-level issue, not a model or training issue.
+
+======================================================================
+5. TABLE QA AUDIT
+======================================================================
+
+  TABLE_CELL (111 examples):
+    A0: 4 correct (3.6%)
+    A1: 0 correct (0.0%)
+    A2: 0 correct (0.0%)
+
+  TABLE_ROW (25 examples):
+    A0: 0 correct (0.0%)
+    A1: 0 correct (0.0%)
+    A2: 0 correct (0.0%)
+
+  Analysis:
+  - TABLE_CELL is the dominant failure category (50% of test)
+  - All models fail on table cell extraction
+  - A1 does not improve TABLE_CELL over A0 (F1: 3.7% vs 3.9%)
+  - A1 improves TABLE_ROW F1 (17.8% vs 1.2%) but 0 EM
+  - Table representation in context (pipe-delimited text) may be
+    the primary barrier — not model capability
+
+======================================================================
+6. LIST QA AUDIT
+======================================================================
+
+  19 examples. All models: 0% EM.
+  A1 F1: 16.0% vs A0 F1: 9.1% (+6.9pp improvement)
+  A2 F1: 15.4% (+6.3pp improvement)
+
+  Failure pattern: List items are multi-line text. Models extract
+  partial spans that overlap with the correct answer but include
+  neighboring items or headers.
+
+======================================================================
+7. MULTI-CHUNK / LONG-CONTEXT
+======================================================================
+
+  MULTI_CHUNK (7 examples):
+    A0: F1=5.7%, A1: F1=16.1% (+10.4pp), A2: F1=19.4% (+13.7pp)
+
+  SECTION_SPECIFIC (14 examples):
+    A0: F1=14.8%, A1: F1=1.4% (-13.4pp REGRESSION)
+    A2: F1=2.0% (-12.8pp REGRESSION)
+
+  A0 advantage on SECTION_SPECIFIC suggests its 414K-sample training
+  provides better section-level comprehension. Fine-tuning on 571
+  examples destroys this capability.
+
+======================================================================
+8. PRODUCTION MODEL (A0) ANALYSIS
+======================================================================
+
+  A0 STRENGTHS:
+  - SECTION_SPECIFIC: F1=14.8% (best of all models)
+  - TABLE_CELL: EM=3.6% (only model with any correct answers)
+  - Conservative abstention prevents wrong answers
+
+  A0 WEAKNESSES:
+  - Abstains on 62.4% of answerable questions
+  - TABLE_CELL: abstains on 72.1% (80/111)
+  - TABLE_ROW: abstains on 96.0% (24/25)
+  - False abstention is the DOMINANT failure mode
+
+  A0's advantage appears concentrated in:
+  - Section-level comprehension (from diverse training data)
+  - TABLE_CELL direct extraction (from table-heavy training)
+  - Previously represented patterns (SQuAD-style QA)
+
+======================================================================
+9. TRAINING BEHAVIOR
+======================================================================
+
+  A1 (DistilBERT):
+    Epoch 1: loss=5.64, val_EM=5.0%,  val_F1=18.5%
+    Epoch 2: loss=4.33, val_EM=7.5%,  val_F1=24.0%
+    Epoch 3: loss=3.49, val_EM=8.8%,  val_F1=22.7%
+
+    Analysis: Stable training. Loss decreasing, val_EM increasing.
+    Mild generalization gap: val_EM=8.8% vs test_EM=1.8%.
+    Val_F1 peaked at epoch 2 then decreased slightly.
+
+  A2 (BERT):
+    Epoch 1: loss=5.37, val_EM=7.5%,  val_F1=21.8%
+    Epoch 2: loss=3.95, val_EM=10.0%, val_F1=23.2%
+    Epoch 3: loss=3.30, val_EM=11.2%, val_F1=23.9%
+
+    Analysis: Stable training but SIGNIFICANT overfitting.
+    val_EM=11.2% vs test_EM=0.9% — 10.3pp gap.
+    With only 2 validation documents, validation metrics are
+    unreliable for checkpoint selection.
+
+  Neither model shows underfitting. Both show decreasing loss.
+  The issue is not training quality but the evaluation barrier.
+
+======================================================================
+10. ANSWER NORMALIZATION DIAGNOSTIC
+======================================================================
+
+  Official EM:
+    A0: 3.2%, A1: 1.8%, A2: 0.9%
+
+  Diagnostic findings:
+  - Subword decimal issue: ~12 A1 predictions would match under
+    relaxed normalization (ignore whitespace around dots)
+  - Currency symbols: 5 predictions affected by $ handling
+  - Punctuation removal alone: 0 additional matches
+
+  If we applied relaxed normalization (treating "20.3" and
+  "20. 3" as equivalent):
+    A1 effective EM would be approximately: 1.8% + (12/221*100%) = ~7.2%
+    This would EXCEED A0's 3.2%
+
+  This is diagnostic only — official results are unchanged.
+
+======================================================================
+11. FAILURE MATRIX
+======================================================================
+
+  | Category         | N  | A0 EM | A1 EM | A2 EM | A0 F1 | A1 F1 | A2 F1 |
+  |------------------|----|-------|-------|-------|-------|-------|-------|
+  | DIRECT_SPAN      | 25 |  4.0% |  8.0% |  4.0% | 17.7% | 42.6% | 36.6% |
+  | NUMERIC          | 20 | 10.0% | 10.0% |  5.0% | 28.8% | 41.4% | 39.1% |
+  | TABLE_CELL      | 111 |  3.6% |  0.0% |  0.0% |  3.9% |  3.7% |  2.1% |
+  | TABLE_ROW        | 25 |  0.0% |  0.0% |  0.0% |  1.2% | 17.8% | 12.9% |
+  | LIST_ITEM        | 19 |  0.0% |  0.0% |  0.0% |  9.1% | 16.0% | 15.4% |
+  | SECTION_SPECIFIC | 14 |  0.0% |  0.0% |  0.0% | 14.8% |  1.4% |  2.0% |
+  | MULTI_CHUNK       | 7 |  0.0% |  0.0% |  0.0% |  5.7% | 16.1% | 19.4% |
+
+  Recurring patterns:
+  - TABLE_CELL: universal failure (hardest, 50% of test)
+  - SECTION_SPECIFIC: A0 exclusive advantage
+  - NUMERIC/DIRECT_SPAN: A1/A2 improve F1 but EM blocked by tokenizer
+  - TABLE_ROW: A1 improves F1 but 0 EM
+
+======================================================================
+12. FIVE-LEVEL ROOT CAUSE ANALYSIS
+======================================================================
+
+  LEVEL 1 (DATA):
+    - Test set has 0 UNANSWERABLE examples — cannot evaluate abstention
+    - Test set is 50.2% TABLE_CELL — skewed to hardest category
+    - A0's training data (414K samples) includes table-heavy patterns
+
+  LEVEL 2 (REPRESENTATION):
+    - WordPiece tokenization splits decimals: 20.3 -> "20. 3"
+    - This prevents EM on ~60% of NUMERIC/DIRECT_SPAN examples
+    - Table context is pipe-delimited text, losing structure
+
+  LEVEL 3 (MODEL):
+    - A0's 414K training provides section-level comprehension advantage
+    - A1/A2 (fresh pretrained) cannot match this on 571 examples
+    - A0's conservative abstention hurts on all-answerable test set
+
+  LEVEL 4 (TRAINING):
+    - A2 overfits (val_EM=11.2% vs test_EM=0.9%)
+    - 2 validation documents insufficient for checkpoint selection
+    - 3 epochs may be too few for BERT to generalize
+
+  LEVEL 5 (EVALUATION):
+    - EM metric is too strict for subword-tokenized outputs
+    - No UNANSWERABLE test examples limits evaluation scope
+    - Test set composition (4 docs, 50% TABLE_CELL) may not represent
+      deployment scenarios
+
+======================================================================
+13. WHAT THE EVIDENCE SUPPORTS
+======================================================================
+
+  [G] MULTIPLE CONTRIBUTING FACTORS
+
+  Specifically:
+  1. ANSWER NORMALIZATION GAP: ~12 A1 predictions are semantically
+     correct but fail EM due to subword tokenization of decimals.
+     Under relaxed normalization, A1 EM would be ~7.2% vs A0's 3.2%.
+
+  2. STRUCTURED QA GAP: TABLE_CELL (50% of test) is universally
+     difficult. The pipe-delimited representation loses table
+     structure. No model achieves >4% EM.
+
+  3. DATA COVERAGE GAP: A0's 414K-sample training provides
+     SECTION_SPECIFIC comprehension that 571 examples cannot match.
+
+  4. EVALUATION LIMITATION: The test set has 0 UNANSWERABLE examples,
+     making it impossible to evaluate the abstention trade-off.
+
+  5. CHECKPOINT SELECTION LIMITATION: 2 validation documents produce
+     unreliable validation metrics (especially for A2).
+
+======================================================================
+14. WHAT WE KNOW
+======================================================================
+
+  1. A1 genuinely learns better token overlap than A0 (F1 +5.8pp overall)
+  2. A1 improves on 5/7 categories by F1
+  3. A0's abstention behavior hurts on this all-answerable test set
+  4. WordPiece tokenization is the primary EM barrier for numerics
+  5. TABLE_CELL is universally hard — likely a representation issue
+  6. A2 overfits more than A1 (larger model, fewer effective examples)
+  7. Training was numerically stable for both models
+  8. The corrected experiment is scientifically valid
+
+======================================================================
+15. WHAT WE DO NOT KNOW
+======================================================================
+
+  1. How models perform on UNANSWERABLE questions (none in test set)
+  2. Whether A1/A2 would improve with more diverse training documents
+  3. Whether table-specific preprocessing would help TABLE_CELL
+  4. Whether initializing from production weights would help
+  5. Whether 10+ epochs would close the val/test gap
+  6. Whether the test set is representative of deployment scenarios
+  7. Whether A0's advantage is from training data quantity or quality
+
+======================================================================
+16. REQUIRED EVIDENCE BEFORE NEXT TRAINING
+======================================================================
+
+  1. Test set must include UNANSWERABLE examples to evaluate abstention
+  2. Test set should be rebalanced (TABLE_CELL currently 50%)
+  3. Diagnostic: evaluate with relaxed normalization to separate
+     tokenizer artifacts from genuine extraction failures
+  4. Diagnostic: evaluate on a held-out document set (not in v3.1)
+     to test genuine generalization
+  5. If retraining: consider answer normalization that handles
+     subword decimal splitting as part of the evaluation, not
+     as a training modification
+
+======================================================================
+PHASE 4F.5-C — ANALYSIS COMPLETE
+======================================================================

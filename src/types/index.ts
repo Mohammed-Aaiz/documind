@@ -27,11 +27,20 @@ export interface ChatMessage {
   insufficientContext?: boolean;
 }
 
+/**
+ * Media verification result — currently unavailable.
+ * The backend analysis pipeline is not implemented yet.
+ * The frontend must never fabricate these values.
+ */
 export interface VerificationResult {
-  score: number;
-  verdict: 'SYNTHETIC' | 'AUTHENTIC' | 'SUSPICIOUS';
-  lipSyncDrift: 'High' | 'Medium' | 'Low';
-  blinkRate: 'Abnormal' | 'Normal';
+  /** Analysis score from 0-100. Null when pipeline is unavailable. */
+  score: number | null;
+  /** Verdict from the detector. Null when pipeline is unavailable. */
+  verdict: 'SYNTHETIC' | 'AUTHENTIC' | 'SUSPICIOUS' | null;
+  /** Lip-sync drift measurement. Null when pipeline is unavailable. */
+  lipSyncDrift: 'High' | 'Medium' | 'Low' | null;
+  /** Blink rate measurement. Null when pipeline is unavailable. */
+  blinkRate: 'Abnormal' | 'Normal' | null;
 }
 
 export interface ReliabilityEvidence {
@@ -73,6 +82,19 @@ export interface SourceRef {
   relevanceScore: number;
   extractionNode: string;
   status: 'VERIFIED' | 'MARGINAL' | 'UNRESOLVED';
+}
+
+export interface ChatSession {
+  id: string;
+  createdAt: string;
+  preview: string;
+}
+
+export interface PersistedMessage {
+  id: string;
+  sender: 'user' | 'oracle';
+  content: string;
+  createdAt: string;
 }
 
 export interface UserProfile {

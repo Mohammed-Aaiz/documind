@@ -1,0 +1,437 @@
+==============================================================================
+PHASE 4D.1 — QA EXPERIMENT RECONCILIATION & VALIDITY AUDIT
+==============================================================================
+
+Report Date: 2026-09-20
+Status: RECONCILIATION COMPLETE — NO PRODUCTION CHANGES
+
+==============================================================================
+1. EXECUTIVE SUMMARY
+==============================================================================
+
+Phase 4C reported: 8/51 oracle PASS (15.7%), 43/51 FAIL (84.3%)
+Phase 4D reported: 60/92 oracle EM (66.3%), baseline 72.8% EM
+
+These numbers CONFLICTED materially. This phase reproduces both protocols,
+identifies every difference, and establishes the true baseline.
+
+CRITICAL FINDINGS:
+
+  1. Phase 4C oracle has a PROTOCOL BUG: it passes the PREDICTED answer
+     as the question text to the QA model, not the original question.
+     This fundamentally invalidates the 84.3% failure rate claim.
+
+  2. Phase 4D oracle uses a SYNTHETIC easy context that inflates
+     performance. The true oracle EM with actual evidence is 27.2%, not 66.3%.
+
+  3. The failure count in Phase 4C (51) does not match the actual
+     Phase 4B Arm C failure count (64). Another inconsistency.
+
+  4. Model checkpoint is verified identical across all evaluations.
+
+CORRECTED BASELINE:
+
+  ORACLE-A (Phase 4C protocol, bugs included):  EM = 20.6% (12/63)
+  ORACLE-B (Phase 4D protocol, inflated):       EM = 66.3% (60/92)
+  ORACLE-C (Unified, correct protocol):         EM = 27.2% (24/92)
+
+  The TRUE oracle performance with correct questions and real evidence
+  substrings is 27.2% EM — significantly worse than both prior reports
+  claimed, but still better than Phase 4C's inflated 84.3% failure.
+
+==============================================================================
+2. PHASE 4C ORACLE RECONSTRUCTION
+==============================================================================
+
+Phase 4C Protocol (from test_phase4c_diagnostics.py):
+
+  Source file:     backend/test_phase4c_diagnostics.py
+  Question set:    Phase 4B Arm C failures (report says 51, actual: 64)
+  Question text:   q.get("answer", "") — THE PREDICTED ANSWER (BUG)
+  Oracle context:  oracle_ctx = expected_answer (just the answer text)
+  Expected answer: From corpus via doc.questions matching
+  EM implementation: normalised exact match (lowercase, whitespace-collapsed)
+  Token F1:        Standard token overlap F1
+  Model:           ./models/documind-qa (DistilBERT)
+  Max length:      384 tokens
+  Max answer:      100 tokens
+  N-best:          20
+
+Reconstructed Result (ORACLE-A):
+
+  Questions tested: 63 (64 failures minus 1 without expected answer)
+  Exact Match:      0.2063 (12/63)
+  Acceptable Match: 0.2063
+  Token F1:         0.5511
+  Mean Confidence:  0.0038
+
+  NOTE: The 12 "passes" are cases where the predicted answer happened to
+  match the expected answer, making the trivial question
+  "What is [answer]?" with context "[answer]" trivially solvable.
+
+  The 84.3% failure rate from Phase 4C is NOT reproducible because:
+  a) The question text is wrong (predicted answer, not original question)
+  b) The failure count (51) doesn't match actual failures (64)
+  c) The context is just the answer text, which is trivially extractable
+
+==============================================================================
+3. PHASE 4D ORACLE RECONSTRUCTION
+==============================================================================
+
+Phase 4D Protocol (from phase4d/oracle_eval.py):
+
+  Source file:     backend/phase4d/oracle_eval.py
+  Question set:    ALL 92 answerable questions
+  Question text:   q["text"] — the ORIGINAL question (CORRECT)
+  Oracle context:  f"The answer is: {expected}. Based on the document, the result is {expected}."
+  Expected answer: q["expected_answer"]
+  EM implementation: normalised exact match (identical to Phase 4C)
+  Token F1:        Standard token overlap F1 (identical to Phase 4C)
+  Model:           ./models/documind-qa (same checkpoint)
+  Max length:      384 tokens
+  Max answer:      100 tokens
+  N-best:          20
+
+Reconstructed Result (ORACLE-B):
+
+  Questions tested: 92
+  Exact Match:      0.6630 (60/92)
+  Acceptable Match: 0.6739
+  Token F1:         0.8895
+  Mean Confidence:  0.0791
+
+  NOTE: The 66.3% EM is INFLATED because the oracle context is synthetic
+  and explicitly states the answer twice: "The answer is: {expected}.
+  Based on the document, the result is {expected}." This makes extraction
+  trivially easy for the model.
+
+==============================================================================
+4. PROTOCOL DIFFERENCE MATRIX
+==============================================================================
+
+  Dimension              | Phase 4C (ORACLE-A)       | Phase 4D (ORACLE-B)         | Unified (ORACLE-C)
+  -----------------------|---------------------------|------------------------------|----------------------
+  Question text          | PREDICTED answer (BUG)    | Original question (CORRECT)  | Original question (CORRECT)
+  Question set           | 64 failures only          | 92 all answerable            | 92 all answerable
+  Oracle context         | Just expected answer text | Synthetic sentence with answer| Actual evidence substrings
+  Context length         | ~5-20 chars               | ~50-100 chars                | ~10-200 chars (varies)
+  Expected answer source | Corpus doc.questions      | Question dict                | Question dict
+  EM implementation      | Identical                 | Identical                    | Identical
+  F1 implementation      | Identical                 | Identical                    | Identical
+  Model checkpoint       | Identical                 | Identical                    | Identical
+  Tokenizer              | Identical                 | Identical                    | Identical
+  Max length             | 384                       | 384                          | 384
+  Max answer             | 100                       | 100                          | 100
+
+  CRITICAL DIFFERENCES:
+    1. Question text: Phase 4C uses WRONG question (predicted answer)
+    2. Oracle context: Phase 4D uses TRIVIAL context (answer stated twice)
+    3. Question set: Phase 4C only tests failures (selection bias)
+
+==============================================================================
+5. UNIFIED BENCHMARK
+==============================================================================
+
+  Total questions:       102
+  Answerable:            92
+  Unsupported:           10
+  Phase 4C failures:     64 (actual, not 51 as reported)
+  Questions in both:     91
+  Questions only in 4C:  1 (unanswerable questions in Phase 4B)
+  Unified benchmark:     92 answerable questions
+
+  Per-kind distribution:
+    factual:           30
+    table:             24
+    list:              16
+    section_specific:   7
+    dense_prose:        5
+    academic:           3
+    long_paragraph:     2
+    multipage:          2
+    multichunk:         1
+    surrounding_context:1
+    unpunctuated:       1
+
+==============================================================================
+6. ORACLE-A RESULTS (Phase 4C Protocol)
+==============================================================================
+
+  Protocol: Phase 4C exact reproduction (with bug)
+  Questions: 63 failure questions
+
+  Aggregate:
+    Exact Match:      0.2063 (12/63)
+    Acceptable Match: 0.2063
+    Token F1:         0.5511
+    Mean Confidence:  0.0038
+
+  Per-kind:
+    (not computed — Phase 4C only tested failures)
+
+==============================================================================
+7. ORACLE-B RESULTS (Phase 4D Protocol)
+==============================================================================
+
+  Protocol: Phase 4D exact reproduction
+  Questions: 92 answerable questions
+
+  Aggregate:
+    Exact Match:      0.6630 (60/92)
+    Acceptable Match: 0.6739
+    Token F1:         0.8895
+    Mean Confidence:  0.0791
+
+  Per-kind:
+    academic:            EM=1.0000 F1=1.0000 n=3
+    dense_prose:         EM=0.6000 F1=0.8615 n=5
+    factual:             EM=0.7000 F1=0.8990 n=30
+    list:                EM=0.7500 F1=0.9609 n=16
+    long_paragraph:      EM=0.0000 F1=0.8334 n=2
+    multichunk:          EM=1.0000 F1=1.0000 n=1
+    multipage:           EM=1.0000 F1=1.0000 n=2
+    section_specific:    EM=0.7143 F1=0.8118 n=7
+    surrounding_context: EM=0.0000 F1=0.2000 n=1
+    table:               EM=0.5417 F1=0.8597 n=24
+    unpunctuated:        EM=1.0000 F1=1.0000 n=1
+
+==============================================================================
+8. ORACLE-C RESULTS (Unified Protocol)
+==============================================================================
+
+  Protocol: Unified (correct question + actual evidence substrings)
+  Questions: 92 answerable questions
+
+  Aggregate:
+    Exact Match:      0.2717 (24/92)
+    Acceptable Match: 0.2935
+    Token F1:         0.6196
+    Mean Confidence:  0.1212
+
+  Per-kind:
+    (computed from reconciliation.json)
+
+==============================================================================
+9. QUESTION-LEVEL DISAGREEMENTS
+==============================================================================
+
+  Disagreements between ORACLE-B and ORACLE-C: 38 questions
+
+  All 38 disagreements are ORACLE-B PASS / ORACLE-C FAIL.
+
+  Root cause: ORACLE-B's synthetic context ("The answer is: {expected}.")
+  makes extraction trivially easy. When the context is just the evidence
+  substring (ORACLE-C), the model often extracts a partial span.
+
+  Example disagreements:
+    ac_1:  B=PASS "quokka estimator"    C=FAIL "quo" (partial)
+    dp_3:  B=PASS "14 millimetres"      C=FAIL "14" (truncated)
+    gl_2:  B=PASS "384 tokens"          C=FAIL "384" (truncated)
+    li_1:  B=PASS "remove the helios filter" C=FAIL "helios" (wrong span)
+
+  The ORACLE-B results OVERSTATE model capability by 39 percentage points
+  (66.3% vs 27.2%).
+
+==============================================================================
+10. MODEL CHECKPOINT VERIFICATION
+==============================================================================
+
+  Model path:   backend/models/documind-qa/model.safetensors
+  SHA256:       cb9f1dde94fca0e1f82c440bdc184ff54ba02efb6ea432e37a8c6ff8a8f69deb
+  File size:    265,470,032 bytes
+  Modified:     2026-09-01T21:22:53 UTC
+  Architecture: DistilBertForQuestionAnswering
+  Vocab size:   30,522
+  Max position: 512
+  Config:       6 layers, 12 heads, 768 dim, 3072 hidden
+  Dropout:      0.1 (attention), 0.1 (QA head)
+
+  VERIFICATION: All three oracle evaluations used the IDENTICAL checkpoint.
+  No model was swapped or accidentally modified.
+
+==============================================================================
+11. TRAINING PROVENANCE VERIFICATION
+==============================================================================
+
+  Claim: 414,107 total training samples across 3 phases
+
+  Evidence:
+    - model_card.json: documents 3 phases, 414,107 total
+    - No training logs in repository
+    - No dataset manifests in repository
+    - No Colab/Kaggle artifacts in repository
+    - No training scripts in repository
+    - Training was performed EXTERNALLY
+
+  Phase 1: SQuAD 2.0 (87,599 samples) — Google Colab T4
+  Phase 2: SQuAD+HotpotQA+CoQA+NewsQA+TriviaQA (414,057 samples) — Kaggle T4
+  Phase 3: Custom Academic QA (50 pairs, 15 epochs) — Google Colab T4
+
+  Status: PARTIALLY_CONFIRMED
+    - model_card.json is the sole source of truth
+    - Numbers are plausible for these datasets
+    - Cannot verify without access to original training environment
+    - Phase 2 sample count (414,057) is the SUM of all datasets
+      (not additional samples beyond Phase 1)
+    - Phase 3 added only 50 domain-specific pairs
+
+  NOTE: Phase 4D report incorrectly stated "414,107" as the total,
+  which matches model_card.json. This is consistent.
+
+==============================================================================
+12. TABLE/LIST RECONCILIATION
+==============================================================================
+
+  TABLE QUESTIONS (n=24):
+
+  Protocol           | EM      | F1      | Cause of Difference
+  -------------------|---------|---------|---------------------
+  Phase 4C (4C rep)  | N/A     | N/A     | Protocol bug (wrong question)
+  Phase 4D (4D rep)  | 0.5417  | 0.8597  | Synthetic easy context
+  Unified (correct)  | 0.2917  | 0.6222  | Actual evidence substrings
+  Phase 4C reported  | 0.0000  | 0.131   | Wrong question + failures only
+
+  DISCREPANCY: 0.2500 between Phase 4D and Unified
+  CAUSE: Phase 4D's synthetic context ("The answer is: 85 percent.")
+  makes table cell extraction trivially easy. With actual evidence
+  substrings (which are pipe-delimited table text), extraction is harder.
+
+  LIST QUESTIONS (n=16):
+
+  Protocol           | EM      | F1      | Cause of Difference
+  -------------------|---------|---------|---------------------
+  Phase 4C (4C rep)  | N/A     | N/A     | Protocol bug (wrong question)
+  Phase 4D (4D rep)  | 0.7500  | 0.9609  | Synthetic easy context
+  Unified (correct)  | 0.0625  | 0.5761  | Actual evidence substrings
+  Phase 4C reported  | 0.0000  | 0.145   | Wrong question + failures only
+
+  DISCREPANCY: 0.6875 between Phase 4D and Unified (HUGE)
+  CAUSE: List items in actual evidence are short fragments that don't
+  contain enough context for the model to extract the full answer.
+  The synthetic context explicitly states the answer, which is trivially
+  extractable.
+
+  CONCLUSION: Neither Phase 4C nor Phase 4D correctly measured
+  table/list handling. The unified protocol shows:
+  - Tables: 29.2% EM with actual evidence (better than 0% but still poor)
+  - Lists: 6.25% EM with actual evidence (very poor)
+
+==============================================================================
+13. INTERPRETATION OF 54-SAMPLE TRAINING EXPERIMENTS
+==============================================================================
+
+  Phase 4D conducted three pilot training experiments:
+
+  Experiment A: 7 prose examples, 3 epochs
+    - Identical to baseline (no change)
+    - Too few examples to affect the model
+
+  Experiment B: 44 structured examples, 5 epochs
+    - REGRESSED: EM dropped from 72.8% to 69.6% (oracle)
+    - Confidence collapsed to 0.0000
+    - Catastrophic forgetting of original training
+
+  Experiment C: 54 combined examples, 3 epochs
+    - Slight regression: 72.8% -> 71.7% (oracle)
+    - Better than B but still degraded
+
+  VALIDITY ASSESSMENT:
+    These are PILOT EXPERIMENTS only. They establish:
+    - 54 CPU-trained examples cause catastrophic forgetting
+    - More data + fewer epochs (C) is better than less data + more epochs (B)
+    - They CANNOT conclude "fine-tuning doesn't work"
+
+    They CAN conclude:
+    - Fine-tuning on 54 examples without proper regularization is harmful
+    - GPU training with thousands of examples and hyperparameter tuning
+      is required before any conclusions about the architecture
+
+==============================================================================
+14. THREATS TO VALIDITY
+==============================================================================
+
+  1. Phase 4C oracle bug: The 84.3% failure rate is INVALID
+  2. Phase 4D synthetic context: The 66.3% EM is INFLATED
+  3. Small pilot training: Cannot conclude about architecture sufficiency
+  4. Synthetic evaluation corpus: May not represent production accuracy
+  5. CPU-only training: Different from GPU training behavior
+  6. No hyperparameter tuning: Fixed configs may not be optimal
+  7. 102 questions: Limited statistical significance
+  8. No real-world documents: Cannot validate production representativeness
+  9. Failure count discrepancy: Phase 4C says 51, actual is 64
+  10. Confidence analysis: Raw softmax, not temperature-calibrated
+
+==============================================================================
+15. CORRECTED PHASE 4D CONCLUSIONS
+==============================================================================
+
+  CORRECTED: The true oracle performance is 27.2% EM (unified protocol),
+  NOT 66.3% (Phase 4D inflated) and NOT 15.7% (Phase 4C buggy).
+
+  This means:
+  - The QA model fails on 72.8% of questions even with exact evidence
+  - Table handling: 29.2% EM with evidence (improved from 0% but still poor)
+  - List handling: 6.25% EM with evidence (very poor)
+  - The model IS the primary bottleneck (72.8% oracle failure rate)
+  - But the true failure rate is 72.8%, not 84.3% as Phase 4C claimed
+
+  The extractive architecture CAN handle some tables and lists when given
+  good context, but performance is significantly worse than Phase 4D's
+  synthetic oracle suggested.
+
+  MODEL CAPACITY ASSESSMENT (corrected):
+    C. CURRENT_MODEL_ARCHITECTURE_INSUFFICIENT
+    The 72.8% oracle failure rate with correct questions and real evidence
+    indicates the extractive architecture has fundamental limitations that
+    training alone cannot resolve.
+
+==============================================================================
+16. PHASE 4E RECOMMENDATION
+==============================================================================
+
+  Based on CORRECTED evidence:
+
+  1. DO NOT use Phase 4C's 84.3% number — it's invalid
+  2. DO NOT use Phase 4D's 66.3% number — it's inflated
+  3. USE the unified oracle: 27.2% EM — this is the true baseline
+
+  Recommended Phase 4E scope:
+    PRIMARY: GPU-based training with 1000+ targeted examples
+      - Must include table, list, numeric, and unanswerable examples
+      - Must use proper train/val/test split
+      - Must include regularization to prevent catastrophic forgetting
+      - Must be evaluated on the UNIFIED protocol (ORACLE-C)
+
+    SECONDARY: Real-world document evaluation
+      - Acquire 10+ legally sourced real documents
+      - Validate that synthetic results correlate with real performance
+
+    TERTIARY: Architecture investigation
+      - If unified oracle stays below 50% EM, investigate:
+        - DeBERTa-v3-base (better span extraction)
+        - Small generative model (T5-small) for synthesis
+        - Hybrid extractive + generative
+
+    BLOCKING: Phase 4E MUST NOT begin until:
+      - Unified oracle baseline is established (DONE: 27.2% EM)
+      - GPU training environment is available
+      - Real-world documents are acquired
+
+==============================================================================
+
+# PHASE 4D.1 — COMPLETE
+
+Reconciliation findings:
+  - Phase 4C oracle protocol BUG identified (wrong question text)
+  - Phase 4D oracle context INFLATION identified (synthetic easy context)
+  - Unified benchmark established (92 questions)
+  - True oracle baseline: 27.2% EM (unified protocol)
+  - Model checkpoint verified identical
+  - Training provenance: PARTIALLY_CONFIRMED
+  - Table/list discrepancy explained (context construction)
+  - Production safety verified
+
+==============================================================================
+Generated with Codebuff 🤖
+Co-Authored-By: Codebuff <noreply@codebuff.com>
+==============================================================================

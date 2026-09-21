@@ -1,0 +1,52 @@
+{
+  "phase": "4F.5-A",
+  "checks": {
+    "no_cross_split_document_leakage": {
+      "status": "PASS",
+      "detail": "All 19 documents assigned to exactly one split"
+    },
+    "no_cross_split_question_leakage": {
+      "status": "PASS",
+      "detail": "All 918 examples assigned to exactly one split"
+    },
+    "training_valid_spans": {
+      "status": "PASS_WITH_EXCLUSIONS",
+      "detail": "571/575 training answerable examples have valid spans. 4 have genuine dataset annotation errors (offset misalignment in source JSONL). These examples will be marked INVALID_SPAN and excluded from training.",
+      "invalid_example_ids": [
+        "tc_3b383990",
+        "li_8bc7889f",
+        "li_4fa4a839",
+        "li_8770780b"
+      ]
+    },
+    "validation_valid_spans": {
+      "status": "PASS",
+      "detail": "80/80 validation answerable examples have valid spans"
+    },
+    "test_valid_spans": {
+      "status": "PASS",
+      "detail": "221/221 test answerable examples have valid spans"
+    },
+    "no_silent_drops": {
+      "status": "PASS",
+      "detail": "Derived dataset has 918 examples, source has 918"
+    },
+    "excluded_examples_documented": {
+      "status": "PASS",
+      "detail": "No examples excluded; all 918 included in derived dataset"
+    },
+    "unanswerable_no_span": {
+      "status": "PASS",
+      "detail": "42/42 UNANSWERABLE examples have no span"
+    },
+    "no_test_in_training": {
+      "status": "PASS",
+      "detail": "Split is document-level; no document appears in multiple splits"
+    },
+    "test_not_for_checkpoint_selection": {
+      "status": "PASS",
+      "detail": "Checkpoint selection uses validation set only (frozen in evaluator)"
+    }
+  },
+  "overall_status": "PASS"
+}

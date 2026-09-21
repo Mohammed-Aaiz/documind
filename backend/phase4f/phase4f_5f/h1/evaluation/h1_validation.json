@@ -1,0 +1,106 @@
+{
+  "total_examples": 93,
+  "overall": {
+    "em": 0.0,
+    "f1": 18.7,
+    "answerable_correct": 0,
+    "answerable_total": 85,
+    "answerability_accuracy": 0.0,
+    "abstention_accuracy": 50.0,
+    "false_abstention": 0.0,
+    "spurious_rate": 50.0,
+    "answerable": 85,
+    "unanswerable": 8
+  },
+  "by_category": {
+    "TABLE_CELL": {
+      "n": 33,
+      "em": 0.0,
+      "f1": 4.3
+    },
+    "TABLE_ROW": {
+      "n": 52,
+      "em": 0.0,
+      "f1": 27.9
+    },
+    "UNANSWERABLE": {
+      "n": 8,
+      "em": 0,
+      "f1": 0
+    }
+  },
+  "unanswerable_details": [
+    {
+      "example_id": "unans_02ea167f",
+      "question": "Who is the marketing director?",
+      "prediction": "",
+      "null_score": 0.003935,
+      "best_answer_score": 0.004418,
+      "null_margin": -0.000483,
+      "abstained": true
+    },
+    {
+      "example_id": "unans_03d364a3",
+      "question": "What is the total cost of ownership?",
+      "prediction": ", 000.",
+      "null_score": 0.004017,
+      "best_answer_score": 0.004806,
+      "null_margin": -0.000789,
+      "abstained": false
+    },
+    {
+      "example_id": "unans_04664035",
+      "question": "What is the stock price of Meridian Analytics?",
+      "prediction": "",
+      "null_score": 0.004308,
+      "best_answer_score": 0.00434,
+      "null_margin": -3.2e-05,
+      "abstained": true
+    },
+    {
+      "example_id": "unans_06ccc9f0",
+      "question": "What is the customer satisfaction rating?",
+      "prediction": "94. 2",
+      "null_score": 0.004041,
+      "best_answer_score": 0.004381,
+      "null_margin": -0.000341,
+      "abstained": false
+    },
+    {
+      "example_id": "unans_08af12b6",
+      "question": "What encryption standard does the mobile app use?",
+      "prediction": "encryption at rest uses aes -",
+      "null_score": 0.004052,
+      "best_answer_score": 0.004669,
+      "null_margin": -0.000616,
+      "abstained": false
+    },
+    {
+      "example_id": "unans_0badce8d",
+      "question": "What is the operating temperature of the PaperStack device?",
+      "prediction": "",
+      "null_score": 0.003878,
+      "best_answer_score": 0.004228,
+      "null_margin": -0.000349,
+      "abstained": true
+    },
+    {
+      "example_id": "unans_0e172594",
+      "question": "What is the SLA response time for Tier 1 support?",
+      "prediction": "the sla targets 99. 95",
+      "null_score": 0.004047,
+      "best_answer_score": 0.004177,
+      "null_margin": -0.00013,
+      "abstained": false
+    },
+    {
+      "example_id": "unans_1b510697",
+      "question": "What is the environmental impact score?",
+      "prediction": "",
+      "null_score": 0.003958,
+      "best_answer_score": 0.004086,
+      "null_margin": -0.000128,
+      "abstained": true
+    }
+  ]
+}

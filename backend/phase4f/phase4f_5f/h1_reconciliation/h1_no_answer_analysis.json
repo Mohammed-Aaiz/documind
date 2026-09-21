@@ -1,0 +1,69 @@
+{
+  "audit_version": "4F.5-H1R-noanswer-v1",
+  "timestamp": "2026-09-22T00:00:00Z",
+
+  "decision_mechanism": {
+    "method": "raw_argmax",
+    "null_score_computed": true,
+    "null_score_used_for_decision": false,
+    "threshold_applied": false,
+    "margin_applied": false,
+    "detail": "H1 uses raw argmax over start/end logits to select answer span. If the predicted tokens decode to an empty string, the model abstains. The null_score (CLS start + CLS end) / 2 is computed and saved for diagnostic purposes but is NOT used for the answer/abstain decision. No threshold or margin rule is applied."
+  },
+
+  "decision_math": {
+    "start_logits": "softmax -> argmax -> start_idx",
+    "end_logits": "argmax over [start_idx : start_idx + max_answer_length] -> end_idx",
+    "answer": "decode(input_ids[start_idx:end_idx+1])",
+    "abstain_condition": "answer string is empty after decoding",
+    "null_score": "(softmax(start_logits)[0] + softmax(end_logits)[0]) / 2",
+    "null_margin": "null_score - (softmax(start_logits)[start_idx] + softmax(end_logits)[end_idx]) / 2",
+    "note": "null_score and null_margin are diagnostic only; not used for decision"
+  },
+
+  "validation_decision_analysis": {
+    "total": 93,
+    "answerable_count": 85,
+    "unanswerable_count": 8,
+    "correct_answers": 0,
+    "false_abstentions": 0,
+    "correct_abstentions": 4,
+    "spurious_answers": 4,
+    "answerable_em": 0.0,
+    "answerable_f1": 18.7,
+    "abstention_rate_on_unanswerable": 50.0,
+    "spurious_rate_on_unanswerable": 50.0,
+    "note": "Model correctly abstains on 4/8 unanswerable but provides spurious answers on the other 4. It also fails to answer any of the 85 answerable questions correctly (EM=0%), though it does produce partial token overlap (F1=18.7%)."
+  },
+
+  "holdout_decision_analysis": {
+    "total": 22,
+    "answerable_count": 0,
+    "unanswerable_count": 22,
+    "correct_abstentions": 8,
+    "spurious_answers": 14,
+    "abstention_rate_on_unanswerable": 36.4,
+    "spurious_rate_on_unanswerable": 63.6
+  },
+
+  "benchmark_decision_analysis": {
+    "total": 182,
+    "answerable_count": 140,
+    "unanswerable_count": 42,
+    "correct_answers": 0,
+    "false_abstentions": 15,
+    "correct_abstentions": 19,
+    "spurious_answers": 23,
+    "answerable_em": 0.0,
+    "answerable_f1": 11.0,
+    "false_abstention_rate": 10.7,
+    "abstention_rate_on_unanswerable": 45.2,
+    "spurious_rate_on_unanswerable": 54.8,
+    "note": "Model provides spurious answers to 23/42 unanswerable benchmark examples. It also fails to answer 15/140 answerable questions (produces empty string), constituting false abstentions."
+  },
+
+  "verification": {
+    "code_reproduces_decision": "YES — predict() in run_h1.py matches the documented mechanism",
+    "decision_consistent_across_splits": "YES — same raw argmax logic for validation, holdout, and benchmark"
+  }
+}

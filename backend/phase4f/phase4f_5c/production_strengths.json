@@ -1,0 +1,26 @@
+{
+  "phase": "4F.5-C",
+  "a0_advantages": {
+    "SECTION_SPECIFIC": {
+      "A0_F1": 14.8,
+      "A1_F1": 1.4,
+      "A2_F1": 2.0
+    },
+    "TABLE_CELL": {
+      "A0_EM": 3.6,
+      "A1_EM": 0.0,
+      "A2_EM": 0.0
+    }
+  },
+  "a0_weaknesses": {
+    "abstention_rate": 62.4,
+    "abstain_categories": [
+      "TABLE_CELL",
+      "TABLE_ROW",
+      "DIRECT_SPAN",
+      "LIST_ITEM",
+      "MULTI_CHUNK",
+      "NUMERIC"
+    ]
+  }
+}

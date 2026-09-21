@@ -1,0 +1,236 @@
+============================================================
+PHASE 4F.5-F1-R — TRAINING PROTOCOL RECONCILIATION REPORT
+============================================================
+
+STATUS: F1_PROTOCOL_READY
+
+============================================================
+STEP 1 — VERIFY CURRENT STATE
+============================================================
+
+Source dataset:    a517530354fc9bcaeef6f1aa16c3fb9ce92f1967668386bc66781e6e6bbf2e97
+Derived dataset:   abcf4182f39f0620fb056eee4167d1872baf9b4c748051eade9d6312332f271f
+Benchmark:         1166bf4ff38265c209614ac20261417b7eeb43653f4482dfdf94721fd50a41d0
+Production model:  df592aa8d0ee1a235489bd3eead44d4cf0861221339226311960697c1c1512ac
+Phase 4F.5-B A1:   EXISTS
+
+ALL VERIFIED
+
+============================================================
+STEP 2 — AUDIT 12 INVALID EXAMPLES
+============================================================
+
+12 answerable training examples had span/offset issues:
+
+EXCLUDED (4 examples — INVALID_TOKEN_SPAN):
+  tc_3b383990  TABLE_CELL    offsets_out_of_bounds + token_span_invalid
+  li_8bc7889f  LIST_ITEM     offset_mismatch + token_span_invalid
+  li_4fa4a839  LIST_ITEM     offset_mismatch + token_span_invalid
+  li_8770780b  LIST_ITEM     offsets_out_of_bounds + token_span_invalid
+
+KEPT (8 examples — VALID_TOKEN_SPAN_CHARACTER_OFFSET_ISSUE):
+  tc_20399d46  TABLE_CELL    valid token span (start=47, end=55)
+  tc_00f97d46  TABLE_CELL    valid token span (start=65, end=68)
+  tc_c2c51b89  TABLE_CELL    valid token span (start=69, end=72)
+  tc_4e522e45  TABLE_CELL    valid token span (start=65, end=68)
+  tr_fc34fb8b  TABLE_ROW     valid token span (start=45, end=73)
+  li_89834a97  LIST_ITEM     valid token span (start=18, end=36)
+  li_7216dc7b  LIST_ITEM     valid token span (start=34, end=55)
+  li_ce7dfc4b  LIST_ITEM     valid token span (start=56, end=62)
+
+These 8 have character-offset encoding issues (>=, newlines) but
+their token spans are correct and will be used by training.
+
+============================================================
+STEP 3 — HANDLE INVALID EXAMPLES
+============================================================
+
+4 examples EXCLUDED from F1 training:
+  li_4fa4a839, li_8770780b, li_8bc7889f, tc_3b383990
+
+Exclusion reason: INVALID_TOKEN_SPAN
+  - token_span.valid = False (or None)
+  - Cannot compute training labels
+  - NOT converted to unanswerable/CLS
+  - NOT repaired
+  - NOT silently assigned arbitrary spans
+  - Source dataset NOT modified
+
+============================================================
+STEP 4 — ACTUAL TRAINING COUNT
+============================================================
+
+  Source train answerable:     575
+  Excluded (invalid span):       -4
+  Valid answerable pool:        571
+
+  After train/val split (15%):
+    Train answerable:          486
+    Val answerable:             85
+
+============================================================
+STEP 5 — UNANSWERABLE SPLIT
+============================================================
+
+  Experiment pool:     28 (first 28 sorted by ID)
+  Final holdout:       14 (last 14 sorted by ID)
+
+  After train/val split of experiment pool:
+    Train unanswerable:  20
+    Val unanswerable:     8
+
+============================================================
+STEP 6 — CLEAN VALIDATION SET
+============================================================
+
+FINAL TRAIN (506 total):
+  Answerable:       486
+  Unanswerable:      20
+
+FINAL VALIDATION (93 total):
+  Answerable:        85
+  Unanswerable:       8
+
+FINAL HOLDOUT (14 total):
+  Unanswerable:      14 (untouched)
+
+Validation ratio: 15.5% of training material
+
+============================================================
+STEP 7 — VALIDATION CATEGORY COVERAGE
+============================================================
+
+  DIRECT_SPAN:        4
+  ENTITY:             3
+  DATE:               7
+  NUMERIC:            9
+  TABLE_CELL:        35
+  TABLE_ROW:          5
+  LIST_ITEM:         14
+  SECTION_SPECIFIC:   6
+  MULTI_CHUNK:        1
+  LONG_CONTEXT:       1
+  UNANSWERABLE:       8
+
+  All 11 categories covered.
+
+============================================================
+STEP 8 — LABEL VALIDATION
+============================================================
+
+  Train answerable invalid:  0
+  Val answerable invalid:    0
+  Unanswerable invalid:      0
+
+  LABEL ALIGNMENT: PASS
+
+============================================================
+STEP 9 — TRAINING CODE AUDIT
+============================================================
+
+  FDataset.__getitem__:
+    UNANSWERABLE -> start=0, end=0 (CLS)          CORRECT
+    Valid token_span -> start_token/end_token      CORRECT
+    Invalid token_span -> start=0, end=0 (CLS)     DEAD CODE (all invalid excluded)
+
+  No return_offsets_mapping — uses pre-computed spans   CORRECT
+  Context-only span alignment preserved                  CORRECT
+  No answerable labeled as impossible                    CORRECT
+
+  TRAINING CODE STATUS: SAFE (for reconciled dataset)
+
+============================================================
+STEP 10 — CHECKPOINT SELECTION PROTOCOL
+============================================================
+
+  TRAIN:           506 examples (training only)
+  VALIDATION:       93 examples (validation only)
+  FINAL EVALUATION: Phase 4F.5-D benchmark
+  HOLDOUT:          14 unanswerable (untouched)
+
+  Rule: Checkpoint selection uses validation ONLY.
+        Never use benchmark/holdout for checkpoint selection.
+
+============================================================
+STEP 11 — FROZEN EXPERIMENT DEFINITION
+============================================================
+
+  MODEL:             distilbert-base-uncased
+  TOKENIZER:         distilbert-base-uncased
+  MAX_LENGTH:        384
+  LEARNING_RATE:     3e-5
+  EPOCHS:            3
+  SEED:              42
+  PHYSICAL_BATCH:    8
+  GRAD_ACCUMULATION: 8
+  EFFECTIVE_BATCH:   64
+  FP16:              enabled
+  WEIGHT_DECAY:      0.01
+  WARMUP_RATIO:      0.1
+  OPTIMIZER:         AdamW
+  LR_SCHEDULER:      linear_with_warmup
+  MAX_GRAD_NORM:     1.0
+
+============================================================
+STEP 12 — F2 STATUS
+============================================================
+
+  F2 (3:1 class-balanced) NOT prepared.
+  F2 will only be considered after F1 evaluation.
+
+============================================================
+INTEGRITY VERIFICATION
+============================================================
+
+  [x] Source dataset unchanged
+  [x] Derived dataset unchanged
+  [x] Benchmark unchanged
+  [x] Production model unchanged
+  [x] Phase 4F.5-B unchanged
+  [x] Phase 4F.5-D unchanged
+  [x] No training performed
+  [x] No checkpoints created
+  [x] No fabricated examples
+  [x] No repaired frozen examples
+  [x] No train/validation overlap
+  [x] 14 final unanswerable holdout untouched
+  [x] Invalid answerable spans not converted to no-answer
+
+============================================================
+FILES CREATED
+============================================================
+
+  reconciliation/invalid_span_audit.json
+  reconciliation/final_training_ids.json
+  reconciliation/final_validation_ids.json
+  reconciliation/final_holdout_ids.json
+  reconciliation/dataset_reconciliation.json
+  reconciliation/training_protocol_audit.json
+  phase4f_5f_f1_reconciliation_manifest.json
+  reports/phase4f_5f_f1_reconciliation_report.txt
+
+============================================================
+FINAL STATUS
+============================================================
+
+PHASE 4F.5-F1-R STATUS:
+
+SOURCE:                VERIFIED
+ANSWERABLE SOURCE:     575 -> 571 valid (4 excluded)
+INVALID EXAMPLES:      4 excluded (INVALID_TOKEN_SPAN)
+EXCLUDED:              li_4fa4a839, li_8770780b, li_8bc7889f, tc_3b383990
+FINAL TRAIN:           506 (486 answerable + 20 unanswerable)
+FINAL VALIDATION:      93 (85 answerable + 8 unanswerable)
+FINAL HOLDOUT:         14 unanswerable (untouched)
+LEAKAGE:               CLEAN
+LABEL ALIGNMENT:       PASS
+NO-ANSWER LABEL:       CORRECT (CLS for unanswerable only)
+CHECKPOINT PROTOCOL:   VALIDATED
+PRODUCTION:            UNCHANGED
+TRAINING:              NOT PERFORMED
+CHECKPOINTS:           NONE
+STATUS:                F1_PROTOCOL_READY
+NEXT STEP:             Update run_experiment.py with reconciled split,
+                       then run Phase 4F.5-F training
+
+============================================================

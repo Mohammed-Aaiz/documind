@@ -1,0 +1,89 @@
+{
+  "phase": "4F.5-A",
+  "split_seed": 42,
+  "source_dataset_hash": "a517530354fc9bcaeef6f1aa16c3fb9ce92f1967668386bc66781e6e6bbf2e97",
+  "derived_dataset_hash": "abcf4182f39f0620fb056eee4167d1872baf9b4c748051eade9d6312332f271f",
+  "total_examples": 918,
+  "total_documents": 19,
+  "splits": {
+    "train": {
+      "documents": [
+        "clinical_trial_gamma",
+        "date_corpus",
+        "entity_corpus",
+        "env_monitoring_zeta",
+        "multi_chunk_doc_xi",
+        "ops_manual_delta",
+        "product_comparison_pi",
+        "project_proposal_nu",
+        "regulation_doc_iota",
+        "research_paper_beta",
+        "tech_spec_alpha",
+        "textbook_chapter_theta",
+        "training_material_omega"
+      ],
+      "document_count": 13,
+      "example_count": 575,
+      "category_distribution": {
+        "DIRECT_SPAN": 50,
+        "NUMERIC": 57,
+        "TABLE_CELL": 231,
+        "TABLE_ROW": 52,
+        "LIST_ITEM": 82,
+        "SECTION_SPECIFIC": 37,
+        "MULTI_CHUNK": 16,
+        "DATE": 25,
+        "ENTITY": 22,
+        "LONG_CONTEXT": 3
+      }
+    },
+    "validation": {
+      "documents": [
+        "company_history_eta",
+        "unanswerable_corpus"
+      ],
+      "document_count": 2,
+      "example_count": 122,
+      "category_distribution": {
+        "DIRECT_SPAN": 11,
+        "NUMERIC": 20,
+        "TABLE_CELL": 20,
+        "TABLE_ROW": 5,
+        "LIST_ITEM": 5,
+        "SECTION_SPECIFIC": 4,
+        "LONG_CONTEXT": 12,
+        "MULTI_CHUNK": 3,
+        "UNANSWERABLE": 42
+      }
+    },
+    "test": {
+      "documents": [
+        "api_docs_lambda",
+        "dataset_desc_mu",
+        "financial_report_q3",
+        "legal_contract_epsilon"
+      ],
+      "document_count": 4,
+      "example_count": 221,
+      "category_distribution": {
+        "DIRECT_SPAN": 25,
+        "NUMERIC": 20,
+        "TABLE_CELL": 111,
+        "TABLE_ROW": 25,
+        "LIST_ITEM": 19,
+        "SECTION_SPECIFIC": 14,
+        "MULTI_CHUNK": 7
+      }
+    }
+  },
+  "cross_split_leakage": {
+    "document_leakage": 0,
+    "question_leakage": 0
+  },
+  "verification": {
+    "all_docs_assigned": true,
+    "no_doc_in_multiple_splits": true,
+    "no_example_in_multiple_splits": true,
+    "total_examples_match": true
+  }
+}

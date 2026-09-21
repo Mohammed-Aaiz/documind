@@ -1,0 +1,12 @@
+{
+  "val_count": 93,
+  "hold_count": 14,
+  "bench_count": 182,
+  "null_score_stats": {
+    "val_answerable_mean": 1.3856,
+    "val_unanswerable_mean": 1.4143,
+    "hold_unanswerable_mean": 1.2344,
+    "bench_answerable_mean": 1.4422,
+    "bench_unanswerable_mean": 1.3635
+  }
+}

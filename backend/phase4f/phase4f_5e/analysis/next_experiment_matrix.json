@@ -1,0 +1,53 @@
+{
+  "phase": "4F.5-E",
+  "options": [
+    {
+      "option": "A",
+      "name": "Threshold/calibration",
+      "evidence_for": "Confidence distributions may separate answerable from unanswerable",
+      "evidence_against": "A1/A2 confidence distributions likely overlap heavily (low confidence overall)",
+      "risk": "LOW",
+      "should_happen_next": "YES - diagnostic first"
+    },
+    {
+      "option": "B",
+      "name": "Unanswerable training",
+      "evidence_for": "Direct fix: A1/A2 never saw 0 unanswerable examples",
+      "evidence_against": "Only 42 unanswerable available, may be insufficient",
+      "risk": "LOW",
+      "should_happen_next": "YES - addresses root cause"
+    },
+    {
+      "option": "C",
+      "name": "Production init + fine-tune",
+      "evidence_for": "Preserves A0's abstention, gains fine-tuning",
+      "evidence_against": "May not work with different tokenizer/task distribution",
+      "risk": "MEDIUM",
+      "should_happen_next": "CONSIDER after B"
+    },
+    {
+      "option": "D",
+      "name": "Structured QA data",
+      "evidence_for": "TABLE_CELL is universal failure",
+      "evidence_against": "May be representation issue, not data issue",
+      "risk": "MEDIUM",
+      "should_happen_next": "CONSIDER after A/B"
+    },
+    {
+      "option": "E",
+      "name": "Table representation",
+      "evidence_for": "Pipe-delimited text loses structure",
+      "evidence_against": "Requires changes to data pipeline, not just training",
+      "risk": "HIGH",
+      "should_happen_next": "NO - too many variables"
+    },
+    {
+      "option": "F",
+      "name": "Different architecture",
+      "evidence_for": "DeBERTa may handle structured data better",
+      "evidence_against": "Previous DeBERTa attempt failed (NaN). Insufficient evidence.",
+      "risk": "HIGH",
+      "should_happen_next": "NO - insufficient evidence"
+    }
+  ]
+}

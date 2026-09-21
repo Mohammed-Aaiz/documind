@@ -1,0 +1,217 @@
+================================================================================
+PHASE 3F — IMPLEMENTATION VALIDATION REPORT
+================================================================================
+
+Report Date: 2026-09-19
+Evaluation Version: 3f-v1
+Corpus Version: phase3f-v1
+
+================================================================================
+EXECUTIVE SUMMARY
+================================================================================
+
+# PHASE 3F COMPLETE
+
+All 18 acceptance criteria PASS.  AC18 (Extraction Evaluation) has been
+implemented and executed with objective gold truth established deterministically
+for 11 of 12 corpus documents.
+
+================================================================================
+ACCEPTANCE CRITERIA STATUS
+================================================================================
+
+  AC1  reproducible corpus:                          PASS
+  AC2  reproducible evaluation command:              PASS
+  AC3  explicit gold labels:                         PASS
+  AC4  Recall@K + Precision@K + MRR:                 PASS
+  AC5  Normalised EM + Token F1 + answerability:     PASS
+  AC6  Evidence coverage:                            PASS
+  AC7  Abstention/spurious/false-abstention:         PASS
+  AC8  Chunk metrics:                                PASS
+  AC9  Latency metrics:                              PASS
+  AC10 Failure taxonomy:                             PASS
+  AC11 Phase 3D baseline preserved:                  PASS
+  AC12 Synthetic vs real identified:                 PASS
+  AC13 All metrics from real execution:              PASS
+  AC14 Evaluation does not alter production:         PASS
+  AC15 Data leakage checks:                          PASS
+  AC16 Reproducibility metadata:                     PASS
+  AC17 Per-kind and per-document:                    PASS
+  AC18 Extraction evaluation:                        PASS
+
+================================================================================
+AC18 — EXTRACTION EVALUATION (DETAILED)
+================================================================================
+
+Implementation: backend/evaluation/harness/extraction.py
+
+Gold data established deterministically from corpus builders for 11/12 documents.
+1 document (academic_two_column.pdf) marked not_evaluable due to non-deterministic
+two-column PDF block ordering.
+
+A. ELEMENT TYPE PRESERVATION
+   Overall preservation rate: 100.00% (11/11 evaluable documents)
+
+   Per-document:
+     short_sections.docx:   13/13 elements (100%)  headings=7/7, paragraphs=6/6
+     heading_heavy.docx:    11/11 elements (100%)  headings=7/7, paragraphs=4/4
+     tables_small.docx:      2/2 elements (100%)   headings=1/1, tables=1/1
+     tables_large.docx:      3/3 elements (100%)   headings=1/1, tables=1/1, paragraphs=1/1
+     lists.docx:             4/4 elements (100%)   headings=2/2, lists=2/2
+     mixed.docx:             8/8 elements (100%)   headings=3/3, paragraphs=3/3, tables=1/1, lists=1/1
+     long_paragraph.txt:     2/2 elements (100%)   paragraphs=2/2
+     dense_prose.txt:        8/8 elements (100%)   paragraphs=8/8
+     unpunctuated.txt:       1/1 elements (100%)   paragraphs=1/1
+     markdown_sections.txt:  8/8 elements (100%)   headings=4/4, paragraphs=4/4
+     multipage_section.pdf:  8/8 elements (100%)   headings=1/1, paragraphs=7/7
+
+B. HEADING PRESERVATION
+   Detection rate (docs with headings): 100.00% (8/8 documents)
+   Level accuracy (DOCX/TXT only):      100.00%
+   Path accuracy (DOCX/TXT only):       100.00%
+
+   Note: Heading levels and paths for PDFs are NOT scored as authoritative
+   (heuristic font-size detection).  For multipage_section.pdf, heading
+   detection is confirmed but level/path accuracy is not evaluated.
+
+C. TABLE EXTRACTION
+   Detection rate (docs with tables): 100.00% (3/3 documents)
+   Row preservation:                  100.00%
+   Column preservation:               100.00%
+   Header preservation:               100.00%
+
+   Verified:
+     tables_small.docx:  1 table, 3 rows x 2 cols, header=["Method","Result"]
+     tables_large.docx:  1 table, 31 rows x 3 cols, header=["Method","Accuracy","Runtime"]
+     mixed.docx:         1 table, 3 rows x 2 cols, header=["Season","Pressure"]
+
+D. LIST PRESERVATION
+   Detection rate (docs with lists): 100.00% (2/2 documents)
+   Item preservation:                100.00%
+   Ordering preservation:            100.00%
+
+   Verified:
+     lists.docx: 2 lists (4 items + 2 items), all items in correct order
+     mixed.docx: 1 list (2 items), all items in correct order
+
+E. CONTENT LOSS
+   Content preservation rate: 100.00%
+   Missing content: 0 elements across all evaluable documents
+
+================================================================================
+GOLD DATA — EVALUABLE VS NON-EVALUABLE
+================================================================================
+
+  Evaluable documents (11):
+    short_sections.docx     heading/paragraph extraction
+    heading_heavy.docx      heading hierarchy (H1-H4)
+    tables_small.docx       table extraction (small)
+    tables_large.docx       table extraction (31 rows)
+    lists.docx              list extraction (bullet + numbered)
+    mixed.docx              mixed elements
+    long_paragraph.txt      paragraph splitting
+    dense_prose.txt         paragraph splitting
+    unpunctuated.txt        hard-cut path
+    markdown_sections.txt   Markdown heading detection
+    multipage_section.pdf   multi-page extraction
+
+  Not evaluable (1):
+    academic_two_column.pdf — Two-column PDF layout makes block ordering
+    non-deterministic across PyMuPDF versions.  Element counts may be
+    evaluated but element ordering and heading-path accuracy cannot be
+    established objectively.
+
+  Gold data was NOT invented for academic_two_column.pdf.  It is correctly
+  marked as not_evaluable rather than guessing at element ordering.
+
+================================================================================
+FAILURE TAXONOMY VALIDATION
+================================================================================
+
+Complete accepted taxonomy (13 categories):
+  RET_MISS    Relevant chunk not in top-K
+  RET_NOISE   Top-K mostly irrelevant
+  CTX_TRUNC   Relevant chunk retrieved but not in QA context
+  CTX_STARVE  Large early chunk consumed budget
+  QA_EXTRACT  Answer in context but wrong span extracted
+  QA_CONF     Model correct but confidence below threshold
+  EVID_OMIT   Correct answer but not grounded
+  ABSTAIN     System abstains on answerable question
+  SPURIOUS    System answers unsupported question
+  EXTRACT     Document extraction failed
+  CHUNK       Evidence split incoherently
+  AMBIG       Ambiguous question
+  ANNOT       Annotation issue
+
+Non-failure categories:
+  CORRECT          Answer correct
+  CORRECT_ABSTAIN  Correct abstention on unsupported question
+  UNKNOWN          Cannot determine cause
+
+Precedence (highest to lowest):
+  RET_MISS > CTX_TRUNC > EVID_OMIT > QA_EXTRACT > QA_CONF > UNKNOWN
+
+Categories with zero occurrences (valid):
+  RET_NOISE, CTX_STARVE, EXTRACT, CHUNK, AMBIG, ANNOT
+
+These categories have count=0 because the current corpus does not provide
+objective signals to classify them.  They are not forced into the corpus.
+
+If a failure cannot be objectively classified, UNKNOWN is used.
+
+Implementation: backend/evaluation/harness/metrics.py::classify_failure()
+
+================================================================================
+REPRODUCIBILITY
+================================================================================
+
+Same corpus:        12 documents, 42 questions (39 answerable, 3 unsupported)
+Same configuration: top_k=5, embedding=all-MiniLM-L6-v2, qa_input_length=384
+Same production code: no production changes
+Same three arms:    A (legacy+legacy), B (legacy+token-aware), C (structure-v2+token-aware)
+Same baseline:      Phase 3D baseline preserved (phase3d_evaluation_report.json unchanged)
+
+Functional metric results are reproducible from the same inputs.
+Timing may vary between runs.
+
+================================================================================
+REGRESSION RESULTS
+================================================================================
+
+Backend tests:      305 passed, 0 failed (all existing tests)
+TypeScript check:   PASSED (tsc --noEmit)
+Vite build:         PASSED (built in 3.44s)
+
+Phase 3D baseline:  UNCHANGED (git diff confirms no modifications)
+Phase 3F evaluation: Implementation updated to include extraction evaluation
+
+================================================================================
+PRODUCTION BEHAVIOR CHANGE
+================================================================================
+
+NO production code was modified.
+
+Files modified (evaluation/test only):
+  backend/evaluation/harness/extraction.py  — NEW: extraction evaluation module
+  backend/evaluation/harness/metrics.py     — UPDATED: documented complete taxonomy
+  backend/test_phase3f_evaluation.py        — UPDATED: integrated extraction eval
+
+Production files NOT modified:
+  backend/documents/processing.py           — UNCHANGED
+  backend/documents/chunking.py             — UNCHANGED
+  backend/chat/rag.py                       — UNCHANGED
+  backend/chat/qa_model.py                  — UNCHANGED
+  All other production modules              — UNCHANGED
+
+================================================================================
+FINAL VERDICT
+================================================================================
+
+# PHASE 3F COMPLETE
+
+All 18 acceptance criteria verified.
+AC18 Extraction Evaluation: PASS — implemented and executed with objective
+gold truth for 11/12 documents.  1 document correctly marked not_evaluable.
+All extraction metrics show 100% preservation across evaluable documents.
+No production code changed.
+================================================================================

@@ -1,0 +1,261 @@
+======================================================================
+PHASE 4F.5-B — CORRECTED CONTROLLED GPU QA EXPERIMENT REPORT
+======================================================================
+
+Date: 2026-09-21
+Status: COMPLETE
+
+======================================================================
+1. ENVIRONMENT
+======================================================================
+
+  GPU:           NVIDIA GeForce RTX 3050 Laptop GPU
+  CUDA:          12.4
+  PyTorch:       2.6.0+cu124
+  Transformers:  5.16.1
+  Precision:     fp16 (A1, A2)
+
+======================================================================
+2. INPUTS VERIFIED
+======================================================================
+
+  Source dataset:  VERIFIED (a517530354fc9bca...)
+  Derived dataset: VERIFIED (abcf4182f39f0620...)
+  Production model: UNCHANGED (df592aa8d0ee1a23...)
+
+======================================================================
+3. DATASET
+======================================================================
+
+  Train:      13 docs, 575 examples (571 valid for training)
+  Validation:  2 docs, 122 examples
+  Test:        4 docs, 221 examples
+  No UNANSWERABLE in test split.
+
+======================================================================
+4. A0 — PRODUCTION BASELINE
+======================================================================
+
+  Model:   Production documind-qa (distilbert-base-uncased)
+  Eval:    TEST split only
+
+  Overall:
+    EM:             3.2%
+    Token F1:       8.6%
+    Answerability:  3.2%
+    Abstention:     0.0%
+    Spurious:       0.0%
+
+  NOTE: A0 EM is lower than Phase 4F.4 (7.8%) because:
+  - Phase 4F.4 evaluated on ALL 918 examples (including training data)
+  - Phase 4F.5 evaluates on TEST split only (221 unseen examples)
+  - The lower EM on held-out data is expected and more honest.
+
+======================================================================
+5. A1 — DISTILBERT (UNCASED)
+======================================================================
+
+  Base:    distilbert-base-uncased (fresh pretrained)
+  Config:  lr=3e-5, batch=8x8=64, epochs=3, fp16, seed=42
+
+  Training History:
+    Epoch 1: loss=5.6384, val_EM=5.0%,  val_F1=18.5%
+    Epoch 2: loss=4.3290, val_EM=7.5%,  val_F1=24.0%
+    Epoch 3: loss=3.4867, val_EM=8.8%,  val_F1=22.7%
+
+  Training Time:   34.5s
+  Peak VRAM:       1842 MB
+  NaN/Inf:         None
+  FP16 Overflow:   None
+
+  Best Checkpoint: epoch 3 (val_EM=8.8%)
+
+  TEST Evaluation:
+    EM:             1.8%
+    Token F1:       14.4%
+    Answerability:  1.8%
+    Abstention:     0.0%
+    Spurious:       0.0%
+
+  Analysis:
+  - Training was stable with decreasing loss
+  - Validation EM improved each epoch (5.0% -> 7.5% -> 8.8%)
+  - TEST EM (1.8%) is lower than validation EM (8.8%) — expected
+    generalization gap
+  - TEST F1 (14.4%) is higher than A0 F1 (8.6%) — the model learned
+    useful token overlap even when not getting exact matches
+
+======================================================================
+6. A2 — BERT (UNCASED)
+======================================================================
+
+  Base:    bert-base-uncased (fresh pretrained)
+  Config:  lr=2e-5, batch=8x8=64, epochs=3, fp16, seed=42
+
+  Training History:
+    Epoch 1: loss=5.3747, val_EM=7.5%,  val_F1=21.8%
+    Epoch 2: loss=3.9508, val_EM=10.0%, val_F1=23.2%
+    Epoch 3: loss=3.2996, val_EM=11.2%, val_F1=23.9%
+
+  Training Time:   67.0s
+  Peak VRAM:       3256 MB
+  NaN/Inf:         None
+  FP16 Overflow:   None
+
+  Best Checkpoint: epoch 3 (val_EM=11.2%)
+
+  TEST Evaluation:
+    EM:             0.9%
+    Token F1:       12.3%
+    Answerability:  0.9%
+    Abstention:     0.0%
+    Spurious:       0.0%
+
+  Analysis:
+  - Training was stable
+  - Validation EM improved each epoch (7.5% -> 10.0% -> 11.2%)
+  - TEST EM (0.9%) is much lower than validation (11.2%) — significant
+    overfitting to the 2-document validation set
+  - BERT's larger capacity (110M params) may overfit more on 571 examples
+
+======================================================================
+7. COMPARISON
+======================================================================
+
+  | Model            |    EM |    F1 | Answer | Abstain | Spurious |
+  |------------------|-------|-------|--------|---------|----------|
+  | A0 Production    |  3.2% |  8.6% |   3.2% |    0.0% |     0.0% |
+  | A1 DistilBERT    |  1.8% | 14.4% |   1.8% |    0.0% |     0.0% |
+  | A2 BERT-base     |  0.9% | 12.3% |   0.9% |    0.0% |     0.0% |
+
+  A1 vs A0:
+    EM delta:  -1.4pp (WORSE)
+    F1 delta:  +5.8pp (BETTER)
+
+  A2 vs A0:
+    EM delta:  -2.3pp (WORSE)
+    F1 delta:  +3.7pp (BETTER)
+
+  A2 vs A1:
+    EM delta:  -0.9pp (WORSE)
+    F1 delta:  -2.1pp (WORSE)
+
+======================================================================
+8. TRAINING STABILITY
+======================================================================
+
+  A1: STABLE
+    - Loss decreased consistently (5.64 -> 3.49)
+    - No NaN/Inf detected
+    - No FP16 overflow events
+    - Validation EM improved each epoch
+
+  A2: STABLE
+    - Loss decreased consistently (5.37 -> 3.30)
+    - No NaN/Inf detected
+    - No FP16 overflow events
+    - Validation EM improved each epoch
+
+======================================================================
+9. FAILURE TAXONOMY (TEST SET)
+======================================================================
+
+  | Model | Total Failures | Rate  | ABSTAIN | EXTRACT | SPURIOUS |
+  |-------|---------------|-------|---------|---------|----------|
+  | A0    |           214 | 96.8% |       0 |     214 |        0 |
+  | A1    |           217 | 98.2% |       0 |     217 |        0 |
+  | A2    |           219 | 99.1% |       0 |     219 |        0 |
+
+  Note: Test set has no UNANSWERABLE examples, so SPURIOUS=0 for all.
+  All failures are EXTRACT (wrong span selected).
+
+======================================================================
+10. FORENSIC TRACES
+======================================================================
+
+  [DIRECT_SPAN] Q: What is the percentage for the metric?
+    Gold: 1.5 percent
+    A0: pred=[]       EM=False F1=0.0%   (abstained)
+    A1: pred=[1. 5 percent] EM=False F1=40.0% (close but tokenizer split)
+    A2: pred=[1. 5 percent] EM=False F1=40.0%
+
+  [NUMERIC] Q: What was the earnings per share?
+    Gold: $3.47
+    A0: pred=[$ 3. 47] EM=False F1=0.0%
+    A1: pred=[3. 47]   EM=False F1=0.0%
+    A2: pred=[3. 47]   EM=False F1=0.0%
+
+  [TABLE_CELL] Q: What is the yoy growth for Enterprise Solutions?
+    Gold: +18.3%
+    A0: pred=[| $ 412. 5m | ...] EM=False F1=0.0% (wrong span)
+    A1: pred=[412. 5m | $ 348. 7m | + 18. 3] EM=False F1=0.0%
+    A2: pred=[412. 5m | $ 348. 7m | + 18. 3] EM=False F1=0.0%
+
+  [LIST_ITEM] Q: What permitted uses is listed first?
+    Gold: Internal data analysis and reporting
+    A0: pred=[uses internal data analysis an] EM=False F1=32.3%
+    A1: pred=[data analysis and reporting in] EM=False F1=27.6%
+    A2: pred=[data analysis and reporting in] EM=False F1=27.6%
+
+  Key observations from forensics:
+  - A0 abstains on some questions (returns empty), hurting EM
+  - A1/A2 always extract something (no abstention)
+  - Subword tokenization splits numbers ("1.5" -> "1. 5"), preventing EM
+  - Table QA remains difficult for all models
+  - LIST_ITEM answers overlap but don't match exactly
+
+======================================================================
+11. CROSS-PHASE COMPARISON
+======================================================================
+
+  NOT DIRECTLY COMPARABLE to Phase 4F.4:
+  - Phase 4F.4 evaluated on ALL 918 examples (train+val+test)
+  - Phase 4F.5 evaluates on TEST split only (221 examples)
+  - Different tokenizer (uncased vs cased in 4F.4)
+  - Different base model (uncased vs cased in 4F.4)
+  - Correct span alignment in 4F.5 vs broken in 4F.4
+
+  The Phase 4F.4 results (A0 EM=7.8%, A1 EM=0.7%) are INVALID
+  due to broken span alignment and should not be compared.
+
+======================================================================
+12. SCIENTIFIC CONCLUSION
+======================================================================
+
+  EXPERIMENTAL OUTCOME: NO_MEANINGFUL_IMPROVEMENT
+
+  Evidence:
+  - A0 EM (3.2%) > A1 EM (1.8%) > A2 EM (0.9%) on TEST
+  - No model achieved meaningful exact match improvement
+  - A1 has higher F1 (14.4%) than A0 (8.6%), suggesting better
+    token-level understanding but not exact extraction
+  - A2 overfits more (val_EM=11.2% but test_EM=0.9%)
+  - All models fail on TABLE_CELL, TABLE_ROW, MULTI_CHUNK
+  - Subword tokenization prevents EM on decimal numbers
+
+  The experiment is scientifically valid:
+  - Correct span alignment verified (99.5% valid)
+  - Proper train/val/test split (no leakage)
+  - Identical evaluator for all models
+  - Production model untouched
+  - Source dataset untouched
+
+  However, the results show that 571 training examples with 3 epochs
+  of fine-tuning are insufficient for this task, regardless of
+  model architecture (DistilBERT or BERT).
+
+======================================================================
+13. PRODUCTION SAFETY
+======================================================================
+
+  Production model checksum: df592aa8d0ee1a23... UNCHANGED
+  Production source code:    UNCHANGED
+  Source dataset:            UNCHANGED
+  Derived dataset:           UNCHANGED
+
+  No experimental weights were copied into production.
+  No production code was modified.
+
+======================================================================
+PHASE 4F.5-B — COMPLETE
+======================================================================

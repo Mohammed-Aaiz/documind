@@ -1,0 +1,52 @@
+{
+  "phase": "4F.4-R",
+  "audit_type": "checkpoint_audit",
+  "a1_distilbert": {
+    "checkpoint_created": true,
+    "checkpoint_path": "backend/phase4f/experiments/results/A1/checkpoint_best/",
+    "files": ["config.json", "model.safetensors", "tokenizer.json", "tokenizer_config.json"],
+    "checkpoint_hash": "cb923d7b63f8561b",
+    "which_checkpoint": "final epoch (epoch 3) - overwritten each epoch",
+    "selection_criterion": "final epoch only (no best-model selection)",
+    "checkpoint_reloaded_for_evaluation": true,
+    "evaluation_used_correct_checkpoint": true,
+    "evaluation_used_base_model_instead": false,
+    "evaluation_used_incomplete_checkpoint": false,
+    "config_architecture": "DistilBertForQuestionAnswering",
+    "config_vocab_size": 28996,
+    "note": "Checkpoint was created and loaded correctly for evaluation. The issue is that the TRAINING LABELS were wrong, not the checkpoint mechanism."
+  },
+  "a2_bert_base": {
+    "checkpoint_created": true,
+    "checkpoint_path": "backend/phase4f/experiments/results/A2/checkpoint_best/",
+    "files": ["config.json", "model.safetensors", "tokenizer.json", "tokenizer_config.json"],
+    "checkpoint_hash": "536fc6edb9b9a884",
+    "which_checkpoint": "final epoch (epoch 3)",
+    "selection_criterion": "final epoch only",
+    "checkpoint_reloaded_for_evaluation": true,
+    "evaluation_used_correct_checkpoint": true,
+    "config_architecture": "BertForQuestionAnswering",
+    "config_vocab_size": 28996,
+    "note": "Same as A1 - checkpoint mechanism correct, training labels wrong."
+  },
+  "a3_deberta_v3": {
+    "checkpoint_created": true,
+    "checkpoint_path": "backend/phase4f/experiments/results/A3/checkpoint_best/",
+    "files": ["config.json", "model.safetensors", "tokenizer.json", "tokenizer_config.json"],
+    "checkpoint_hash": "aa08acf2366610b2",
+    "which_checkpoint": "final epoch (epoch 3) from NaN training",
+    "selection_criterion": "final epoch only",
+    "checkpoint_reloaded_for_evaluation": true,
+    "evaluation_used_correct_checkpoint": true,
+    "config_architecture": "DebertaV2ForQuestionAnswering",
+    "config_vocab_size": 128100,
+    "config_dtype": "float16",
+    "note": "Checkpoint contains NaN-trained weights. Model defaults to always abstaining (outputting [CLS] token position). Evaluation is technically valid - it correctly shows the model is non-functional."
+  },
+  "production_model_checkpoint_safety": {
+    "checksum_before": "df592aa8d0ee1a235489bd3eead44d4cf0861221339226311960697c1c1512ac",
+    "checksum_after": "df592aa8d0ee1a235489bd3eead44d4cf0861221339226311960697c1c1512ac",
+    "unchanged": true,
+    "no_weights_copied_to_production": true
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "phase": "4F.4-R",
+  "audit_type": "cross_phase_evaluation_compatibility",
+  "phases_compared": ["3F", "4B", "4C", "4D.1", "4E", "4F.4"],
+  "compatibility_matrix": {
+    "Phase_3F": {
+      "same_dataset": false,
+      "same_question_set": false,
+      "same_context": false,
+      "same_task": "QA (but full RAG pipeline, not isolated QA head)",
+      "same_metric": "exact_match + token_f1 + answerability (different implementation)",
+      "same_inference_path": false,
+      "same_answer_normalization": false,
+      "comparable": "NOT_DIRECTLY_COMPARABLE",
+      "reason": "Phase 3F evaluates the full RAG pipeline (retrieval + QA) on 42 questions from 12 documents. Phase 4F.4 evaluates only the QA head on 918 questions from 19 documents. Different question sets, different contexts, different evaluation scope."
+    },
+    "Phase_4B": {
+      "same_dataset": false,
+      "same_question_set": false,
+      "same_task": "QA evaluation (different scope)",
+      "same_metric": "similar (EM, F1)",
+      "comparable": "NOT_DIRECTLY_COMPARABLE",
+      "reason": "Phase 4B evaluates different model configurations on different data."
+    },
+    "Phase_4C": {
+      "same_dataset": false,
+      "same_question_set": false,
+      "same_task": "QA failure analysis",
+      "comparable": "NOT_DIRECTLY_COMPARABLE",
+      "reason": "Phase 4C is a failure matrix analysis with different question sets and different evaluation criteria."
+    },
+    "Phase_4D_1": {
+      "same_dataset": false,
+      "same_question_set": false,
+      "same_task": "QA evaluation",
+      "comparable": "NOT_DIRECTLY_COMPARABLE",
+      "reason": "Different dataset, different questions, different evaluation scope."
+    },
+    "Phase_4E": {
+      "same_dataset": false,
+      "same_question_set": false,
+      "same_task": "QA architecture analysis",
+      "comparable": "NOT_DIRECTLY_COMPARABLE",
+      "reason": "Phase 4E analyzes architecture candidates, not actual training results."
+    },
+    "Phase_4F_4": {
+      "same_dataset": true,
+      "same_question_set": true,
+      "same_task": true,
+      "same_metric": true,
+      "same_inference_path": true,
+      "same_answer_normalization": true,
+      "comparable": "DIRECTLY_COMPARABLE (within 4F.4 only)",
+      "reason": "A0/A1/A2/A3 in Phase 4F.4 use identical dataset, questions, and evaluation protocol."
+    }
+  },
+  "summary": "Phase 4F.4 results are NOT directly comparable to any previous phase. They can only be compared within 4F.4 (A0 vs A1 vs A2 vs A3). Previous phases used different datasets, question sets, evaluation scopes (full RAG pipeline vs isolated QA head), and different metrics."
+}

@@ -1,0 +1,117 @@
+{
+  "phase": "4F.5-F0",
+  "report_type": "GPU_ENVIRONMENT_RECOVERY",
+  "status": "GPU_ENVIRONMENT_READY",
+  "timestamp": "2026-09-21T00:00:00Z",
+
+  "system_python": {
+    "version": "3.13.12",
+    "pytorch": "2.11.0+cpu",
+    "cuda_available": false,
+    "note": "System Python has CPU-only PyTorch — NOT usable for GPU training"
+  },
+
+  "gpu_venv": {
+    "path": "backend/phase4f_gpu/",
+    "python": "3.11.0",
+    "created_from": "backend/venv/ (Python 3.11.0)",
+    "pytorch": "2.6.0+cu124",
+    "cuda_version": "12.4",
+    "cuda_available": true,
+    "transformers": "5.16.1",
+    "tokenizers": "0.23.2",
+    "safetensors": "0.8.0",
+    "numpy": "2.4.6",
+    "accelerate": "1.15.0",
+    "activate_command": "backend/phase4f_gpu/Scripts/activate",
+    "python_command": "backend/phase4f_gpu/Scripts/python.exe"
+  },
+
+  "gpu_hardware": {
+    "name": "NVIDIA GeForce RTX 3050 Laptop GPU",
+    "total_vram_mb": 4295,
+    "total_vram_gb": 4.29,
+    "driver_version": "616.56",
+    "cuda/umd_version": "13.4",
+    "wddm_mode": true,
+    "power_limit_w": 60,
+    "idle_temp_c": 49
+  },
+
+  "smoke_test": {
+    "status": "PASS",
+    "details": "3x3 matrix multiply on CUDA device cuda:0 succeeded",
+    "tensor_device": "cuda:0",
+    "tensor_dtype": "float32"
+  },
+
+  "model_load_test": {
+    "status": "PASS",
+    "model": "distilbert-base-uncased",
+    "task": "QuestionAnswering",
+    "gpu_memory_before_mb": 0.0,
+    "gpu_memory_after_mb": 266.6,
+    "gpu_memory_used_mb": 266.6,
+    "inference_latency_ms": 246.4,
+    "inference_success": true,
+    "note": "qa_outputs weights randomly initialized (expected for base→QA conversion)"
+  },
+
+  "memory_test": {
+    "status": "PASS",
+    "total_vram_mb": 4295,
+    "model_footprint_mb": 267,
+    "batch_tests": {
+      "batch_1": {"peak_mb": 1354, "headroom_mb": 2940, "status": "OK"},
+      "batch_2": {"peak_mb": 1351, "headroom_mb": 2943, "status": "OK"},
+      "batch_4": {"peak_mb": 1351, "headroom_mb": 2943, "status": "OK"},
+      "batch_8": {"peak_mb": 1351, "headroom_mb": 2943, "status": "OK"}
+    },
+    "target_config": {
+      "physical_batch": 8,
+      "gradient_accumulation": 8,
+      "effective_batch": 64,
+      "max_length": 384,
+      "safe": true,
+      "headroom_mb": 2943
+    },
+    "recommended_config": {
+      "physical_batch": 8,
+      "gradient_accumulation": 8,
+      "fp16": true,
+      "lr": 3e-5,
+      "epochs": 3,
+      "note": "Matches Phase 4F.5-B A1 config — confirmed safe on RTX 3050"
+    }
+  },
+
+  "distilbert_cached": true,
+  "hf_cache_path": "~/.cache/huggingface/hub/models--distilbert-base-uncased",
+
+  "integrity_validation": {
+    "production_model": "UNCHANGED",
+    "production_checksum": "df592aa8d0ee1a235489bd3eead44d4cf0861221339226311960697c1c1512ac",
+    "frozen_dataset": "UNCHANGED",
+    "source_hash": "a517530354fc9bcaeef6f1aa16c3fb9ce92f1967668386bc66781e6e6bbf2e97",
+    "derived_hash": "abcf4182f39f0620fb056eee4167d1872baf9b4c748051eade9d6312332f271f",
+    "benchmark": "UNCHANGED",
+    "benchmark_hash": "1166bf4ff38265c209614ac20261417b7eeb43653f4482dfdf94721fd50a41d0",
+    "phase4f_5b_artifacts": "UNCHANGED",
+    "a1_checkpoint": "EXISTS"
+  },
+
+  "training_performed": false,
+  "checkpoints_created": false,
+  "production_modified": false,
+  "staged_or_committed": false,
+
+  "execution_command": "backend/phase4f_gpu/Scripts/python.exe backend/phase4f/phase4f_5f/run_experiment.py",
+  "notes": [
+    "GPU venv uses Python 3.11.0, not system Python 3.13.12",
+    "PyTorch 2.6.0+cu124 matches previous Phase 4F.5-B environment",
+    "Transformers 5.16.1 matches previous environment",
+    "Batch 8 + grad_acc 8 has 2943 MB headroom — very safe",
+    "distilbert-base-uncased already cached — no download needed",
+    "Do NOT use system Python (py) for GPU training — it has CPU-only PyTorch"
+  ]
+}

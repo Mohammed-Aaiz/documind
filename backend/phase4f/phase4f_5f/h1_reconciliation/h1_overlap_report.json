@@ -1,0 +1,66 @@
+{
+  "audit_version": "4F.5-H1R-overlap-v1",
+  "timestamp": "2026-09-22T00:00:00Z",
+
+  "example_level_overlap": {
+    "train_answerable_vs_val_answerable": {"count": 0, "ids": [], "status": "CLEAN"},
+    "train_answerable_vs_val_unanswerable": {"count": 0, "ids": [], "status": "CLEAN"},
+    "train_answerable_vs_holdout": {"count": 0, "ids": [], "status": "CLEAN"},
+    "train_answerable_vs_benchmark_answerable": {"count": 0, "ids": [], "status": "CLEAN"},
+    "train_answerable_vs_benchmark_unanswerable": {"count": 0, "ids": [], "status": "CLEAN"},
+    "train_unanswerable_h20_vs_val_answerable": {"count": 0, "ids": [], "status": "CLEAN"},
+    "train_unanswerable_h20_vs_val_unanswerable": {"count": 0, "ids": [], "status": "CLEAN"},
+    "train_unanswerable_h20_vs_holdout": {"count": 0, "ids": [], "status": "CLEAN"},
+    "train_unanswerable_h20_vs_benchmark_answerable": {"count": 0, "ids": [], "status": "CLEAN"},
+    "train_unanswerable_h20_vs_benchmark_unanswerable": {"count": 0, "ids": [], "status": "CLEAN"},
+    "train_all_vs_benchmark": {"count": 0, "ids": [], "status": "CLEAN"},
+    "val_answerable_vs_benchmark_answerable": {"count": 0, "ids": [], "status": "CLEAN"},
+    "val_unanswerable_vs_benchmark_unanswerable": {
+      "count": 8,
+      "ids": ["unans_02ea167f", "unans_03d364a3", "unans_04664035", "unans_06ccc9f0",
+              "unans_08af12b6", "unans_0badce8d", "unans_0e172594", "unans_1b510697"],
+      "status": "EXPECTED",
+      "note": "All 8 validation unanswerable are also in the benchmark. This is by design: the benchmark was constructed to include all 42 derived unanswerable examples. Validation uses the same source examples."
+    },
+    "holdout_vs_benchmark_unanswerable": {
+      "count": 22,
+      "ids": ["unans_67e1a2fc", "unans_691bae51", "unans_7a4e5b72", "unans_7a9ef8c8",
+              "unans_7b46d69d", "unans_885f9d0e", "unans_89493393", "unans_8afe7d03",
+              "unans_a042521b", "unans_a334de2c", "unans_a603100e", "unans_a60eda2e",
+              "unans_a7ad9d04", "unans_b415e6a3", "unans_d7480687", "unans_de20050d",
+              "unans_e1454d12", "unans_e25b96fd", "unans_ecebc88c", "unans_ee310eea",
+              "unans_f6563cea", "unans_fb3b3426"],
+      "status": "EXPECTED",
+      "note": "All 22 holdout examples are also in the benchmark. Same design: the benchmark includes all 42 derived unanswerable. The holdout is a subset of the benchmark for additional diagnostic analysis."
+    },
+    "holdout_vs_benchmark_answerable": {"count": 0, "ids": [], "status": "CLEAN"}
+  },
+
+  "document_level_overlap": {
+    "note": "All unanswerable examples (validation + holdout) are derived from the same 42-question document pool. Document-level overlap between validation and holdout is expected since they sample from the same source documents. H20 training examples span 17 different documents with zero overlap with derived dataset documents.",
+    "h20_document_count": 17,
+    "h20_vs_derived_document_overlap": 0
+  },
+
+  "duplicate_check": {
+    "within_training": 0,
+    "within_validation": 0,
+    "within_holdout": 0,
+    "within_benchmark": 0,
+    "status": "CLEAN"
+  },
+
+  "near_duplicate_check": {
+    "status": "NOT_AVAILABLE",
+    "note": "No near-duplicate detection tooling available in current codebase"
+  },
+
+  "severity_assessment": {
+    "train_val_leakage": "NONE",
+    "train_holdout_leakage": "NONE",
+    "train_benchmark_leakage": "NONE",
+    "val_benchmark_overlap": "EXPECTED_BY_DESIGN — validation unanswerable are a subset of benchmark unanswerable",
+    "holdout_benchmark_overlap": "EXPECTED_BY_DESIGN — holdout is a diagnostic subset of benchmark unanswerable",
+    "overall": "NO_ILLEGAL_LEAKAGE"
+  }
+}

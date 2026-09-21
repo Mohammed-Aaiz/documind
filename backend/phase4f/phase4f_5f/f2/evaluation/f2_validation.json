@@ -1,0 +1,96 @@
+{
+  "eval_version": "4F.5-F2-eval-v1",
+  "total_examples": 93,
+  "overall": {
+    "em": 5.9,
+    "f1": 17.9,
+    "answerability_accuracy": 5.9,
+    "abstention_accuracy": 0.0,
+    "false_abstention": 0.0,
+    "spurious_rate": 8.6,
+    "answerable": 85,
+    "unanswerable": 8
+  },
+  "by_category": {
+    "DATE": {
+      "n": 7,
+      "em": 42.9,
+      "f1": 76.9,
+      "avg_confidence": 0.0263
+    },
+    "DIRECT_SPAN": {
+      "n": 4,
+      "em": 0.0,
+      "f1": 21.1,
+      "avg_confidence": 0.0444
+    },
+    "ENTITY": {
+      "n": 3,
+      "em": 0.0,
+      "f1": 22.2,
+      "avg_confidence": 0.0194
+    },
+    "LIST_ITEM": {
+      "n": 14,
+      "em": 0.0,
+      "f1": 14.1,
+      "avg_confidence": 0.0191
+    },
+    "LONG_CONTEXT": {
+      "n": 1,
+      "em": 0.0,
+      "f1": 0.0,
+      "avg_confidence": 0.0137
+    },
+    "MULTI_CHUNK": {
+      "n": 1,
+      "em": 0.0,
+      "f1": 16.7,
+      "avg_confidence": 0.0392
+    },
+    "NUMERIC": {
+      "n": 9,
+      "em": 22.2,
+      "f1": 48.9,
+      "avg_confidence": 0.0487
+    },
+    "SECTION_SPECIFIC": {
+      "n": 6,
+      "em": 0.0,
+      "f1": 1.8,
+      "avg_confidence": 0.0216
+    },
+    "TABLE_CELL": {
+      "n": 35,
+      "em": 0.0,
+      "f1": 2.6,
+      "avg_confidence": 0.0395
+    },
+    "TABLE_ROW": {
+      "n": 5,
+      "em": 0.0,
+      "f1": 16.1,
+      "avg_confidence": 0.0387
+    },
+    "UNANSWERABLE": {
+      "n": 8,
+      "em": 0,
+      "f1": 0,
+      "avg_confidence": 0.0358
+    }
+  },
+  "confidence_analysis": {
+    "answerable_correct_mean": 0.0285,
+    "answerable_incorrect_mean": 0.0343,
+    "unanswerable_abstained_mean": 0,
+    "unanswerable_spurious_mean": 0.0358,
+    "separation": -0.0073
+  },
+  "failure_taxonomy": {
+    "by_type": {
+      "EXTRACT": 80,
+      "SPURIOUS": 8
+    }
+  },
+  "model_label": "F2_Reconciled"
+}

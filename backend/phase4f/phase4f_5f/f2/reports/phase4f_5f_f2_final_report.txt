@@ -1,0 +1,288 @@
+============================================================
+PHASE 4F.5-F2 — FINAL REPORT
+TARGETED UNANSWERABLE TRAINING EXPERIMENT
+============================================================
+
+DECISION: F2_NO_MEANINGFUL_SIGNAL
+
+============================================================
+1. ENVIRONMENT
+============================================================
+
+GPU:              NVIDIA GeForce RTX 3050 Laptop GPU (4.29 GB)
+Python:           3.11.0 (backend/phase4f_gpu/)
+PyTorch:          2.6.0+cu124
+CUDA:             12.4
+Transformers:     5.16.1
+Peak GPU Memory:  1844 MB
+Training Time:    29.6s (3 epochs)
+
+============================================================
+2. TRAINING PROTOCOL
+============================================================
+
+Base Model:       distilbert-base-uncased
+Tokenizer:        distilbert-base-uncased
+Max Length:       384
+Learning Rate:    3e-5
+Epochs:           3
+Physical Batch:   8
+Grad Accum:       8
+Effective Batch:  64
+FP16:             enabled
+Seed:             42
+Optimizer:        AdamW
+LR Scheduler:     linear_with_warmup
+Max Grad Norm:    1.0
+
+============================================================
+3. DATASET COUNTS
+============================================================
+
+TRAIN: 506 total
+  Answerable:      486
+  Unanswerable:     20
+
+VALIDATION: 93 total
+  Answerable:       85
+  Unanswerable:      8
+
+HOLDOUT: 14 total
+  Unanswerable:     14 (untouched)
+
+EXCLUDED: 4 answerable (invalid token spans)
+  li_4fa4a839, li_8770780b, li_8bc7889f, tc_3b383990
+
+============================================================
+4. TRAINING HISTORY
+============================================================
+
+Epoch 1: loss=5.7107  val_EM=2.4%   val_F1=15.1%  val_abstain=0.0%  time=8.4s
+Epoch 2: loss=4.6389  val_EM=5.9%   val_F1=17.9%  val_abstain=0.0%  time=7.8s  [BEST]
+Epoch 3: loss=3.8235  val_EM=4.7%   val_F1=17.6%  val_abstain=0.0%  time=7.9s
+
+Selected Checkpoint: epoch2 (best val_EM + abstention tiebreak)
+Training Stable: YES (no NaN, no overflow)
+
+============================================================
+5. VALIDATION RESULTS
+============================================================
+
+Overall:
+  EM:              5.9%
+  F1:             17.9%
+  Abstention:      0.0%  (model NEVER abstains)
+  Spurious:        8.6%  (1 of 8 unanswerable answered)
+  False Abstention: N/A (0% abstention)
+
+Per-Category (answerable):
+  DIRECT_SPAN:     EM=0.0%   F1=41.7%   n=4
+  ENTITY:          EM=0.0%   F1=46.9%   n=3
+  DATE:            EM=14.3%  F1=21.8%   n=7
+  NUMERIC:         EM=0.0%   F1=6.4%    n=9
+  TABLE_CELL:      EM=5.7%   F1=13.5%   n=35
+  TABLE_ROW:       EM=0.0%   F1=21.3%   n=5
+  LIST_ITEM:       EM=7.1%   F1=22.5%   n=14
+  SECTION_SPECIFIC: EM=16.7% F1=29.7%   n=6
+  MULTI_CHUNK:     EM=0.0%   F1=0.0%    n=1
+  LONG_CONTEXT:    EM=0.0%   F1=0.0%    n=1
+
+============================================================
+6. HOLDOUT RESULTS (14 unanswerable)
+============================================================
+
+  Abstained:       0/14 (0.0%)
+  Spurious:       14/14 (100.0%)
+
+  The model answered ALL 14 unanswerable questions.
+  No abstention behavior was learned.
+
+============================================================
+7. BENCHMARK RESULTS (Phase 4F.5-D)
+============================================================
+
+Overall:
+  EM:              2.9%
+  F1:             19.7%
+  Abstention:      0.0%
+  Spurious:       23.1% (42/42 unanswerable answered)
+
+Per-Category:
+  DIRECT_SPAN:     EM=0.0%   F1=45.8%   n=24
+  NUMERIC:         EM=5.0%   F1=10.8%   n=20
+  TABLE_CELL:      EM=4.2%   F1=16.0%   n=24
+  TABLE_ROW:       EM=0.0%   F1=18.5%   n=16
+  LIST_ITEM:       EM=5.0%   F1=24.4%   n=20
+  SECTION_SPECIFIC: EM=6.3%  F1=27.0%   n=16
+  MULTI_CHUNK:     EM=0.0%   F1=3.3%    n=10
+  LONG_CONTEXT:    EM=0.0%   F1=12.0%   n=10
+  UNANSWERABLE:    EM=0.0%   F1=0.0%    n=42 (spurious=100%)
+
+============================================================
+8. BASELINE COMPARISON
+============================================================
+
+A0/A1/A2 baseline results were not available for comparison
+(Phase 4F.5-F run_experiment.py was never executed, so A0/A1
+benchmark results do not exist).
+
+F2 standalone comparison:
+  F2 EM:   2.9%
+  F2 F1:  19.7%
+  F2 Abstention: 0.0%
+  F2 Spurious:  23.1%
+
+============================================================
+9. ABSTENTION ANALYSIS
+============================================================
+
+CRITICAL FINDING: F2 has ZERO abstention capability.
+
+  Validation abstention:    0.0% (0/8 unanswerable)
+  Holdout abstention:       0.0% (0/14 unanswerable)
+  Benchmark abstention:     0.0% (0/42 unanswerable)
+
+The model was trained with 20 unanswerable examples (out of
+506 total training examples = 4.0% unanswerable ratio).
+
+With only 4.0% unanswerable in training, the model has not
+learned to recognize unanswerable questions. It treats every
+question as answerable and always produces an answer.
+
+The 20 unanswerable examples are insufficient to teach
+abstention behavior to DistilBERT.
+
+============================================================
+10. SPURIOUS ANSWER ANALYSIS
+============================================================
+
+The model generates spurious answers for all unanswerable
+questions across all evaluation sets:
+
+  Validation:  1/8 spurious (12.5%)
+  Holdout:    14/14 spurious (100.0%)
+  Benchmark:  42/42 spurious (100.0%)
+
+The spurious answers are not random — they are confident
+extractions from the context, suggesting the model has
+learned to always extract something rather than abstain.
+
+============================================================
+11. CONFIDENCE ANALYSIS
+============================================================
+
+The model shows no meaningful confidence separation between
+correct and incorrect predictions. All predictions receive
+similar confidence scores, indicating the model cannot
+distinguish answerable from unanswerable questions.
+
+============================================================
+12. LEAKAGE AUDIT
+============================================================
+
+  Train <-> Validation overlap:   0
+  Train <-> Holdout overlap:      0
+  Validation <-> Holdout overlap: 0
+  Benchmark leakage:              0
+
+  Status: CLEAN
+
+============================================================
+13. PRODUCTION INTEGRITY
+============================================================
+
+  Production model checksum: df592aa8d0ee1a23... UNCHANGED
+  Benchmark checksum:        1166bf4ff38265c2... UNCHANGED
+  Derived dataset checksum:  abcf4182f39f0620... UNCHANGED
+
+  Status: ALL UNCHANGED
+
+============================================================
+14. LIMITATIONS
+============================================================
+
+1. A0/A1/A2 baseline results not available for direct comparison
+2. Only 20 unanswerable examples in training (4.0% ratio)
+3. 3 epochs may be insufficient for convergence
+4. DistilBERT is a small model with limited capacity
+5. The dataset is technically challenging (tables, code, etc.)
+6. No learning rate scheduling for abstention-specific loss
+
+============================================================
+15. ANALYSIS
+============================================================
+
+The F2 experiment was designed to test whether adding 20
+genuine unanswerable examples to training would teach
+DistilBERT to abstain on unanswerable questions.
+
+RESULT: The experiment FAILED to produce abstention.
+
+Root cause: The unanswerable-to-answerable ratio (20:486 =
+1:24.3) is too low. The model's gradient updates are
+overwhelmingly driven by answerable examples, and the 20
+unanswerable examples provide insufficient signal to learn
+the abstention behavior.
+
+The model converges on answerable QA (loss decreases from
+5.71 to 3.82) but never learns to output no-answer for
+unanswerable questions.
+
+============================================================
+16. DECISION
+============================================================
+
+F2_NO_MEANINGFUL_SIGNAL
+
+Reasoning:
+- Abstention rate: 0.0% across all evaluation sets
+- No improvement over a model that never abstains
+- The 20 unanswerable training examples are insufficient
+- Answerable performance is also low (5.9% EM on validation)
+- No evidence that targeted unanswerable training helps
+  with the abstention failure identified in Phase 4F.5-E
+
+The experiment confirms that simply adding a small number
+of unanswerable examples to training is NOT sufficient to
+teach abstention. A fundamentally different approach is
+needed (e.g., much higher unanswerable ratio, different
+loss function, or architectural changes).
+
+============================================================
+ARTIFACTS CREATED
+============================================================
+
+f2/
+  checkpoints/F2/checkpoint_epoch1/
+  checkpoints/F2/checkpoint_epoch2/
+  checkpoints/F2/checkpoint_epoch3/
+  config/f2_config.json
+  logs/f2_training.json
+  evaluation/f2_validation.json
+  evaluation/f2_holdout.json
+  evaluation/f2_benchmark.json
+  manifests/f2_dataset_ids.json
+  manifests/f2_manifest.json
+  reports/phase4f_5f_f2_final_report.txt
+
+============================================================
+FINAL SUMMARY
+============================================================
+
+PHASE 4F.5-F2 STATUS:
+
+TRAINING COUNT:    506 (486+20)
+VALIDATION COUNT:  93 (85+8)
+HOLDOUT COUNT:     14
+COMPLETED:         YES
+CHECKPOINT:        epoch2
+VALIDATION EM:     5.9%
+VALIDATION F1:    17.9%
+HOLDOUT ABSTAIN:   0.0% (0/14)
+BENCHMARK EM:     2.9%
+BENCHMARK F1:     19.7%
+BENCHMARK ABSTAIN: 0.0% (0/42)
+PRODUCTION:        UNCHANGED
+DECISION:          F2_NO_MEANINGFUL_SIGNAL
+
+============================================================

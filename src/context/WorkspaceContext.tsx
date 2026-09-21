@@ -1,24 +1,45 @@
 import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
-import { DocumentFile, ChatMessage } from '../types';
+import { DocumentFile, ChatMessage, ChatSession } from '../types';
 import {
   apiUploadDocument,
   apiListDocuments,
   apiDeleteDocument,
   apiAskQuestion,
+  apiListSessions,
+  apiCreateSession,
+  apiGetSessionMessages,
+  apiAddSessionMessage,
   ApiDocument,
 } from '../lib/api';
 
 interface WorkspaceContextType {
+  // Documents
   files: DocumentFile[];
   uploading: boolean;
   uploadError: string | null;
   addFiles: (rawFiles: File[]) => Promise<void>;
   removeFile: (id: string) => Promise<void>;
   refreshFiles: () => Promise<void>;
+
+  // Conversation state
+  activeSessionId: string | null;
+  sessions: ChatSession[];
   messages: ChatMessage[];
   chatInput: string;
   setChatInput: (v: string) => void;
-  sendMessage: () => void;
+  sendMessage: () => Promise<void>;
+  startNewConversation: () => Promise<void>;
+  openConversation: (sessionId: string) => Promise<void>;
+  backToHomepage: () => void;
+  isConversationMode: boolean;
+
+  // Drawer
+  drawerOpen: boolean;
+  toggleDrawer: () => void;
+  closeDrawer: () => void;
+
+  // Loading states
+  sessionsLoading: boolean;
 }
 
 const WorkspaceContext = createContext<WorkspaceContextType | undefined>(undefined);
@@ -40,13 +61,26 @@ function apiDocToFile(doc: ApiDocument): DocumentFile {
 }
 
 export const WorkspaceProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  // Documents
   const [files, setFiles] = useState<DocumentFile[]>([]);
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
+
+  // Conversation
+  const [activeSessionId, setActiveSessionId] = useState<string | null>(null);
+  const [sessions, setSessions] = useState<ChatSession[]>([]);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [chatInput, setChatInput] = useState('');
+  const [sessionsLoading, setSessionsLoading] = useState(false);
 
+  // Drawer
+  const [drawerOpen, setDrawerOpen] = useState(false);
+
+  const isConversationMode = activeSessionId !== null;
+
+  // -----------------------------------------------------------------------
   // Load documents on mount
+  // -----------------------------------------------------------------------
   const refreshFiles = useCallback(async () => {
     try {
       const docs = await apiListDocuments();
@@ -60,7 +94,34 @@ export const WorkspaceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     refreshFiles();
   }, [refreshFiles]);
 
+  // -----------------------------------------------------------------------
+  // Load sessions on mount
+  // -----------------------------------------------------------------------
+  const refreshSessions = useCallback(async () => {
+    setSessionsLoading(true);
+    try {
+      const apiSessions = await apiListSessions();
+      setSessions(
+        apiSessions.map((s) => ({
+          id: s.id,
+          createdAt: s.createdAt,
+          preview: s.preview,
+        })),
+      );
+    } catch {
+      // Silently fail
+    } finally {
+      setSessionsLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    refreshSessions();
+  }, [refreshSessions]);
+
+  // -----------------------------------------------------------------------
   // Upload files to backend
+  // -----------------------------------------------------------------------
   const addFiles = useCallback(async (rawFiles: File[]) => {
     setUploading(true);
     setUploadError(null);
@@ -85,10 +146,8 @@ export const WorkspaceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
 
         try {
           const doc = await apiUploadDocument(file);
-          // Replace optimistic entry with real one
           setFiles((prev) => prev.map((f) => (f.id === tempId ? apiDocToFile(doc) : f)));
         } catch (err) {
-          // Mark as error
           setFiles((prev) => prev.map((f) => (f.id === tempId ? { ...f, status: 'error' as const } : f)));
           setUploadError(err instanceof Error ? err.message : 'Upload failed');
         }
@@ -98,7 +157,9 @@ export const WorkspaceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     }
   }, []);
 
-  // Delete document from backend
+  // -----------------------------------------------------------------------
+  // Delete document
+  // -----------------------------------------------------------------------
   const removeFile = useCallback(async (id: string) => {
     try {
       await apiDeleteDocument(id);
@@ -108,18 +169,88 @@ export const WorkspaceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     }
   }, []);
 
+  // -----------------------------------------------------------------------
+  // Start a new conversation
+  // -----------------------------------------------------------------------
+  const startNewConversation = useCallback(async () => {
+    try {
+      const session = await apiCreateSession();
+      setActiveSessionId(session.id);
+      setMessages([]);
+      setDrawerOpen(false);
+      // Refresh session list
+      refreshSessions();
+    } catch {
+      // Could not create session
+    }
+  }, [refreshSessions]);
+
+  // -----------------------------------------------------------------------
+  // Open an existing conversation
+  // -----------------------------------------------------------------------
+  const openConversation = useCallback(async (sessionId: string) => {
+    setActiveSessionId(sessionId);
+    setDrawerOpen(false);
+    try {
+      const apiMessages = await apiGetSessionMessages(sessionId);
+      setMessages(
+        apiMessages.map((m) => ({
+          id: m.id,
+          sender: m.sender as 'user' | 'oracle',
+          text: m.content,
+          timestamp: m.createdAt,
+        })),
+      );
+    } catch {
+      setMessages([]);
+    }
+  }, []);
+
+  // -----------------------------------------------------------------------
+  // Go back to homepage
+  // -----------------------------------------------------------------------
+  const backToHomepage = useCallback(() => {
+    setActiveSessionId(null);
+    setMessages([]);
+    setChatInput('');
+    refreshSessions();
+  }, [refreshSessions]);
+
+  // -----------------------------------------------------------------------
+  // Send a message (with persistence)
+  // -----------------------------------------------------------------------
   const sendMessage = useCallback(async () => {
     const text = chatInput.trim();
     if (!text) return;
 
+    let sessionId = activeSessionId;
+
+    // If no active session, create one first
+    if (!sessionId) {
+      try {
+        const session = await apiCreateSession();
+        sessionId = session.id;
+        setActiveSessionId(sessionId);
+        refreshSessions();
+      } catch {
+        return; // Cannot create session
+      }
+    }
+
+    const finalSessionId = sessionId;
+    setChatInput('');
+
+    // Optimistic user message
     const userMsg: ChatMessage = {
-      id: Date.now().toString(),
+      id: `temp-user-${Date.now()}`,
       sender: 'user',
       text,
       timestamp: new Date().toLocaleTimeString(),
     };
     setMessages((prev) => [...prev, userMsg]);
-    setChatInput('');
+
+    // Persist user message
+    apiAddSessionMessage(finalSessionId, 'user', text).catch(() => {});
 
     try {
       const res = await apiAskQuestion(text);
@@ -127,8 +258,9 @@ export const WorkspaceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       if (res.insufficientContext || !answerText) {
         answerText = 'I could not find relevant information in your documents to answer this question.';
       }
+
       const oracleMsg: ChatMessage = {
-        id: (Date.now() + 1).toString(),
+        id: `temp-oracle-${Date.now() + 1}`,
         sender: 'oracle',
         text: answerText,
         timestamp: new Date().toLocaleTimeString(),
@@ -136,19 +268,52 @@ export const WorkspaceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         insufficientContext: res.insufficientContext,
       };
       setMessages((prev) => [...prev, oracleMsg]);
+
+      // Persist oracle message
+      apiAddSessionMessage(finalSessionId, 'oracle', answerText).catch(() => {});
     } catch {
       const errorMsg: ChatMessage = {
-        id: (Date.now() + 1).toString(),
+        id: `temp-oracle-${Date.now() + 1}`,
         sender: 'oracle',
         text: 'Failed to process your question. Please try again.',
         timestamp: new Date().toLocaleTimeString(),
       };
       setMessages((prev) => [...prev, errorMsg]);
+      apiAddSessionMessage(finalSessionId, 'oracle', 'Failed to process your question. Please try again.').catch(() => {});
     }
-  }, [chatInput]);
+  }, [chatInput, activeSessionId, refreshSessions]);
+
+  // -----------------------------------------------------------------------
+  // Drawer controls
+  // -----------------------------------------------------------------------
+  const toggleDrawer = useCallback(() => setDrawerOpen((prev) => !prev), []);
+  const closeDrawer = useCallback(() => setDrawerOpen(false), []);
 
   return (
-    <WorkspaceContext.Provider value={{ files, uploading, uploadError, addFiles, removeFile, refreshFiles, messages, chatInput, setChatInput, sendMessage }}>
+    <WorkspaceContext.Provider
+      value={{
+        files,
+        uploading,
+        uploadError,
+        addFiles,
+        removeFile,
+        refreshFiles,
+        activeSessionId,
+        sessions,
+        messages,
+        chatInput,
+        setChatInput,
+        sendMessage,
+        startNewConversation,
+        openConversation,
+        backToHomepage,
+        isConversationMode,
+        drawerOpen,
+        toggleDrawer,
+        closeDrawer,
+        sessionsLoading,
+      }}
+    >
       {children}
     </WorkspaceContext.Provider>
   );

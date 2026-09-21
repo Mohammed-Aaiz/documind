@@ -1,0 +1,61 @@
+{
+  "phase": "4F.4-R",
+  "audit_type": "model_initialization_audit",
+  "production_model": {
+    "path": "backend/models/documind-qa/",
+    "base_model": "distilbert-base-uncased",
+    "architecture": "DistilBertForQuestionAnswering",
+    "vocab_size": 30522,
+    "transformers_version_used_during_training": "5.13.1",
+    "training_phases": [
+      "Phase 1: SQuAD 2.0 (87,599 samples) on Google Colab T4",
+      "Phase 2: SQuAD+HotpotQA+CoQA+NewsQA+TriviaQA (414,057 samples) on Kaggle T4",
+      "Phase 3: Custom Academic QA (50 pairs, 15 epochs) on Google Colab T4"
+    ],
+    "total_training_samples": 414107,
+    "final_train_loss": 1.6592,
+    "final_eval_loss": 3.8913,
+    "checksum": "df592aa8d0ee1a235489bd3eead44d4cf0861221339226311960697c1c1512ac"
+  },
+  "a1_distilbert": {
+    "base_model_identifier": "distilbert-base-cased",
+    "base_model_revision": "not recorded",
+    "pretrained_weights_loaded": true,
+    "loading_method": "AutoModelForQuestionAnswering.from_pretrained('distilbert-base-cased')",
+    "architecture": "DistilBertForQuestionAnswering",
+    "vocab_size": 28996,
+    "qa_head_initialization": "RANDOM (default from_pretrained behavior)",
+    "num_parameters_estimate": "66M (DistilBERT base)",
+    "num_trainable_parameters_estimate": "66M (all parameters trained)",
+    "CRITICAL_DISCREPANCY": "Production model uses distilbert-base-UNCASED (vocab 30522). A1 was initialized from distilbert-base-CASED (vocab 28996). These are DIFFERENT pretrained models with different vocabularies."
+  },
+  "a2_bert_base": {
+    "base_model_identifier": "bert-base-cased",
+    "base_model_revision": "not recorded",
+    "pretrained_weights_loaded": true,
+    "loading_method": "AutoModelForQuestionAnswering.from_pretrained('bert-base-cased')",
+    "architecture": "BertForQuestionAnswering",
+    "vocab_size": 28996,
+    "qa_head_initialization": "RANDOM",
+    "num_parameters_estimate": "110M (BERT-base)",
+    "num_trainable_parameters_estimate": "110M (all parameters trained)"
+  },
+  "a3_deberta_v3": {
+    "base_model_identifier": "microsoft/deberta-v3-base",
+    "base_model_revision": "not recorded",
+    "pretrained_weights_loaded": true,
+    "loading_method": "AutoModelForQuestionAnswering.from_pretrained('microsoft/deberta-v3-base')",
+    "architecture": "DebertaV2ForQuestionAnswering",
+    "vocab_size": 128100,
+    "qa_head_initialization": "RANDOM",
+    "num_parameters_estimate": "86M (DeBERTa-v3 base)",
+    "num_trainable_parameters_estimate": "86M (all parameters trained)"
+  },
+  "determination": {
+    "a1": "pretrained distilbert-base-cased + randomly initialized QA head",
+    "a2": "pretrained bert-base-cased + randomly initialized QA head",
+    "a3": "pretrained microsoft/deberta-v3-base + randomly initialized QA head",
+    "production_model": "pretrained distilbert-base-uncased + QA head trained on 414K+ samples",
+    "all_trained_models_used_different_base_than_production": true
+  }
+}

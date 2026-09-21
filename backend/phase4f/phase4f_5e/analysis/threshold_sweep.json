@@ -1,0 +1,458 @@
+{
+  "A0": [
+    {
+      "threshold": 0.0,
+      "em": 2.1,
+      "f1": 12.0,
+      "false_abstention": 0.0,
+      "unanswerable_abstention": 0.0,
+      "spurious_rate": 100.0,
+      "coverage": 100.0,
+      "n_answered": 140
+    },
+    {
+      "threshold": 0.05,
+      "em": 2.1,
+      "f1": 12.0,
+      "false_abstention": 0.0,
+      "unanswerable_abstention": 0.0,
+      "spurious_rate": 100.0,
+      "coverage": 100.0,
+      "n_answered": 140
+    },
+    {
+      "threshold": 0.1,
+      "em": 2.2,
+      "f1": 12.0,
+      "false_abstention": 0.7,
+      "unanswerable_abstention": 0.0,
+      "spurious_rate": 100.0,
+      "coverage": 99.3,
+      "n_answered": 139
+    },
+    {
+      "threshold": 0.15,
+      "em": 2.2,
+      "f1": 12.0,
+      "false_abstention": 0.7,
+      "unanswerable_abstention": 0.0,
+      "spurious_rate": 100.0,
+      "coverage": 99.3,
+      "n_answered": 139
+    },
+    {
+      "threshold": 0.2,
+      "em": 2.2,
+      "f1": 11.8,
+      "false_abstention": 2.9,
+      "unanswerable_abstention": 0.0,
+      "spurious_rate": 100.0,
+      "coverage": 97.1,
+      "n_answered": 136
+    },
+    {
+      "threshold": 0.25,
+      "em": 2.4,
+      "f1": 10.8,
+      "false_abstention": 11.4,
+      "unanswerable_abstention": 0.0,
+      "spurious_rate": 100.0,
+      "coverage": 88.6,
+      "n_answered": 124
+    },
+    {
+      "threshold": 0.3,
+      "em": 2.6,
+      "f1": 10.0,
+      "false_abstention": 17.9,
+      "unanswerable_abstention": 9.5,
+      "spurious_rate": 90.5,
+      "coverage": 82.1,
+      "n_answered": 115
+    },
+    {
+      "threshold": 0.35,
+      "em": 2.8,
+      "f1": 10.1,
+      "false_abstention": 22.9,
+      "unanswerable_abstention": 14.3,
+      "spurious_rate": 85.7,
+      "coverage": 77.1,
+      "n_answered": 108
+    },
+    {
+      "threshold": 0.4,
+      "em": 2.1,
+      "f1": 9.5,
+      "false_abstention": 30.7,
+      "unanswerable_abstention": 23.8,
+      "spurious_rate": 76.2,
+      "coverage": 69.3,
+      "n_answered": 97
+    },
+    {
+      "threshold": 0.45,
+      "em": 2.2,
+      "f1": 9.9,
+      "false_abstention": 36.4,
+      "unanswerable_abstention": 23.8,
+      "spurious_rate": 76.2,
+      "coverage": 63.6,
+      "n_answered": 89
+    },
+    {
+      "threshold": 0.5,
+      "em": 2.4,
+      "f1": 7.8,
+      "false_abstention": 40.0,
+      "unanswerable_abstention": 33.3,
+      "spurious_rate": 66.7,
+      "coverage": 60.0,
+      "n_answered": 84
+    },
+    {
+      "threshold": 0.6,
+      "em": 1.4,
+      "f1": 5.1,
+      "false_abstention": 48.6,
+      "unanswerable_abstention": 35.7,
+      "spurious_rate": 64.3,
+      "coverage": 51.4,
+      "n_answered": 72
+    },
+    {
+      "threshold": 0.7,
+      "em": 1.6,
+      "f1": 3.9,
+      "false_abstention": 56.4,
+      "unanswerable_abstention": 45.2,
+      "spurious_rate": 54.8,
+      "coverage": 43.6,
+      "n_answered": 61
+    },
+    {
+      "threshold": 0.8,
+      "em": 2.0,
+      "f1": 2.9,
+      "false_abstention": 65.0,
+      "unanswerable_abstention": 61.9,
+      "spurious_rate": 38.1,
+      "coverage": 35.0,
+      "n_answered": 49
+    },
+    {
+      "threshold": 0.9,
+      "em": 2.7,
+      "f1": 2.7,
+      "false_abstention": 73.6,
+      "unanswerable_abstention": 73.8,
+      "spurious_rate": 26.2,
+      "coverage": 26.4,
+      "n_answered": 37
+    }
+  ],
+  "A1": [
+    {
+      "threshold": 0.0,
+      "em": 3.6,
+      "f1": 21.3,
+      "false_abstention": 0.0,
+      "unanswerable_abstention": 0.0,
+      "spurious_rate": 100.0,
+      "coverage": 100.0,
+      "n_answered": 140
+    },
+    {
+      "threshold": 0.05,
+      "em": 6.2,
+      "f1": 27.6,
+      "false_abstention": 42.1,
+      "unanswerable_abstention": 19.0,
+      "spurious_rate": 81.0,
+      "coverage": 57.9,
+      "n_answered": 81
+    },
+    {
+      "threshold": 0.1,
+      "em": 12.5,
+      "f1": 41.7,
+      "false_abstention": 82.9,
+      "unanswerable_abstention": 78.6,
+      "spurious_rate": 21.4,
+      "coverage": 17.1,
+      "n_answered": 24
+    },
+    {
+      "threshold": 0.15,
+      "em": 0.0,
+      "f1": 40.0,
+      "false_abstention": 98.6,
+      "unanswerable_abstention": 95.2,
+      "spurious_rate": 4.8,
+      "coverage": 1.4,
+      "n_answered": 2
+    },
+    {
+      "threshold": 0.2,
+      "em": 0,
+      "f1": 0,
+      "false_abstention": 100.0,
+      "unanswerable_abstention": 100.0,
+      "spurious_rate": 0.0,
+      "coverage": 0.0,
+      "n_answered": 0
+    },
+    {
+      "threshold": 0.25,
+      "em": 0,
+      "f1": 0,
+      "false_abstention": 100.0,
+      "unanswerable_abstention": 100.0,
+      "spurious_rate": 0.0,
+      "coverage": 0.0,
+      "n_answered": 0
+    },
+    {
+      "threshold": 0.3,
+      "em": 0,
+      "f1": 0,
+      "false_abstention": 100.0,
+      "unanswerable_abstention": 100.0,
+      "spurious_rate": 0.0,
+      "coverage": 0.0,
+      "n_answered": 0
+    },
+    {
+      "threshold": 0.35,
+      "em": 0,
+      "f1": 0,
+      "false_abstention": 100.0,
+      "unanswerable_abstention": 100.0,
+      "spurious_rate": 0.0,
+      "coverage": 0.0,
+      "n_answered": 0
+    },
+    {
+      "threshold": 0.4,
+      "em": 0,
+      "f1": 0,
+      "false_abstention": 100.0,
+      "unanswerable_abstention": 100.0,
+      "spurious_rate": 0.0,
+      "coverage": 0.0,
+      "n_answered": 0
+    },
+    {
+      "threshold": 0.45,
+      "em": 0,
+      "f1": 0,
+      "false_abstention": 100.0,
+      "unanswerable_abstention": 100.0,
+      "spurious_rate": 0.0,
+      "coverage": 0.0,
+      "n_answered": 0
+    },
+    {
+      "threshold": 0.5,
+      "em": 0,
+      "f1": 0,
+      "false_abstention": 100.0,
+      "unanswerable_abstention": 100.0,
+      "spurious_rate": 0.0,
+      "coverage": 0.0,
+      "n_answered": 0
+    },
+    {
+      "threshold": 0.6,
+      "em": 0,
+      "f1": 0,
+      "false_abstention": 100.0,
+      "unanswerable_abstention": 100.0,
+      "spurious_rate": 0.0,
+      "coverage": 0.0,
+      "n_answered": 0
+    },
+    {
+      "threshold": 0.7,
+      "em": 0,
+      "f1": 0,
+      "false_abstention": 100.0,
+      "unanswerable_abstention": 100.0,
+      "spurious_rate": 0.0,
+      "coverage": 0.0,
+      "n_answered": 0
+    },
+    {
+      "threshold": 0.8,
+      "em": 0,
+      "f1": 0,
+      "false_abstention": 100.0,
+      "unanswerable_abstention": 100.0,
+      "spurious_rate": 0.0,
+      "coverage": 0.0,
+      "n_answered": 0
+    },
+    {
+      "threshold": 0.9,
+      "em": 0,
+      "f1": 0,
+      "false_abstention": 100.0,
+      "unanswerable_abstention": 100.0,
+      "spurious_rate": 0.0,
+      "coverage": 0.0,
+      "n_answered": 0
+    }
+  ],
+  "A2": [
+    {
+      "threshold": 0.0,
+      "em": 3.6,
+      "f1": 19.4,
+      "false_abstention": 0.0,
+      "unanswerable_abstention": 0.0,
+      "spurious_rate": 100.0,
+      "coverage": 100.0,
+      "n_answered": 140
+    },
+    {
+      "threshold": 0.05,
+      "em": 5.1,
+      "f1": 24.7,
+      "false_abstention": 44.3,
+      "unanswerable_abstention": 31.0,
+      "spurious_rate": 69.0,
+      "coverage": 55.7,
+      "n_answered": 78
+    },
+    {
+      "threshold": 0.1,
+      "em": 10.3,
+      "f1": 32.7,
+      "false_abstention": 79.3,
+      "unanswerable_abstention": 81.0,
+      "spurious_rate": 19.0,
+      "coverage": 20.7,
+      "n_answered": 29
+    },
+    {
+      "threshold": 0.15,
+      "em": 0.0,
+      "f1": 40.0,
+      "false_abstention": 97.9,
+      "unanswerable_abstention": 95.2,
+      "spurious_rate": 4.8,
+      "coverage": 2.1,
+      "n_answered": 3
+    },
+    {
+      "threshold": 0.2,
+      "em": 0,
+      "f1": 0,
+      "false_abstention": 100.0,
+      "unanswerable_abstention": 97.6,
+      "spurious_rate": 2.4,
+      "coverage": 0.0,
+      "n_answered": 0
+    },
+    {
+      "threshold": 0.25,
+      "em": 0,
+      "f1": 0,
+      "false_abstention": 100.0,
+      "unanswerable_abstention": 100.0,
+      "spurious_rate": 0.0,
+      "coverage": 0.0,
+      "n_answered": 0
+    },
+    {
+      "threshold": 0.3,
+      "em": 0,
+      "f1": 0,
+      "false_abstention": 100.0,
+      "unanswerable_abstention": 100.0,
+      "spurious_rate": 0.0,
+      "coverage": 0.0,
+      "n_answered": 0
+    },
+    {
+      "threshold": 0.35,
+      "em": 0,
+      "f1": 0,
+      "false_abstention": 100.0,
+      "unanswerable_abstention": 100.0,
+      "spurious_rate": 0.0,
+      "coverage": 0.0,
+      "n_answered": 0
+    },
+    {
+      "threshold": 0.4,
+      "em": 0,
+      "f1": 0,
+      "false_abstention": 100.0,
+      "unanswerable_abstention": 100.0,
+      "spurious_rate": 0.0,
+      "coverage": 0.0,
+      "n_answered": 0
+    },
+    {
+      "threshold": 0.45,
+      "em": 0,
+      "f1": 0,
+      "false_abstention": 100.0,
+      "unanswerable_abstention": 100.0,
+      "spurious_rate": 0.0,
+      "coverage": 0.0,
+      "n_answered": 0
+    },
+    {
+      "threshold": 0.5,
+      "em": 0,
+      "f1": 0,
+      "false_abstention": 100.0,
+      "unanswerable_abstention": 100.0,
+      "spurious_rate": 0.0,
+      "coverage": 0.0,
+      "n_answered": 0
+    },
+    {
+      "threshold": 0.6,
+      "em": 0,
+      "f1": 0,
+      "false_abstention": 100.0,
+      "unanswerable_abstention": 100.0,
+      "spurious_rate": 0.0,
+      "coverage": 0.0,
+      "n_answered": 0
+    },
+    {
+      "threshold": 0.7,
+      "em": 0,
+      "f1": 0,
+      "false_abstention": 100.0,
+      "unanswerable_abstention": 100.0,
+      "spurious_rate": 0.0,
+      "coverage": 0.0,
+      "n_answered": 0
+    },
+    {
+      "threshold": 0.8,
+      "em": 0,
+      "f1": 0,
+      "false_abstention": 100.0,
+      "unanswerable_abstention": 100.0,
+      "spurious_rate": 0.0,
+      "coverage": 0.0,
+      "n_answered": 0
+    },
+    {
+      "threshold": 0.9,
+      "em": 0,
+      "f1": 0,
+      "false_abstention": 100.0,
+      "unanswerable_abstention": 100.0,
+      "spurious_rate": 0.0,
+      "coverage": 0.0,
+      "n_answered": 0
+    }
+  ]
+}

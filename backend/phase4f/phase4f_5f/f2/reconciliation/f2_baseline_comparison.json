@@ -1,0 +1,46 @@
+{
+  "comparison_version": "4F.5-F2R-baseline-comparison-v1",
+  "models": {
+    "A0": {
+      "label": "Production Model",
+      "em": 2.1,
+      "f1": 12.0,
+      "abstention": 64.3,
+      "spurious": 8.2,
+      "source": "Phase 4F.5-D pre-recorded"
+    },
+    "A1": {
+      "label": "Phase 4F.5-B DistilBERT",
+      "em": 3.6,
+      "f1": 21.3,
+      "abstention": 0.0,
+      "spurious": 23.1,
+      "source": "Phase 4F.5-D pre-recorded"
+    },
+    "A2": {
+      "label": "Phase 4F.5-B BERT",
+      "em": 3.6,
+      "f1": 19.4,
+      "abstention": 0.0,
+      "spurious": 23.1,
+      "source": "Phase 4F.5-D pre-recorded"
+    },
+    "F2": {
+      "label": "Phase 4F.5-F2 Reconciled",
+      "em": 2.9,
+      "f1": 19.7,
+      "abstention": 0.0,
+      "spurious": 23.1,
+      "source": "Phase 4F.5-F2 benchmark evaluation"
+    }
+  },
+  "analysis": {
+    "extraction_ranking": "A1(3.6) = A2(3.6) > F2(2.9) > A0(2.1)",
+    "abstention_ranking": "A0(64.3) >> A1(0) = A2(0) = F2(0)",
+    "spurious_ranking": "A0(8.2) << A1(23.1) = A2(23.1) = F2(23.1)",
+    "f2_vs_a1_f1_delta": -1.6,
+    "f2_vs_a1_abstention_delta": 0.0,
+    "f2_vs_a1_spurious_delta": 0.0,
+    "conclusion": "F2 is functionally equivalent to A1/A2. Targeted unanswerable training with 20 examples had no measurable effect on any metric."
+  }
+}

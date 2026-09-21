@@ -1,0 +1,42 @@
+{
+  "phase": "4F.5-B",
+  "status": "COMPLETE",
+  "source_dataset_hash": "a517530354fc9bcaeef6f1aa16c3fb9ce92f1967668386bc66781e6e6bbf2e97",
+  "derived_dataset_hash": "abcf4182f39f0620fb056eee4167d1872baf9b4c748051eade9d6312332f271f",
+  "production_model_checksum": "df592aa8d0ee1a235489bd3eead44d4cf0861221339226311960697c1c1512ac",
+  "production_unchanged": true,
+  "results": {
+    "a0": {
+      "em": 3.2,
+      "f1": 8.6
+    },
+    "a1": {
+      "em": 1.8,
+      "f1": 14.4,
+      "best_checkpoint": "C:\\Users\\moham\\OneDrive\\Desktop\\stitch_documind_futuristic_3d_ui\\backend\\phase4f\\phase4f_5\\checkpoints\\A1\\checkpoint_epoch3",
+      "best_val_em": 8.8,
+      "nan_detected": false,
+      "overflow_count": 0
+    },
+    "a2": {
+      "em": 0.9,
+      "f1": 12.3,
+      "best_checkpoint": "C:\\Users\\moham\\OneDrive\\Desktop\\stitch_documind_futuristic_3d_ui\\backend\\phase4f\\phase4f_5\\checkpoints\\A2\\checkpoint_epoch3",
+      "best_val_em": 11.2,
+      "nan_detected": false,
+      "overflow_count": 0
+    }
+  },
+  "comparison": {
+    "em_delta": -1.4,
+    "f1_delta": 5.8,
+    "answerability_delta": -1.4,
+    "abstention_delta": 0.0,
+    "spurious_delta": 0.0
+  },
+  "training_stability": {
+    "A1": "STABLE",
+    "A2": "STABLE"
+  },
+  "a3_status": "DEFERRED"
+}

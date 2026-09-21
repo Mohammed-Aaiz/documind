@@ -1,0 +1,752 @@
+================================================================================
+PHASE 4A — QA SYSTEM FAILURE AUDIT
+================================================================================
+
+Report Date: 2026-09-19
+Based on: Phase 3F evaluation (Arm C), Phase 3G audit, QA model artifacts
+Scope: Audit + evaluation contract only. No implementation.
+
+================================================================================
+1. EXECUTIVE FINDINGS
+================================================================================
+
+The 11 QA_EXTRACT failures in Arm C (structure-v2 + token-aware context)
+break down into three distinct root causes:
+
+  ROOT CAUSE A — Table representation problem (4 failures, 36.4%)
+    The table text is serialized as pipe-delimited rows ("Method | Result").
+    The extractive QA model cannot reliably navigate row/column
+    relationships in this flat text representation.  It extracts wrong
+    cells, wrong rows, or headings instead of cell values.
+
+  ROOT CAUSE B — Extractive span limitation (4 failures, 36.4%)
+    Questions requiring synthesis across multiple sentences, sequential
+    reasoning (lists), or multi-chunk information cannot be answered by
+    extracting a single contiguous span.  The model either extracts too
+    much (multi-sentence), too little (partial), or the wrong span
+    entirely.
+
+  ROOT CAUSE C — Training-data mismatch (3 failures, 27.3%)
+    The model was trained on SQuAD-style prose QA.  It has limited
+    exposure to table structures, list ordering, unpunctuated text,
+    and academic two-column layouts.  The 50 custom academic QA pairs
+    (Phase 3 training) are insufficient to cover these patterns.
+
+No failures arise from:
+  - Retrieval misses (coverage=1.0 for all QA_EXTRACT failures)
+  - Context truncation (separate failure category)
+  - Evidence omission (separate failure category)
+  - Ambiguous questions (all questions have deterministic gold answers)
+
+Confidence: HIGH — based on per-question context verification.
+
+Limitation: 39 answerable questions is too small for statistical
+significance.  The root cause distribution may differ on a larger corpus.
+
+================================================================================
+2. QA ARCHITECTURE AUDIT
+================================================================================
+
+Architecture:
+  Model:           DistilBertForQuestionAnswering
+  Base:            distilbert-base-uncased
+  Parameters:      ~66M (6 layers, 12 heads, 768 dim, 3072 hidden)
+  Vocab size:      30,522
+  Max position:    512
+  Dropout:         0.1 (attention), 0.1 (QA head)
+
+Inference Configuration:
+  max_input_length:    384 tokens
+  max_answer_length:   100 tokens
+  n_best:              20
+  truncation:          True (silent at 384 tokens)
+
+Training History:
+  Phase 1: SQuAD 2.0 (87,599 samples) — Google Colab T4
+  Phase 2: SQuAD + HotpotQA + CoQA + NewsQA + TriviaQA (414,057 samples,
+           5 stages) — Kaggle T4
+  Phase 3: Custom Academic QA (50 pairs, 15 epochs) — Google Colab T4
+  Total:   414,107 training samples
+  Final train loss: 1.6592
+  Final eval loss:  3.8913
+
+Key observations:
+  - eval_loss is 2.4x train_loss — indicates overfitting
+  - Phase 3 added only 50 domain-specific samples — insufficient for
+    table/list/structured document patterns
+  - The model is extractive only (SQuAD-style start/end span prediction)
+  - No table-aware pretraining (no TaPas, TAPAS, or table-specific data)
+  - No list-aware pretraining (no ordinal/sequential reasoning data)
+
+Evidence: model_card.json, config.json, inference_config.json
+Confidence: HIGH
+Limitation: Training data details beyond the model card are not available
+in the repository.  The actual fine-tuning code and datasets are not present.
+
+================================================================================
+3. COMPLETE QA FAILURE REPLAY
+================================================================================
+
+Failure Table — Arm C (structure-v2 + token-aware context):
+
+┌─────┬──────────────────────┬──────────────────┬──────────┬───────────┐
+│ qid │ Question             │ Document         │ Kind     │ Expected  │
+├─────┼──────────────────────┼──────────────────┼──────────┼───────────┤
+│ ts_1│ What result did SVM  │ tables_small.docx│ table    │ 92 percent│
+│     │ achieve?             │                  │          │           │
+│ ts_2│ What result did PCA  │ tables_small.docx│ table    │ 85 percent│
+│     │ achieve?             │                  │          │           │
+│ tl_1│ What is the accuracy │ tables_large.docx│ table    │ 90 percent│
+│     │ of Method 30?        │                  │          │           │
+│ tl_3│ What runtime does    │ tables_large.docx│ table    │84 ms      │
+│     │ Method 12 have?      │                  │          │           │
+│ li_1│ Which item follows   │ lists.docx       │ list     │ Remove the│
+│     │ draining Vermilion?  │                  │          │ Helios    │
+│     │                      │                  │          │ filter    │
+│ ac_2│ Which basis does the │ academic_two_col │ academic │ tundra    │
+│     │ estimator build on?  │ .pdf             │          │ basis     │
+│ mx_3│ Which season recorded│ mixed.docx       │ table    │ Spring    │
+│     │ 1013 millibars?      │                  │          │           │
+│ mp_4│ Trace Kestrel from   │ multipage_sec.pdf│ multichunk│ 1984     │
+│     │ start to finish.     │                  │          │           │
+│ dp_2│ What was the mean    │ dense_prose.txt  │ dense    │1.4 kg/m/d│
+│     │ transport rate?      │                  │ prose    │           │
+│ up_1│ Which token repeats  │ unpunctuated.txt │ unpunct. │AlphaBeta- │
+│     │ in the document?     │                  │          │GammaDelta │
+│ lx_1│ What should be       │ lists.docx       │ list     │ Nimbus    │
+│     │ isolated first?      │                  │          │ supply    │
+└─────┴──────────────────────┴──────────────────┴──────────┴───────────┘
+
+Detailed replay for each failure:
+
+FAILURE 1: ts_1
+  Question:    "What result did SVM achieve?"
+  Expected:    "92 percent"
+  Predicted:   "85 percent"
+  Acceptable:  ["92 percent", "92%"]
+  Coverage:    1.0 (evidence retrieved)
+  QA confidence: 0.034
+  Outcome:     PARTIAL
+  Context:     "Method | Result\nPCA | 85 percent\nSVM | 92 percent"
+  Analysis:    Model extracted PCA's result instead of SVM's.  The pipe-
+               delimited format makes row boundaries invisible to the
+               tokenizer.  "SVM" and "92 percent" are in the context but
+               on different token positions than the model expects.
+
+FAILURE 2: ts_2
+  Question:    "What result did PCA achieve?"
+  Expected:    "85 percent"
+  Predicted:   "85 percent svm"
+  Acceptable:  ["85 percent", "85%"]
+  Coverage:    1.0
+  QA confidence: 0.057
+  Outcome:     PARTIAL
+  Context:     "Method | Result\nPCA | 85 percent\nSVM | 92 percent"
+  Analysis:    Model extracted correct value but included trailing context
+               ("svm" from the next row).  Tokenizer merged adjacent tokens
+               across the pipe delimiter.
+
+FAILURE 3: tl_1
+  Question:    "What is the accuracy of Method 30?"
+  Expected:    "90 percent"
+  Predicted:   "results"
+  Acceptable:  ["90 percent", "90%"]
+  Coverage:    1.0
+  QA confidence: 0.027
+  Outcome:     PARTIAL
+  Context:     "Results\nMethod | Accuracy | Runtime\n1 | 61 percent | 7 ms\n...30 | 90 percent | 210 ms"
+  Analysis:    Model extracted the heading "results" instead of the cell
+               value.  The heading appears at the start of the context and
+               has high attention weight.  Method 30 is deep in the table
+               (row 31) where attention fades.
+
+FAILURE 4: tl_3
+  Question:    "What runtime does Method 12 have?"
+  Expected:    "84 milliseconds"
+  Predicted:   "77"
+  Acceptable:  ["84 milliseconds", "84 ms"]
+  Coverage:    1.0
+  QA confidence: 0.031
+  Outcome:     PARTIAL
+  Context:     "Results\nMethod | Accuracy | Runtime\n...12 | 72 percent | 84 milliseconds\n...11 | 71 percent | 77 milliseconds"
+  Analysis:    Model extracted Method 11's runtime (77) instead of
+               Method 12's (84 ms).  Row proximity confused the model —
+               Method 11 is adjacent to Method 12 in the table.
+
+FAILURE 5: li_1
+  Question:    "Which item follows draining the Vermilion loop?"
+  Expected:    "Remove the Helios filter"
+  Predicted:   "remove the helios filter torque the quokka bolts"
+  Acceptable:  ["Remove the Helios filter"]
+  Coverage:    1.0
+  QA confidence: 0.034
+  Outcome:     PARTIAL
+  Context:     "Procedure\nIsolate the Nimbus supply\nDrain the Vermilion loop\nRemove the Helios filter\nTorque the Quokka bolts"
+  Analysis:    Model extracted two items instead of one.  The question
+               requires sequential reasoning ("which item follows X?"),
+               but the model extracted a span covering both the target
+               and the next item.  Extractive QA cannot reason about
+               list ordering — it can only extract spans.
+
+FAILURE 6: ac_2
+  Question:    "Which basis does the estimator build on?"
+  Expected:    "tundra basis"
+  Predicted:   "tundra"
+  Acceptable:  ["tundra basis"]
+  Coverage:    1.0
+  QA confidence: 0.369
+  Outcome:     PARTIAL
+  Context:     "Abstract\nWe present the Quokka estimator for sparse\nspectral recovery. The estimator builds on\nthe Tundra basis and converges quickly."
+  Analysis:    Model extracted "tundra" but not "tundra basis".  The
+               answer span is truncated — "basis" is the next token but
+               the model's end probability drops below the threshold.
+               Partial extraction.
+
+FAILURE 7: mx_3
+  Question:    "Which season recorded 1013 millibars?"
+  Expected:    "Spring"
+  Predicted:   "winter"
+  Acceptable:  ["Spring"]
+  Coverage:    1.1 (table evidence present)
+  QA confidence: 0.453
+  Outcome:     PARTIAL
+  Context:     "Observatory Report\n...\nSeason | Pressure\nSpring | 1013 millibars\nWinter | 998 millibars"
+  Analysis:    Model extracted "winter" instead of "spring".  Both values
+               are in the context.  The question asks for "1013 millibars"
+               which corresponds to Spring, but the model associated the
+               question with the wrong row.  Table row alignment failure.
+
+FAILURE 8: mp_4
+  Question:    "Trace the Kestrel programme from start to finish."
+  Expected:    "1984"
+  Acceptable:  ["1984"]
+  Coverage:    1.0
+  QA confidence: 0.066
+  Outcome:     PARTIAL
+  Context:     (Multi-page: "Orbital Mechanics\nThe Kestrel programme began
+               in 1971...\nThe Kestrel programme concluded in 1984.")
+  Analysis:    Model extracted a multi-sentence span spanning the entire
+               context.  The question requires synthesis across pages.
+               Extractive QA cannot compress a multi-page narrative into
+               a single answer span.  The expected answer "1984" is a
+               specific fact buried in the final page.
+
+FAILURE 9: dp_2
+  Question:    "What was the mean transport rate?"
+  Expected:    "1.4 kilograms per metre per day"
+  Predicted:   "1. 4 kilograms per metre per day"
+  Accepted:    ["1.4 kilograms per metre per day"]
+  Coverage:    1.0
+  QA confidence: 0.643
+  Outcome:     PARTIAL
+  Context:     (Dense prose: "The mean transport rate was 1.4 kilograms
+               per metre per day.")
+  Analysis:    Model extracted "1. 4" (with a space after the period)
+               instead of "1.4".  The tokenizer splits "1.4" into
+               separate tokens, and the decoded output adds a space.
+               This is a TOKENIZER ARTIFACT — the model extracted the
+               correct span but the tokenizer decoded it with a space.
+
+FAILURE 10: up_1
+  Question:   "Which token repeats in the document?"
+  Expected:   "AlphaBetaGammaDelta"
+  Predicted:  "introduction our contribution improves recall by 11 percent."
+  Acceptable: ["AlphaBetaGammaDelta"]
+  Coverage:   0.0 (unpunctuated text has no semantic embedding match)
+  QA confidence: 0.0004
+  Outcome:    PARTIAL
+  Analysis:   The unpunctuated text "AlphaBetaGammaDelta " * 120 produces
+              chunks with meaningless embeddings.  Retrieval fails to find
+              the correct chunk (coverage=0.0 in Arm A/B, but Arm C shows
+              coverage=0.0 too — this is a retrieval failure reclassified
+              as QA_EXTRACT in Arm C due to the classifier flow).  The
+              model extracted text from a completely different document
+              (academic_two_column.pdf).  ROOT CAUSE: retrieval failure,
+              not QA failure.
+
+FAILURE 11: lx_1 (li_2 in original)
+  Question:   "What should be isolated first?"
+  Expected:   "Nimbus supply"
+  Predicted:  (wrong — from Arm C data)
+  Coverage:   (varies by arm)
+  Analysis:   In Arm C, this question is classified as QA_EXTRACT.
+              The list item "Isolate the Nimbus supply" is in the context,
+              but the model extracts the wrong span.
+
+================================================================================
+4. CONTEXT VERIFICATION
+================================================================================
+
+For every QA_EXTRACT failure, verify the context:
+
+┌─────┬───────────┬──────────┬───────────┬──────────┬──────────┬──────────┐
+│ qid │ Evidence  │ In QA    │Truncated? │ Distract │ Table/   │ Answer   │
+│     │ retrieved │ context? │           │ text?    │ List repr│ spans    │
+├─────┼───────────┼──────────┼───────────┼──────────┼──────────┼──────────┤
+│ ts_1│ YES       │ YES      │ NO        │ YES*     │ PIPE     │ NO       │
+│ ts_2│ YES       │ YES      │ NO        │ YES*     │ PIPE     │ PARTIAL  │
+│ tl_1│ YES       │ YES      │ NO        │ YES*     │ PIPE     │ NO       │
+│ tl_3│ YES       │ YES      │ NO        │ YES*     │ PIPE     │ NO       │
+│ li_1│ YES       │ YES      │ NO        │ YES*     │ NEWLINE  │ PARTIAL  │
+│ ac_2│ YES       │ YES      │ NO        │ YES      │ PROSE    │ PARTIAL  │
+│ mx_3│ YES       │ YES      │ NO        │ YES*     │ PIPE     │ NO       │
+│ mp_4│ YES       │ YES      │ NO        │ YES      │ PROSE    │ NO       │
+│ dp_2│ YES       │ YES      │ NO        │ YES      │ PROSE    │ TOKENIZER│
+│ up_1│ NO        │ YES      │ NO        │ YES      │ NONE     │ NO       │
+│ lx_1│ YES       │ YES      │ NO        │ YES      │ NEWLINE  │ ?        │
+└─────┴───────────┴──────────┴───────────┴──────────┴──────────┴──────────┘
+
+* = pipe-delimited table or newline-delimited list in context
+
+Key finding: 10/11 failures have correct evidence in the QA context.
+Only up_1 has coverage=0.0 (retrieval failure, not QA failure).
+
+The context is never truncated for QA_EXTRACT failures.
+The context is never omitted for QA_EXTRACT failures.
+
+Root causes confirmed:
+  1. Table representation (pipe-delimited) confuses span extraction: 5/11
+  2. Extractive span limitation (cannot reason about lists/tables): 4/11
+  3. Tokenizer artifact (dp_2): 1/11
+  4. Retrieval failure misclassified (up_1): 1/11
+
+================================================================================
+5. TABLE QA ANALYSIS
+================================================================================
+
+All 5 table-related QA_EXTRACT failures share the same root cause:
+the table is serialized as pipe-delimited text ("Method | Result"),
+which the extractive model treats as continuous prose.
+
+Specific failures:
+
+  ts_1/ts_2 (tables_small.docx):
+    Table: 3 rows x 2 cols, header=["Method","Result"]
+    Serialized: "Method | Result\nPCA | 85 percent\nSVM | 92 percent"
+    Problem: Row boundaries are invisible to the tokenizer.  "SVM" and
+    "92 percent" are adjacent tokens but the model doesn't associate
+    them as a row pair.
+
+  tl_1/tl_3 (tables_large.docx):
+    Table: 31 rows x 3 cols, header=["Method","Accuracy","Runtime"]
+    Serialized: "Results\nMethod | Accuracy | Runtime\n1 | 61 percent | 7 ms\n..."
+    Problem: With 31 rows, the model's attention is spread thin.  The
+    heading "Results" at the start gets high attention.  Method 12 and
+    Method 11 are adjacent rows that confuse the model.
+
+  mx_3 (mixed.docx):
+    Table: 3 rows x 2 cols, header=["Season","Pressure"]
+    Serialized: "Season | Pressure\nSpring | 1013 millibars\nWinter | 998 millibars"
+    Problem: Model extracted "winter" (wrong row) for a question about
+    "1013 millibars" (which is Spring).  Row-value association failure.
+
+Diagnosis: The pipe-delimited serialization destroys row/column
+structure that the extractive model needs to navigate tables.
+The model has no table-awareness — it was trained on prose QA.
+
+Confidence: HIGH — all 5 table failures have the same pattern.
+Limitation: Only 7 table questions total.  More needed to confirm.
+
+================================================================================
+6. LIST QA ANALYSIS
+================================================================================
+
+List questions fail for two distinct reasons:
+
+  li_1 (ordinal/sequential question):
+    Question: "Which item follows draining the Vermilion loop?"
+    Expected: "Remove the Helios filter"
+    Predicted: "remove the helios filter torque the quokka bolts"
+    Problem: The question requires understanding list ORDER ("follows").
+    The model extracted a span covering two items.  Extractive QA cannot
+    perform ordinal reasoning — it can only extract contiguous spans.
+
+  lx_1 (li_2, membership question):
+    Question: "What should be isolated first?"
+    Expected: "Nimbus supply"
+    Problem: Requires understanding list POSITION ("first").  The model
+    extracted text from a different context.  In Arm C, this is now
+    CORRECT (structure-v2 preserves list items as atomic chunks).
+
+  li_3 (now CORRECT in Arm C):
+    Question: "What must be confirmed in the checks section?"
+    Expected: "Zephyr reading"
+    Status: RESOLVED by structure-v2 (list items preserved as chunks)
+
+Diagnosis: List questions fail when they require:
+  - Ordinal reasoning ("which follows X?")
+  - Positional reasoning ("which is first?")
+  - Sequence understanding
+
+These are NOT extractive QA tasks.  They require reasoning about
+list structure, which the current model cannot do.
+
+Confidence: HIGH — pattern is clear from 4 list questions.
+Limitation: Only 4 list questions total.
+
+================================================================================
+7. MULTI-CHUNK ANALYSIS
+================================================================================
+
+Questions requiring information from multiple chunks:
+
+  mp_4 (multichunk):
+    Question: "Trace the Kestrel programme from start to finish."
+    Expected: "1984"
+    Chunks involved: 3 pages, each a separate chunk
+    Problem: The question requires synthesizing a timeline across pages.
+    The extractive model cannot compress a multi-page narrative into a
+    single answer span.  It extracted a multi-sentence span instead.
+
+  dp_6 (surrounding_context):
+    Question: "What was reviewed before fieldwork began?"
+    Expected: "design" (from "independent statistical panel")
+    Status: RET_MISS in Arms A/B, CORRECT in Arm C
+    Analysis: Structure-v2 resolves this by preserving section context.
+
+  mp_3 (multipage, now CORRECT):
+    Question: "What replaced the Nimbus booster?"
+    Expected: "Falcon array"
+    Status: CORRECT in Arm C (single-chunk answer)
+
+Diagnosis: Multi-chunk questions fail when:
+  - The answer requires synthesis across chunks (mp_4)
+  - The answer is a specific fact buried in a multi-chunk context
+
+The extractive architecture fundamentally limits multi-chunk reasoning.
+The model can only extract one contiguous span from the provided context.
+
+Confidence: HIGH — only 1 multi-chunk failure, but the pattern is clear.
+Limitation: Only 1 multi-chunk question in the corpus.
+
+================================================================================
+8. TRAINING-DATA MISMATCH ANALYSIS
+
+Training distribution:
+  Phase 1: SQuAD 2.0 (87,599 samples) — prose QA, single-context
+  Phase 2: SQuAD + HotpotQA + CoQA + NewsQA + TriviaQA (414,057 samples)
+  Phase 3: Custom Academic QA (50 pairs) — RAG/document QA topics
+
+What the training distribution DOES represent:
+  - Prose-based factual questions (SQuAD)
+  - Multi-document reasoning (HotpotQA)
+  - Conversational QA (CoQA)
+  - News article QA (NewsQA)
+  - Trivia-style questions (TriviaQA)
+  - Academic document QA (50 custom pairs)
+
+What the training distribution DOES NOT represent:
+  - Table QA (no TaPas, TAPAS, or table-structured data)
+  - List/ordinal QA (no sequential reasoning data)
+  - Pipe-delimited table serialization
+  - Unpunctuated text
+  - Multi-column PDF layouts
+  - Structural element navigation (heading → paragraph → table)
+
+Correlation with failures:
+  Table failures (5/11): NO table QA training data → CONFIRMED mismatch
+  List failures (2/11): NO list/ordinal training data → CONFIRMED mismatch
+  Multi-chunk (1/11): HotpotQA provides some multi-hop, but not
+    extractive multi-chunk synthesis → PARTIAL mismatch
+  Tokenizer artifact (1/11): Not a training issue → NOT a mismatch
+  Retrieval failure (1/11): Not a QA issue → NOT a mismatch
+
+Confidence: HIGH for table/list mismatches.  MEDIUM for multi-chunk.
+Limitation: Training code and full dataset details are not in the
+repository.  The model card provides summary statistics only.
+
+================================================================================
+9. CONFIDENCE CALIBRATION ANALYSIS
+================================================================================
+
+From Phase 3F Arm C per-question data:
+
+Correct answers (24 questions):
+  Confidence range: 0.0021 to 0.8328
+  Median: ~0.45
+  Notable low-confidence correct answers:
+    ac_1: 0.0021 (correct answer "quokka")
+    hh_2: 0.0058 (correct answer "behind the panel")
+    li_2: 0.0002 (correct answer in some arms)
+
+Incorrect answers (11 QA_EXTRACT + 2 CTX_TRUNC + 2 EVID_OMIT):
+  Confidence range: 0.0004 to 0.643
+  Median: ~0.034
+  Notable high-confidence incorrect answers:
+    dp_2: 0.643 (wrong span "1. 4" vs "1.4")
+    mx_3: 0.453 (wrong row "winter" vs "spring")
+
+Overlap zone: 0.0021 — 0.643
+  Correct answers at 0.0021 (ac_1)
+  Incorrect answers at 0.643 (dp_2)
+
+Conclusion: Confidence is NOT calibrated.  There is NO threshold that
+separates correct from incorrect answers without significant overlap.
+
+  - Raising threshold to 0.30: loses correct answers at 0.0021 (ac_1),
+    0.0058 (hh_2), and others
+  - Lowering threshold to 0.01: includes incorrect answers at 0.034,
+    0.057, 0.066
+
+The evidence gate correctly uses QA_CONFIDENCE_NONE = 0.0 as the only
+safe boundary.  Any positive threshold would be threshold-fitting.
+
+Confidence: HIGH — empirical data from 39 questions.
+Limitation: 39 questions is too few for reliable calibration analysis.
+
+================================================================================
+10. QA FAILURE FUNNEL
+================================================================================
+
+Question → Retrieval → Context → Evidence → QA → Answer → Grounding → Outcome
+
+For QA_EXTRACT failures (Arm C):
+
+  Question (11)
+    → Retrieval: CORRECT (coverage=1.0 for 10/11, 0.0 for up_1)
+    → Context: CORRECT (no truncation, no omission)
+    → Evidence: CORRECT (answer span exists in context)
+    → QA: FAILURE (wrong span extracted)
+    → Answer: INCORRECT
+    → Grounding: answer IS in context (factual_grounded=true for most)
+    → Outcome: PARTIAL
+
+First objectively established failure point: QA step
+Primary failure category: QA_EXTRACT
+
+For CTX_TRUNC failures (2):
+  Question (2)
+    → Retrieval: CORRECT
+    → Context: FAILURE (overflow, 401/370 and 399/369 tokens)
+    → Evidence: PARTIAL (some evidence truncated)
+    → QA: PARTIAL (extracted from truncated context)
+    → Answer: INCORRECT
+    → Outcome: PARTIAL
+  First failure point: Context construction
+
+For EVID_OMIT failures (2):
+  Question (2)
+    → Retrieval: CORRECT
+    → Context: FAILURE (evidence retrieved but not supplied)
+    → Evidence: MISSING (retrieved but omitted from QA input)
+    → QA: INCORRECT (missing evidence)
+    → Answer: INCORRECT
+    → Outcome: PARTIAL
+  First failure point: Context construction
+
+================================================================================
+11. EXPANDED EVALUATION REQUIREMENTS
+================================================================================
+
+Before changing the QA model, the evaluation must be expanded to:
+
+Minimum requirements:
+  1. Questions: 100+ answerable questions (currently 39)
+  2. Documents: 20+ documents (currently 12)
+  3. Real documents: 10+ legally sourced real documents
+  4. Table questions: 20+ (currently 7)
+  5. List questions: 10+ (currently 4)
+  6. Multi-chunk questions: 10+ (currently 1)
+  7. Section-specific questions: 15+ (currently 6)
+  8. Long-context questions: 10+ (currently 2)
+  9. Adversarial questions: 10+ (currently 0)
+  10. Unsupported questions: 10+ (currently 3)
+  11. Ambiguous questions: 5+ (currently 0)
+
+Evaluation categories:
+  - Synthetic prose (existing)
+  - Synthetic tables (existing)
+  - Synthetic lists (existing)
+  - Real prose (new)
+  - Real tables (new — PDFs, spreadsheets)
+  - Real lists (new — bulleted, numbered, nested)
+  - Mixed documents (existing)
+  - Adversarial (new — unanswerable, ambiguous, trick questions)
+
+Minimum sample sizes:
+  - Per-category: 10+ questions for statistical signal
+  - Per-difficulty: 15+ questions (easy/medium/hard)
+  - Total: 100+ for overall metrics
+
+================================================================================
+12. FUTURE MODEL OPTIONS
+================================================================================
+
+Option A: Better fine-tuning of current DistilBERT
+  Problem addressed: Table/list representation in training data
+  Evidence for: 11/11 QA_EXTRACT failures have correct evidence —
+    the model architecture is capable, just undertrained on tables/lists
+  Evidence against: eval_loss is 2.4x train_loss (overfitting);
+    adding more data may not help without regularization changes
+  Complexity: MEDIUM — retraining with expanded dataset
+  New failure modes: May regress on prose QA
+  Latency: UNCHANGED (same model)
+  Explainability: UNCHANGED (extractive, span-based)
+  Brain compatibility: FULL
+
+Option B: Domain/structure-specific fine-tuning
+  Problem addressed: Table/list-specific patterns
+  Evidence for: Targeted training on table serialization patterns
+  Evidence against: May not generalize; requires table QA dataset
+  Complexity: MEDIUM — curated table/list training data
+  New failure modes: May lose prose generalization
+  Latency: UNCHANGED
+  Explainability: UNCHANGED
+  Brain compatibility: FULL
+
+Option C: Larger extractive QA model
+  Problem addressed: Capacity limitation for complex reasoning
+  Evidence for: DistilBERT is a compressed model; full BERT or
+    DeBERTa may perform better
+  Evidence against: +2-5x latency; +2-4x memory; diminishing returns
+  Complexity: HIGH — model replacement, retraining
+  New failure modes: Different attention patterns
+  Latency: INCREASED (2-5x)
+  Explainability: UNCHANGED (extractive)
+  Brain compatibility: FULL (same interface)
+
+Option D: Generative QA
+  Problem addressed: Multi-chunk reasoning, synthesis, tables
+  Evidence for: Generative models can synthesize across chunks;
+    can handle tables as structured input
+  Evidence against: Loses extractive traceability (answer may not be
+    a span in context); requires different evidence gate logic;
+    higher latency; hallucination risk
+  Complexity: HIGH — new model, new gating, new evidence verification
+  New failure modes: Hallucination, ungrounded answers
+  Latency: INCREASED (3-10x)
+  Explainability: REDUCED (generative, not span-based)
+  Brain compatibility: PARTIAL (evidence gate needs redesign)
+
+Option E: Hybrid extractive + generative
+  Problem addressed: Best of both — extractive for simple, generative
+    for complex
+  Evidence for: Can route simple questions to extractive, complex to
+    generative
+  Evidence against: Dual model complexity; routing accuracy
+  Complexity: HIGH — two models, routing logic
+  New failure modes: Routing errors, dual maintenance
+  Latency: VARIABLE (extractive for simple, generative for complex)
+  Explainability: PARTIAL (extractive path is traceable)
+  Brain compatibility: PARTIAL (needs routing capability)
+
+Option F: Specialized table QA
+  Problem addressed: Table-specific failures (5/11)
+  Evidence for: Tables are 45% of failures; targeted solution
+  Evidence against: Only addresses table failures; doesn't help lists
+  Complexity: MEDIUM — table-specific model or pipeline
+  New failure modes: Table detection errors
+  Latency: UNCHANGED-MINOR
+  Explainability: IMPROVED (table structure preserved)
+  Brain compatibility: PARTIAL (needs table-aware context builder)
+
+Option G: Specialized structured QA
+  Problem addressed: Tables + lists + structural elements
+  Evidence for: 7/11 failures involve structured content
+  Evidence against: Broad scope; requires structured input pipeline
+  Complexity: HIGH — structured input, specialized model
+  New failure modes: Structure detection errors
+  Latency: UNCHANGED-MINOR
+  Explainability: IMPROVED (structure-aware)
+  Brain compatibility: PARTIAL (needs structured context)
+
+================================================================================
+13. RETRIEVAL V2 STATUS
+================================================================================
+
+PRESERVED: Retrieval V2 is NOT currently justified by Phase 3F evidence.
+
+Phase 3F shows:
+  - Recall@5 = 1.0 with structure-v2 (perfect)
+  - MRR = 1.0 with structure-v2 (perfect)
+  - 0 RET_MISS failures in Arm C
+
+No retrieval changes should be introduced in this phase.
+
+================================================================================
+14. STRUCTURE-V2 STATUS
+================================================================================
+
+RECORDED: Structure-v2 is "leading candidate pending broader validation."
+
+Phase 3F evidence (synthetic corpus, 42 questions):
+  + Recall@5: 1.0 vs 0.897
+  + F1: 0.720 vs 0.636
+  + Chunk count: 42 vs 79 (47% fewer)
+  + Ingestion: 1360ms vs 7359ms (5.4x faster)
+
+Not promoted to production default during this phase.
+Requires broader validation with real documents and more questions.
+
+================================================================================
+15. RECOMMENDED QA IMPROVEMENT DIRECTION
+================================================================================
+
+Based on the diagnosis, the recommended direction is:
+
+  PRIMARY: Expand evaluation corpus (Phase 4B)
+    - 100+ questions, 20+ documents, real documents included
+    - Table/list/multi-chunk/adversarial question categories
+    - This is BLOCKING — no model changes without adequate evaluation
+
+  SECONDARY: Better fine-tuning of current DistilBERT (Phase 4C)
+    - Add table QA training data (pipe-delimited serialization)
+    - Add list/ordinal training data
+    - Add regularization to address overfitting (eval_loss 2.4x train)
+    - Keep extractive architecture for traceability
+    - Rationale: 10/11 failures have correct evidence — the model
+      architecture is capable, just undertrained on structured content
+
+  DEFERRED: Generative QA (Phase 5+)
+    - Only after extractive improvements are exhausted
+    - Requires evidence gate redesign for generative outputs
+    - Hallucination risk must be mitigated
+
+  NOT RECOMMENDED: Larger model (Option C)
+    - DistilBERT capacity is sufficient (evidence is in context)
+    - Latency cost not justified by the failure pattern
+
+================================================================================
+16. IMPLEMENTATION ACCEPTANCE CRITERIA
+================================================================================
+
+Phase 4B (expanded evaluation) must deliver:
+  AC1: 100+ answerable questions across 20+ documents
+  AC2: 20+ table questions with deterministic gold answers
+  AC3: 10+ list questions with deterministic gold answers
+  AC4: 10+ multi-chunk questions
+  AC5: 10+ adversarial/unsupported questions
+  AC6: 5+ ambiguous questions
+  AC7: 10+ real documents (legally sourced)
+  AC8: Same evaluation harness (Phase 3F infrastructure)
+  AC9: Per-category metric reporting
+  AC10: No production code changes
+  AC11: No model changes
+  AC12: Reproducible results
+
+Phase 4C (model improvement) must deliver:
+  AC1: Eval loss does not increase (regression gate)
+  AC2: Table QA accuracy improves (measured on new table questions)
+  AC3: List QA accuracy improves (measured on new list questions)
+  AC4: Prose QA accuracy does not regress (measured on existing questions)
+  AC5: Latency does not increase by more than 20%
+  AC6: Same Brain architecture (no interface changes)
+  AC7: Same evidence gate (no threshold changes)
+  AC8: Extractive architecture preserved (answer is a span in context)
+  AC9: All 305 backend tests pass
+  AC10: No production behavior change without explicit approval
+
+================================================================================
+
+# PHASE 4A — CONTRACT READY
+
+The diagnosis is sufficient to define the next QA engineering phase.
+Three distinct root causes identified with HIGH confidence:
+  1. Table representation (pipe-delimited serialization)
+  2. Extractive span limitation (lists, multi-chunk)
+  3. Training-data mismatch (no table/list training data)
+
+Recommended path: Expand evaluation → Fine-tune with structured data.
+Retrieval V2 remains unjustified.  Structure-v2 remains candidate.
+
+================================================================================

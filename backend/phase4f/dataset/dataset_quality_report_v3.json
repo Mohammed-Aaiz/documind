@@ -1,0 +1,755 @@
+{
+  "phase": "4F.2-R",
+  "dataset_version": "phase4f-qa-v3",
+  "timestamp": "2026-09-19T21:48:18.584987+00:00",
+  "dataset_hash": "ff293619e1a7b051",
+  "total_examples": 918,
+  "v2_examples": 1000,
+  "remediation": {
+    "original": 1000,
+    "corrected": 0,
+    "removed": 82,
+    "remaining": 918,
+    "fixes": [
+      {
+        "id": "ds_26da0bb8",
+        "action": "removed",
+        "reason": "nonsensical_question: 'How much frequency does the device have?'"
+      },
+      {
+        "id": "ds_cb9be885",
+        "action": "removed",
+        "reason": "nonsensical_question: 'How many temperature does the device support?'"
+      },
+      {
+        "id": "ds_d73eb0a1",
+        "action": "removed",
+        "reason": "nonsensical_question: 'How many weight does the unit support?'"
+      },
+      {
+        "id": "ds_5f823a2d",
+        "action": "removed",
+        "reason": "broken_answer_fragment: '802.11a'"
+      },
+      {
+        "id": "ds_09e3d1d3",
+        "action": "removed",
+        "reason": "broken_answer_fragment: '5.2, a'"
+      },
+      {
+        "id": "ds_42970886",
+        "action": "removed",
+        "reason": "broken_answer_fragment: '67 a'"
+      },
+      {
+        "id": "ds_370cb000",
+        "action": "removed",
+        "reason": "nonsensical_question: 'How much power does the system have?'"
+      },
+      {
+        "id": "ds_9bf0ac0b",
+        "action": "removed",
+        "reason": "broken_answer_fragment: '12V'"
+      },
+      {
+        "id": "ds_ab39e9c3",
+        "action": "removed",
+        "reason": "broken_answer_fragment: '36V'"
+      },
+      {
+        "id": "ds_f21ed388",
+        "action": "removed",
+        "reason": "nonsensical_question: 'How much weight does the unit have?'"
+      },
+      {
+        "id": "ds_fb731ea6",
+        "action": "removed",
+        "reason": "nonsensical_question: 'How many duration does the process support?'"
+      },
+      {
+        "id": "ds_7539d5b1",
+        "action": "removed",
+        "reason": "nonsensical_question: 'How many duration does the process support?'"
+      },
+      {
+        "id": "ds_05c0afdc",
+        "action": "removed",
+        "reason": "broken_answer_fragment: '1, a'"
+      },
+      {
+        "id": "ds_94d6381e",
+        "action": "removed",
+        "reason": "broken_answer_fragment: '2025 a'"
+      },
+      {
+        "id": "ds_53eff017",
+        "action": "removed",
+        "reason": "nonsensical_question: 'How many percentage are in Longformer?'"
+      },
+      {
+        "id": "ds_d6f6e0f8",
+        "action": "removed",
+        "reason": "nonsensical_question: 'How many percentage are in the metric?'"
+      },
+      {
+        "id": "ds_cb017dfd",
+        "action": "removed",
+        "reason": "broken_answer_fragment: '2024 a'"
+      },
+      {
+        "id": "ds_aaf16df5",
+        "action": "removed",
+        "reason": "nonsensical_question: 'How many latency are in BigBird?'"
+      },
+      {
+        "id": "ds_c9d3a949",
+        "action": "removed",
+        "reason": "nonsensical_question: 'How much percentage does the metric have?'"
+      },
+      {
+        "id": "ds_dda859df",
+        "action": "removed",
+        "reason": "nonsensical_question: 'How much percentage does the metric have?'"
+      },
+      {
+        "id": "ds_4c3f879e",
+        "action": "removed",
+        "reason": "nonsensical_question: 'How much monetary value does the amount have?'"
+      },
+      {
+        "id": "ds_40747139",
+        "action": "removed",
+        "reason": "nonsensical_question: 'How much percentage does the metric have?'"
+      },
+      {
+        "id": "ds_7e319e17",
+        "action": "removed",
+        "reason": "nonsensical_question: 'How much percentage does the metric have?'"
+      },
+      {
+        "id": "ds_61c85c32",
+        "action": "removed",
+        "reason": "nonsensical_question: 'How many monetary value are in the amount?'"
+      },
+      {
+        "id": "ds_dc630cc3",
+        "action": "removed",
+        "reason": "nonsensical_question: 'How much monetary value does the amount have?'"
+      },
+      {
+        "id": "ds_c8f60a1b",
+        "action": "removed",
+        "reason": "nonsensical_question: 'How many percentage are in the metric?'"
+      },
+      {
+        "id": "ds_2286dcae",
+        "action": "removed",
+        "reason": "nonsensical_question: 'How much monetary value does the amount have?'"
+      },
+      {
+        "id": "ds_ba70cf7e",
+        "action": "removed",
+        "reason": "nonsensical_question: 'How many monetary value are in the amount?'"
+      },
+      {
+        "id": "ds_96ee69df",
+        "action": "removed",
+        "reason": "nonsensical_question: 'How much monetary value does the amount have?'"
+      },
+      {
+        "id": "ds_ff0d3056",
+        "action": "removed",
+        "reason": "nonsensical_question: 'How many monetary value are in the amount?'"
+      },
+      {
+        "id": "ds_2389dfaa",
+        "action": "removed",
+        "reason": "broken_answer_fragment: '2024 a'"
+      },
+      {
+        "id": "ds_3f742222",
+        "action": "removed",
+        "reason": "broken_answer_fragment: '2025. A'"
+      },
+      {
+        "id": "ds_b9408002",
+        "action": "removed",
+        "reason": "nonsensical_question: 'How many percentage are in XR-7?'"
+      },
+      {
+        "id": "ds_e5f98f5c",
+        "action": "removed",
+        "reason": "nonsensical_question: 'How many percentage are in XR-7?'"
+      },
+      {
+        "id": "ds_5dbab3fd",
+        "action": "removed",
+        "reason": "nonsensical_question: 'How many percentage are in XR-7?'"
+      },
+      {
+        "id": "ds_e1d564b6",
+        "action": "removed",
+        "reason": "nonsensical_question: 'How much percentage does the metric have?'"
+      },
+      {
+        "id": "ds_ad15e6b6",
+        "action": "removed",
+        "reason": "broken_answer_fragment: '3.2 a'"
+      },
+      {
+        "id": "ds_49b08b27",
+        "action": "removed",
+        "reason": "nonsensical_question: 'How many memory are in the system?'"
+      },
+      {
+        "id": "ds_edb7a8e1",
+        "action": "removed",
+        "reason": "broken_answer_fragment: '400, A'"
+      },
+      {
+        "id": "ds_616e40b6",
+        "action": "removed",
+        "reason": "nonsensical_question: 'How many percentage are in the metric?'"
+      },
+      {
+        "id": "ds_e24e4dc1",
+        "action": "removed",
+        "reason": "broken_answer_fragment: '35 a'"
+      },
+      {
+        "id": "ds_17d5cbda",
+        "action": "removed",
+        "reason": "nonsensical_question: 'How many concentration are in the measurement?'"
+      },
+      {
+        "id": "ds_1acf7e49",
+        "action": "removed",
+        "reason": "nonsensical_question: 'How much concentration does the reading have?'"
+      },
+      {
+        "id": "ds_5accf4a3",
+        "action": "removed",
+        "reason": "nonsensical_question: 'How much concentration does the reading have?'"
+      },
+      {
+        "id": "ds_9691102d",
+        "action": "removed",
+        "reason": "broken_answer_fragment: '2001, A'"
+      },
+      {
+        "id": "ds_e5b6c31c",
+        "action": "removed",
+        "reason": "nonsensical_question: 'How much monetary value does the amount have?'"
+      },
+      {
+        "id": "ds_d943fc04",
+        "action": "removed",
+        "reason": "broken_answer_fragment: '2003 a'"
+      },
+      {
+        "id": "ds_f5ef03a9",
+        "action": "removed",
+        "reason": "broken_answer_fragment: '2006, a'"
+      },
+      {
+        "id": "ds_2675786c",
+        "action": "removed",
+        "reason": "broken_answer_fragment: '2010, A'"
+      },
+      {
+        "id": "ds_9c549a14",
+        "action": "removed",
+        "reason": "broken_answer_fragment: '2012, A'"
+      },
+      {
+        "id": "ds_f4506d2d",
+        "action": "removed",
+        "reason": "broken_answer_fragment: '2013 a'"
+      },
+      {
+        "id": "ds_b49782e1",
+        "action": "removed",
+        "reason": "broken_answer_fragment: '2017 a'"
+      },
+      {
+        "id": "ds_8b4e0cef",
+        "action": "removed",
+        "reason": "broken_answer_fragment: '2025, A'"
+      },
+      {
+        "id": "ds_dff7aa63",
+        "action": "removed",
+        "reason": "nonsensical_question: 'How much monetary value does HNSW have?'"
+      },
+      {
+        "id": "ds_e4c84e60",
+        "action": "removed",
+        "reason": "nonsensical_question: 'How many latency are in HNSW?'"
+      },
+      {
+        "id": "ds_ce58372f",
+        "action": "removed",
+        "reason": "broken_answer_fragment: '100,000 v'"
+      },
+      {
+        "id": "ds_a6381d35",
+        "action": "removed",
+        "reason": "broken_answer_fragment: '1.3, a'"
+      },
+      {
+        "id": "ds_2323bf2c",
+        "action": "removed",
+        "reason": "nonsensical_question: 'How much duration does the process have?'"
+      },
+      {
+        "id": "ds_d1106418",
+        "action": "removed",
+        "reason": "nonsensical_question: 'How many duration are in the process?'"
+      },
+      {
+        "id": "ds_a9b5ff25",
+        "action": "removed",
+        "reason": "broken_answer_fragment: '2. A'"
+      },
+      {
+        "id": "ds_878079a6",
+        "action": "removed",
+        "reason": "nonsensical_question: 'How many monetary value are in the amount?'"
+      },
+      {
+        "id": "ds_c72f4a7b",
+        "action": "removed",
+        "reason": "broken_answer_fragment: '14 a'"
+      },
+      {
+        "id": "ds_f4f75034",
+        "action": "removed",
+        "reason": "nonsensical_question: 'How much percentage does the metric have?'"
+      },
+      {
+        "id": "ds_f8361c6b",
+        "action": "removed",
+        "reason": "nonsensical_question: 'How much monetary value does the amount have?'"
+      },
+      {
+        "id": "ds_55a478d1",
+        "action": "removed",
+        "reason": "nonsensical_question: 'How many memory are in the system?'"
+      },
+      {
+        "id": "ds_1ef29f6a",
+        "action": "removed",
+        "reason": "nonsensical_question: 'How many duration are in the process?'"
+      },
+      {
+        "id": "ds_65bf07aa",
+        "action": "removed",
+        "reason": "nonsensical_question: 'How much latency does the system have?'"
+      },
+      {
+        "id": "ds_e6b8f679",
+        "action": "removed",
+        "reason": "nonsensical_question: 'How many latency are in the system?'"
+      },
+      {
+        "id": "num_833366f5",
+        "action": "removed",
+        "reason": "broken_answer_fragment: '340M'"
+      },
+      {
+        "id": "num_79b69519",
+        "action": "removed",
+        "reason": "broken_answer_fragment: '66M'"
+      },
+      {
+        "id": "num_55e43ad6",
+        "action": "removed",
+        "reason": "nonsensical_question: 'How many memory overhead ratio were recorded?'"
+      },
+      {
+        "id": "tc_8d616027",
+        "action": "removed",
+        "reason": "broken_answer_fragment: '350M'"
+      },
+      {
+        "id": "tc_29c73e2f",
+        "action": "removed",
+        "reason": "broken_answer_fragment: '149M'"
+      },
+      {
+        "id": "tc_d1fb0b13",
+        "action": "removed",
+        "reason": "broken_answer_fragment: '128M'"
+      },
+      {
+        "id": "tc_45e4cc47",
+        "action": "removed",
+        "reason": "broken_answer_fragment: '355M'"
+      },
+      {
+        "id": "tc_863a0405",
+        "action": "removed",
+        "reason": "broken_answer_fragment: '340M'"
+      },
+      {
+        "id": "tc_92892205",
+        "action": "removed",
+        "reason": "broken_answer_fragment: '66M'"
+      },
+      {
+        "id": "tc_6fb190e1",
+        "action": "removed",
+        "reason": "broken_answer_fragment: '235M'"
+      },
+      {
+        "id": "tc_b9e73fe6",
+        "action": "removed",
+        "reason": "broken_answer_fragment: '1.0x'"
+      },
+      {
+        "id": "tc_76bcbd5e",
+        "action": "removed",
+        "reason": "broken_answer_fragment: '1.1x'"
+      },
+      {
+        "id": "tc_412753d3",
+        "action": "removed",
+        "reason": "broken_answer_fragment: '1.5x'"
+      },
+      {
+        "id": "tc_eca2864b",
+        "action": "removed",
+        "reason": "broken_answer_fragment: '0.25x'"
+      }
+    ]
+  },
+  "category_distribution": {
+    "TABLE_CELL": 362,
+    "LIST_ITEM": 106,
+    "NUMERIC": 97,
+    "DIRECT_SPAN": 86,
+    "TABLE_ROW": 82,
+    "SECTION_SPECIFIC": 55,
+    "UNANSWERABLE": 42,
+    "MULTI_CHUNK": 26,
+    "DATE": 25,
+    "ENTITY": 22,
+    "LONG_CONTEXT": 15
+  },
+  "structural_validation": {
+    "total": 918,
+    "valid": 918,
+    "invalid": 0,
+    "issues": []
+  },
+  "semantic_audit": {
+    "sample_size": 150,
+    "failures": [],
+    "pass_rate": 100.0
+  },
+  "table_cell_analysis": {
+    "total_tc": 362,
+    "percentage": 39.4,
+    "by_document": {
+      "api_docs_lambda": 42,
+      "dataset_desc_mu": 42,
+      "env_monitoring_zeta": 36,
+      "multi_chunk_doc_xi": 30,
+      "tech_spec_alpha": 28,
+      "research_paper_beta": 27,
+      "project_proposal_nu": 25,
+      "product_comparison_pi": 25,
+      "clinical_trial_gamma": 24,
+      "company_history_eta": 20,
+      "training_material_omega": 20,
+      "financial_report_q3": 16,
+      "textbook_chapter_theta": 16,
+      "legal_contract_epsilon": 11
+    },
+    "by_table_domain": 15,
+    "unique_q_patterns": 317,
+    "top_q_patterns": [
+      [
+        "X much is the unit of X?",
+        4
+      ],
+      [
+        "X at the table, what variable value does X show?",
+        4
+      ],
+      [
+        "X unit does X have?",
+        3
+      ],
+      [
+        "X at the table, what unit value does X show?",
+        3
+      ],
+      [
+        "X much is the rate limit of X?",
+        3
+      ],
+      [
+        "X at the table, what tier value does X show?",
+        3
+      ],
+      [
+        "X max does X have?",
+        3
+      ],
+      [
+        "X mean does X have?",
+        3
+      ],
+      [
+        "X to the table, what is the headcount for X?",
+        3
+      ],
+      [
+        "X much is the parameter of X?",
+        2
+      ]
+    ],
+    "answer_column_distribution": {
+      "Unit": 15,
+      "Endpoint": 12,
+      "Parameter": 10,
+      "Value": 10,
+      "Model": 7,
+      "EM": 7,
+      "F1": 7,
+      "Description": 7,
+      "Variable": 7,
+      "Min": 7,
+      "Max": 7,
+      "Mean": 7,
+      "Missing %": 7,
+      "Max Context": 6,
+      "Station": 6,
+      "AQI (Mean)": 6,
+      "PM2.5 (ug/m3)": 6,
+      "Ozone (ppb)": 6,
+      "NO2 (ppb)": 6,
+      "Days Monitored": 6,
+      "Method": 6,
+      "Auth Required": 6,
+      "Metric": 6,
+      "Q1 2025": 6,
+      "Q2 2025": 6,
+      "Q3 2025": 6,
+      "Target": 6,
+      "XR-7 (n=624)": 5,
+      "Placebo (n=623)": 5,
+      "Difference": 5,
+      "Year": 5,
+      "Revenue (USD)": 5,
+      "Employees": 5,
+      "Key Milestone": 5,
+      "Role": 5,
+      "Headcount": 5,
+      "Monthly Cost": 5,
+      "Duration": 5,
+      "Total Cost": 5,
+      "Product": 5,
+      "Annual License": 5,
+      "Users Supported": 5,
+      "Storage": 5,
+      "Support SLA": 5,
+      "Division": 4,
+      "Q3 2025 Revenue": 4,
+      "Q3 2024 Revenue": 4,
+      "YoY Growth": 4,
+      "p-value": 4,
+      "Payment Schedule": 4,
+      "Due Date": 4,
+      "Index Type": 4,
+      "Build Time": 4,
+      "Query Time": 4,
+      "Recall": 4,
+      "Tier": 4,
+      "Rate Limit": 4,
+      "Burst Limit": 4,
+      "Monthly Quota": 4,
+      "Network Type": 4,
+      "DNS Resolution": 4,
+      "Isolation": 4,
+      "Performance": 4,
+      "Use Case": 4,
+      "Amount (USD)": 3
+    },
+    "semantic_diversity": 272,
+    "redundant_examples": 32,
+    "redundancy_groups": 330
+  },
+  "duplicate_analysis": {
+    "exact_question_dupes": 35,
+    "exact_question_dupes_total_extra": 87,
+    "exact_context_dupes": 125,
+    "exact_context_dupes_total_extra": 488,
+    "exact_qc_dupes": 0,
+    "exact_qc_dupes_total_extra": 0,
+    "exact_qa_dupes": 0,
+    "exact_qa_dupes_total_extra": 0,
+    "near_duplicate_pairs": 122,
+    "cross_split_leakage": [],
+    "cross_split_leakage_count": 0
+  },
+  "document_balance": {
+    "total_documents": 19,
+    "single_doc_categories": {
+      "ENTITY": "entity_corpus",
+      "DATE": "date_corpus",
+      "UNANSWERABLE": "unanswerable_corpus"
+    },
+    "validation_only_capabilities": [],
+    "test_only_capabilities": [],
+    "sorted_docs": [
+      [
+        "company_history_eta",
+        89
+      ],
+      [
+        "research_paper_beta",
+        80
+      ],
+      [
+        "financial_report_q3",
+        77
+      ],
+      [
+        "multi_chunk_doc_xi",
+        75
+      ],
+      [
+        "tech_spec_alpha",
+        74
+      ],
+      [
+        "api_docs_lambda",
+        69
+      ],
+      [
+        "env_monitoring_zeta",
+        68
+      ],
+      [
+        "clinical_trial_gamma",
+        65
+      ],
+      [
+        "dataset_desc_mu",
+        61
+      ],
+      [
+        "textbook_chapter_theta",
+        48
+      ],
+      [
+        "project_proposal_nu",
+        48
+      ],
+      [
+        "unanswerable_corpus",
+        42
+      ],
+      [
+        "training_material_omega",
+        38
+      ],
+      [
+        "product_comparison_pi",
+        37
+      ],
+      [
+        "legal_contract_epsilon",
+        34
+      ],
+      [
+        "ops_manual_delta",
+        31
+      ],
+      [
+        "date_corpus",
+        25
+      ],
+      [
+        "entity_corpus",
+        22
+      ],
+      [
+        "regulation_doc_iota",
+        17
+      ]
+    ]
+  },
+  "external_isolation": {
+    "status": "PASS",
+    "question_overlap": 0,
+    "context_overlap": 0,
+    "eval_phrases_checked": 1143
+  },
+  "high_risk_audit": {
+    "TABLE_ROW": {
+      "total": 82,
+      "pass_rate": 100.0,
+      "issues": 0
+    },
+    "TABLE_CELL": {
+      "total": 362,
+      "pass_rate": 100.0,
+      "issues": 0
+    },
+    "LIST_ITEM": {
+      "total": 106,
+      "pass_rate": 100.0,
+      "issues": 0
+    },
+    "MULTI_CHUNK": {
+      "total": 26,
+      "pass_rate": 100.0,
+      "issues": 0
+    },
+    "LONG_CONTEXT": {
+      "total": 15,
+      "pass_rate": 100.0,
+      "issues": 0
+    },
+    "UNANSWERABLE": {
+      "total": 42,
+      "pass_rate": 100.0,
+      "issues": 0
+    },
+    "SECTION_SPECIFIC": {
+      "total": 55,
+      "pass_rate": 100.0,
+      "issues": 0
+    }
+  },
+  "gpu_readiness": {
+    "python_version": "3.11.0 (main, Oct 24 2022, 18:26:48) [MSC v.1933 64 bit (AMD64)]",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "pytorch_version": "2.13.0+cpu",
+    "cuda_available": false,
+    "cuda_version": "N/A",
+    "gpu_name": "N/A",
+    "gpu_memory": "N/A",
+    "transformers_version": "5.16.1",
+    "tokenizer_available": true,
+    "mixed_precision": false,
+    "training_feasible": false
+  },
+  "training_configs": {
+    "A1_distilbert": {
+      "valid": true,
+      "issues": []
+    },
+    "A2_bert_base": {
+      "valid": true,
+      "issues": []
+    },
+    "A3_deberta_v3": {
+      "valid": true,
+      "issues": []
+    }
+  }
+}

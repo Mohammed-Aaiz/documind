@@ -1,0 +1,102 @@
+{
+  "audit_version": "4F.5-F1R-audit-v1",
+  "timestamp": "2026-09-21T00:00:00Z",
+  "total_answerable_training_pool": 575,
+  "total_invalid": 12,
+  "excluded_count": 4,
+  "kept_with_offset_issue": 8,
+
+  "excluded_examples": [
+    {
+      "example_id": "tc_3b383990",
+      "category": "TABLE_CELL",
+      "classification": "INVALID_TOKEN_SPAN",
+      "issues": ["offsets_out_of_bounds", "token_span_invalid"],
+      "token_span": {"start_token": null, "end_token": null, "valid": false},
+      "exclusion_reason": "Token span is None/invalid — cannot compute training labels"
+    },
+    {
+      "example_id": "li_8bc7889f",
+      "category": "LIST_ITEM",
+      "classification": "INVALID_TOKEN_SPAN",
+      "issues": ["offset_mismatch", "token_span_invalid"],
+      "token_span": {"start_token": null, "end_token": null, "valid": false},
+      "exclusion_reason": "Token span is None/invalid — cannot compute training labels"
+    },
+    {
+      "example_id": "li_4fa4a839",
+      "category": "LIST_ITEM",
+      "classification": "INVALID_TOKEN_SPAN",
+      "issues": ["offset_mismatch", "token_span_invalid"],
+      "token_span": {"start_token": null, "end_token": null, "valid": false},
+      "exclusion_reason": "Token span is None/invalid — cannot compute training labels"
+    },
+    {
+      "example_id": "li_8770780b",
+      "category": "LIST_ITEM",
+      "classification": "INVALID_TOKEN_SPAN",
+      "issues": ["offsets_out_of_bounds", "token_span_invalid"],
+      "token_span": {"start_token": null, "end_token": null, "valid": false},
+      "exclusion_reason": "Token span is None/invalid — cannot compute training labels"
+    }
+  ],
+
+  "kept_with_cosmetic_offset_issue": [
+    {
+      "example_id": "tc_20399d46",
+      "category": "TABLE_CELL",
+      "classification": "VALID_TOKEN_SPAN_CHARACTER_OFFSET_ISSUE",
+      "token_span": {"start_token": 47, "end_token": 55, "valid": true},
+      "note": "Character offset mismatch due to >= encoding; token span is correct"
+    },
+    {
+      "example_id": "tc_00f97d46",
+      "category": "TABLE_CELL",
+      "classification": "VALID_TOKEN_SPAN_CHARACTER_OFFSET_ISSUE",
+      "token_span": {"start_token": 65, "end_token": 68, "valid": true},
+      "note": "Character offset mismatch; token span is correct"
+    },
+    {
+      "example_id": "tc_c2c51b89",
+      "category": "TABLE_CELL",
+      "classification": "VALID_TOKEN_SPAN_CHARACTER_OFFSET_ISSUE",
+      "token_span": {"start_token": 69, "end_token": 72, "valid": true},
+      "note": "Character offset mismatch; token span is correct"
+    },
+    {
+      "example_id": "tc_4e522e45",
+      "category": "TABLE_CELL",
+      "classification": "VALID_TOKEN_SPAN_CHARACTER_OFFSET_ISSUE",
+      "token_span": {"start_token": 65, "end_token": 68, "valid": true},
+      "note": "Character offset mismatch; token span is correct"
+    },
+    {
+      "example_id": "tr_fc34fb8b",
+      "category": "TABLE_ROW",
+      "classification": "VALID_TOKEN_SPAN_CHARACTER_OFFSET_ISSUE",
+      "token_span": {"start_token": 45, "end_token": 73, "valid": true},
+      "note": "Character offsets out of bounds (truncation); token span covers full row correctly"
+    },
+    {
+      "example_id": "li_89834a97",
+      "category": "LIST_ITEM",
+      "classification": "VALID_TOKEN_SPAN_CHARACTER_OFFSET_ISSUE",
+      "token_span": {"start_token": 18, "end_token": 36, "valid": true},
+      "note": "Character offset mismatch due to newline encoding; token span is correct"
+    },
+    {
+      "example_id": "li_7216dc7b",
+      "category": "LIST_ITEM",
+      "classification": "VALID_TOKEN_SPAN_CHARACTER_OFFSET_ISSUE",
+      "token_span": {"start_token": 34, "end_token": 55, "valid": true},
+      "note": "Character offset mismatch; token span is correct"
+    },
+    {
+      "example_id": "li_ce7dfc4b",
+      "category": "LIST_ITEM",
+      "classification": "VALID_TOKEN_SPAN_CHARACTER_OFFSET_ISSUE",
+      "token_span": {"start_token": 56, "end_token": 62, "valid": true},
+      "note": "Character offset mismatch; token span is correct"
+    }
+  ]
+}

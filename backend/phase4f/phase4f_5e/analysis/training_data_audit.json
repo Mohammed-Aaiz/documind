@@ -1,0 +1,60 @@
+{
+  "total_examples": 918,
+  "total_categories": {
+    "DIRECT_SPAN": 86,
+    "ENTITY": 22,
+    "DATE": 25,
+    "NUMERIC": 97,
+    "TABLE_CELL": 362,
+    "TABLE_ROW": 82,
+    "LIST_ITEM": 106,
+    "SECTION_SPECIFIC": 55,
+    "LONG_CONTEXT": 15,
+    "MULTI_CHUNK": 26,
+    "UNANSWERABLE": 42
+  },
+  "train_categories": {
+    "DIRECT_SPAN": 50,
+    "ENTITY": 22,
+    "DATE": 25,
+    "NUMERIC": 57,
+    "TABLE_CELL": 231,
+    "TABLE_ROW": 52,
+    "LIST_ITEM": 82,
+    "SECTION_SPECIFIC": 37,
+    "LONG_CONTEXT": 3,
+    "MULTI_CHUNK": 16
+  },
+  "validation_categories": {
+    "DIRECT_SPAN": 11,
+    "NUMERIC": 20,
+    "TABLE_CELL": 20,
+    "TABLE_ROW": 5,
+    "LIST_ITEM": 5,
+    "SECTION_SPECIFIC": 4,
+    "LONG_CONTEXT": 12,
+    "MULTI_CHUNK": 3,
+    "UNANSWERABLE": 42
+  },
+  "test_categories": {
+    "DIRECT_SPAN": 25,
+    "NUMERIC": 20,
+    "TABLE_CELL": 111,
+    "TABLE_ROW": 25,
+    "LIST_ITEM": 19,
+    "SECTION_SPECIFIC": 14,
+    "MULTI_CHUNK": 7
+  },
+  "benchmark_categories": {
+    "UNANSWERABLE": 42,
+    "TABLE_CELL": 24,
+    "DIRECT_SPAN": 24,
+    "SECTION_SPECIFIC": 16,
+    "LIST_ITEM": 20,
+    "NUMERIC": 20,
+    "TABLE_ROW": 16,
+    "LONG_CONTEXT": 10,
+    "MULTI_CHUNK": 10
+  },
+  "critical_finding": "A1/A2 trained on 0 unanswerable examples vs 0 in test"
+}

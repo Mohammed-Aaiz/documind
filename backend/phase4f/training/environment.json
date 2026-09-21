@@ -1,0 +1,18 @@
+{
+  "python_version": "3.11.0 (main, Oct 24 2022, 18:26:48) [MSC v.1933 64 bit (AMD64)]",
+  "platform": "Windows-10-10.0.26200-SP0",
+  "machine": "AMD64",
+  "processor": "Intel64 Family 6 Model 154 Stepping 3, GenuineIntel",
+  "pytorch_version": "2.13.0+cpu",
+  "cuda_available": false,
+  "cuda_version": "N/A",
+  "gpu_count": 0,
+  "gpu_name": "N/A",
+  "gpu_memory": "N/A",
+  "transformers_version": "5.16.1",
+  "tokenizer_available": true,
+  "tokenizer_model": "distilbert-base-cased",
+  "mixed_precision_available": false,
+  "training_feasible": false,
+  "block_reason": "GPU unavailable"
+}

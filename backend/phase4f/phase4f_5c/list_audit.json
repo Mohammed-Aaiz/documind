@@ -1,0 +1,214 @@
+{
+  "phase": "4F.5-C",
+  "examples": [
+    {
+      "id": "li_cc7f84c3",
+      "cat": "LIST_ITEM",
+      "gold": "Revenue: $847.3 million (+12.4% YoY)",
+      "A0": "revenue",
+      "A1": "847. 3 million",
+      "A2": "22. 1 % free cash flow : $ 189. 4 million cash and equivalents : $ 2. 1 billion",
+      "A0_f1": 0.0,
+      "A1_f1": 25.0,
+      "A2_f1": 10.0
+    },
+    {
+      "id": "li_f17cfdc6",
+      "cat": "LIST_ITEM",
+      "gold": "Net Income: $142.6 million (+20.6% YoY)",
+      "A0": "revenue",
+      "A1": "847. 3 million",
+      "A2": "22. 1 % free cash flow : $ 189. 4 million cash and equivalents : $ 2. 1 billion",
+      "A0_f1": 0.0,
+      "A1_f1": 22.2,
+      "A2_f1": 9.5
+    },
+    {
+      "id": "li_050b38c1",
+      "cat": "LIST_ITEM",
+      "gold": "EPS (Diluted): $3.47",
+      "A0": "",
+      "A1": "847. 3 million",
+      "A2": "22. 1 % free cash flow : $ 189. 4 million cash and equivalents : $ 2. 1 billion",
+      "A0_f1": 0.0,
+      "A1_f1": 0.0,
+      "A2_f1": 0.0
+    },
+    {
+      "id": "li_1f72c296",
+      "cat": "LIST_ITEM",
+      "gold": "Operating Margin: 22.1%",
+      "A0": "eps ( diluted ) : $ 3. 47",
+      "A1": "142. 6 million ( + 20. 6 % yoy ) eps ( diluted ) : $ 3. 47 operating margin : 22. 1 % free cash flow : $ 189. 4 million cash and equivalents : $ 2. 1 billion",
+      "A2": "142. 6 million ( + 20. 6 % yoy ) eps ( diluted ) : $ 3. 47 operating margin : 22. 1 % free cash flow : $ 189. 4 million cash and equivalents : $ 2. 1 billion",
+      "A0_f1": 0.0,
+      "A1_f1": 6.5,
+      "A2_f1": 6.5
+    },
+    {
+      "id": "li_631f3671",
+      "cat": "LIST_ITEM",
+      "gold": "Free Cash Flow: $189.4 million",
+      "A0": "revenue",
+      "A1": "142. 6 million ( + 20. 6 % yoy ) eps ( diluted ) : $ 3. 47 operating margin : 22. 1 % free cash flow : $ 189. 4 million cash and equivalents : $ 2. 1 billion",
+      "A2": "22. 1 % free cash flow : $ 189. 4 million cash and equivalents : $ 2. 1 billion",
+      "A0_f1": 0.0,
+      "A1_f1": 18.2,
+      "A2_f1": 30.0
+    },
+    {
+      "id": "li_1cd424f2",
+      "cat": "LIST_ITEM",
+      "gold": "Cash and Equivalents: $2.1 billion",
+      "A0": "$ 2. 1 billion total debt",
+      "A1": "142. 6 million ( + 20. 6 % yoy ) eps ( diluted ) : $ 3. 47 operating margin : 22. 1 % free cash flow : $ 189. 4 million cash and equivalents : $ 2. 1 billion",
+      "A2": "22. 1 % free cash flow : $ 189. 4 million",
+      "A0_f1": 18.2,
+      "A1_f1": 18.2,
+      "A2_f1": 12.5
+    },
+    {
+      "id": "li_c09855de",
+      "cat": "LIST_ITEM",
+      "gold": "Total Debt: $1.8 billion",
+      "A0": "",
+      "A1": "847. 3 million",
+      "A2": "22. 1 % free cash flow : $ 189. 4 million cash and equivalents : $ 2. 1 billion",
+      "A0_f1": 0.0,
+      "A1_f1": 0.0,
+      "A2_f1": 10.5
+    },
+    {
+      "id": "li_70d2f27a",
+      "cat": "LIST_ITEM",
+      "gold": "Dividend: $0.52 per share (paid October 15, 2025)",
+      "A0": "",
+      "A1": "847. 3 million",
+      "A2": "22. 1 % free cash flow : $ 189. 4 million cash and equivalents : $ 2. 1 billion",
+      "A0_f1": 0.0,
+      "A1_f1": 0.0,
+      "A2_f1": 0.0
+    },
+    {
+      "id": "li_417011c7",
+      "cat": "LIST_ITEM",
+      "gold": "Internal data analysis and reporting",
+      "A0": "uses internal data analysis and reporting integration with licensee ' s proprietary platforms use by licensee ' s employees and authorized contractors testing and quality assurance in non - production environments",
+      "A1": "data analysis and reporting integration with licensee ' s proprietary platforms use by licensee ' s employees and authorized contractors testing and quality assurance in non - production environments",
+      "A2": "data analysis and reporting integration with licensee ' s proprietary platforms use by licensee ' s employees and authorized contractors testing and quality assurance in non - production environments",
+      "A0_f1": 32.3,
+      "A1_f1": 27.6,
+      "A2_f1": 27.6
+    },
+    {
+      "id": "li_5a304295",
+      "cat": "LIST_ITEM",
+      "gold": "Integration with Licensee's proprietary platforms",
+      "A0": "uses internal data analysis and reporting integration with licensee ' s proprietary platforms use by licensee ' s employees and authorized contractors testing and quality assurance",
+      "A1": "data analysis and reporting integration with licensee ' s proprietary platforms use by licensee ' s employees and authorized contractors testing and quality assurance in non - production environments",
+      "A2": "data analysis and reporting integration with licensee ' s proprietary platforms use by licensee ' s employees and authorized contractors testing and quality assurance in non - production environments",
+      "A0_f1": 30.8,
+      "A1_f1": 27.6,
+      "A2_f1": 27.6
+    },
+    {
+      "id": "li_624603d6",
+      "cat": "LIST_ITEM",
+      "gold": "Use by Licensee's employees and authorized contractors",
+      "A0": "what permitted uses is listed third? permitted uses internal data analysis and reporting integration with licensee ' s proprietary platforms use by licensee ' s employees and authorized contractors testing and quality assurance",
+      "A1": "data analysis and reporting integration with licensee ' s proprietary platforms use by licensee ' s employees and authorized contractors testing and quality assurance in non - production environments",
+      "A2": "data analysis and reporting integration with licensee ' s proprietary platforms use by licensee ' s employees and authorized contractors testing and quality assurance in non - production environments",
+      "A0_f1": 36.4,
+      "A1_f1": 38.7,
+      "A2_f1": 38.7
+    },
+    {
+      "id": "li_af6e2596",
+      "cat": "LIST_ITEM",
+      "gold": "Testing and quality assurance in non-production environments",
+      "A0": "",
+      "A1": "data analysis and reporting integration with licensee ' s proprietary platforms use by licensee ' s employees and authorized contractors testing and quality assurance in non - production environments",
+      "A2": "data analysis and reporting integration with licensee ' s proprietary platforms use by licensee ' s employees and authorized contractors testing and quality assurance in non - production environments",
+      "A0_f1": 0.0,
+      "A1_f1": 38.7,
+      "A2_f1": 38.7
+    },
+    {
+      "id": "li_48a0f64c",
+      "cat": "LIST_ITEM",
+      "gold": "JWT Bearer Token: standard for web applications",
+      "A0": "jwt bearer token",
+      "A1": "jwt bearer token : standard for web applications api key : for server - to - server communication ( x - api - key header ) oauth 2. 0 : for third - party integrations mtls : for high - security environments",
+      "A2": "jwt bearer token : standard for web applications api key : for server - to - server communication ( x - api - key header ) oauth 2. 0",
+      "A0_f1": 40.0,
+      "A1_f1": 34.3,
+      "A2_f1": 42.9
+    },
+    {
+      "id": "li_82648128",
+      "cat": "LIST_ITEM",
+      "gold": "API Key: for server-to-server communication (X-API-Key header)",
+      "A0": "",
+      "A1": "jwt bearer token : standard for web applications api key : for server - to - server communication ( x - api - key header ) oauth 2. 0 : for third - party integrations mtls : for high - security environments",
+      "A2": "jwt bearer token : standard for web applications api key : for server - to - server communication ( x - api - key header ) oauth 2. 0",
+      "A0_f1": 0.0,
+      "A1_f1": 17.1,
+      "A2_f1": 21.4
+    },
+    {
+      "id": "li_1241980d",
+      "cat": "LIST_ITEM",
+      "gold": "OAuth 2.0: for third-party integrations",
+      "A0": "jwt bearer token : standard for web applications api key : for server - to - server communication ( x - api - key header ) oauth 2. 0",
+      "A1": "jwt bearer token : standard for web applications api key : for server - to - server communication ( x - api - key header ) oauth 2. 0 : for third - party integrations mtls : for high - security environments",
+      "A2": "jwt bearer token : standard for web applications api key : for server - to - server communication ( x - api - key header ) oauth 2. 0",
+      "A0_f1": 15.4,
+      "A1_f1": 18.2,
+      "A2_f1": 15.4
+    },
+    {
+      "id": "li_a4eb60b5",
+      "cat": "LIST_ITEM",
+      "gold": "mTLS: for high-security environments (mutual TLS client certificates)",
+      "A0": "",
+      "A1": "jwt bearer token : standard for web applications api key : for server - to - server communication ( x - api - key header ) oauth 2. 0 : for third - party integrations mtls : for high - security environments",
+      "A2": "jwt bearer token : standard for web applications api key : for server - to - server communication ( x - api - key header ) oauth 2. 0",
+      "A0_f1": 0.0,
+      "A1_f1": 11.1,
+      "A2_f1": 6.9
+    },
+    {
+      "id": "li_3927464a",
+      "cat": "LIST_ITEM",
+      "gold": "Smith, J.A., Johnson, M.K., and Williams, R.T. (2025).",
+      "A0": "",
+      "A1": "r. t. ( 2025 ). geoclimate - 2024 : a comprehensive meteorological dataset for the continental united states. journal of climate data, 12 ( 3 ), 45 - 67. doi : 10. 1234",
+      "A2": "r. t. ( 2025 ). geoclimate",
+      "A0_f1": 0.0,
+      "A1_f1": 0.0,
+      "A2_f1": 0.0
+    },
+    {
+      "id": "li_39ef9936",
+      "cat": "LIST_ITEM",
+      "gold": "GeoClimate-2024: A Comprehensive Meteorological Dataset for the Continental United States.",
+      "A0": "",
+      "A1": "r. t. ( 2025",
+      "A2": "m. k., and williams, r. t. ( 2025 ). geoclimate",
+      "A0_f1": 0.0,
+      "A1_f1": 0.0,
+      "A2_f1": 0.0
+    },
+    {
+      "id": "li_938c278e",
+      "cat": "LIST_ITEM",
+      "gold": "Journal of Climate Data, 12(3), 45-67. DOI: 10.1234/jcd.2025.0123",
+      "A0": "",
+      "A1": "r. t. ( 2025",
+      "A2": "m. k., and williams, r. t. ( 2025 ). geoclimate",
+      "A0_f1": 0.0,
+      "A1_f1": 0.0,
+      "A2_f1": 0.0
+    }
+  ]
+}

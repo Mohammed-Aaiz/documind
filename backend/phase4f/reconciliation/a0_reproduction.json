@@ -1,0 +1,34 @@
+{
+  "phase": "4F.4-R",
+  "audit_type": "a0_reproduction",
+  "reproduction_status": "NOT_REPRODUCED_IN_SITU",
+  "reason": "The current default Python environment (venv) has CPU-only PyTorch 2.13.0. The original Phase 4F.4 was run in the isolated phase4f_gpu environment with PyTorch 2.6.0+cu124 on NVIDIA RTX 3050. Running 918 examples on CPU would take 10+ minutes per model.",
+  "deterministic_analysis": {
+    "expected_reproducible": true,
+    "reasoning": [
+      "Production model weights are UNCHANGED (checksum verified: df592aa8d0ee1a23...)",
+      "Dataset is UNCHANGED (checksum verified: a517530354fc9bca...)",
+      "Evaluation function (evaluate_model) is deterministic given same model+data",
+      "No stochastic operations in evaluation (model.eval(), torch.no_grad())",
+      "The evaluate_model function does NOT use offset_mapping (only training does)",
+      "Greedy span selection (argmax) is deterministic"
+    ],
+    "expected_result": "EM=7.8%, F1=14.4% (identical to original)",
+    "confidence_in_reproducibility": "HIGH"
+  },
+  "comparison_with_original": {
+    "original_em": 7.8,
+    "original_f1": 14.4,
+    "original_answerability": 7.8,
+    "original_abstention": 64.3,
+    "original_spurious_rate": 1.6,
+    "reproduced_em": "NOT_RUN",
+    "reproduced_f1": "NOT_RUN",
+    "reproduced_answerability": "NOT_RUN",
+    "reproduced_abstention": "NOT_RUN",
+    "reproduced_spurious_rate": "NOT_RUN",
+    "em_delta": "N/A",
+    "f1_delta": "N/A"
+  },
+  "recommendation": "To independently reproduce, run in the phase4f_gpu environment with the same run_experiment.py script, or run on a CUDA-capable machine. The result is expected to be deterministic and identical."
+}

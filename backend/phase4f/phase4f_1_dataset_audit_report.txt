@@ -1,0 +1,178 @@
+======================================================================
+PHASE 4F.1 — DATASET AUDIT
+======================================================================
+
+Date: 2026-09-19 21:28:31 UTC
+Dataset Version: phase4f-qa-v1
+Dataset Hash: d18ae829da1a206e
+
+1. Dataset Objective
+----------------------------------------
+Expand Phase 4F training dataset from 217 to 1,000+ examples.
+No model training. No production changes. No model replacement.
+
+2. Source Inventory
+----------------------------------------
+Documents used: 16
+  - tech_spec_alpha (technical_specification, multi_section_with_tables)
+  - research_paper_beta (academic_paper, multi_section_prose)
+  - financial_report_q3 (financial_report, prose_with_tables)
+  - clinical_trial_gamma (clinical_report, structured_prose)
+  - ops_manual_delta (operations_manual, sections_with_lists)
+  - legal_contract_epsilon (legal_document, prose_with_numbered_items)
+  - env_monitoring_zeta (monitoring_report, data_heavy)
+  - company_history_eta (historical_narrative, chronological_prose)
+  - textbook_chapter_theta (educational, textbook_style)
+  - regulation_doc_iota (regulatory, formal_structured)
+  - api_docs_lambda (api_documentation, technical_reference)
+  - dataset_desc_mu (scientific, data_description)
+  - project_proposal_nu (project_proposal, structured_with_budget)
+  - training_material_omega (training_material, tutorial_style)
+  - multi_chunk_doc_xi (reference_guide, long_form_multi_section)
+  - product_comparison_pi (product_analysis, comparative)
+
+3. Dataset Size
+----------------------------------------
+Total examples: 1000
+Target minimum: 1000
+Target preferred: 1500
+Target met: YES
+
+4. Category Distribution
+----------------------------------------
+  TABLE_CELL: 373 (37.3%)
+  DIRECT_SPAN: 154 (15.4%)
+  LIST_ITEM: 106 (10.6%)
+  NUMERIC: 100 (10.0%)
+  TABLE_ROW: 82 (8.2%)
+  SECTION_SPECIFIC: 55 (5.5%)
+  UNANSWERABLE: 42 (4.2%)
+  MULTI_CHUNK: 26 (2.6%)
+  DATE: 25 (2.5%)
+  ENTITY: 22 (2.2%)
+  LONG_CONTEXT: 15 (1.5%)
+
+  All required categories represented.
+
+5. Document Distribution
+----------------------------------------
+Total documents: 19
+Most represented: company_history_eta (89 examples)
+Least represented: regulation_doc_iota (17 examples)
+Document types:
+  unknown: 3 documents
+  technical_specification: 1 documents
+  academic_paper: 1 documents
+  financial_report: 1 documents
+  clinical_report: 1 documents
+  operations_manual: 1 documents
+  legal_document: 1 documents
+  monitoring_report: 1 documents
+  historical_narrative: 1 documents
+  educational: 1 documents
+  regulatory: 1 documents
+  api_documentation: 1 documents
+  scientific: 1 documents
+  project_proposal: 1 documents
+  training_material: 1 documents
+  reference_guide: 1 documents
+  product_analysis: 1 documents
+
+6. Answer Distribution
+----------------------------------------
+  Mean answer length: 17.1 chars
+  Max answer length: 90 chars
+  Unanswerable count: 42
+
+7. Context Distribution
+----------------------------------------
+  Mean context length: 143.0 chars
+  Max context length: 928 chars
+
+8. Table Coverage
+----------------------------------------
+  TABLE_CELL examples: 373
+  TABLE_ROW examples: 82
+  Documents with tables: 14
+
+9. List Coverage
+----------------------------------------
+  LIST_ITEM examples: 106
+  Documents with lists: 16
+
+10. Multi-Chunk Coverage
+----------------------------------------
+  MULTI_CHUNK examples: 26
+
+11. Unanswerable Coverage
+----------------------------------------
+  UNANSWERABLE examples: 42
+    plausible_unsupported: 13
+    entity_absent: 11
+    number_absent: 7
+    related_not_supported: 6
+    date_absent: 3
+    conflicting_distractor: 2
+
+12. Duplicate Analysis
+----------------------------------------
+  Exact question duplicates: 35 groups (85 extra)
+  Exact context duplicates: 125 groups (488 extra)
+  Exact Q+C pair duplicates: 0 groups (0 extra)
+  Near-duplicate pairs: 62
+
+13. Leakage Analysis
+----------------------------------------
+  Status: NONE_FOUND
+  Question overlap: 0
+  Context overlap: 0
+  Document overlap: 0
+  Eval phrases checked: 1038
+
+14. Annotation Validation
+----------------------------------------
+  Total: 1000
+  Valid: 1000
+  Invalid: 0
+
+15. Semantic Quality Audit
+----------------------------------------
+  Sample size: 120
+  Pass rate: 91.7%
+  Failures: 10
+    tr_13d9b323: question_no_question_mark
+    tr_34f90438: question_no_question_mark
+    tr_94791f9c: question_no_question_mark
+    li_75a3c968: question_no_question_mark
+    li_0711a049: question_no_question_mark
+
+16. Train/Validation/Internal-Test Split
+----------------------------------------
+  train: 811 examples, 15 documents
+  validation: 110 examples, 2 documents
+  internal_test: 79 examples, 2 documents
+  No document appears in more than one split: VERIFIED
+  External benchmark isolated: YES
+
+17. Dataset Hash
+----------------------------------------
+  d18ae829da1a206e
+
+18. Known Limitations
+----------------------------------------
+  - Dataset is synthetically generated; real-world linguistic variation may differ
+  - All examples use text-based table representation (pipe-delimited), not visual tables
+  - Multi-chunk examples use simulated chunk boundaries, not actual retrieval pipeline splits
+  - Long-context examples cap at 1200 chars; real documents may be much longer
+  - No actual PDF/DOCX parsing artifacts are included in contexts
+
+19. GPU Training Readiness
+----------------------------------------
+  Dataset: READY
+  Pipeline: VALIDATED (smoke test)
+  Compute: BLOCKED (GPU unavailable)
+  No training in this phase.
+
+======================================================================
+PHASE 4F.1 — DATASET READY
+======================================================================

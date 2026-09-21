@@ -1,0 +1,232 @@
+================================================================================
+PHASE 4F.5-H1: DOCUMENT-GROUNDED NEGATIVE TRAINING - FINAL REPORT
+================================================================================
+Date: 2026-09-21
+Status: H1_NO_MEANINGFUL_SIGNAL
+
+================================================================================
+1. DATASET COMPOSITION
+================================================================================
+Training:
+  Answerable: 486 (F1 reconciled)
+  Unanswerable: 114 (H20 document-grounded)
+  Total: 600
+  Negative ratio: 19.0%
+
+Validation:
+  Answerable: 85
+  Unanswerable: 8
+  Total: 93
+
+Holdout:
+  Unanswerable: 22 (untouched)
+
+================================================================================
+2. H20 HASH
+================================================================================
+49defabe24affe40c0a849a8ec451659e9a200adb933643cab1bc01581d0305f
+
+H20 category distribution:
+  TABLE_ABSENT_ROW: 29
+  UNSUPPORTED_NUMBER: 14
+  TABLE_ABSENT_CELL: 14
+  UNSUPPORTED_ENTITY: 13
+  SECTION_ABSENT_FACT: 12
+  ABSENT_FACT: 9
+  RELATED_NOT_SUPPORTED: 7
+  LIST_ABSENT_ITEM: 7
+  UNSUPPORTED_DATE: 5
+  CONFLICTING_DISTRACTOR: 2
+  MULTI_CHUNK_ABSENT_FACT: 2
+
+H20 document distribution: 17 documents
+
+================================================================================
+3. TRAINING CONFIGURATION
+================================================================================
+Model: distilbert-base-uncased (fresh initialization)
+Tokenizer: distilbert-base-uncased
+Max length: 384
+Learning rate: 3e-5
+Epochs: 3
+Physical batch: 8
+Gradient accumulation: 8
+Effective batch: 64
+FP16: enabled
+Weight decay: 0.01
+Warmup ratio: 0.1
+Seed: 42
+GPU: NVIDIA GeForce RTX 3050 Laptop GPU
+
+================================================================================
+4. TRAINING HISTORY
+================================================================================
+Epoch 1: loss=5.8661 val_EM=0.0% val_F1=18.7% val_abstain=50.0% time=10.0s
+Epoch 2: loss=5.4136 val_EM=0.0% val_F1=5.8% val_abstain=12.5% time=9.6s
+Epoch 3: loss=4.0454 val_EM=0.0% val_F1=8.6% val_abstain=37.5% time=9.6s
+
+Training time: 35.2s
+Peak GPU memory: 1844 MB
+
+Best checkpoint: epoch1 (selected by val_EM)
+Checkpoint hash: 854c629cd0418f5e
+
+================================================================================
+5. VALIDATION METRICS
+================================================================================
+EM: 0.0%
+F1: 18.7%
+Answerable accuracy: 0.0%
+Abstention accuracy: 50.0%
+False abstention: 0.0%
+Spurious rate: 50.0%
+
+================================================================================
+6. HOLDOUT METRICS (22 examples)
+================================================================================
+Abstention: 36.4%
+Spurious: 63.6%
+
+================================================================================
+7. BENCHMARK METRICS (182 examples)
+================================================================================
+Answerable (140):
+  EM: 0.0%
+  F1: 11.0%
+  False abstention: 10.7%
+
+Unanswerable (42):
+  Abstention: 45.2%
+  Spurious: 54.8%
+
+Overall:
+  EM: 0.0%
+  F1: 11.0%
+
+Category breakdown:
+  DIRECT_SPAN: n=24 EM=0.0% F1=13.0%
+  LIST_ITEM: n=20 EM=0.0% F1=12.9%
+  LONG_CONTEXT: n=10 EM=0.0% F1=1.6%
+  MULTI_CHUNK: n=10 EM=0.0% F1=3.0%
+  NUMERIC: n=20 EM=0.0% F1=22.6%
+  SECTION_SPECIFIC: n=16 EM=0.0% F1=3.2%
+  TABLE_CELL: n=24 EM=0.0% F1=5.8%
+  TABLE_ROW: n=16 EM=0.0% F1=18.0%
+  UNANSWERABLE: n=42 EM=0% F1=0%
+
+================================================================================
+8. NULL-SCORE ANALYSIS
+================================================================================
+Unanswerable mean null_score: 0.00395
+Unanswerable mean null_margin: -0.000344
+
+The null scores are extremely low (~0.004), indicating the model is NOT
+assigning high probability to the CLS token for unanswerable examples.
+The null margin is negative (-0.000344), meaning the best answer score
+is slightly higher than the null score.
+
+This indicates the model has NOT learned to use CLS as a no-answer signal.
+Instead, it appears to be making random predictions on unanswerable examples.
+
+================================================================================
+9. F2 VS H1 COMPARISON
+================================================================================
+The central question: Did H20 document-grounded negatives improve
+no-answer behavior?
+
+                    F2 (20 synthetic)    H1 (114 grounded)
+Training:           506 (486+20)         600 (486+114)
+Benchmark EM:       2.9%                 0.0%
+Benchmark F1:       19.7%                11.0%
+Benchmark Abstain:  0.0%                 45.2%
+Benchmark Spurious: 23.1%                54.8%
+
+Analysis:
+- H1 abstention improved from 0% to 45.2% (positive signal)
+- BUT H1 spurious rate increased from 23.1% to 54.8% (negative)
+- H1 answerable EM dropped from 2.9% to 0.0% (severe regression)
+- H1 answerable F1 dropped from 19.7% to 11.0% (regression)
+
+The model is abstaining MORE but NOT more accurately. It's abstaining
+on BOTH answerable and unanswerable examples, indicating the H20 negatives
+are causing the model to collapse rather than learn targeted abstention.
+
+================================================================================
+10. BASELINE COMPARISON
+================================================================================
+Model                  EM      F1    Abstain  Spurious
+------------------------------------------------------
+A0 (Production)       2.1%   12.0%   64.3%     8.2%
+A1 (DistilBERT)       3.6%   21.3%    0.0%    23.1%
+F2 (20 synthetic)     2.9%   19.7%    0.0%    23.1%
+H1 (114 grounded)     0.0%   11.0%   45.2%    54.8%
+
+H1 performs worse than all baselines on answerable metrics.
+H1 has moderate abstention but high spurious rate.
+
+================================================================================
+11. LEAKAGE AUDIT
+================================================================================
+H20 disjoint from validation: PASS
+H20 disjoint from holdout: PASS
+H20 disjoint from benchmark: PASS
+
+================================================================================
+12. PRODUCTION INTEGRITY
+================================================================================
+Production checksum: df592aa8d0ee1a235489bd3eead44d4cf0861221339226311960697c1c1512ac
+Status: UNCHANGED
+
+================================================================================
+13. LIMITATIONS
+================================================================================
+1. The H20 negatives may be too different from answerable examples,
+   causing the model to collapse rather than learn targeted abstention.
+
+2. The best checkpoint was epoch1 (val_EM=0.0%), indicating the model
+   never learned to answer questions effectively.
+
+3. The validation set has only 8 unanswerable examples, making it
+   difficult to reliably evaluate abstention during training.
+
+4. The model appears to be making random predictions on unanswerable
+   examples (null_score ~0.004), suggesting the CLS signal is weak.
+
+5. The H20 questions may be too complex or domain-specific for
+   DistilBERT to learn meaningful patterns in 3 epochs.
+
+================================================================================
+14. DECISION
+================================================================================
+H1_NO_MEANINGFUL_SIGNAL
+
+Rationale:
+- Answerable performance collapsed (EM 0.0%, F1 11.0%)
+- Abstention improved but at the cost of massive spurious increases
+- The model is NOT learning targeted abstention - it's collapsing
+- The H20 negatives are not providing useful training signal
+
+================================================================================
+15. RECOMMENDED NEXT EXPERIMENT
+================================================================================
+Based on H1 results, the document-grounded negatives are too different
+from answerable examples for DistilBERT to learn effectively.
+
+Recommended next steps:
+1. Analyze H20 question complexity vs answerable question complexity
+2. Consider reducing H20 count to 20-30 examples (similar to F2)
+3. Consider using a larger model (BERT-base or DeBERTa)
+4. Consider curriculum learning (start with easier negatives)
+5. Consider using only a subset of H20 categories (e.g., ABSENT_FACT,
+   UNSUPPORTED_NUMBER) that are more similar to answerable questions
+
+================================================================================
+FINAL STATUS
+================================================================================
+H1_NO_MEANINGFUL_SIGNAL
+
+================================================================================
+GENERATED: 2026-09-21
+DO NOT TRAIN. DO NOT CREATE CHECKPOINTS. DO NOT MODIFY PRODUCTION.
+DO NOT MODIFY FROZEN DATA. DO NOT COMMIT, STAGE, OR PUSH.
+================================================================================

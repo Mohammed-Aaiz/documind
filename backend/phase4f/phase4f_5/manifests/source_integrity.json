@@ -1,0 +1,44 @@
+{
+  "phase": "4F.5-A",
+  "verification_timestamp": "2026-09-21",
+  "checks": {
+    "source_dataset": {
+      "path": "backend/phase4f/dataset/training_data_v3_1.jsonl",
+      "expected_hash": "a517530354fc9bcaeef6f1aa16c3fb9ce92f1967668386bc66781e6e6bbf2e97",
+      "actual_hash": "a517530354fc9bcaeef6f1aa16c3fb9ce92f1967668386bc66781e6e6bbf2e97",
+      "match": true,
+      "status": "VERIFIED"
+    },
+    "production_model": {
+      "path": "backend/models/documind-qa/",
+      "expected_checksum": "df592aa8d0ee1a235489bd3eead44d4cf0861221339226311960697c1c1512ac",
+      "actual_checksum": "df592aa8d0ee1a235489bd3eead44d4cf0861221339226311960697c1c1512ac",
+      "match": true,
+      "status": "UNCHANGED"
+    },
+    "production_code": {
+      "status": "UNCHANGED",
+      "note": "No production application code modified"
+    },
+    "phase4f_4_artifacts": {
+      "status": "PRESERVED",
+      "artifacts_verified": [
+        "backend/phase4f/experiments/phase4f_4_results.json",
+        "backend/phase4f/experiments/phase4f_4_experiment_manifest.json",
+        "backend/phase4f/experiments/results/all_results.json"
+      ]
+    },
+    "phase4f_4r_artifacts": {
+      "status": "PRESERVED",
+      "artifacts_verified": [
+        "backend/phase4f/phase4f_4r_manifest.json",
+        "backend/phase4f/reconciliation/phase4f_4r_reconciliation_report.txt",
+        "backend/phase4f/reconciliation/token_span_audit.json"
+      ]
+    }
+  },
+  "overall_status": "ALL_INTEGRITY_CHECKS_PASS",
+  "no_training_performed": true,
+  "no_dataset_modification": true,
+  "no_model_weights_copied": true
+}

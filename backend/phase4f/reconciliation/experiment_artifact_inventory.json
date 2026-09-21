@@ -1,0 +1,203 @@
+{
+  "phase": "4F.4-R",
+  "inventory_timestamp": "2026-09-21",
+  "artifacts": [
+    {
+      "path": "backend/phase4f/experiments/run_experiment.py",
+      "type": "training_and_evaluation_script",
+      "purpose": "Primary experiment script used for Phase 4F.4 GPU run (A0 eval + A1/A2/A3 train + eval)",
+      "generated": "before_run",
+      "checksum": null,
+      "notes": "Contains QADataset class with BROKEN span alignment (missing return_offsets_mapping)"
+    },
+    {
+      "path": "backend/phase4f/experiments/train.py",
+      "type": "training_script",
+      "purpose": "Alternative Phase 4F.3 training script (NOT used for 4F.4 GPU run)",
+      "generated": "before_run",
+      "checksum": null,
+      "notes": "Uses different span alignment approach (char_to_token mapping); also broken"
+    },
+    {
+      "path": "backend/phase4f/experiments/evaluate.py",
+      "type": "evaluation_script",
+      "purpose": "Standalone evaluation script (NOT used for 4F.4; run_experiment.py has its own evaluate_model)",
+      "generated": "before_run",
+      "checksum": null
+    },
+    {
+      "path": "backend/phase4f/experiments/experiment_manifest.json",
+      "type": "manifest",
+      "purpose": "Phase 4F.3 experiment manifest (pre-GPU, BLOCKED_BY_COMPUTE status)",
+      "generated": "2026-09-19T21:56:40Z",
+      "checksum": null
+    },
+    {
+      "path": "backend/phase4f/experiments/phase4f_4_experiment_manifest.json",
+      "type": "manifest",
+      "purpose": "Phase 4F.4 experiment manifest (post-GPU run)",
+      "generated": "after_run",
+      "checksum": null
+    },
+    {
+      "path": "backend/phase4f/experiments/phase4f_4_results.json",
+      "type": "results",
+      "purpose": "Consolidated Phase 4F.4 results",
+      "generated": "after_run",
+      "checksum": null
+    },
+    {
+      "path": "backend/phase4f/experiments/phase4f_4_controlled_gpu_experiment_report.txt",
+      "type": "report",
+      "purpose": "Full Phase 4F.4 experiment report",
+      "generated": "after_run",
+      "checksum": null
+    },
+    {
+      "path": "backend/phase4f/experiments/phase4f_4e_cuda_environment.json",
+      "type": "environment_report",
+      "purpose": "CUDA environment details",
+      "generated": "before_run",
+      "checksum": null
+    },
+    {
+      "path": "backend/phase4f/experiments/phase4f_4e_cuda_environment_report.txt",
+      "type": "environment_report",
+      "purpose": "CUDA environment narrative report",
+      "generated": "before_run",
+      "checksum": null
+    },
+    {
+      "path": "backend/phase4f/experiments/requirements.txt",
+      "type": "config",
+      "purpose": "Python package requirements for GPU experiments",
+      "generated": "before_run",
+      "checksum": null
+    },
+    {
+      "path": "backend/phase4f/experiments/results/all_results.json",
+      "type": "results",
+      "purpose": "All experiment results (A0+A1+A2+A3)",
+      "generated": "after_run",
+      "checksum": null
+    },
+    {
+      "path": "backend/phase4f/experiments/results/A0/evaluation_results.json",
+      "type": "results",
+      "purpose": "A0 production baseline evaluation",
+      "generated": "after_run",
+      "checksum": null
+    },
+    {
+      "path": "backend/phase4f/experiments/results/A0/metadata.json",
+      "type": "metadata",
+      "purpose": "A0 production model metadata + checksum",
+      "generated": "after_run",
+      "checksum": null
+    },
+    {
+      "path": "backend/phase4f/experiments/results/A1/training_metadata.json",
+      "type": "metadata",
+      "purpose": "A1 DistilBERT training metadata + history",
+      "generated": "after_run",
+      "checksum": null
+    },
+    {
+      "path": "backend/phase4f/experiments/results/A1/evaluation_results.json",
+      "type": "results",
+      "purpose": "A1 DistilBERT evaluation results",
+      "generated": "after_run",
+      "checksum": null
+    },
+    {
+      "path": "backend/phase4f/experiments/results/A1/checkpoint_best/",
+      "type": "checkpoint",
+      "purpose": "A1 best checkpoint (final epoch)",
+      "generated": "during_run",
+      "checksum": "cb923d7b63f8561b",
+      "files": ["config.json", "model.safetensors", "tokenizer.json", "tokenizer_config.json"]
+    },
+    {
+      "path": "backend/phase4f/experiments/results/A2/training_metadata.json",
+      "type": "metadata",
+      "purpose": "A2 BERT-base training metadata + history",
+      "generated": "after_run",
+      "checksum": null
+    },
+    {
+      "path": "backend/phase4f/experiments/results/A2/evaluation_results.json",
+      "type": "results",
+      "purpose": "A2 BERT-base evaluation results",
+      "generated": "after_run",
+      "checksum": null
+    },
+    {
+      "path": "backend/phase4f/experiments/results/A2/checkpoint_best/",
+      "type": "checkpoint",
+      "purpose": "A2 best checkpoint (final epoch)",
+      "generated": "during_run",
+      "checksum": "536fc6edb9b9a884",
+      "files": ["config.json", "model.safetensors", "tokenizer.json", "tokenizer_config.json"]
+    },
+    {
+      "path": "backend/phase4f/experiments/results/A3/training_metadata.json",
+      "type": "metadata",
+      "purpose": "A3 DeBERTa-v3 training metadata + history (NaN loss)",
+      "generated": "after_run",
+      "checksum": null
+    },
+    {
+      "path": "backend/phase4f/experiments/results/A3/evaluation_results.json",
+      "type": "results",
+      "purpose": "A3 DeBERTa-v3 evaluation results",
+      "generated": "after_run",
+      "checksum": null
+    },
+    {
+      "path": "backend/phase4f/experiments/results/A3/checkpoint_best/",
+      "type": "checkpoint",
+      "purpose": "A3 best checkpoint (from NaN training)",
+      "generated": "during_run",
+      "checksum": "aa08acf2366610b2",
+      "files": ["config.json", "model.safetensors", "tokenizer.json", "tokenizer_config.json"]
+    },
+    {
+      "path": "backend/phase4f/experiments/final_gpu_package/",
+      "type": "package",
+      "purpose": "GPU execution package manifest + checksums",
+      "generated": "before_run",
+      "checksum": null
+    },
+    {
+      "path": "backend/phase4f/dataset/training_data_v3_1.jsonl",
+      "type": "dataset",
+      "purpose": "Frozen QA dataset (918 examples)",
+      "generated": "before_run",
+      "checksum": "a517530354fc9bcaeef6f1aa16c3fb9ce92f1967668386bc66781e6e6bbf2e97",
+      "verified": true
+    },
+    {
+      "path": "backend/phase4f/dataset/dataset_manifest_v3_1.json",
+      "type": "manifest",
+      "purpose": "Dataset version manifest with validation status",
+      "generated": "before_run",
+      "checksum": null
+    },
+    {
+      "path": "backend/models/documind-qa/",
+      "type": "model",
+      "purpose": "Production DistilBERT QA model",
+      "checksum": "df592aa8d0ee1a235489bd3eead44d4cf0861221339226311960697c1c1512ac",
+      "verified": true,
+      "base_model": "distilbert-base-uncased",
+      "vocab_size": 30522,
+      "training_samples": 414107,
+      "notes": "Trained on SQuAD 2.0 + multi-dataset + custom academic QA"
+    }
+  ],
+  "artifact_count": 27,
+  "pre_run_artifacts": 10,
+  "during_run_artifacts": 3,
+  "post_run_artifacts": 10,
+  "external_artifacts": 4
+}

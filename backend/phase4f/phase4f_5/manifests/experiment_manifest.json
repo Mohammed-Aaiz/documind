@@ -1,0 +1,86 @@
+{
+  "phase": "4F.5",
+  "status": "READY_FOR_GPU_TRAINING",
+  "prepared_by": "4F.5-A",
+  "timestamp": "2026-09-21",
+  "frozen_inputs": {
+    "source_dataset_path": "backend/phase4f/dataset/training_data_v3_1.jsonl",
+    "source_dataset_hash": "a517530354fc9bcaeef6f1aa16c3fb9ce92f1967668386bc66781e6e6bbf2e97",
+    "derived_dataset_path": "backend/phase4f/phase4f_5/dataset/derived_dataset.jsonl",
+    "derived_dataset_hash": "abcf4182f39f0620fb056eee4167d1872baf9b4c748051eade9d6312332f271f",
+    "production_model_checksum": "df592aa8d0ee1a235489bd3eead44d4cf0861221339226311960697c1c1512ac"
+  },
+  "split": {
+    "seed": 42,
+    "method": "document-level deterministic",
+    "train_docs": 13,
+    "train_examples": 575,
+    "validation_docs": 2,
+    "validation_examples": 122,
+    "test_docs": 4,
+    "test_examples": 221,
+    "total_docs": 19,
+    "total_examples": 918,
+    "cross_split_leakage": 0
+  },
+  "experiments": {
+    "A0": {
+      "model": "production/documind-qa",
+      "train": false,
+      "evaluate_on": "test"
+    },
+    "A1": {
+      "model": "distilbert-base-uncased",
+      "train": true,
+      "config": "configs/a1_config.json",
+      "train_on": "train (571 valid examples)",
+      "select_checkpoint_on": "validation",
+      "evaluate_on": "test"
+    },
+    "A2": {
+      "model": "bert-base-uncased",
+      "train": true,
+      "config": "configs/a2_config.json",
+      "train_on": "train (571 valid examples)",
+      "select_checkpoint_on": "validation",
+      "evaluate_on": "test"
+    },
+    "A3": {
+      "status": "DEFERRED",
+      "reason": "DeBERTa deferred until A1/A2 produce valid evidence"
+    }
+  },
+  "span_alignment": {
+    "method": "return_offsets_mapping=True + context-only search + trimmed trailing space",
+    "valid_rate": "99.5% (872/876 answerable)",
+    "invalid_examples": 4,
+    "invalid_reason": "genuine dataset annotation errors (offset misalignment in source JSONL)",
+    "invalid_ids": ["tc_3b383990", "li_8bc7889f", "li_4fa4a839", "li_8770780b"]
+  },
+  "evaluation": {
+    "protocol_version": "4F.5-eval-v1",
+    "protocol_path": "evaluation/evaluation_protocol.json",
+    "evaluator_path": "evaluation/evaluate.py",
+    "evaluated_on": "test split only"
+  },
+  "checkpoint_policy": {
+    "selection_metric": "validation_exact_match",
+    "secondary_metric": "validation_token_f1",
+    "tiebreaking": "earliest checkpoint",
+    "never_use_test": true
+  },
+  "artifacts": {
+    "dataset/derived_dataset.jsonl": "Derived dataset with split + span metadata",
+    "dataset/split_manifest.json": "Document-level split manifest",
+    "dataset/span_alignment_audit.json": "Span alignment audit results",
+    "dataset/truncation_audit.json": "Context truncation audit",
+    "dataset/data_quality_gate.json": "Data quality gate results",
+    "evaluation/evaluate.py": "Canonical evaluation script",
+    "evaluation/evaluation_protocol.json": "Evaluation protocol specification",
+    "configs/a1_config.json": "A1 DistilBERT configuration",
+    "configs/a2_config.json": "A2 BERT-base configuration",
+    "manifests/experiment_manifest.json": "This manifest",
+    "manifests/source_integrity.json": "Source integrity verification",
+    "reports/phase4f_5a_preparation_report.txt": "Preparation report"
+  }
+}
