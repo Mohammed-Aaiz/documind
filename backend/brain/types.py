@@ -175,7 +175,9 @@ class QaResult:
     """Start character offset in context."""
 
     end: int
-    """End character offset in context."""
+    """End character offset in context (exclusive): ``context[start:end]``
+    is exactly ``answer``.  Both are ``0`` when the selected span could not be
+    mapped onto the context."""
 
 
 # ---------------------------------------------------------------------------

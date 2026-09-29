@@ -8,7 +8,10 @@ import os
 import time
 import json
 import urllib.request
-import uuid
+from functools import partial
+
+from tests.integration_http import api_call as _api_call
+from tests.integration_http import multipart_upload
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
@@ -21,36 +24,8 @@ for root, dirs, files in os.walk('.'):
 
 BASE = 'http://localhost:8000'
 
-
-def api_call(method, path, token=None, body=None):
-    url = f'{BASE}{path}'
-    headers = {'Content-Type': 'application/json'}
-    if token:
-        headers['Authorization'] = f'Bearer {token}'
-    data = json.dumps(body).encode() if body else None
-    req = urllib.request.Request(url, data=data, headers=headers, method=method)
-    try:
-        with urllib.request.urlopen(req) as resp:
-            return resp.status, json.loads(resp.read())
-    except urllib.error.HTTPError as e:
-        return e.code, json.loads(e.read())
-
-
-def multipart_upload(url, token, filepath, filename):
-    boundary = uuid.uuid4().hex
-    with open(filepath, 'rb') as f:
-        file_bytes = f.read()
-    body = (f'--{boundary}\r\nContent-Disposition: form-data; name="file"; filename="{filename}"\r\nContent-Type: application/octet-stream\r\n\r\n').encode() + file_bytes + f'\r\n--{boundary}--\r\n'.encode()
-    headers = {}
-    if token:
-        headers['Authorization'] = f'Bearer {token}'
-    headers['Content-Type'] = f'multipart/form-data; boundary={boundary}'
-    req = urllib.request.Request(url, data=body, headers=headers, method='POST')
-    try:
-        with urllib.request.urlopen(req) as resp:
-            return resp.status, json.loads(resp.read())
-    except urllib.error.HTTPError as e:
-        return e.code, json.loads(e.read())
+# Bound to this harness's BASE; see tests/integration_http.py.
+api_call = partial(_api_call, base=BASE)
 
 
 def main():

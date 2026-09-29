@@ -8,7 +8,8 @@ No mocks, no fakes, no simulated responses.
 import json
 import sys
 import urllib.request
-import uuid
+
+from tests.integration_http import multipart_upload
 
 BASE = "http://localhost:3000"  # Vite proxy -> FastAPI
 
@@ -34,31 +35,6 @@ def api_call(method, path, token=None, body=None, data=None, content_type=None):
 
 def api_call_raw(url, method, headers, data=None):
     return urllib.request.Request(url, data=data, headers=headers, method=method)
-
-
-def multipart_upload(url, token, filepath, filename):
-    """Multipart file upload using urllib."""
-    boundary = uuid.uuid4().hex
-    with open(filepath, "rb") as f:
-        file_bytes = f.read()
-
-    body = (
-        f"--{boundary}\r\n"
-        f'Content-Disposition: form-data; name="file"; filename="{filename}"\r\n'
-        f"Content-Type: application/octet-stream\r\n\r\n"
-    ).encode() + file_bytes + f"\r\n--{boundary}--\r\n".encode()
-
-    headers = {}
-    if token:
-        headers["Authorization"] = f"Bearer {token}"
-    headers["Content-Type"] = f"multipart/form-data; boundary={boundary}"
-
-    req = urllib.request.Request(url, data=body, headers=headers, method="POST")
-    try:
-        with urllib.request.urlopen(req) as resp:
-            return resp.status, json.loads(resp.read())
-    except urllib.error.HTTPError as e:
-        return e.code, json.loads(e.read())
 
 
 def main():

@@ -5,50 +5,19 @@ Tests through the real Vite proxy -> FastAPI -> pgvector -> QA model.
 No mocks, no fakes, no simulated results.
 """
 
-import json
 import os
 import subprocess
 import sys
-import uuid
-import urllib.request
+from functools import partial
+
+from tests.integration_http import api_call as _api_call
+from tests.integration_http import multipart_upload
 
 BASE = "http://localhost:3000"
 PSQL = "C:/pg/pg16/pgsql/bin/psql.exe"
 
-
-def api_call(method, path, token=None, body=None):
-    url = f"{BASE}{path}"
-    headers = {"Content-Type": "application/json"}
-    if token:
-        headers["Authorization"] = f"Bearer {token}"
-    data = json.dumps(body).encode() if body else None
-    req = urllib.request.Request(url, data=data, headers=headers, method=method)
-    try:
-        with urllib.request.urlopen(req) as resp:
-            return resp.status, json.loads(resp.read())
-    except urllib.error.HTTPError as e:
-        return e.code, json.loads(e.read())
-
-
-def multipart_upload(url, token, filepath, filename):
-    boundary = uuid.uuid4().hex
-    with open(filepath, "rb") as f:
-        file_bytes = f.read()
-    body = (
-        f"--{boundary}\r\n"
-        f'Content-Disposition: form-data; name="file"; filename="{filename}"\r\n'
-        f"Content-Type: application/octet-stream\r\n\r\n"
-    ).encode() + file_bytes + f"\r\n--{boundary}--\r\n".encode()
-    headers = {}
-    if token:
-        headers["Authorization"] = f"Bearer {token}"
-    headers["Content-Type"] = f"multipart/form-data; boundary={boundary}"
-    req = urllib.request.Request(url, data=body, headers=headers, method="POST")
-    try:
-        with urllib.request.urlopen(req) as resp:
-            return resp.status, json.loads(resp.read())
-    except urllib.error.HTTPError as e:
-        return e.code, json.loads(e.read())
+# Bound to this harness's BASE; see tests/integration_http.py.
+api_call = partial(_api_call, base=BASE)
 
 
 def create_knowledge_pdf(path):

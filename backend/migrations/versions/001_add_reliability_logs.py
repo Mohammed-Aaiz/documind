@@ -1,7 +1,7 @@
 """Add reliability_logs table for persistent user-scoped reliability data.
 
 Revision ID: 001
-Revises: None
+Revises: 000_create_base_tables
 Create Date: 2026-09-02
 """
 
@@ -13,7 +13,7 @@ from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
 revision: str = "001"
-down_revision: Union[str, None] = None
+down_revision: Union[str, None] = "000_create_base_tables"
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 

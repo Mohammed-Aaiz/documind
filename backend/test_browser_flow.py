@@ -6,25 +6,15 @@ the real Vite dev-server proxy (port 3000 -> port 8000) and the real
 PostgreSQL database.
 """
 
-import json
 import sys
-import urllib.request
+from functools import partial
+
+from tests.integration_http import api_call as _api_call
 
 BASE = "http://localhost:3000"  # Vite dev server (proxies /api -> 8000)
 
-
-def api_call(method, path, token=None, body=None):
-    url = f"{BASE}{path}"
-    headers = {"Content-Type": "application/json"}
-    if token:
-        headers["Authorization"] = f"Bearer {token}"
-    data = json.dumps(body).encode() if body else None
-    req = urllib.request.Request(url, data=data, headers=headers, method=method)
-    try:
-        with urllib.request.urlopen(req) as resp:
-            return resp.status, json.loads(resp.read())
-    except urllib.error.HTTPError as e:
-        return e.code, json.loads(e.read())
+# Bound to this harness's BASE; see tests/integration_http.py.
+api_call = partial(_api_call, base=BASE)
 
 
 def main():

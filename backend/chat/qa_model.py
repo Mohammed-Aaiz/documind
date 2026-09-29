@@ -20,6 +20,11 @@ import torch
 from pathlib import Path
 from transformers import AutoModelForQuestionAnswering, AutoTokenizer
 
+# Single shared implementation, deliberately dependency-free. Answer-span
+# reconstruction is used by this service AND by the Phase 4F evaluation
+# runners; see backend/answer_span.py for why decode() cannot be used.
+from answer_span import answer_char_span
+
 _MODEL_NAME = os.getenv("QA_MODEL_NAME", "./models/documind-qa")
 
 _model = None
@@ -188,9 +193,16 @@ def answer_question(question: str, context: str) -> dict:
         {
             "answer": str,       # the extracted answer span
             "score": float,      # confidence score (0-1)
-            "start": int,        # start character offset in context
-            "end": int,          # end character offset in context
+            "start": int,        # start CHARACTER offset in context
+            "end": int,          # end CHARACTER offset in context (exclusive)
         }
+
+    ``context[start:end]`` is exactly ``answer``: the answer text is taken from
+    the original context via the tokenizer's character offsets, never rebuilt
+    from decoded subword tokens.  If the selected token span cannot be mapped
+    onto the context (it fell inside the question, or the tokenizer cannot
+    produce offsets), the answer falls back to decoding and ``start``/``end``
+    are ``0``, meaning "no reconstructable context span".
 
     Raises:
         RuntimeError: If the DocuMind QA model is not available.
@@ -205,14 +217,28 @@ def answer_question(question: str, context: str) -> dict:
     max_answer_length = _inference_config.get("max_answer_length", 100)
     n_best = _inference_config.get("n_best", 20)
 
-    inputs = _tokenizer(
-        question,
-        context,
+    tokenizer_kwargs = dict(
         return_tensors="pt",
         max_length=max_input_length,
         truncation=True,
         padding=True,
     )
+    # Offset mapping is required to rebuild the answer from the source text.
+    # It is not a model input, so it is removed before the forward pass.
+    offsets: list | None = None
+    sequence_ids: list | None = None
+    try:
+        inputs = _tokenizer(
+            question, context, return_offsets_mapping=True, **tokenizer_kwargs
+        )
+        offsets = inputs["offset_mapping"][0].tolist()
+        sequence_ids = list(inputs.sequence_ids(0))
+        del inputs["offset_mapping"]
+    except (TypeError, ValueError, NotImplementedError):
+        # A slow tokenizer cannot produce offsets — keep the legacy decode path.
+        offsets = None
+        sequence_ids = None
+        inputs = _tokenizer(question, context, **tokenizer_kwargs)
 
     with torch.no_grad():
         outputs = _model(**inputs)
@@ -252,21 +278,35 @@ def answer_question(question: str, context: str) -> dict:
             score = float(start_probs[s_idx_int] * end_probs[e_idx_int])
             if score > best_score:
                 best_score = score
-                best_start = s_idx_int
-                best_end = e_idx_int + 1
-                answer_tokens = input_ids_0[s_idx_int : e_idx_int + 1]
-                best_answer = _tokenizer.decode(answer_tokens, skip_special_tokens=True).strip()
+                span = answer_char_span(offsets, sequence_ids, s_idx_int, e_idx_int)
+                if span is not None:
+                    best_start, best_end = span
+                    best_answer = context[span[0]:span[1]]
+                else:
+                    # The span does not map onto the context (for example a
+                    # question-only span).  Keep the legacy decoded text and
+                    # report no character span.
+                    best_start = best_end = 0
+                    best_answer = _tokenizer.decode(
+                        input_ids_0[s_idx_int : e_idx_int + 1],
+                        skip_special_tokens=True,
+                    ).strip()
 
     # Fallback to simple argmax if n-best produced nothing valid
     if not best_answer:
-        s_idx = torch.argmax(start_logits)
-        e_idx = torch.argmax(end_logits) + 1
-        answer_tokens = inputs["input_ids"][0][s_idx:e_idx]
-        best_answer = _tokenizer.decode(answer_tokens, skip_special_tokens=True).strip()
+        s_idx = int(torch.argmax(start_logits))
+        e_idx = int(torch.argmax(end_logits)) + 1
+        span = answer_char_span(offsets, sequence_ids, s_idx, e_idx - 1)
+        if span is not None:
+            best_start, best_end = span
+            best_answer = context[span[0]:span[1]]
+        else:
+            best_start = best_end = 0
+            best_answer = _tokenizer.decode(
+                inputs["input_ids"][0][s_idx:e_idx], skip_special_tokens=True
+            ).strip()
         best_score = float(torch.softmax(start_logits, dim=1)[0][s_idx]
                            * torch.softmax(end_logits, dim=1)[0][e_idx - 1])
-        best_start = int(s_idx)
-        best_end = int(e_idx)
 
     return {
         "answer": best_answer,
