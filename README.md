@@ -499,12 +499,12 @@ retrain them.
 
 ### Migrations
 
-Alembic is the sanctioned schema path; the chain is linear, currently head **`007`**
-(verified 2026-10-09, `alembic heads` → `007 (head)`):
+Alembic is the sanctioned schema path; the chain is linear, currently head **`008`**
+(verified 2026-10-21, `alembic heads` → `008 (head)`):
 
 ```bash
 cd backend
-./venv/Scripts/python.exe -m alembic heads      # 007 (head)
+./venv/Scripts/python.exe -m alembic heads      # 008 (head)
 ./venv/Scripts/python.exe -m alembic upgrade head
 ```
 
@@ -569,13 +569,20 @@ npm run build
 **Test baseline (historical — not re-run for this revision).** The suite changes often;
 `pytest --collect-only -q` reported **904** collected tests on 2026-10-09. The earlier
 figures in this section and in the 2026-09-30 implementation report are stale snapshots —
-do not cite a pass count you have not produced yourself. `alembic heads` → **007 (head)**;
+do not cite a pass count you have not produced yourself. `alembic heads` → **008 (head)**;
 `npm run build` → passes.
 
 > The SQLite suite does not exercise pgvector, the real QA model, voice, or media
 > verification, and it is **not** proof of an end-to-end pass. A genuine end-to-end
 > verification requires a reachable PostgreSQL + pgvector database and provisioned
 > models. Docker end-to-end verification has **not** been run (see §12).
+>
+> One integration test is expected to **error**, not pass, until a database lifecycle
+> authority is implemented: `tests/integration/rag/test_real_e2e_validation.py`
+> provisions and drops its own database, so its fixture calls the fail-closed
+> create-authorization gate before any socket is opened and is refused by design
+> (Step 1.6K, `backend/architecture/STEP1_6K_LIFECYCLE_AUTHORIZATION_HARDENING_2026-10-12.md`).
+> A reachable PostgreSQL is therefore not sufficient for a zero-error run.
 
 ---
 

@@ -257,3 +257,7 @@ npm run build
 Genuine end-to-end verification additionally requires a reachable PostgreSQL + pgvector
 database via `backend/.env`; the SQLite test suite does not exercise pgvector, the real
 QA model or migrations. Never report an SQLite pass as proof of an end-to-end pass.
+
+One test is expected to **error** rather than pass: `tests/integration/rag/test_real_e2e_validation.py`
+is refused by the fail-closed create-authorization gate before it opens a socket, so a
+reachable PostgreSQL does not make the suite error-free (Step 1.6K).
