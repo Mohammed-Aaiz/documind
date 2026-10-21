@@ -92,6 +92,84 @@ class ExtractedElement:
 
 
 # ===========================================================================
+# Phase 1a — per-page completeness accounting
+# ===========================================================================
+
+#: Minimum usable text for one page to count as *accounted for*: the number of
+#: non-whitespace alphanumeric characters its final text must contain.
+#:
+#: Owner decision (gate 24, 2026-10-15): the value is **4** and its home is this
+#: module — no configuration surface, so a deployment cannot silently change
+#: document verdicts.  The rule this constant encodes is the one the R5 plan
+#: states once (§7.2.1): a page is usable when its final text carries at least
+#: this many non-whitespace alphanumeric characters **and** its extraction did
+#: not raise.
+#:
+#: Why 4 — measured, not round.  The evidence set is **not** the two-population
+#: set an earlier revision of this comment claimed; measured with this module's
+#: own measure, it has three regions:
+#:
+#:   0         punctuation-only, whitespace-only, blank and image-only (scanned)
+#:             pages — no text layer at all;
+#:   2         a bare folio or page number ("17", "iv") — text, but no content;
+#:   5 .. 17   legitimate sparse pages: "Part I" (5), "Figure 1" (7),
+#:             "Chapter 1" (8), "Appendix A" (9), "References" (10),
+#:             "Introduction" / "Bibliography" (12), "Lecture 3: Attention" (17);
+#:   82 ..     an ordinary digital page (one substantive paragraph; the shipped
+#:             fixture ``tests/fixtures/darwin_proper.pdf`` measures 206-271).
+#:
+#: The value sits inside the measured gap between the largest text-bearing page
+#: that carries no content (2) and the shortest legitimate sparse page (5), so a
+#: short page is never reported as missing content merely for being short, while
+#: a page that yielded only a folio still cannot make a document usable.  The
+#: evidence is a corpus of generated pages plus one shipped digital fixture, not
+#: a universal guarantee; any value in 3-4 is equally supported by it.
+#:
+#: What it deliberately does **not** do: it is not a quality measure.  A
+#: low-quality or garbage text layer carries plenty of characters and is *not*
+#: detected here, so Phase 1a does not fix — and does not claim to fix — a scan
+#: that ships junk text.  That case belongs to Phase 1b's OCR quality work.
+MIN_USABLE_CHARS = 4
+
+
+def count_usable_chars(text: str) -> int:
+    """Count the non-whitespace alphanumeric characters in ``text``.
+
+    This is the measure §7.2.1 defines for page usability.  Punctuation,
+    whitespace and control characters do not count: a page carrying only a
+    rule, a page number of dashes or stray whitespace has produced no usable
+    content and must not be able to make a document ``ready``.
+    """
+    return sum(1 for char in text if char.isalnum())
+
+
+@dataclass(frozen=True)
+class PageCoverage:
+    """Per-page completeness accounting for a paged format (PDF).
+
+    Carries only facts the extraction actually observed: how many pages the
+    source document has, how many of them produced usable text, and which ones
+    did not.  It is not a quality score and it makes no claim about pages it
+    could not read beyond "unaccounted".
+    """
+
+    pages_total: int
+    pages_usable: int
+    unusable_pages: tuple[int, ...]
+    """1-based page numbers that produced no usable text, in document order."""
+
+    @property
+    def complete(self) -> bool:
+        """True when every page of the document produced usable content."""
+        return self.pages_usable == self.pages_total
+
+    @property
+    def no_usable_pages(self) -> bool:
+        """True when no page produced usable content (zero usable pages)."""
+        return self.pages_usable == 0
+
+
+# ===========================================================================
 # Heading path utilities
 # ===========================================================================
 
@@ -155,32 +233,82 @@ def _classify_pdf_heading(span_font: str, span_size: float) -> int | None:
     return None
 
 
-def extract_pdf(path: Path) -> list[ExtractedElement]:
-    """Extract structured content from a PDF.
+def _pdf_table_element(
+    page_num: int,
+    heading_path: list[str],
+    table_data: list[list[str]],
+) -> ExtractedElement:
+    """One aggregate table element carrying the heading context in effect."""
+    section = heading_path[-1] if heading_path else None
+    return ExtractedElement(
+        content="\n".join(" | ".join(row) for row in table_data),
+        element_type="table",
+        page=page_num + 1,
+        heading_path=list(heading_path),
+        section=section,
+        table_data=table_data,
+    )
+
+
+def _extract_pdf_with_coverage(
+    path: Path,
+) -> tuple[list[ExtractedElement], PageCoverage]:
+    """Extract structured content from a PDF **and** its per-page coverage.
 
     Uses page.get_text("dict") for block-level extraction with
     font metadata for heading detection. Tables are extracted
     separately via find_tables() to avoid duplication.
+
+    Read order: detected tables and text blocks are merged into one per-page
+    event stream ordered by their actual PyMuPDF bounding boxes ``(y0, x0)``
+    *before* the heading state is applied, so a table inherits the heading
+    context that is current at its own position on the page — never a stale
+    page-start heading.  Ties at identical coordinates are broken
+    deterministically (text blocks before tables, then original extraction
+    index).  No layout information is invented: every coordinate comes from
+    PyMuPDF.  Text blocks that substantially overlap a detected table are
+    still skipped, so table text is never duplicated.
+
+    Every page is accounted for individually (Phase 1a): the returned
+    :class:`PageCoverage` records how many pages produced usable text and which
+    ones did not, so the caller never has to infer completeness from "some
+    element was extracted somewhere".
     """
     doc = fitz.open(str(path))
     elements: list[ExtractedElement] = []
     heading_path: list[str] = []
-
-    # Collect table bounding boxes per page to avoid text/table overlap
-    page_tables: dict[int, list[tuple[float, float, float, float]]] = {}
+    pages_total = 0
+    pages_usable = 0
+    unusable_pages: list[int] = []
 
     for page_num in range(len(doc)):
         page = doc[page_num]
 
-        # --- Extract tables first to know their bounding boxes ---
+        # --- Per-page completeness accounting (Phase 1a, §7.2.1) ---
+        #
+        # The measure is the page's own native text, taken from the same
+        # engine and independently of the structural pipeline below (which
+        # deliberately drops blocks overlapping detected tables).  A page
+        # whose own text extraction raises is *unaccounted*: a page-level
+        # failure degrades coverage, it does not abort the document.
+        pages_total += 1
         try:
-            tables = page.find_tables()
-            for table in tables:
+            page_chars = count_usable_chars(page.get_text("text"))
+        except Exception:
+            page_chars = 0
+        if page_chars >= MIN_USABLE_CHARS:
+            pages_usable += 1
+        else:
+            unusable_pages.append(page_num + 1)
+
+        # --- Collect tables (content + real bounding boxes) ---
+        table_events: list[tuple[tuple, list[list[str]]]] = []
+        table_bboxes: list[tuple] = []
+        try:
+            for table in page.find_tables():
                 # table.bbox = (x0, y0, x1, y1)
                 bbox = table.bbox
-                if page_num not in page_tables:
-                    page_tables[page_num] = []
-                page_tables[page_num].append(bbox)
+                table_bboxes.append(bbox)
 
                 # Extract table content
                 table_data: list[list[str]] = []
@@ -188,26 +316,22 @@ def extract_pdf(path: Path) -> list[ExtractedElement]:
                     table_data.append([str(cell) if cell else "" for cell in row])
 
                 if any(any(cell.strip() for cell in row) for row in table_data):
-                    section = heading_path[-1] if heading_path else None
-                    elements.append(ExtractedElement(
-                        content="\n".join(
-                            " | ".join(row) for row in table_data
-                        ),
-                        element_type="table",
-                        page=page_num + 1,
-                        heading_path=list(heading_path),
-                        section=section,
-                        table_data=table_data,
-                    ))
+                    table_events.append((bbox, table_data))
         except Exception:
             # find_tables() may not be available in all PyMuPDF versions
             pass
 
-        # --- Extract text blocks ---
+        # --- Collect text blocks ---
         try:
             page_dict = page.get_text("dict")
         except Exception:
-            # Fallback to plain text if dict extraction fails
+            # Fallback to plain text if dict extraction fails.  No block
+            # coordinates exist here, so the historical deterministic order is
+            # preserved: tables first, then the page text blob.
+            for bbox, table_data in sorted(
+                table_events, key=lambda event: (event[0][1], event[0][0])
+            ):
+                elements.append(_pdf_table_element(page_num, heading_path, table_data))
             text = page.get_text("text")
             if text.strip():
                 elements.append(ExtractedElement(
@@ -218,16 +342,21 @@ def extract_pdf(path: Path) -> list[ExtractedElement]:
                 ))
             continue
 
-        page_bbox_list = page_tables.get(page_num, [])
+        # Event stream entries are ``((y0, x0, kind, index), kind, payload)``
+        # where kind 0 = text block, 1 = table.  Sorting uses only real
+        # PyMuPDF coordinates, so the order is the page's read order.
+        events: list[tuple[tuple, int, tuple]] = []
+        for index, (bbox, table_data) in enumerate(table_events):
+            events.append(((bbox[1], bbox[0], 1, index), 1, (table_data,)))
 
-        for block in page_dict.get("blocks", []):
+        for index, block in enumerate(page_dict.get("blocks", [])):
             # Skip image blocks (type 1)
             if block.get("type") == 1:
                 continue
 
             # Skip blocks that overlap with extracted tables
             block_bbox = block.get("bbox", (0, 0, 0, 0))
-            if _bbox_overlaps_table(block_bbox, page_bbox_list):
+            if _bbox_overlaps_table(block_bbox, table_bboxes):
                 continue
 
             # Extract text from block lines/spans
@@ -255,6 +384,24 @@ def extract_pdf(path: Path) -> list[ExtractedElement]:
             block_text = "\n".join(block_lines).strip()
             if not block_text:
                 continue
+
+            events.append(
+                (
+                    (block_bbox[1], block_bbox[0], 0, index),
+                    0,
+                    (block_text, block_font, block_size),
+                )
+            )
+
+        events.sort(key=lambda event: event[0])
+
+        for _key, kind, payload in events:
+            if kind == 1:
+                (table_data,) = payload
+                elements.append(_pdf_table_element(page_num, heading_path, table_data))
+                continue
+
+            block_text, block_font, block_size = payload
 
             # --- Classify element type ---
             heading_level = _classify_pdf_heading(block_font, block_size)
@@ -284,6 +431,21 @@ def extract_pdf(path: Path) -> list[ExtractedElement]:
                 ))
 
     doc.close()
+    return elements, PageCoverage(
+        pages_total=pages_total,
+        pages_usable=pages_usable,
+        unusable_pages=tuple(unusable_pages),
+    )
+
+
+def extract_pdf(path: Path) -> list[ExtractedElement]:
+    """Extract structured content from a PDF (elements only).
+
+    Backward-compatible wrapper.  Use :func:`extract_document` when the
+    document's per-page coverage is needed as well (the ingestion verdict does
+    need it).
+    """
+    elements, _coverage = _extract_pdf_with_coverage(path)
     return elements
 
 
@@ -598,6 +760,28 @@ def extract_text(path: Path, file_type: str) -> list[ExtractedElement]:
     if extractor is None:
         raise ValueError(f"Unsupported file type: {file_type}")
     return extractor(path)
+
+
+def extract_document(
+    path: Path, file_type: str
+) -> tuple[list[ExtractedElement], PageCoverage | None]:
+    """Extract a document together with its per-page coverage (Phase 1a).
+
+    Returns ``(elements, coverage)``.  ``coverage`` is ``None`` for formats
+    that have no pages (DOCX/TXT): there is no page denominator to be honest
+    about, so the verdict for those formats is decided by the pipeline steps
+    alone (§7.2.1).
+
+    This is the extraction entry point the ingestion pipeline uses.  The
+    legacy :func:`extract_text` entry point is preserved unchanged for callers
+    that only need the element stream.
+    """
+    if file_type == "pdf":
+        return _extract_pdf_with_coverage(path)
+    extractor = EXTRACTORS.get(file_type)
+    if extractor is None:
+        raise ValueError(f"Unsupported file type: {file_type}")
+    return extractor(path), None
 
 
 # ===========================================================================

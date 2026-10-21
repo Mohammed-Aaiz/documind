@@ -16,6 +16,45 @@ python-docx==1.2.0
 pgvector==0.5.0
 sentence-transformers>=3.0.0
 
+# ML runtime — imported directly by chat/qa_model.py, which loads the QA model
+# with transformers/torch rather than through a pipeline.  Declared explicitly
+# instead of relying on sentence-transformers' transitive dependencies, so a
+# clean install can import chat/qa_model.py.
+torch==2.13.0
+transformers==5.16.1
+
+# Voice STT — real local Whisper transcription (POST /api/voice/transcribe).
+# faster-whisper runs on CTranslate2 (not torch) and decodes audio through PyAV,
+# whose wheels bundle the FFmpeg libraries, so no system ffmpeg binary is
+# required.  av is pinned below 19 on purpose: av>=19 requires Python >=3.12 and
+# would not resolve in this Python 3.11 environment.
+faster-whisper==1.2.1
+ctranslate2==4.8.2
+av==18.1.0
+onnxruntime==1.30.0
+
+# Voice TTS — Google Text-to-Speech client (POST /api/voice/synthesize).
+# gTTS 2.5.4 requires requests.
+# NOTE: gTTS's published metadata declares click<8.2 for its CLI,
+# which conflicts with huggingface_hub's click>=8.4.2.
+# The Python gTTS runtime API does not use click.
+# Provision gTTS with:
+#   pip install --no-deps gTTS==2.5.4
+requests==2.34.2
+gTTS==2.5.4
+
+# Media Verification — image decoding for local image-authenticity inference.
+# Required by transformers image processors (ViTImageProcessor) used by the
+# provisioned Deep-Fake-Detector-v2 model in backend/models/media-verification/.
+# Declared here; installation into backend/venv is an operator-approved step.
+pillow==12.3.0
+
+# Media Verification — torchvision is required by transformers' AutoImageProcessor
+# path (AutoImageProcessor -> ViTImageProcessor).  Pinned to the build that
+# targets the pinned torch 2.13.0 (torchvision 0.28.0 declares torch==2.13.0);
+# it must not be bumped independently of torch.
+torchvision==0.28.0
+
 # Testing
 pytest==8.3.4
 pytest-asyncio==0.25.0

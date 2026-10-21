@@ -2,6 +2,7 @@
 Embedding generation and semantic search endpoints.
 """
 
+import logging
 import uuid
 
 from fastapi import APIRouter, Depends, HTTPException, status
@@ -15,6 +16,7 @@ from embeddings.model import embed_texts, embed_query
 from storage.database import get_db
 
 router = APIRouter(prefix="/api/embeddings", tags=["embeddings"])
+logger = logging.getLogger(__name__)
 
 
 # ---------------------------------------------------------------------------
@@ -103,12 +105,22 @@ async def generate_embeddings(
             documentId=body.documentId,
             chunksEmbedded=len(chunks),
         )
-    except Exception as e:
+    except HTTPException:
+        raise
+    except Exception:
+        # The full exception is logged server-side only.  The client receives a
+        # fixed message: the try block spans model inference *and*
+        # ``await db.commit()``, so the exception can carry third-party ML,
+        # filesystem, network or database-driver detail that must not be
+        # disclosed.  Matches the convention in ``backend/voice.py``.
+        logger.exception(
+            "Embedding generation failed for document %s", doc.id
+        )
         doc.embedding_status = "error"
         await db.commit()
         raise HTTPException(
-            status_code=500,
-            detail=f"Embedding generation failed: {str(e)}",
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Embedding generation failed",
         )
 
 

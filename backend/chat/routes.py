@@ -9,6 +9,7 @@ from auth.dependencies import CurrentUser
 from storage.database import get_db
 from chat.models import ChatSession, ChatMessage
 from chat.qa_model import is_model_available, get_model_status
+from chat.rag import dual_path_enabled
 from brain import Brain
 from brain.adapters import create_registry
 from brain.types import ExecutionContext
@@ -25,6 +26,13 @@ router = APIRouter(prefix="/api/chat", tags=["chat"])
 class AskRequest(BaseModel):
     question: str
     topK: int = 5
+    #: Answer engine for this request.  ``extractive`` (default) preserves the
+    #: existing contract; ``generative`` uses the approved local Flan-T5 path
+    #: through the same retrieval pipeline.  The default does not change
+    #: silently (DOCUMIND_PROJECT_CONTEXT.md §0.8).
+    engine: str = "extractive"
+    #: Academic answer format for the generative engine: 5, 10 or 15 marks.
+    answerFormat: str = "10"
 
 
 class SourceOut(BaseModel):
@@ -50,6 +58,35 @@ class SourceOut(BaseModel):
     tokenCount: int | None = None
     chunkerVersion: str | None = None
 
+    # --- Dual-path provenance (null when the structural path did not run) ---
+    retrievalPath: str | None = None
+    """"semantic", "structural" or "hybrid" — which retrieval path(s) found
+    this source.  Null only for responses produced before the dual path ran."""
+
+    fusionScore: float | None = None
+    """Reciprocal-rank-fusion score.  NOT a similarity; ``score`` still holds
+    the pgvector similarity (and stays 0.0 for structural-only sources)."""
+
+    structuralHops: int | None = None
+    """Graph hops from the nearest structural seed (0 = the seed itself)."""
+
+    evidenceKind: str | None = None
+    """"chunk" (a ``document_chunks`` row), "structure_element" (a
+    ``document_structure_elements`` row from the Feature #13 element-level
+    structural stream), or "table_row" (a ``document_table_rows`` row from the
+    Phase 3 query-gated compact table-evidence band).  Null for responses
+    produced before this field."""
+
+    # --- Phase 3 table-row provenance (null for every other evidence kind) ---
+    tableElementId: str | None = None
+    """The aggregate ``table`` structure element a "table_row" came from."""
+
+    rowIndex: int | None = None
+    """The row's own 0-based index inside that table (header row is 0)."""
+
+    headerRepeated: bool | None = None
+    """Whether the row's content embeds the table's header row."""
+
 
 class ReliabilityEvidence(BaseModel):
     """Real evidence from the RAG pipeline — no fabricated metrics.
@@ -71,6 +108,17 @@ class ReliabilityEvidence(BaseModel):
     contextBudgetTokens: int = 0    # tokens available in the QA context
     contextUsedTokens: int = 0      # tokens actually supplied to the QA model
 
+    # --- Evidence-sufficiency diagnostics (computed from real signals) ---
+    semanticSourceCount: int = 0    # supplied evidence found by pgvector only
+    structuralSourceCount: int = 0  # supplied evidence found by the graph only
+    structuralElementSourceCount: int = 0  # of those, element-level (structure_element)
+    hybridSourceCount: int = 0      # supplied evidence found by both paths
+    structuralHopMax: int = 0       # deepest graph expansion among the evidence
+    pathAgreement: bool = False     # >= 1 evidence chunk supported by both paths
+    evidenceCoverage: float = 1.0   # supplied to QA / selected as final evidence
+    fusionEnabled: bool = False     # whether the dual-path pipeline ran
+    pipelineVersion: str = "rag-v1" # which pipeline actually produced this answer
+
 
 class AskResponse(BaseModel):
     answer: str
@@ -80,6 +128,137 @@ class AskResponse(BaseModel):
     question: str
     reliability: ReliabilityEvidence
     outcome: str  # Application-level outcome classification
+
+    # --- Additive: which engine produced this answer (never guessed) ---
+    engine: str = "extractive"
+    marks: int | None = None
+    #: Deterministic verification summary for generative answers; ``None``
+    #: means the extractive path produced the answer (not "verified").
+    verification: dict | None = None
+    warnings: list[str] = []
+
+
+def _sources_from_chunks(chunks) -> list[SourceOut]:
+    """Map retrieved chunks to the API source contract (one implementation)."""
+    return [
+        SourceOut(
+            chunkId=chunk.chunk_id,
+            content=chunk.content,
+            score=round(max(0.0, float(getattr(chunk, "score", 0.0) or 0.0)), 4),
+            documentId=chunk.document_id,
+            documentName=chunk.document_name,
+            page=chunk.page,
+            headingPath=list(chunk.heading_path) if chunk.heading_path else None,
+            section=chunk.section,
+            elementType=chunk.element_type,
+            tokenCount=chunk.token_count,
+            chunkerVersion=chunk.chunker_version,
+            retrievalPath=chunk.retrieval_path,
+            fusionScore=chunk.fusion_score,
+            structuralHops=chunk.structural_hops,
+            evidenceKind=chunk.evidence_kind,
+            tableElementId=chunk.table_element_id,
+            rowIndex=chunk.row_index,
+            headerRepeated=chunk.header_repeated,
+        )
+        for chunk in chunks
+    ]
+
+
+async def _answer_with_generation(
+    body: AskRequest, current_user, db: AsyncSession
+) -> AskResponse:
+    """Serve ``/api/chat/ask`` with the approved local generative engine.
+
+    Retrieval, verification and reliability persistence are delegated to
+    ``generation.service`` — the same code path ``/api/generation/answer``
+    uses — so the two API surfaces cannot drift apart.  The extractive default
+    is untouched: this only runs when the caller explicitly selects it.
+    """
+    from generation.engine import get_generator_status
+    from generation.service import persist_generation, run_generation
+    from generation.types import AnswerFormat, GenerationUnavailableError
+
+    question = body.question.strip()
+    try:
+        answer_format = AnswerFormat.coerce(body.answerFormat)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+    user_id = str(current_user.id)
+    try:
+        chunks, result = await run_generation(
+            db, user_id, question, top_k=body.topK, answer_format=answer_format
+        )
+    except GenerationUnavailableError as exc:
+        status = get_generator_status()
+        raise HTTPException(
+            status_code=503,
+            detail={
+                "error": "DocuMind generative model is not available",
+                "message": str(exc),
+                "model": status.get("model"),
+            },
+        ) from exc
+
+    # Persist before responding: a failure here must not look like an answer.
+    await persist_generation(db, user_id, question, chunks, result, answer_format)
+
+    supplied_ids = {b.chunk_id for b in result.blocks if b.chunk_id}
+    supplied = [c for c in chunks if str(getattr(c, "chunk_id", "")) in supplied_ids]
+    if not supplied:
+        supplied = list(chunks)
+
+    scores = [max(0.0, float(getattr(c, "score", 0.0) or 0.0)) for c in supplied]
+    paths = [getattr(c, "retrieval_path", None) for c in supplied]
+    verification = result.verification
+
+    reliability = ReliabilityEvidence(
+        qaConfidence=0.0,  # the generative engine produces no extractive span
+        retrievalScore=round(max(scores, default=0.0), 4),
+        avgRetrievalScore=round(sum(scores) / len(scores), 4) if scores else 0.0,
+        sourceCount=len(result.blocks),
+        uniqueDocuments=len({b.document_id for b in result.blocks if b.document_id}),
+        factualGrounded=bool(verification.get("verified")),
+        insufficientContext=result.insufficient_context,
+        retrievedSourceCount=len(chunks),
+        omittedSourceCount=max(0, len(chunks) - len(supplied)),
+        semanticSourceCount=paths.count("semantic"),
+        structuralSourceCount=paths.count("structural"),
+        structuralElementSourceCount=sum(
+            1 for c in supplied if getattr(c, "evidence_kind", None) == "structure_element"
+        ),
+        hybridSourceCount=paths.count("hybrid"),
+        structuralHopMax=max(
+            (int(getattr(c, "structural_hops", 0) or 0) for c in supplied), default=0
+        ),
+        pathAgreement="hybrid" in paths,
+        evidenceCoverage=(
+            len(supplied) / len(chunks) if chunks else 1.0
+        ),
+        fusionEnabled=dual_path_enabled(),
+        pipelineVersion=(
+            "generative-dual-path-v1" if dual_path_enabled() else "generative-semantic-v1"
+        ),
+    )
+
+    return AskResponse(
+        answer=result.answer,
+        confidence=0.0,  # honest: the generative engine has no span confidence
+        sources=_sources_from_chunks(supplied),
+        insufficientContext=result.insufficient_context,
+        question=question,
+        reliability=reliability,
+        outcome=(
+            Outcome.INSUFFICIENT_EVIDENCE.value
+            if result.insufficient_context
+            else Outcome.SUCCESS.value
+        ),
+        engine="generative",
+        marks=result.marks,
+        verification=verification,
+        warnings=list(result.warnings),
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -284,6 +463,18 @@ async def ask(
     if not body.question.strip():
         raise HTTPException(status_code=400, detail="Question cannot be empty")
 
+    # 0. Explicit engine selection.  The extractive Brain path below remains the
+    # default; ``generative`` is opt-in per request (DOCUMIND_PROJECT_CONTEXT.md
+    # §0.8) and reuses the shared generation service rather than duplicating it.
+    engine = (body.engine or "extractive").strip().lower()
+    if engine == "generative":
+        return await _answer_with_generation(body, current_user, db)
+    if engine != "extractive":
+        raise HTTPException(
+            status_code=400,
+            detail="engine must be 'extractive' or 'generative'",
+        )
+
     # 1. Create real service adapters wired to this request's db session
     registry = create_registry(db)
     brain = Brain(registry)
@@ -293,6 +484,13 @@ async def ask(
         user_id=str(current_user.id),
         raw_question=body.question,
         top_k=body.topK,
+    )
+    # The reported pipeline version reflects the pipeline that will actually run
+    # for this request — the dual-path (semantic + document-structure) pipeline
+    # when it is active, otherwise the original semantic-only pipeline.  It is
+    # never advanced merely because the code exists.
+    ctx.pipeline_version = (
+        "dual-path-graph-rag-v1" if dual_path_enabled() else "rag-v1"
     )
 
     # 3. Let the Brain process the request
@@ -333,6 +531,13 @@ async def ask(
             elementType=s.element_type,
             tokenCount=s.token_count,
             chunkerVersion=s.chunker_version,
+            retrievalPath=s.retrieval_path,
+            fusionScore=s.fusion_score,
+            structuralHops=s.structural_hops,
+            evidenceKind=s.evidence_kind,
+            tableElementId=s.table_element_id,
+            rowIndex=s.row_index,
+            headerRepeated=s.header_repeated,
         )
         for s in br.sources
     ]
@@ -349,6 +554,17 @@ async def ask(
         omittedSourceCount=br.reliability.get("omittedSourceCount", 0),
         contextBudgetTokens=br.reliability.get("contextBudgetTokens", 0),
         contextUsedTokens=br.reliability.get("contextUsedTokens", 0),
+        semanticSourceCount=br.reliability.get("semanticSourceCount", 0),
+        structuralSourceCount=br.reliability.get("structuralSourceCount", 0),
+        structuralElementSourceCount=br.reliability.get(
+            "structuralElementSourceCount", 0
+        ),
+        hybridSourceCount=br.reliability.get("hybridSourceCount", 0),
+        structuralHopMax=br.reliability.get("structuralHopMax", 0),
+        pathAgreement=br.reliability.get("pathAgreement", False),
+        evidenceCoverage=br.reliability.get("evidenceCoverage", 1.0),
+        fusionEnabled=br.reliability.get("fusionEnabled", False),
+        pipelineVersion=ctx.pipeline_version,
     )
 
     # 6. Store reliability data for the Reliability Center page
@@ -363,6 +579,19 @@ async def ask(
         "factualGrounded": br.reliability.get("factualGrounded", False),
         "insufficientContext": br.reliability.get("insufficientContext", True),
         "sources": br.reliability.get("sources", []),
+        # Evidence-sufficiency / provenance signals, persisted so the Reliability
+        # Center reads exactly the values that were returned to the client.
+        "semanticSourceCount": br.reliability.get("semanticSourceCount", 0),
+        "structuralSourceCount": br.reliability.get("structuralSourceCount", 0),
+        "structuralElementSourceCount": br.reliability.get(
+            "structuralElementSourceCount", 0
+        ),
+        "hybridSourceCount": br.reliability.get("hybridSourceCount", 0),
+        "structuralHopMax": br.reliability.get("structuralHopMax", 0),
+        "pathAgreement": br.reliability.get("pathAgreement", False),
+        "evidenceCoverage": br.reliability.get("evidenceCoverage", 1.0),
+        "fusionEnabled": br.reliability.get("fusionEnabled", False),
+        "pipelineVersion": ctx.pipeline_version,
     }
     await store_query_reliability(str(current_user.id), reliability_evidence, db=db)
 

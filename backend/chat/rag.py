@@ -18,12 +18,26 @@ database.  All of it is optional; legacy rows yield ``None``.
 
 import json
 import math
+import os
 import re
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
+from typing import Mapping, Sequence
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from embeddings.model import embed_query
+from graph.service import (
+    MAX_HOPS as GRAPH_MAX_HOPS,
+    expand_element_seeds,
+    expand_from_seeds,
+    find_element_seed_matches,
+    find_section_seed_matches,
+    load_candidates as load_graph_candidates,
+    load_element_candidates,
+    load_table_rows,
+    structural_score as graph_structural_score,
+    terms_from_question,
+)
 from chat.qa_model import (
     answer_question,
     count_input_tokens,
@@ -31,6 +45,22 @@ from chat.qa_model import (
     get_max_input_length,
     is_model_available,
 )
+
+
+# ---------------------------------------------------------------------------
+# Retrieval-path vocabulary
+# ---------------------------------------------------------------------------
+
+RETRIEVAL_SEMANTIC = "semantic"
+"""Found by the existing pgvector path only."""
+
+RETRIEVAL_STRUCTURAL = "structural"
+"""Found only by heading/section seeding + document-graph traversal."""
+
+RETRIEVAL_HYBRID = "hybrid"
+"""Found independently by both paths."""
+
+RETRIEVAL_PATHS = (RETRIEVAL_SEMANTIC, RETRIEVAL_STRUCTURAL, RETRIEVAL_HYBRID)
 
 
 @dataclass
@@ -56,6 +86,42 @@ class SourceChunk:
     element_type: str | None = None
     token_count: int | None = None
     chunker_version: str | None = None
+
+    # --- Dual-path provenance (additive; defaults keep legacy callers working) ---
+    retrieval_path: str = RETRIEVAL_SEMANTIC
+    """Which path produced this chunk: ``"semantic"``, ``"structural"`` or
+    ``"hybrid"``.  A chunk found by both paths is ``"hybrid"``."""
+
+    fusion_score: float | None = None
+    """Reciprocal-rank-fusion score.  This is **not** a cosine similarity and
+    must never be reported as one; ``score`` remains the similarity."""
+
+    structural_hops: int | None = None
+    """Graph hops from the nearest structural seed (``0`` = the seed itself)."""
+
+    structural_relation: str | None = None
+    """Graph relation that reached this chunk (``None`` at hop 0)."""
+
+    structural_score: float | None = None
+    """Graph-distance score (relation weight / (1 + hops)).  Not a similarity."""
+
+    evidence_kind: str = "chunk"
+    """Granularity of the evidence record: ``"chunk"`` for a
+    ``document_chunks`` row, ``"structure_element"`` for a
+    ``document_structure_elements`` row reached by the element-level structural
+    stream, or ``"table_row"`` for a ``document_table_rows`` row from the
+    query-gated compact table-evidence band.  Defaults to ``"chunk"`` so
+    existing producers keep their meaning."""
+
+    # --- Table-row provenance (additive; None for every other evidence kind) ---
+    table_element_id: str | None = None
+    """The aggregate ``table`` structure element this row belongs to."""
+
+    row_index: int | None = None
+    """The row's own 0-based index in the source table (header row is 0)."""
+
+    header_repeated: bool | None = None
+    """Whether ``content`` embeds the table's header row above the row itself."""
 
 
 def coerce_heading_path(value: object) -> tuple[str, ...] | None:
@@ -495,3 +561,642 @@ def rag_answer(
         source_count=len(chunks),
         unique_documents=unique_docs,
     )
+
+
+# ===========================================================================
+# Dual-path retrieval — semantic (pgvector) + structural (document graph)
+# ===========================================================================
+#
+# The semantic path above is untouched.  This section adds a second, independent
+# retrieval path that walks the document's own structure, and then fuses the two
+# paths with Reciprocal Rank Fusion.
+#
+# Fusion is deliberately *rank*-based rather than score-based: cosine similarity
+# and graph-distance scores live on different scales, and adding them directly
+# would invent a calibration that nobody has measured.  RRF only needs each
+# path's ordering, and the two weights below are the pipeline's declared prior
+# (0.70 semantic / 0.30 structural), not a fitted parameter.
+
+DUAL_PATH_ENV = "DOCUMIND_DUAL_PATH_RAG"
+"""Kill switch for the structural path.  Unset (or any value other than
+0/false/no/off) → the dual path is active."""
+
+SEMANTIC_SEED_COUNT = 3
+"""How many top semantic chunks also act as structural seeds."""
+
+STRUCTURAL_SEED_LIMIT = 8
+"""How many heading/section term matches are used as seeds."""
+
+STRUCTURAL_CANDIDATE_LIMIT = 15
+"""Hard bound on structurally retrieved candidates handed to fusion."""
+
+STRUCTURAL_ELEMENT_CANDIDATE_LIMIT = 10
+"""Hard bound on structure-element candidates handed to fusion."""
+
+RRF_K = 60
+RRF_SEMANTIC_WEIGHT = 0.70
+RRF_STRUCTURAL_WEIGHT = 0.30
+
+
+def dual_path_enabled() -> bool:
+    """Whether the structural path participates in retrieval."""
+    value = os.environ.get(DUAL_PATH_ENV)
+    if value is None:
+        return True
+    return value.strip().lower() not in ("0", "false", "no", "off", "")
+
+
+# ---------------------------------------------------------------------------
+# Compact table-row evidence (query-gated, additive band)
+# ---------------------------------------------------------------------------
+#
+# Why this exists
+# ---------------
+# A PDF table is persisted as ONE aggregate ``table`` structure element (~230
+# tokens for the teacher-demo table) which cannot fit the QA context: the budget
+# is 362 usable tokens and the five ranked chunks already consume 266
+# (266 + 230 = 496 > 362).  Phase 2 persists the same table's rows individually
+# (``document_table_rows``), each ~36-48 tokens with the header repeated, so a
+# relevant row *can* fit the remaining budget.
+#
+# Safety model (this is the whole point of the band)
+# -------------------------------------------------
+# * **Post-ranking, additive.**  The band is appended AFTER the existing fused
+#   chunk list and BEFORE the existing unranked structure-element tail.  It never
+#   enters RRF, never re-ranks, never replaces and never reorders chunk evidence;
+#   the ranked bands are handed to ``build_qa_context`` in their existing order.
+# * **Query-gated.**  Rows are only offered when the question names a persisted
+#   table *dimension* (a header cell), not merely text that happens to appear in
+#   a cell.  When the gate closes nothing is retrieved and the QA context is
+#   byte-for-byte the previous baseline — which is what keeps an unrelated
+#   question's answer (e.g. the power-rail question) from changing.
+# * **All-or-nothing.**  A row must fit the *actual* remaining budget whole;
+#   ``build_qa_context`` already skips (never truncates) later items, so an
+#   over-cap row is reported as omitted rather than truncated into the context.
+# * **Kill switch, default OFF.**  ``DOCUMIND_TABLE_EVIDENCE`` (mirroring the
+#   ``DOCUMIND_DUAL_PATH_RAG`` convention) must be explicitly enabled; the
+#   default is the pre-Phase-3 behaviour until Phase 4 measures it.
+# * **No fabricated values.**  A row's ``content`` is the persisted serialisation
+#   of the extractor's own cells (Phase 2); ``score`` stays ``0.0`` because no
+#   similarity was ever computed for it.
+
+TABLE_EVIDENCE_ENV = "DOCUMIND_TABLE_EVIDENCE"
+"""Kill switch for the compact table-evidence band.  Unset, empty, or any value
+other than ``1``/``true``/``yes``/``on`` → the band is OFF (the default) and the
+QA context is exactly the pre-Phase-3 baseline."""
+
+EVIDENCE_KIND_TABLE_ROW = "table_row"
+"""``evidence_kind`` of a persisted ``document_table_rows`` row."""
+
+EVIDENCE_KIND_STRUCTURE_ELEMENT = "structure_element"
+"""``evidence_kind`` of the document-order structure-element tail (unchanged)."""
+
+TABLE_EVIDENCE_MAX_DOCUMENTS = 5
+"""Documents whose rows may be read for one query (matches the element stream)."""
+
+TABLE_EVIDENCE_MAX_TABLES = 2
+"""Distinct tables that may contribute row evidence to one query."""
+
+TABLE_EVIDENCE_MAX_ROWS = 2
+"""Row units that may be offered to one query."""
+
+TABLE_EVIDENCE_MAX_TOKENS = 64
+"""Per-row cap.  An over-cap row is skipped whole; it is never truncated."""
+
+_TABLE_EVIDENCE_TRUTHY = ("1", "true", "yes", "on")
+
+
+def table_evidence_enabled() -> bool:
+    """Whether the compact table-evidence band participates in a request.
+
+    Defaults to ``False``: unlike the structural path, this band changes which
+    evidence reaches the extractive QA model, so it stays off until measured.
+    """
+    value = os.environ.get(TABLE_EVIDENCE_ENV)
+    if value is None:
+        return False
+    return value.strip().lower() in _TABLE_EVIDENCE_TRUTHY
+
+
+def table_gate_open(
+    header_rows: Sequence[Sequence[str]],
+    terms: Sequence[str] | set[str],
+) -> bool:
+    """Whether a question asks about one of a table's own dimensions.
+
+    Deliberately stricter than "a question word appears somewhere in the table":
+
+    * a **multi-word** header cell opens the gate only when at least **two** of its
+      own terms are named by the question (e.g. ``calibration`` + ``interval`` for
+      the header ``Calibration Interval``);
+    * a **single-word** header cell opens the gate when that word is named.
+
+    A question that merely mentions a word shared with a header (for example a
+    question about sensor calibration in general) therefore stays closed, and a
+    question whose terms only appear in *cells* — a row label or a value — does not
+    open the gate either.  The gate reads persisted header cells only, so it is
+    deterministic and independent of any question-specific string.
+    """
+    wanted = {str(term) for term in terms}
+    if not wanted:
+        return False
+
+    for cells in header_rows:
+        for cell in cells:
+            cell_terms = set(terms_from_question(str(cell)))
+            if not cell_terms:
+                continue
+            matched = cell_terms & wanted
+            if not matched:
+                continue
+            if len(cell_terms) == 1 or len(matched) >= 2:
+                return True
+    return False
+
+
+def _match_count(cells: Sequence[str], wanted: set[str]) -> int:
+    """How many distinct question terms appear in ``cells`` (deterministic)."""
+    if not cells:
+        return 0
+    text = " ".join(str(cell) for cell in cells)
+    return len(set(terms_from_question(text, limit=64)) & wanted)
+
+
+def select_table_row_evidence(
+    rows: Sequence[object],
+    *,
+    question: str,
+    document_names: Mapping[str, str] | None = None,
+    max_rows: int = TABLE_EVIDENCE_MAX_ROWS,
+    max_tables: int = TABLE_EVIDENCE_MAX_TABLES,
+    max_tokens: int = TABLE_EVIDENCE_MAX_TOKENS,
+) -> list[SourceChunk]:
+    """Select the most relevant persisted table rows for ``question``.
+
+    ``rows`` are ``document_table_rows`` records (any object exposing ``cells``,
+    ``content``, ``is_header``, ``row_index``, ``page_number``, ``heading_path``,
+    ``section``, ``token_count``, ``header_repeated``, ``document_id`` and
+    ``table_element_id``).  Selection is a pure function of the persisted rows and
+    the question: headers decide whether the question is table-relevant at all,
+    then rows are ranked by row-label matches first, any-cell matches second, and
+    source order last.
+
+    Row-label matches take precedence over incidental cell matches, so a narrow
+    question yields its own rows rather than every row that shares a word.
+
+    Returns ``[]`` whenever the gate is closed, no row matches, or no row fits the
+    per-row cap — so a caller that adds this list to the evidence stream changes
+    nothing in those cases.
+    """
+    wanted = set(terms_from_question(question))
+    if not wanted:
+        return []
+
+    grouped: dict[tuple[str, str], list[object]] = {}
+    for row in rows:
+        key = (str(row.document_id), str(row.table_element_id))
+        grouped.setdefault(key, []).append(row)
+
+    gated = [
+        key
+        for key, group in grouped.items()
+        if table_gate_open(
+            [list(r.cells or []) for r in group if r.is_header], wanted
+        )
+    ]
+    if not gated:
+        # Completely inert: no row selection for a question that does not ask
+        # about a table dimension.
+        return []
+
+    candidates: list[tuple[int, int, str, str, int, object]] = []
+    for key in gated:
+        document_id, table_element_id = key
+        for row in grouped[key]:
+            if row.is_header:
+                continue
+            cells = list(row.cells or [])
+            label_matches = _match_count(cells[:1], wanted)
+            cell_matches = _match_count(cells, wanted)
+            if not label_matches and not cell_matches:
+                continue
+            candidates.append(
+                (
+                    label_matches,
+                    cell_matches,
+                    document_id,
+                    table_element_id,
+                    int(row.row_index),
+                    row,
+                )
+            )
+
+    # A question that names a row label ("the lidar array") is asking about those
+    # rows, so label matches take precedence exclusively: a row that merely
+    # contains one of the question's words somewhere in its cells is only
+    # considered when no row label matches at all.  This keeps the band narrow and
+    # deterministic — one question, its rows — instead of padding it with rows
+    # that happen to share a word.
+    label_matched = [item for item in candidates if item[0] > 0]
+    pool = label_matched or candidates
+    pool.sort(key=lambda item: (-item[0], -item[1], item[2], item[3], item[4]))
+
+    names = document_names or {}
+    selected: list[SourceChunk] = []
+    tables_used: list[str] = []
+    for _label, _cells, document_id, table_element_id, row_index, row in pool:
+        if len(selected) >= max_rows:
+            break
+        if table_element_id not in tables_used and len(tables_used) >= max_tables:
+            continue
+        content = str(row.content or "")
+        if not content.strip():
+            continue
+        measured = row.token_count
+        if not isinstance(measured, int) or measured <= 0:
+            measured = _count_text(content)[0]
+        if measured > max_tokens:
+            # Never truncated: an oversized row is skipped whole (and therefore
+            # reported as omitted once the context is built).
+            continue
+        selected.append(
+            SourceChunk(
+                chunk_id=f"{EVIDENCE_KIND_TABLE_ROW}:{table_element_id}:{row_index}",
+                content=content,
+                score=0.0,  # no similarity exists for table evidence
+                document_id=document_id,
+                document_name=names.get(document_id, ""),
+                page=row.page_number,
+                heading_path=coerce_heading_path(row.heading_path),
+                section=row.section,
+                element_type="table",
+                token_count=row.token_count,
+                retrieval_path=RETRIEVAL_STRUCTURAL,
+                evidence_kind=EVIDENCE_KIND_TABLE_ROW,
+                table_element_id=table_element_id,
+                row_index=row_index,
+                header_repeated=bool(row.header_repeated),
+            )
+        )
+        if table_element_id not in tables_used:
+            tables_used.append(table_element_id)
+    return selected
+
+
+async def retrieve_table_row_evidence(
+    db: AsyncSession,
+    user_id: str,
+    *,
+    question: str,
+    chunks: Sequence[SourceChunk],
+    max_documents: int = TABLE_EVIDENCE_MAX_DOCUMENTS,
+) -> list[SourceChunk]:
+    """Query-gated, document-scoped row evidence for an already-retrieved set.
+
+    The document scope is the set of documents that supplied **chunk-level**
+    retrieval evidence — the same boundary ``brain.adapters._augment_with_structure``
+    uses, so the table band can never reach a document the ranked retrieval did
+    not return (an unranked structure-element match does not widen it).  Document
+    isolation is therefore inherited rather than re-implemented; the loader
+    additionally filters on ``user_id`` in the database.
+    """
+    document_ids = list(
+        dict.fromkeys(
+            c.document_id
+            for c in chunks
+            if getattr(c, "evidence_kind", "chunk") == "chunk"
+        )
+    )
+    if not document_ids:
+        return []
+    rows = await load_table_rows(
+        db, user_id, document_ids, max_documents=max_documents
+    )
+    if not rows:
+        return []
+    names = {c.document_id: c.document_name for c in chunks}
+    return select_table_row_evidence(rows, question=question, document_names=names)
+
+
+def order_evidence_bands(
+    chunks: Sequence[SourceChunk],
+    table_evidence: Sequence[SourceChunk] = (),
+) -> list[SourceChunk]:
+    """Order evidence as: ranked chunks → table rows → unranked element tail.
+
+    The band boundary is the first item that is not chunk-level evidence, i.e. the
+    start of the unranked structure-element tail.  With no table evidence the input
+    order is returned unchanged (a copy), so the pre-Phase-3 stream — and therefore
+    the QA context built from it — is preserved exactly.
+    """
+    ordered = list(chunks)
+    if not table_evidence:
+        return ordered
+
+    tail_start = len(ordered)
+    for index, chunk in enumerate(ordered):
+        if getattr(chunk, "evidence_kind", "chunk") != "chunk":
+            tail_start = index
+            break
+    return [*ordered[:tail_start], *table_evidence, *ordered[tail_start:]]
+
+
+async def retrieve_structural_candidates(
+    db: AsyncSession,
+    user_id: str,
+    question: str,
+    semantic_seed_ids: list[str] | None = None,
+    limit: int = STRUCTURAL_CANDIDATE_LIMIT,
+) -> list[SourceChunk]:
+    """Retrieve chunks through document structure rather than vector similarity.
+
+    Seeds come from two independent sources:
+
+    A. heading/section term matching — meaningful question terms are matched
+       against ``document_chunks.section`` and against the text form of
+       ``document_chunks.heading_path``;
+    B. the top semantic chunk ids, used as anchors into the graph.
+
+    Seeds are then expanded through ``document_graph_edges`` for at most
+    ``MAX_HOPS`` hops.  Every hop is scoped to ``user_id`` at the database, so a
+    caller can never traverse or retrieve another user's chunks, and expansion
+    cannot cross documents because edges are per-document.
+
+    Returns chunks with ``retrieval_path="structural"`` and ``score=0.0``.  The
+    embedding model never scored these chunks, so reporting a cosine for them
+    would be fabrication; ``structural_score`` carries the graph-distance score
+    instead.  Ordering is by ``structural_score`` descending, then chunk id, so
+    the result is deterministic.
+    """
+    terms = terms_from_question(question)
+
+    seed_ids: list[str] = []
+    seed_terms: dict[str, tuple[str, ...]] = {}
+
+    if terms:
+        matches = await find_section_seed_matches(
+            db, user_id, terms, limit=STRUCTURAL_SEED_LIMIT
+        )
+        for chunk_id, matched in matches:
+            if chunk_id in seed_terms:
+                continue
+            seed_terms[chunk_id] = matched
+            seed_ids.append(chunk_id)
+
+    for chunk_id in (semantic_seed_ids or [])[:SEMANTIC_SEED_COUNT]:
+        chunk_id = str(chunk_id)
+        if chunk_id in seed_terms:
+            continue
+        seed_terms[chunk_id] = ()
+        seed_ids.append(chunk_id)
+
+    if not seed_ids:
+        return []
+
+    visited = await expand_from_seeds(db, user_id, seed_ids, max_hops=GRAPH_MAX_HOPS)
+    details = await load_graph_candidates(db, user_id, list(visited.keys()))
+
+    candidates: list[SourceChunk] = []
+    for chunk_id, (hops, relation, weight) in visited.items():
+        info = details.get(chunk_id)
+        if info is None:
+            # Not visible to this user (or a seed that is not one of their own
+            # chunks).  Dropped rather than reported.
+            continue
+        candidates.append(
+            SourceChunk(
+                chunk_id=info["chunk_id"],
+                content=info["content"],
+                score=0.0,  # not a semantic hit — see the docstring
+                document_id=info["document_id"],
+                document_name=info["document_name"],
+                page=info["page"],
+                heading_path=info["heading_path"],
+                section=info["section"],
+                element_type=info["element_type"],
+                token_count=info["token_count"],
+                chunker_version=info["chunker_version"],
+                retrieval_path=RETRIEVAL_STRUCTURAL,
+                fusion_score=None,
+                structural_hops=hops,
+                structural_relation=relation,
+                structural_score=graph_structural_score(hops, weight),
+            )
+        )
+
+    candidates.sort(key=lambda c: (-(c.structural_score or 0.0), c.chunk_id))
+    return candidates[:limit]
+
+
+async def retrieve_structural_element_candidates(
+    db: AsyncSession,
+    user_id: str,
+    question: str,
+    limit: int = STRUCTURAL_ELEMENT_CANDIDATE_LIMIT,
+) -> list[SourceChunk]:
+    """Retrieve persisted structure elements as structural retrieval candidates.
+
+    This is the element-level structural stream: a ``DocumentStructureElement``
+    becomes a candidate here and can then enter the same rank-based fusion as
+    semantic chunks (see :func:`retrieve_dual_path`).
+
+    Candidate generation mirrors the chunk-level structural path exactly:
+
+    A. seeds — elements whose own section name (``heading_path[-1]``) matches a
+       meaningful question term (structure names only; element content is
+       never matched);
+    B. expansion — bounded breadth-first walk over the ``parent_id`` tree
+       (``MAX_ELEMENT_HOPS`` hops, ``MAX_ELEMENT_NODES`` nodes), scoped to the
+       authenticated user at every level.
+
+    Returns elements with ``retrieval_path="structural"`` and
+    ``evidence_kind="structure_element"``.  ``score`` stays ``0.0`` because no
+    similarity exists for an element — it is never reported as one;
+    ``structural_score`` carries the graph-distance score instead.  Ordering is
+    by ``structural_score`` descending, then candidate id, so the result is
+    deterministic.
+    """
+    terms = terms_from_question(question)
+    if not terms:
+        return []
+
+    matches = await find_element_seed_matches(
+        db, user_id, terms, limit=STRUCTURAL_SEED_LIMIT
+    )
+    seed_ids = [element_id for element_id, _matched in matches]
+    if not seed_ids:
+        return []
+
+    visited = await expand_element_seeds(db, user_id, seed_ids)
+    details = await load_element_candidates(db, user_id, list(visited.keys()))
+
+    candidates: list[SourceChunk] = []
+    for element_id, (hops, relation, weight) in visited.items():
+        info = details.get(element_id)
+        if info is None:
+            # Not visible to this user (or a foreign seed).  Dropped rather
+            # than reported.
+            continue
+        path = info["heading_path"]
+        content = info["content"] or (" > ".join(path) if path else "")
+        if not content or not content.strip():
+            continue
+        candidates.append(
+            SourceChunk(
+                chunk_id=f"structure:{info['element_id']}",
+                content=content,
+                score=0.0,  # not a semantic hit — see the docstring
+                document_id=info["document_id"],
+                document_name=info["document_name"],
+                page=info["page"],
+                heading_path=path,
+                section=(path[-1] if path else None),
+                element_type=info["element_type"],
+                token_count=None,
+                chunker_version=None,
+                retrieval_path=RETRIEVAL_STRUCTURAL,
+                fusion_score=None,
+                structural_hops=hops,
+                structural_relation=relation,
+                structural_score=graph_structural_score(hops, weight),
+                evidence_kind="structure_element",
+            )
+        )
+
+    candidates.sort(key=lambda c: (-(c.structural_score or 0.0), c.chunk_id))
+    return candidates[:limit]
+
+
+def fuse_dual_path(
+    semantic: list[SourceChunk],
+    structural: list[SourceChunk],
+    top_k: int,
+    *,
+    semantic_weight: float = RRF_SEMANTIC_WEIGHT,
+    structural_weight: float = RRF_STRUCTURAL_WEIGHT,
+    k: int = RRF_K,
+) -> list[SourceChunk]:
+    """Fuse the two retrieval paths with Reciprocal Rank Fusion.
+
+    ``fusion_score = w_semantic / (k + semantic_rank)
+                  + w_structural / (k + structural_rank)``
+
+    with 1-based ranks taken from each path's own ordering.  A chunk found by
+    only one path receives only that path's contribution.
+
+    Provenance is explicit:
+
+    * both paths  → ``retrieval_path="hybrid"``
+    * semantic only → ``"semantic"``
+    * structural only → ``"structural"``, and its ``score`` stays ``0.0``
+      because no similarity was ever computed for it.  ``fusion_score`` is a
+      separate quantity and is never a stand-in for cosine similarity.
+
+    Ordering is fully deterministic: fused score descending, then semantic
+    similarity descending, then chunk id ascending.  At most ``top_k`` chunks
+    are returned.
+    """
+    semantic_rank = {c.chunk_id: i + 1 for i, c in enumerate(semantic)}
+    structural_rank = {c.chunk_id: i + 1 for i, c in enumerate(structural)}
+
+    semantic_by_id = {c.chunk_id: c for c in semantic}
+    structural_by_id = {c.chunk_id: c for c in structural}
+
+    fused: list[SourceChunk] = []
+    for chunk_id in set(semantic_by_id) | set(structural_by_id):
+        sem = semantic_by_id.get(chunk_id)
+        struct = structural_by_id.get(chunk_id)
+        base = sem if sem is not None else struct
+        assert base is not None  # one of the two always exists
+
+        sem_r = semantic_rank.get(chunk_id)
+        struct_r = structural_rank.get(chunk_id)
+
+        score = 0.0
+        if sem_r is not None:
+            score += semantic_weight / (k + sem_r)
+        if struct_r is not None:
+            score += structural_weight / (k + struct_r)
+
+        if sem is not None and struct is not None:
+            path = RETRIEVAL_HYBRID
+        elif sem is not None:
+            path = RETRIEVAL_SEMANTIC
+        else:
+            path = RETRIEVAL_STRUCTURAL
+
+        fused.append(
+            replace(
+                base,
+                retrieval_path=path,
+                fusion_score=round(score, 8),
+                structural_hops=struct.structural_hops if struct is not None else None,
+                structural_relation=(
+                    struct.structural_relation if struct is not None else None
+                ),
+                structural_score=(
+                    struct.structural_score if struct is not None else None
+                ),
+            )
+        )
+
+    fused.sort(
+        key=lambda c: (-(c.fusion_score or 0.0), -(c.score or 0.0), c.chunk_id)
+    )
+    return fused[:top_k]
+
+
+async def retrieve_dual_path(
+    db: AsyncSession,
+    user_id: str,
+    query: str,
+    top_k: int = 5,
+    *,
+    semantic_chunks: list[SourceChunk] | None = None,
+) -> list[SourceChunk]:
+    """Both retrieval paths plus fusion, as one call.
+
+    ``semantic_chunks`` may be supplied by a caller that already ran the
+    semantic path (the Brain adapter does) so the embedding and the vector
+    query are not paid for twice.
+
+    The structural path has two granularities that share one ranking stream:
+    chunk-level graph candidates (:func:`retrieve_structural_candidates`) and
+    persisted structure-element candidates
+    (:func:`retrieve_structural_element_candidates`).  Both are ordered by the
+    same graph-distance score and fused with the same declared structural
+    prior, so an element candidate can enter the final top-k and influence its
+    ordering without any fabricated similarity score.
+
+    When the semantic path returns nothing the structural path is still tried:
+    a question naming a section can be answered from the section even when no
+    chunk is vector-similar to it.  The fused result is then structural-only,
+    and the evidence gate treats it accordingly (no fabricated similarity).
+    """
+    semantic = (
+        semantic_chunks
+        if semantic_chunks is not None
+        else await retrieve_chunks(db, user_id, query, top_k=top_k)
+    )
+
+    structural = await retrieve_structural_candidates(
+        db,
+        user_id,
+        query,
+        semantic_seed_ids=[c.chunk_id for c in semantic],
+        limit=max(STRUCTURAL_CANDIDATE_LIMIT, top_k),
+    )
+
+    element_structural = await retrieve_structural_element_candidates(
+        db, user_id, query
+    )
+
+    # One structural ranking stream: chunk-level and element-level candidates
+    # are ordered by the same graph-distance score with the same
+    # deterministic tie-break, then fused by rank.
+    structural_stream = sorted(
+        [*structural, *element_structural],
+        key=lambda c: (-(c.structural_score or 0.0), c.chunk_id),
+    )
+
+    return fuse_dual_path(semantic, structural_stream, top_k)

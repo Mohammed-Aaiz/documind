@@ -41,6 +41,7 @@ async def store_query_reliability(
         factual_grounded=data.get("factualGrounded", False),
         insufficient_context=data.get("insufficientContext", True),
         sources_json=data.get("sources", []),
+        generation_json=data.get("generation"),
     )
 
     stmt = (
@@ -67,6 +68,28 @@ class ReliabilitySourceRef(BaseModel):
     page: int | None
     status: str  # VERIFIED, MARGINAL, UNRESOLVED
 
+    # --- Dual-path provenance (additive; None for rows written before it) ---
+    retrievalPath: str | None = None  # semantic | structural | hybrid
+    fusionScore: float | None = None  # RRF score — not a similarity
+    structuralHops: int | None = None
+    # chunk | structure_element | table_row — distinguishes element-level
+    # structural evidence, chunk-level structural retrieval (both report path
+    # "structural") and the compact table-row band.
+    evidenceKind: str | None = None
+
+    # --- Structure metadata (Phase 5; None when not recorded) -------------
+    # The section / element type captured at ingestion, persisted so the
+    # Reliability Center shows real provenance instead of "not reported".
+    section: str | None = None
+    elementType: str | None = None
+
+    # --- Phase 5: table-row provenance (None for every other evidence kind) -
+    # Exact persisted values, copied from the row's SourceRef.  Never derived
+    # from the row text and never reconstructed.
+    tableElementId: str | None = None  # the aggregate table structure element
+    rowIndex: int | None = None        # 0-based row index (header row is 0)
+    headerRepeated: bool | None = None # whether content embeds the header row
+
 
 class ReliabilityQueryData(BaseModel):
     question: str
@@ -79,6 +102,28 @@ class ReliabilityQueryData(BaseModel):
     factualGrounded: bool
     insufficientContext: bool
     sources: list[ReliabilitySourceRef]
+
+    # --- Evidence-sufficiency provenance (GraphRAG) -----------------------
+    #
+    # Derived from the persisted per-source provenance of *this* query, not
+    # recomputed from a guess: each count partitions ``sources`` exactly.
+    semanticSourceCount: int = 0
+    structuralSourceCount: int = 0
+    structuralElementSourceCount: int = 0
+    hybridSourceCount: int = 0
+    # Of the structural evidence, how much is the compact table-row band.  Kept
+    # separate so "structural chunk" sources are not overstated by table rows
+    # (a table row reports retrievalPath "structural" too).  Partitions the
+    # structural bucket together with structuralElementSourceCount.
+    tableRowSourceCount: int = 0
+    structuralHopMax: int = 0
+    pathAgreement: bool = False
+
+    # --- Additive generative-path metadata (None for extractive answers) ---
+    # Engine/model, requested mark format, latency, abstention and the
+    # deterministic verification report.  Null means "this answer was produced
+    # by the extractive path", never "verification passed".
+    generation: dict | None = None
 
 
 _EMPTY = ReliabilityQueryData(
@@ -124,9 +169,34 @@ async def get_last_query_reliability(
             relevanceScore=s.get("relevanceScore", 0.0),
             page=s.get("page"),
             status=s.get("status", "UNRESOLVED"),
+            retrievalPath=s.get("retrievalPath"),
+            fusionScore=s.get("fusionScore"),
+            structuralHops=s.get("structuralHops"),
+            evidenceKind=s.get("evidenceKind"),
+            section=s.get("section"),
+            elementType=s.get("elementType"),
+            tableElementId=s.get("tableElementId"),
+            rowIndex=s.get("rowIndex"),
+            headerRepeated=s.get("headerRepeated"),
         )
         for s in sources
     ]
+
+    # Path counts are derived from the persisted provenance of this query, so
+    # the Reliability Center reports exactly what the answer was built from.
+    semantic_count = sum(1 for s in source_refs if s.retrievalPath == "semantic")
+    structural_count = sum(1 for s in source_refs if s.retrievalPath == "structural")
+    hybrid_count = sum(1 for s in source_refs if s.retrievalPath == "hybrid")
+    # Of the structural evidence, how much is element-level (Feature #13).
+    structural_element_count = sum(
+        1 for s in source_refs if s.evidenceKind == "structure_element"
+    )
+    # Table-row evidence is structural by path; counted separately so the UI can
+    # keep the chunk-level structural remainder honest.
+    table_row_count = sum(
+        1 for s in source_refs if s.evidenceKind == "table_row"
+    )
+    hops = [s.structuralHops for s in source_refs if s.structuralHops is not None]
 
     return ReliabilityQueryData(
         question=row.question,
@@ -139,4 +209,12 @@ async def get_last_query_reliability(
         factualGrounded=row.factual_grounded,
         insufficientContext=row.insufficient_context,
         sources=source_refs,
+        semanticSourceCount=semantic_count,
+        structuralSourceCount=structural_count,
+        structuralElementSourceCount=structural_element_count,
+        hybridSourceCount=hybrid_count,
+        tableRowSourceCount=table_row_count,
+        structuralHopMax=max(hops) if hops else 0,
+        pathAgreement=hybrid_count > 0,
+        generation=getattr(row, "generation_json", None),
     )

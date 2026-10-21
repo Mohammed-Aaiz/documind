@@ -43,6 +43,11 @@ class ReliabilityLog(Base):
     # Source references stored as JSONB array — no separate table needed.
     sources_json: Mapped[dict | None] = mapped_column(JSONB, nullable=True, default=list)
 
+    # Additive generative-path metadata (migration 008).  NULL for rows produced
+    # by the extractive path: engine/model, answer format, latency, abstention,
+    # and the deterministic verification report.
+    generation_json: Mapped[dict | None] = mapped_column(JSONB, nullable=True)
+
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
     )

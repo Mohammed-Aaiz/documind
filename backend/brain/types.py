@@ -226,6 +226,46 @@ class SourceRef:
     chunker_version: str | None = None
     """Chunker that produced this chunk, or None for legacy chunks."""
 
+    # --- Dual-path provenance (additive; defaults keep legacy callers working) ---
+    retrieval_path: str = "semantic"
+    """Which retrieval path produced this chunk: ``"semantic"``,
+    ``"structural"`` or ``"hybrid"``.  Defaults to ``"semantic"`` because
+    before the structural path existed every source came from pgvector."""
+
+    fusion_score: float | None = None
+    """Reciprocal-rank-fusion score.  This is **not** a cosine similarity and
+    must never be presented as one; ``score`` remains the similarity."""
+
+    structural_hops: int | None = None
+    """Graph hops from the nearest structural seed (``0`` = the seed)."""
+
+    structural_relation: str | None = None
+    """Graph relation that reached this chunk (``None`` at hop 0)."""
+
+    structural_score: float | None = None
+    """Graph-distance score (relation weight / (1 + hops)).  Not a similarity."""
+
+    evidence_kind: str = "chunk"
+    """Granularity of the evidence record: ``"chunk"`` for a
+    ``document_chunks`` row (semantic, chunk-level structural, or hybrid), or
+    ``"structure_element"`` for a ``document_structure_elements`` row reached
+    by the Feature #13 element-level structural stream.  Distinguishes the two
+    kinds of structural evidence, which both carry
+    ``retrieval_path="structural"``, or ``"table_row"`` for a
+    ``document_table_rows`` row offered by the Phase 3 query-gated compact
+    table-evidence band.  Defaults to ``"chunk"`` so every existing producer
+    keeps its established meaning."""
+
+    # --- Phase 3 table-row provenance (None for every other evidence kind) ---
+    table_element_id: str | None = None
+    """The aggregate ``table`` structure element a ``table_row`` came from."""
+
+    row_index: int | None = None
+    """The row's own 0-based index inside that table (header row is 0)."""
+
+    header_repeated: bool | None = None
+    """Whether the row's content embeds the table's header row."""
+
 
 # ---------------------------------------------------------------------------
 # 7. EvidenceBundle
@@ -261,6 +301,18 @@ class EvidenceBundle:
       - "context_budget_tokens": int
       - "context_used_tokens": int
       - "context_truncated_source_ids": list[str]
+      - "semantic_source_ids": list[str]     — evidence found by pgvector only
+      - "structural_source_ids": list[str]   — evidence found by the graph only
+      - "hybrid_source_ids": list[str]       — evidence found by both paths
+      - "semantic_source_count": int
+      - "structural_source_count": int
+      - "hybrid_source_count": int
+      - "structural_hop_max": int            — deepest expansion among evidence
+      - "path_agreement": bool               — at least one evidence chunk was
+        supported by both paths
+      - "evidence_coverage": float           — QA-supplied evidence / final
+        selected evidence (1.0 when nothing was dropped)
+      - "fusion_enabled": bool               — whether the structural path ran
     """
 
 
@@ -440,7 +492,13 @@ class ExecutionContext:
 
     # --- Metadata ---
     pipeline_version: str = "rag-v1"
-    """Pipeline version for traceability."""
+    """Pipeline version for traceability.
+
+    ``"rag-v1"`` — semantic-only retrieval (the original pipeline).
+    ``"dual-path-graph-rag-v1"`` — semantic + document-structure retrieval with
+    RRF fusion.  The API boundary sets this only when the structural path is
+    actually active for the request, never merely because it is implemented.
+    """
 
     model_metadata: dict[str, str] = field(default_factory=dict)
     """Model information.

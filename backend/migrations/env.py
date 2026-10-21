@@ -23,10 +23,21 @@ from chat.models import ChatSession, ChatMessage  # noqa: F401
 from verification.models import VerificationResult  # noqa: F401
 from reliability.models import ReliabilityLog, SourceRef  # noqa: F401
 from user.models import UserSettings  # noqa: F401
+from graph.models import (  # noqa: F401
+    DocumentGraphEdge,
+    DocumentStructureEdge,
+    DocumentStructureElement,
+)
 
 config = context.config
 if config.config_file_name is not None:
-    fileConfig(config.config_file_name)
+    # ``disable_existing_loggers`` defaults to True, which silences every
+    # logger created before Alembic runs -- including uvicorn's.  Because the
+    # application applies migrations during startup (see main.py), that made
+    # any startup failure invisible: the process exited with a bare ``sys.exit(1)``
+    # and no traceback was ever emitted.  Keep existing loggers enabled so
+    # startup errors stay diagnosable.
+    fileConfig(config.config_file_name, disable_existing_loggers=False)
 
 # Point Alembic at the application's configured database (settings / .env)
 # instead of the placeholder URL hard-coded in alembic.ini, so `alembic` and

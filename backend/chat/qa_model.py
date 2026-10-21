@@ -16,9 +16,13 @@ so we load the model and tokenizer directly.
 
 import json
 import os
-import torch
 from pathlib import Path
-from transformers import AutoModelForQuestionAnswering, AutoTokenizer
+
+# ``torch`` and ``transformers`` are imported inside the functions that need
+# them.  They are the slowest imports in the whole application (several seconds
+# each), and this module is imported at startup by main.py, so importing them
+# eagerly delayed every backend start by ~19s for no benefit -- the weights are
+# only loaded lazily on first use anyway.  See backend/scripts/start_server.py.
 
 # Single shared implementation, deliberately dependency-free. Answer-span
 # reconstruction is used by this service AND by the Phase 4F evaluation
@@ -53,6 +57,8 @@ def _load_model():
         raise RuntimeError(_model_load_error)
 
     try:
+        from transformers import AutoModelForQuestionAnswering, AutoTokenizer
+
         _tokenizer = AutoTokenizer.from_pretrained(str(model_path))
         _model = AutoModelForQuestionAnswering.from_pretrained(str(model_path))
         _model.eval()
@@ -209,6 +215,8 @@ def answer_question(question: str, context: str) -> dict:
     """
     if not context.strip():
         return {"answer": "", "score": 0.0, "start": 0, "end": 0}
+
+    import torch
 
     _load_model()  # raises RuntimeError if model unavailable
 

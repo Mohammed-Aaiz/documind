@@ -12,6 +12,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from config import get_settings
 from storage.database import Base, engine
 from chat.qa_model import get_model_status
+from generation.engine import get_generator_status
 
 # Import all models so Alembic can detect them
 from auth.models import User  # noqa: F401
@@ -22,14 +23,15 @@ from reliability.models import ReliabilityLog, SourceRef  # noqa: F401
 from user.models import UserSettings  # noqa: F401
 
 # Import routers
+from generation.routes import router as generation_router
 from auth.routes import router as auth_router
 from documents.routes import router as documents_router
 from chat.routes import router as chat_router
 from verification.routes import router as verification_router
 from reliability.routes import router as reliability_router
-from user.routes import router as user_router
 from embeddings.routes import router as embeddings_router
 from settings.routes import router as settings_router
+from voice import router as voice_router
 
 settings = get_settings()
 
@@ -104,9 +106,10 @@ app.include_router(documents_router)
 app.include_router(chat_router)
 app.include_router(verification_router)
 app.include_router(reliability_router)
-app.include_router(user_router)
 app.include_router(embeddings_router)
 app.include_router(settings_router)
+app.include_router(voice_router)
+app.include_router(generation_router)
 
 
 @app.get("/api/health", tags=["health"])
@@ -122,4 +125,8 @@ async def health_check():
             "path": qa_status["model_path"],
             "error": qa_status["error"],
         },
+        # Additive generative engine.  ``loaded`` is false until the first
+        # generation request; ``available`` reflects the already-loaded state,
+        # so health stays cheap and never triggers a model load.
+        "generator": get_generator_status(),
     }

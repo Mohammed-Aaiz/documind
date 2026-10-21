@@ -208,3 +208,61 @@ class Brain:
                     )
         except AttributeError:
             pass
+
+        # --- Dual-path provenance diagnostics (GraphRAG) -------------------
+        #
+        # Counted over the evidence that was actually reported — i.e. the chunks
+        # the QA model was given — never over the retrieved set.  These are real
+        # signals, not a single invented "confidence" number.
+        signals = evidence.grounding_signals
+
+        semantic_ids: list[str] = []
+        structural_ids: list[str] = []
+        hybrid_ids: list[str] = []
+        element_ids: list[str] = []
+        hops: list[int] = []
+
+        for source in evidence.sources:
+            path = getattr(source, "retrieval_path", "semantic")
+            if path == "hybrid":
+                hybrid_ids.append(source.chunk_id)
+            elif path == "structural":
+                structural_ids.append(source.chunk_id)
+            else:
+                semantic_ids.append(source.chunk_id)
+
+            # Feature #14: element-level structural evidence (Feature #13) also
+            # reports retrieval_path="structural", so break it out by the
+            # evidence_kind the producer set — never inferred from the score.
+            if getattr(source, "evidence_kind", "chunk") == "structure_element":
+                element_ids.append(source.chunk_id)
+
+            source_hops = getattr(source, "structural_hops", None)
+            if source_hops is not None:
+                hops.append(int(source_hops))
+
+        # evidenceCoverage = supplied to QA / selected as final evidence.
+        # 1.0 when nothing was selected at all (nothing was dropped).
+        selected = len(evidence.sources) + len(signals.get("omitted_source_ids") or [])
+        supplied = len(evidence.sources)
+
+        signals.update(
+            {
+                "semantic_source_ids": semantic_ids,
+                "structural_source_ids": structural_ids,
+                "hybrid_source_ids": hybrid_ids,
+                "structural_element_source_ids": element_ids,
+                "semantic_source_count": len(semantic_ids),
+                "structural_source_count": len(structural_ids),
+                "hybrid_source_count": len(hybrid_ids),
+                "structural_element_source_count": len(element_ids),
+                "structural_hop_max": max(hops) if hops else 0,
+                "path_agreement": bool(hybrid_ids),
+                "evidence_coverage": (
+                    round(supplied / selected, 6) if selected else 1.0
+                ),
+                # The structural path is active exactly when the request ran the
+                # dual-path pipeline — not merely when this code exists.
+                "fusion_enabled": ctx.pipeline_version.startswith("dual-path"),
+            }
+        )

@@ -98,6 +98,28 @@ def _build_reliability(
             "relevanceScore": round(max(0.0, src.score), 4),
             "page": src.page,
             "status": status,
+            # Dual-path provenance, so the Reliability Center can distinguish
+            # SEMANTIC / STRUCTURAL / HYBRID instead of guessing from the score.
+            "retrievalPath": getattr(src, "retrieval_path", "semantic"),
+            "fusionScore": getattr(src, "fusion_score", None),
+            "structuralHops": getattr(src, "structural_hops", None),
+            # "chunk", "structure_element" or "table_row" — separates
+            # element-level structural evidence from chunk-level structural
+            # retrieval, and both from the compact table-row band.
+            "evidenceKind": getattr(src, "evidence_kind", "chunk"),
+            # --- Structure metadata (Phase 5) -------------------------------
+            # The section/element-type captured at ingestion, carried so the
+            # Reliability Center can show what it actually is instead of an
+            # honest-but-empty "not reported".  None for legacy chunks.
+            "section": src.section,
+            "elementType": src.element_type,
+            # --- Phase 5 table-row provenance (None for every other kind) ---
+            # Copied verbatim from the persisted row's SourceRef; never
+            # re-derived from the row text and never reconstructed.  These are
+            # what the Reliability Center shows for a "table_row" source.
+            "tableElementId": getattr(src, "table_element_id", None),
+            "rowIndex": getattr(src, "row_index", None),
+            "headerRepeated": getattr(src, "header_repeated", None),
         })
 
     # Phase 3D transparency: chunks retrieved but not supplied to the QA model
@@ -122,4 +144,15 @@ def _build_reliability(
         "omittedSourceCount": len(omitted),
         "contextBudgetTokens": int(signals.get("context_budget_tokens", 0) or 0),
         "contextUsedTokens": int(signals.get("context_used_tokens", 0) or 0),
+        # --- Evidence-sufficiency diagnostics (GraphRAG) ---
+        "semanticSourceCount": int(signals.get("semantic_source_count", 0)),
+        "structuralSourceCount": int(signals.get("structural_source_count", 0)),
+        "structuralElementSourceCount": int(
+            signals.get("structural_element_source_count", 0)
+        ),
+        "hybridSourceCount": int(signals.get("hybrid_source_count", 0)),
+        "structuralHopMax": int(signals.get("structural_hop_max", 0)),
+        "pathAgreement": bool(signals.get("path_agreement", False)),
+        "evidenceCoverage": float(signals.get("evidence_coverage", 1.0)),
+        "fusionEnabled": bool(signals.get("fusion_enabled", False)),
     }
