@@ -1,0 +1,45 @@
+# Keep the backend build context free of secrets, environments, and heavy
+# runtime assets. Model weights are mounted at runtime, never copied.
+
+# Secrets / environment
+.env
+.env.*
+!.env.example
+
+# Local Python environment
+venv/
+.venv/
+ENV/
+env/
+
+# Provisioned models (mounted read-only at /app/models) and experiments
+models/
+phases/
+
+# Uploaded/runtime data
+uploads/
+*.sqlite
+*.sqlite3
+
+# Caches / bytecode
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Tests and append-only research artifacts are not needed at runtime
+tests/
+architecture/
+evaluation/
+
+# VCS / editors / OS
+.git/
+.gitignore
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log

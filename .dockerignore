@@ -1,0 +1,36 @@
+# Root build context is used only by Dockerfile.frontend.
+# Keep it small and free of secrets / installed environments / model weights.
+
+# Secrets / environment
+.env
+.env.*
+!.env.example
+backend/.env
+backend/.env.*
+
+# Node / build output
+node_modules/
+dist/
+.vite/
+npm-debug.log*
+
+# Backend environments, models, runtime data (never part of the frontend image)
+backend/venv/
+backend/.venv/
+backend/models/
+backend/phases/
+backend/uploads/
+backend/.pytest_cache/
+**/__pycache__/
+*.py[cod]
+
+# VCS / editors / OS
+.git/
+.gitignore
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log

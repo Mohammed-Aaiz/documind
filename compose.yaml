@@ -1,0 +1,118 @@
+# DocuMind production-style local stack.
+#
+#   db       PostgreSQL + pgvector (internal only; NOT published to the host)
+#   backend  FastAPI image (migrations run at startup; models mounted read-only)
+#   frontend nginx serving the built SPA and proxying /api to the backend
+#
+# Configuration comes from the environment (Compose reads a repo-root .env for
+# ${...} interpolation). No secret values are stored in this file.
+#
+# Required (fail fast with a clear message when unset):
+#   POSTGRES_PASSWORD   database password
+#   JWT_SECRET_KEY      >=32-byte HS256 signing key (openssl rand -hex 32)
+# Optional:
+#   POSTGRES_USER (documind) POSTGRES_DB (documind)
+#   CORS_ORIGINS   MAX_UPLOAD_SIZE_MB   OMP_NUM_THREADS
+#
+# Usage:
+#   docker compose config
+#   docker compose build
+#   docker compose up -d
+#   docker compose ps
+#   curl http://localhost:8000/api/health     # backend (host loopback only)
+#   open http://localhost:8080                # frontend
+
+name: documind
+
+services:
+  db:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-documind}
+      POSTGRES_DB: ${POSTGRES_DB:-documind}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD (in the repo-root .env or the environment)}
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      # $$ escapes Compose interpolation so the check runs inside the container.
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+      start_period: 10s
+    networks: [documind]
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    environment:
+      DATABASE_URL: "postgresql+asyncpg://${POSTGRES_USER:-documind}:${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD (in the repo-root .env or the environment)}@db:5432/${POSTGRES_DB:-documind}"
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:?Set JWT_SECRET_KEY (in the repo-root .env or the environment)}
+      JWT_ALGORITHM: ${JWT_ALGORITHM:-HS256}
+      JWT_EXPIRE_MINUTES: ${JWT_EXPIRE_MINUTES:-1440}
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:8080,http://127.0.0.1:8080}
+      UPLOAD_DIR: /app/uploads
+      MAX_UPLOAD_SIZE_MB: ${MAX_UPLOAD_SIZE_MB:-50}
+      # Locally-provisioned models (mounted read-only below).
+      QA_MODEL_NAME: /app/models/documind-qa
+      WHISPER_MODEL_NAME: /app/models/whisper/small
+      # Embedding model pre-fetched into the image at build time.
+      EMBEDDING_MODEL: /opt/documind-models/all-MiniLM-L6-v2
+      OMP_NUM_THREADS: ${OMP_NUM_THREADS:-2}
+    volumes:
+      - ./backend/models:/app/models:ro
+      - uploads:/app/uploads
+    depends_on:
+      db:
+        condition: service_healthy
+    # Readiness: /api/health answers only after migrations succeed and the app
+    # booted, so a 200 here implies the DB is reachable and the schema is current.
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request,sys,json;d=json.load(urllib.request.urlopen('http://127.0.0.1:8000/api/health',timeout=10));sys.exit(0 if d.get('status')=='healthy' else 1)",
+        ]
+      interval: 15s
+      timeout: 12s
+      retries: 10
+      start_period: 300s
+    ports:
+      # Loopback only — the API is not exposed on the network by default.
+      - "127.0.0.1:8000:8000"
+    security_opt:
+      - no-new-privileges:true
+    networks: [documind]
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    depends_on:
+      backend:
+        condition: service_healthy
+    ports:
+      - "8080:80"
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1/ || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    security_opt:
+      - no-new-privileges:true
+    networks: [documind]
+    restart: unless-stopped
+
+volumes:
+  db_data:
+  uploads:
+
+networks:
+  documind:
+    driver: bridge

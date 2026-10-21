@@ -55,8 +55,8 @@ backend/models/documind-qa/model.safetensors
 # Generated runtime logs
 uvicorn.log
 vite.log
-# Local GPU experiment environment
-backend/phase4f_gpu/
+# Local GPU experiment environment (relocated under backend/phases/ on 2026-09-30)
+backend/phases/phase4f_gpu/
 
 # ML experiment checkpoints and generated model binaries
 **/checkpoints/
@@ -67,13 +67,25 @@ backend/phase4f_gpu/
 **/*.ckpt
 **/*.onnx
 
+# Downloaded model binaries
+
+*.bin
+
+# Temporary generated JSON files
+
+/backend/gen_ask_tmp.json
+/backend/live5.json
+/backend/live15.json
+
+
 # Local experiment model directories
 backend/phase4f/models/
+backend/phases/phase4f/models/
 backend/models/experiments/
 
 # Local Python environments
 backend/venv/
-backend/phase4f_gpu/
+backend/phases/phase4f_gpu/
 
 # Runtime logs
 *.log
