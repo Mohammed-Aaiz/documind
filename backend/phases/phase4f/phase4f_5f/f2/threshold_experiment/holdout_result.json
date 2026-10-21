@@ -1,0 +1,15 @@
+{
+  "decision_rule": "null_score >= 1.5705",
+  "em": 0,
+  "f1": 0,
+  "answerable_total": 0,
+  "answerable_correct": 0,
+  "answerable_coverage": 0.0,
+  "false_abstention": 0,
+  "false_abstention_rate": 0.0,
+  "unanswerable_total": 14,
+  "unanswerable_correct": 2,
+  "abstention_rate": 14.29,
+  "spurious": 12,
+  "spurious_rate": 85.71
+}

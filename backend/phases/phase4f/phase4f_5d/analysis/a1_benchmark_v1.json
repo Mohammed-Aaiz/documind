@@ -1,0 +1,82 @@
+{
+  "model": "A1",
+  "benchmark": "v1",
+  "total": 182,
+  "answerable_n": 140,
+  "unanswerable_n": 42,
+  "overall": {
+    "em_answerable": 3.6,
+    "f1_answerable": 21.3,
+    "abstention_correct": 0,
+    "abstention_total": 42,
+    "abstention_rate": 0.0,
+    "spurious": 42,
+    "spurious_rate": 23.1,
+    "false_abstention": 0,
+    "false_abstention_rate": 0.0
+  },
+  "by_category": {
+    "DIRECT_SPAN": {
+      "n": 24,
+      "em": 16.7,
+      "f1": 47.7
+    },
+    "LIST_ITEM": {
+      "n": 20,
+      "em": 0.0,
+      "f1": 14.2
+    },
+    "LONG_CONTEXT": {
+      "n": 10,
+      "em": 0.0,
+      "f1": 12.0
+    },
+    "MULTI_CHUNK": {
+      "n": 10,
+      "em": 0.0,
+      "f1": 21.0
+    },
+    "NUMERIC": {
+      "n": 20,
+      "em": 5.0,
+      "f1": 39.8
+    },
+    "SECTION_SPECIFIC": {
+      "n": 16,
+      "em": 0.0,
+      "f1": 1.2
+    },
+    "TABLE_CELL": {
+      "n": 24,
+      "em": 0.0,
+      "f1": 2.4
+    },
+    "TABLE_ROW": {
+      "n": 16,
+      "em": 0.0,
+      "f1": 22.1
+    },
+    "UNANSWERABLE": {
+      "n": 42,
+      "em": "N/A",
+      "f1": "N/A"
+    }
+  },
+  "by_tier": {
+    "TIER_1_CORE": {
+      "n": 40,
+      "em": 10.0,
+      "f1": 29.1
+    },
+    "TIER_2_STRUCTURED": {
+      "n": 80,
+      "em": 1.2,
+      "f1": 18.6
+    },
+    "TIER_3_HARD": {
+      "n": 20,
+      "em": 0.0,
+      "f1": 16.5
+    }
+  }
+}

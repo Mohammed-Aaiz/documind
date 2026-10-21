@@ -1,0 +1,116 @@
+{
+  "A0": {
+    "answerable_correct": {
+      "count": 22,
+      "mean": 0.3995,
+      "median": 0.374,
+      "min": 0.009,
+      "max": 0.9168,
+      "p25": 0.1334,
+      "p75": 0.6285
+    },
+    "answerable_incorrect": {
+      "count": 118,
+      "mean": 0.1936,
+      "median": 0.1566,
+      "min": 0.0001,
+      "max": 0.7043,
+      "p25": 0.0228,
+      "p75": 0.2927
+    },
+    "unanswerable_abstained": {
+      "count": 0,
+      "mean": 0,
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "p25": 0,
+      "p75": 0
+    },
+    "unanswerable_spurious": {
+      "count": 42,
+      "mean": 0.216,
+      "median": 0.1241,
+      "min": 0.0,
+      "max": 0.9664,
+      "p25": 0.0611,
+      "p75": 0.3374
+    }
+  },
+  "A1": {
+    "answerable_correct": {
+      "count": 22,
+      "mean": 0.1052,
+      "median": 0.1076,
+      "min": 0.0388,
+      "max": 0.1763,
+      "p25": 0.0897,
+      "p75": 0.1196
+    },
+    "answerable_incorrect": {
+      "count": 118,
+      "mean": 0.0599,
+      "median": 0.0548,
+      "min": 0.0178,
+      "max": 0.1432,
+      "p25": 0.0318,
+      "p75": 0.082
+    },
+    "unanswerable_abstained": {
+      "count": 0,
+      "mean": 0,
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "p25": 0,
+      "p75": 0
+    },
+    "unanswerable_spurious": {
+      "count": 42,
+      "mean": 0.0794,
+      "median": 0.0723,
+      "min": 0.0351,
+      "max": 0.191,
+      "p25": 0.051,
+      "p75": 0.0943
+    }
+  },
+  "A2": {
+    "answerable_correct": {
+      "count": 24,
+      "mean": 0.0915,
+      "median": 0.097,
+      "min": 0.0311,
+      "max": 0.1579,
+      "p25": 0.0685,
+      "p75": 0.1123
+    },
+    "answerable_incorrect": {
+      "count": 116,
+      "mean": 0.0591,
+      "median": 0.0503,
+      "min": 0.0161,
+      "max": 0.1636,
+      "p25": 0.0293,
+      "p75": 0.0859
+    },
+    "unanswerable_abstained": {
+      "count": 0,
+      "mean": 0,
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "p25": 0,
+      "p75": 0
+    },
+    "unanswerable_spurious": {
+      "count": 42,
+      "mean": 0.0714,
+      "median": 0.0605,
+      "min": 0.0302,
+      "max": 0.2069,
+      "p25": 0.0433,
+      "p75": 0.0862
+    }
+  }
+}

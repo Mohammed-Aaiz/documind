@@ -1,0 +1,433 @@
+{
+  "ledger_version": "4F-LR-v1",
+  "timestamp": "2026-09-22T00:00:00Z",
+  "source_of_evidence": "LOCAL FILESYSTEM ONLY",
+  "github_accessed": false,
+
+  "evaluation_populations": {
+    "P1": {
+      "description": "Full derived dataset evaluation (older 4F experiments)",
+      "total": 918,
+      "answerable": 876,
+      "unanswerable": 42,
+      "answerable_categories": ["DATE", "DIRECT_SPAN", "ENTITY", "LIST_ITEM", "LONG_CONTEXT", "MULTI_CHUNK", "NUMERIC", "SECTION_SPECIFIC", "TABLE_CELL", "TABLE_ROW"],
+      "unanswerable_source": "unanswerable_corpus (synthetic, OOD)"
+    },
+    "P2": {
+      "description": "Corrected 4F.5-B test split (answerable only)",
+      "total": 221,
+      "answerable": 221,
+      "unanswerable": 0,
+      "answerable_categories": ["DIRECT_SPAN", "LIST_ITEM", "MULTI_CHUNK", "NUMERIC", "SECTION_SPECIFIC", "TABLE_CELL", "TABLE_ROW"],
+      "note": "No DATE, ENTITY, LONG_CONTEXT categories in this split"
+    },
+    "P3": {
+      "description": "Frozen benchmark (Phase 4F.5-D)",
+      "total": 182,
+      "answerable": 140,
+      "unanswerable": 42,
+      "answerable_categories": ["DIRECT_SPAN", "LIST_ITEM", "LONG_CONTEXT", "MULTI_CHUNK", "NUMERIC", "SECTION_SPECIFIC", "TABLE_CELL", "TABLE_ROW"],
+      "unanswerable_source": "unanswerable_corpus (synthetic, OOD)",
+      "hash": "1166bf4ff38265c209614ac20261417b7eeb43653f4482dfdf94721fd50a41d0",
+      "note": "Absence of DATE/ENTITY from P3 benchmark is by design"
+    }
+  },
+
+  "experiments": [
+    {
+      "experiment_id": "A0",
+      "phase": "4F.5-B",
+      "model_base": "production_bert",
+      "tokenizer": "production_bert",
+      "training_data": "production training set (not publicly documented)",
+      "answerable_count": "N/A",
+      "unanswerable_count": "N/A",
+      "validation_count": "N/A",
+      "holdout_count": "N/A",
+      "benchmark_count": "N/A",
+      "dataset_hash": "N/A",
+      "benchmark_hash": "N/A",
+      "hyperparameters": "production config",
+      "evaluations": {
+        "P1_918_examples": {
+          "source_file": "backend/phase4f/experiments/results/A0/evaluation_results.json",
+          "em": 7.8,
+          "f1": 14.4,
+          "answerable_correct": null,
+          "answerable_total": 876,
+          "false_abstention": 49.9,
+          "unanswerable_abstention": 64.3,
+          "spurious_rate": 1.6,
+          "population": "P1",
+          "is_historical": true
+        },
+        "P2_221_examples": {
+          "source_file": "backend/phase4f/phase4f_5/results/a0_test.json",
+          "em": 3.2,
+          "f1": 8.6,
+          "answerable_correct": 7,
+          "answerable_total": 221,
+          "false_abstention": 62.4,
+          "unanswerable_abstention": 0.0,
+          "spurious_rate": 0.0,
+          "population": "P2",
+          "is_canonical_for_split": true
+        }
+      },
+      "checkpoint_selection_rule": "N/A (production model, not fine-tuned)",
+      "status": "PRODUCTION_BASELINE",
+      "known_protocol_deviations": [],
+      "production_changed": false,
+      "frozen_artifacts_changed": false
+    },
+    {
+      "experiment_id": "A1",
+      "phase": "4F.5-B",
+      "model_base": "distilbert-base-uncased",
+      "tokenizer": "distilbert-base-uncased",
+      "training_data": "571 answerable from derived dataset (no unanswerable)",
+      "answerable_count": 571,
+      "unanswerable_count": 0,
+      "validation_count": "N/A (not reconciled yet)",
+      "holdout_count": "N/A",
+      "benchmark_count": "N/A",
+      "dataset_hash": "abcf4182f39f0620fb056eee4167d1872baf9b4c748051eade9d6312332f271f",
+      "benchmark_hash": "1166bf4ff38265c209614ac20261417b7eeb43653f4482dfdf94721fd50a41d0",
+      "hyperparameters": {"lr": 3e-5, "epochs": 3, "batch": 8, "grad_acc": 8, "fp16": true, "seed": 42},
+      "evaluations": {
+        "P1_918_examples": {
+          "source_file": "backend/phase4f/experiments/results/A1/evaluation_results.json",
+          "em": 0.7,
+          "f1": 6.9,
+          "answerable_correct": 6,
+          "answerable_total": 876,
+          "false_abstention": 0.0,
+          "unanswerable_abstention": 0.0,
+          "spurious_rate": 4.6,
+          "population": "P1",
+          "is_historical": true
+        },
+        "P2_221_examples": {
+          "source_file": "backend/phase4f/phase4f_5/results/a1_test.json",
+          "em": 1.8,
+          "f1": 14.4,
+          "answerable_correct": 4,
+          "answerable_total": 221,
+          "false_abstention": 0.0,
+          "unanswerable_abstention": 0.0,
+          "spurious_rate": 0.0,
+          "population": "P2",
+          "is_canonical_for_split": true
+        }
+      },
+      "checkpoint_selection_rule": "Best validation EM",
+      "status": "NO_ABSTENTION_LEARNED",
+      "known_protocol_deviations": ["P1 evaluation uses different checkpoint than P2 evaluation"],
+      "production_changed": false,
+      "frozen_artifacts_changed": false
+    },
+    {
+      "experiment_id": "A2",
+      "phase": "4F.5-B",
+      "model_base": "bert-base-uncased",
+      "tokenizer": "bert-base-uncased",
+      "training_data": "571 answerable from derived dataset (no unanswerable)",
+      "answerable_count": 571,
+      "unanswerable_count": 0,
+      "validation_count": "N/A",
+      "holdout_count": "N/A",
+      "benchmark_count": "N/A",
+      "dataset_hash": "abcf4182f39f0620fb056eee4167d1872baf9b4c748051eade9d6312332f271f",
+      "benchmark_hash": "1166bf4ff38265c209614ac20261417b7eeb43653f4482dfdf94721fd50a41d0",
+      "hyperparameters": {"lr": 3e-5, "epochs": 3, "batch": 8, "grad_acc": 8, "fp16": true, "seed": 42},
+      "evaluations": {
+        "P1_918_examples": {
+          "source_file": "backend/phase4f/experiments/results/A2/evaluation_results.json",
+          "em": 0.0,
+          "f1": 9.3,
+          "answerable_correct": 0,
+          "answerable_total": 876,
+          "false_abstention": 0.0,
+          "unanswerable_abstention": 0.0,
+          "spurious_rate": 4.6,
+          "population": "P1",
+          "is_historical": true,
+          "reconciliation_note": "P1 A2 EM=0.0% (876 answerable + 42 unanswerable). This differs from P2 A2 EM=0.9% (221 answerable only). Both are valid for their respective populations. The discrepancy is due to different evaluation sets, not a bug."
+        },
+        "P2_221_examples": {
+          "source_file": "backend/phase4f/phase4f_5/results/a2_test.json",
+          "em": 0.9,
+          "f1": 12.3,
+          "answerable_correct": 2,
+          "answerable_total": 221,
+          "false_abstention": 0.0,
+          "unanswerable_abstention": 0.0,
+          "spurious_rate": 0.0,
+          "population": "P2",
+          "is_canonical_for_split": true
+        }
+      },
+      "checkpoint_selection_rule": "Best validation EM",
+      "status": "NO_ABSTENTION_LEARNED",
+      "known_protocol_deviations": ["P1 evaluation uses different checkpoint than P2 evaluation"],
+      "production_changed": false,
+      "frozen_artifacts_changed": false
+    },
+    {
+      "experiment_id": "F2",
+      "phase": "4F.5-F",
+      "model_base": "distilbert-base-uncased",
+      "tokenizer": "distilbert-base-uncased",
+      "training_data": "486 answerable + 20 unanswerable (reconciled split)",
+      "answerable_count": 486,
+      "unanswerable_count": 20,
+      "total_training": 506,
+      "validation_count": 93,
+      "holdout_count": 14,
+      "benchmark_count": 182,
+      "dataset_hash": "abcf4182f39f0620fb056eee4167d1872baf9b4c748051eade9d6312332f271f",
+      "benchmark_hash": "1166bf4ff38265c209614ac20261417b7eeb43653f4482dfdf94721fd50a41d0",
+      "hyperparameters": {"lr": 3e-5, "epochs": 3, "batch": 8, "grad_acc": 8, "fp16": true, "seed": 42},
+      "evaluations": {
+        "P3_validation_93_examples": {
+          "source_file": "backend/phase4f/phase4f_5f/f2/evaluation/f2_validation.json",
+          "em": 5.9,
+          "f1": 17.9,
+          "answerable_correct": 5,
+          "answerable_total": 85,
+          "false_abstention": 0.0,
+          "unanswerable_abstention": 0.0,
+          "spurious_rate": 8.6,
+          "population": "P3_validation"
+        },
+        "P3_holdout_14_examples": {
+          "source_file": "backend/phase4f/phase4f_5f/f2/evaluation/f2_holdout.json",
+          "em": 0,
+          "f1": 0,
+          "answerable_correct": 0,
+          "answerable_total": 0,
+          "false_abstention": 0.0,
+          "unanswerable_abstention": 0.0,
+          "spurious_rate": 100.0,
+          "population": "P3_holdout"
+        },
+        "P3_benchmark_182_examples": {
+          "source_file": "backend/phase4f/phase4f_5f/f2/evaluation/f2_benchmark.json",
+          "em": 2.9,
+          "f1": 19.7,
+          "answerable_correct": 4,
+          "answerable_total": 140,
+          "false_abstention": 0.0,
+          "unanswerable_abstention": 0.0,
+          "spurious_rate": 23.1,
+          "population": "P3"
+        }
+      },
+      "checkpoint_selection_rule": "Best validation EM + abstention tiebreak (epoch2 selected)",
+      "checkpoint_hash": "416b63642ba80a1c",
+      "status": "NO_ABSTENTION_LEARNED",
+      "known_protocol_deviations": ["run_experiment.py designed F2 with 696 examples (486+20+190 resampled) but was never executed. Actual F2 used 506 examples from reconciled split via run_f2.py."],
+      "production_changed": false,
+      "frozen_artifacts_changed": false
+    },
+    {
+      "experiment_id": "G",
+      "phase": "4F.5-G",
+      "model_base": "distilbert-base-uncased (F2 checkpoint)",
+      "tokenizer": "distilbert-base-uncased",
+      "training_data": "F2 training (486+20, same as F2)",
+      "answerable_count": 486,
+      "unanswerable_count": 20,
+      "total_training": 506,
+      "validation_count": 93,
+      "holdout_count": 14,
+      "benchmark_count": 182,
+      "decision_rule": "null_score >= 1.5705",
+      "evaluations": {
+        "P3_benchmark_182_examples": {
+          "source_file": "backend/phase4f/phase4f_5f/f2/reports/phase4f_5f_g_threshold_report.txt",
+          "em": 2.86,
+          "f1": 16.92,
+          "answerable_correct": null,
+          "answerable_total": 140,
+          "false_abstention": 27.86,
+          "unanswerable_abstention": 19.05,
+          "spurious_rate": 80.95,
+          "population": "P3"
+        }
+      },
+      "checkpoint_selection_rule": "Same F2 checkpoint (epoch2)",
+      "status": "THRESHOLD_UNSTABLE",
+      "known_protocol_deviations": ["Threshold is post-hoc applied to F2 model, not trained with threshold"],
+      "production_changed": false,
+      "frozen_artifacts_changed": false
+    },
+    {
+      "experiment_id": "H",
+      "phase": "4F.5-H",
+      "model_base": "N/A (dataset generation, not training)",
+      "training_data": "N/A",
+      "status": "H_DATASET_READY",
+      "pools": {
+        "H10": {"count": 57, "target_pct": 10.0},
+        "H20": {"count": 114, "target_pct": 20.0},
+        "H30": {"count": 171, "target_pct": 29.9}
+      },
+      "source_documents": 18,
+      "category_coverage": 11,
+      "hashes": {
+        "H10": "b5ac22285e7e028197b426792918e5ce9f6881e90b3bdeb8c2ba2a35db4d59d9",
+        "H20": "49defabe24affe40c0a849a8ec451659e9a200adb933643cab1bc01581d0305f",
+        "H30": "e0d1812fe03e6ee4a415e7c2730e7c6bdd690dd28ea37218db45d7f1088e3822"
+      },
+      "recommended_pool": "H20",
+      "production_changed": false,
+      "frozen_artifacts_changed": false
+    },
+    {
+      "experiment_id": "H1",
+      "phase": "4F.5-H1",
+      "model_base": "distilbert-base-uncased",
+      "tokenizer": "distilbert-base-uncased",
+      "training_data": "486 answerable + 114 H20 document-grounded unanswerable",
+      "answerable_count": 486,
+      "unanswerable_count": 114,
+      "total_training": 600,
+      "validation_count": 93,
+      "holdout_count": 22,
+      "benchmark_count": 182,
+      "dataset_hash": "abcf4182f39f0620fb056eee4167d1872baf9b4c748051eade9d6312332f271f",
+      "benchmark_hash": "1166bf4ff38265c209614ac20261417b7eeb43653f4482dfdf94721fd50a41d0",
+      "h20_hash": "49defabe24affe40c0a849a8ec451659e9a200adb933643cab1bc01581d0305f",
+      "hyperparameters": {"lr": 3e-5, "epochs": 3, "batch": 8, "grad_acc": 8, "fp16": true, "weight_decay": 0.01, "warmup_ratio": 0.1, "seed": 42},
+      "evaluations": {
+        "P3_validation_93_examples": {
+          "source_file": "backend/phase4f/phase4f_5f/h1/evaluation/h1_validation.json",
+          "em": 0.0,
+          "f1": 18.7,
+          "answerable_correct": 0,
+          "answerable_total": 85,
+          "false_abstention": 0.0,
+          "unanswerable_abstention": 50.0,
+          "spurious_rate": 50.0,
+          "population": "P3_validation"
+        },
+        "P3_holdout_22_examples": {
+          "source_file": "backend/phase4f/phase4f_5f/h1/evaluation/h1_holdout.json",
+          "em": 0,
+          "f1": 0,
+          "answerable_correct": 0,
+          "answerable_total": 0,
+          "false_abstention": 0.0,
+          "unanswerable_abstention": 36.4,
+          "spurious_rate": 63.6,
+          "population": "P3_holdout",
+          "note": "Holdout contains 22 examples (not 14 as intended). See protocol deviation."
+        },
+        "P3_benchmark_182_examples": {
+          "source_file": "backend/phase4f/phase4f_5f/h1/evaluation/h1_benchmark.json",
+          "em": 0.0,
+          "f1": 11.0,
+          "answerable_correct": 0,
+          "answerable_total": 140,
+          "false_abstention": 10.7,
+          "unanswerable_abstention": 45.2,
+          "spurious_rate": 54.8,
+          "population": "P3"
+        }
+      },
+      "null_analysis": {
+        "mean_null_score_unanswerable": 0.00395,
+        "mean_null_margin_unanswerable": -0.000344,
+        "positive_margin_count": 3,
+        "positive_margin_fraction": "3/42 (7.1%)"
+      },
+      "checkpoint_selection_rule": "Best validation EM (epoch1 selected at 0.0%)",
+      "checkpoint_hash": "854c629cd0418f5e",
+      "status": "MODEL_COLLAPSED",
+      "known_protocol_deviations": [
+        "Holdout contains 22 examples instead of intended 14 (split-index mismatch in get_holdout_examples())",
+        "12 unanswerable examples (indices 8-19) are placed in neither training, validation, nor holdout",
+        "Validation unanswerable IDs differ from F1 reconciliation specification (6 of 8 IDs differ)"
+      ],
+      "production_changed": false,
+      "frozen_artifacts_changed": false
+    },
+    {
+      "experiment_id": "H1-R",
+      "phase": "4F.5-H1-R",
+      "model_base": "N/A (read-only audit, no training)",
+      "status": "VALID_WITH_LIMITATIONS",
+      "summary": "Read-only reconciliation audit of H1. Verified benchmark results are correctly computed. Holdout discrepancy explained. No illegal leakage found. Labels correct. Null-scores verified. Model collapsed with H20 negatives.",
+      "production_changed": false,
+      "frozen_artifacts_changed": false
+    }
+  ],
+
+  "frozen_artifact_integrity": {
+    "source_dataset": {
+      "path": "backend/phase4f/dataset/training_data_v3_1.jsonl",
+      "hash": "a517530354fc9bcaeef6f1aa16c3fb9ce92f1967668386bc66781e6e6bbf2e97",
+      "status": "VERIFIED_UNCHANGED"
+    },
+    "derived_dataset": {
+      "path": "backend/phase4f/phase4f_5/dataset/derived_dataset.jsonl",
+      "hash": "abcf4182f39f0620fb056eee4167d1872baf9b4c748051eade9d6312332f271f",
+      "status": "VERIFIED_UNCHANGED"
+    },
+    "benchmark": {
+      "path": "backend/phase4f/phase4f_5d/benchmark/qa_benchmark_v1.jsonl",
+      "hash": "1166bf4ff38265c209614ac20261417b7eeb43653f4482dfdf94721fd50a41d0",
+      "status": "VERIFIED_UNCHANGED"
+    },
+    "h20_pool": {
+      "path": "backend/phase4f/phase4f_5f/h/pools/h20.jsonl",
+      "hash": "49defabe24affe40c0a849a8ec451659e9a200adb933643cab1bc01581d0305f",
+      "status": "VERIFIED_UNCHANGED"
+    },
+    "production_model": {
+      "path": "backend/models/documind-qa",
+      "hash": "df592aa8d0ee1a235489bd3eead44d4cf0861221339226311960697c1c1512ac",
+      "status": "VERIFIED_UNCHANGED"
+    }
+  },
+
+  "discrepancies": {
+    "A0_inconsistency": {
+      "P1_em": 7.8,
+      "P2_em": 3.2,
+      "explanation": "Different evaluation populations. P1 includes 876 answerable (including DATE/ENTITY categories where A0 excels) plus 42 unanswerable. P2 is 221 answerable only from a different split. Both numbers are valid for their respective populations.",
+      "severity": "NO_BUG"
+    },
+    "A1_inconsistency": {
+      "P1_em": 0.7,
+      "P2_em": 1.8,
+      "explanation": "Different evaluation populations. P1 has 876 answerable (harder categories included), P2 has 221 answerable only. The checkpoint used may also differ between evaluations.",
+      "severity": "NO_BUG"
+    },
+    "A2_inconsistency": {
+      "P1_em": 0.0,
+      "P2_em": 0.9,
+      "explanation": "Different evaluation populations. P1 (918 examples, 876 answerable + 42 unanswerable) yields EM=0.0%. P2 (221 answerable only) yields EM=0.9%. A2 gets 2 correct out of 221 in P2, 0 correct out of 876 in P1. The P2 subset is easier for A2.",
+      "severity": "NO_BUG"
+    },
+    "F2_training_count": {
+      "design_696": "run_experiment.py (4F.5-F) designed F2 as 486+20+190_resampled=696",
+      "actual_506": "Actual F2 (run_f2.py) trained with 486+20=506",
+      "explanation": "run_experiment.py was never executed. run_f2.py used the reconciled split (506 examples) without resampling. The 696 number is a stale design specification.",
+      "severity": "DOCUMENTATION_ERROR"
+    },
+    "H1_holdout": {
+      "expected": 14,
+      "actual": 22,
+      "explanation": "get_holdout_examples() uses split index 20 instead of 28, yielding 42-20=22 instead of 42-28=14. Root cause is a parameter mismatch between the F1 reconciliation protocol and the H1 execution code.",
+      "severity": "PROTOCOL_DEVIATION_LOW_EFFECT"
+    },
+    "H1_terminology": {
+      "issue": "H1-R report references 'H10 negatives' in evidence classification table",
+      "actual": "H1 experiment uses H20 negatives (114 examples)",
+      "explanation": "Documentation typo in the H1-R reconciliation report. The actual experiment and all other artifacts correctly reference H20.",
+      "severity": "DOCUMENTATION_ERROR"
+    }
+  }
+}

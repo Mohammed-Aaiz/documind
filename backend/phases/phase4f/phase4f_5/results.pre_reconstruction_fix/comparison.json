@@ -1,0 +1,52 @@
+{
+  "phase": "4F.5-B",
+  "eval_version": "4F.5-eval-v1",
+  "test_examples": 221,
+  "models": {
+    "a0": {
+      "label": "A0_Production",
+      "em": 3.2,
+      "f1": 8.6,
+      "answerability": 3.2,
+      "abstention": 0.0,
+      "spurious": 0.0
+    },
+    "a1": {
+      "label": "A1_DistilBERT",
+      "em": 1.8,
+      "f1": 14.4,
+      "answerability": 1.8,
+      "abstention": 0.0,
+      "spurious": 0.0
+    },
+    "a2": {
+      "label": "A2_BERT",
+      "em": 0.9,
+      "f1": 12.3,
+      "answerability": 0.9,
+      "abstention": 0.0,
+      "spurious": 0.0
+    }
+  },
+  "A1_vs_A0": {
+    "em_delta": -1.4,
+    "f1_delta": 5.8,
+    "answerability_delta": -1.4,
+    "abstention_delta": 0.0,
+    "spurious_delta": 0.0
+  },
+  "A2_vs_A0": {
+    "em_delta": -2.3,
+    "f1_delta": 3.7,
+    "answerability_delta": -2.3,
+    "abstention_delta": 0.0,
+    "spurious_delta": 0.0
+  },
+  "A2_vs_A1": {
+    "em_delta": -0.9,
+    "f1_delta": -2.1,
+    "answerability_delta": -0.9,
+    "abstention_delta": 0.0,
+    "spurious_delta": 0.0
+  }
+}

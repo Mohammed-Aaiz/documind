@@ -1,0 +1,76 @@
+{
+  "eval_version": "4F.5-eval-v1",
+  "total_examples": 221,
+  "overall": {
+    "em": 13.1,
+    "f1": 29.6,
+    "answerability_accuracy": 13.1,
+    "abstention_accuracy": 0.0,
+    "false_abstention": 0.0,
+    "spurious_rate": 0.0,
+    "answerable": 221,
+    "unanswerable": 0
+  },
+  "by_category": {
+    "DIRECT_SPAN": {
+      "n": 25,
+      "em": 16.0,
+      "f1": 53.9,
+      "avg_confidence": 0.2482
+    },
+    "LIST_ITEM": {
+      "n": 19,
+      "em": 0.0,
+      "f1": 17.7,
+      "avg_confidence": 0.1667
+    },
+    "MULTI_CHUNK": {
+      "n": 7,
+      "em": 14.3,
+      "f1": 19.0,
+      "avg_confidence": 0.1369
+    },
+    "NUMERIC": {
+      "n": 20,
+      "em": 60.0,
+      "f1": 85.2,
+      "avg_confidence": 0.5372
+    },
+    "SECTION_SPECIFIC": {
+      "n": 14,
+      "em": 0.0,
+      "f1": 15.4,
+      "avg_confidence": 0.2747
+    },
+    "TABLE_CELL": {
+      "n": 111,
+      "em": 10.8,
+      "f1": 16.0,
+      "avg_confidence": 0.174
+    },
+    "TABLE_ROW": {
+      "n": 25,
+      "em": 0.0,
+      "f1": 41.0,
+      "avg_confidence": 0.0442
+    }
+  },
+  "failure_taxonomy": {
+    "total_failures": 192,
+    "failure_rate": 86.9,
+    "by_type": {
+      "EXTRACT": 192
+    }
+  },
+  "confidence_analysis": {
+    "correct_mean": 0.4869,
+    "correct_std": 0.3136,
+    "incorrect_mean": 0.1626,
+    "incorrect_std": 0.1609,
+    "separation": 0.3243
+  },
+  "latency_ms": 235.43,
+  "model_dir": "backend/models/documind-qa",
+  "split": "test",
+  "timestamp": "2026-09-29T16:13:17Z"
+}

@@ -1,0 +1,101 @@
+{
+  "DIRECT_SPAN": {
+    "count": 24,
+    "pct": 13.2,
+    "tier": "TIER_1_CORE",
+    "docs": [
+      "company_history_eta",
+      "legal_contract_epsilon",
+      "dataset_desc_mu",
+      "api_docs_lambda",
+      "financial_report_q3"
+    ]
+  },
+  "LIST_ITEM": {
+    "count": 20,
+    "pct": 11.0,
+    "tier": "TIER_2_STRUCTURED",
+    "docs": [
+      "company_history_eta",
+      "legal_contract_epsilon",
+      "dataset_desc_mu",
+      "api_docs_lambda",
+      "financial_report_q3"
+    ]
+  },
+  "LONG_CONTEXT": {
+    "count": 10,
+    "pct": 5.5,
+    "tier": "TIER_3_HARD",
+    "docs": [
+      "company_history_eta"
+    ]
+  },
+  "MULTI_CHUNK": {
+    "count": 10,
+    "pct": 5.5,
+    "tier": "TIER_3_HARD",
+    "docs": [
+      "company_history_eta",
+      "legal_contract_epsilon",
+      "dataset_desc_mu",
+      "api_docs_lambda",
+      "financial_report_q3"
+    ]
+  },
+  "NUMERIC": {
+    "count": 20,
+    "pct": 11.0,
+    "tier": "TIER_2_STRUCTURED",
+    "docs": [
+      "company_history_eta",
+      "legal_contract_epsilon",
+      "financial_report_q3",
+      "api_docs_lambda"
+    ]
+  },
+  "SECTION_SPECIFIC": {
+    "count": 16,
+    "pct": 8.8,
+    "tier": "TIER_1_CORE",
+    "docs": [
+      "company_history_eta",
+      "legal_contract_epsilon",
+      "dataset_desc_mu",
+      "api_docs_lambda",
+      "financial_report_q3"
+    ]
+  },
+  "TABLE_CELL": {
+    "count": 24,
+    "pct": 13.2,
+    "tier": "TIER_2_STRUCTURED",
+    "docs": [
+      "company_history_eta",
+      "legal_contract_epsilon",
+      "dataset_desc_mu",
+      "api_docs_lambda",
+      "financial_report_q3"
+    ]
+  },
+  "TABLE_ROW": {
+    "count": 16,
+    "pct": 8.8,
+    "tier": "TIER_2_STRUCTURED",
+    "docs": [
+      "company_history_eta",
+      "legal_contract_epsilon",
+      "dataset_desc_mu",
+      "api_docs_lambda",
+      "financial_report_q3"
+    ]
+  },
+  "UNANSWERABLE": {
+    "count": 42,
+    "pct": 23.1,
+    "tier": "TIER_3_HARD",
+    "docs": [
+      "unanswerable_corpus"
+    ]
+  }
+}

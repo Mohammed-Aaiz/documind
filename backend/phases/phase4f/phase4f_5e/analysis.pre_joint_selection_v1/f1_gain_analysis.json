@@ -1,0 +1,24 @@
+{
+  "phase": "4F.5-E",
+  "analysis": {
+    "baseline_threshold": 0.0,
+    "A0_overall": {
+      "em": 7.9,
+      "f1": 18.9
+    },
+    "A1_overall": {
+      "em": 15.7,
+      "f1": 35.7
+    },
+    "A1_vs_A0_overall": {
+      "em_delta": 7.8,
+      "f1_delta": 16.8
+    },
+    "prior_qualitative_notes": {
+      "source": "Phase 4F.5-E original run; NOT re-derived by this script",
+      "category_concentration": "A1 gains concentrated in DIRECT_SPAN (+28.4pp F1) and TABLE_ROW (+22.1pp F1)",
+      "mechanism": "A1 always extracts (never abstains), so it gets partial token overlap even on wrong answers",
+      "verdict": "F1 gain is REAL but partially explained by non-abstention behavior"
+    }
+  }
+}

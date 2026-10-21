@@ -1,0 +1,25 @@
+{
+  "production_model": {
+    "base": "distilbert-base-uncased",
+    "vocab": 30522,
+    "training_samples": 414107,
+    "training_phases": 3,
+    "unanswerable_in_training": "yes (SQuAD 2.0 has unanswerable)",
+    "structured_qa": "extensive (multi-dataset)"
+  },
+  "a1_a2_experiment": {
+    "a1_base": "distilbert-base-uncased",
+    "a2_base": "bert-base-uncased",
+    "training_samples": 571,
+    "unanswerable_in_training": 0,
+    "structured_qa": "limited (571 answerable examples)",
+    "abstention_training": "ABSENT"
+  },
+  "key_differences": [
+    "Training data: 414K vs 571 (725x difference)",
+    "Unanswerable coverage: production=extensive vs experiment=0",
+    "Production includes SQuAD 2.0 (has unanswerable questions)",
+    "A1/A2 training data has NO unanswerable examples",
+    "A1/A2 have no mechanism to learn abstention"
+  ]
+}

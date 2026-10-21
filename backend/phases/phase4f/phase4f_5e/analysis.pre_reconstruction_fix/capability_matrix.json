@@ -1,0 +1,23 @@
+{
+  "phase": "4F.5-E",
+  "extraction_vs_abstention": {
+    "A0": {
+      "extraction_em": 2.1,
+      "extraction_f1": 12.0,
+      "abstention_rate": 64.3,
+      "spurious": 8.2
+    },
+    "A1": {
+      "extraction_em": 3.6,
+      "extraction_f1": 21.3,
+      "abstention_rate": 0.0,
+      "spurious": 23.1
+    },
+    "A2": {
+      "extraction_em": 3.6,
+      "extraction_f1": 19.4,
+      "abstention_rate": 0.0,
+      "spurious": 23.1
+    }
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "total": 42,
+  "examples": [
+    {
+      "id": "unans_fb3b3426",
+      "question": "What machine learning framework is used for embeddings?",
+      "reason": "entity_absent_or_unsupported"
+    },
+    {
+      "id": "unans_ecebc88c",
+      "question": "What was the date of the board meeting?",
+      "reason": "entity_absent_or_unsupported"
+    },
+    {
+      "id": "unans_63ece8c5",
+      "question": "What is the data retention policy?",
+      "reason": "entity_absent_or_unsupported"
+    },
+    {
+      "id": "unans_7a9ef8c8",
+      "question": "Who is the chief marketing officer?",
+      "reason": "entity_absent_or_unsupported"
+    },
+    {
+      "id": "unans_ee310eea",
+      "question": "What programming language is the frontend written in?",
+      "reason": "entity_absent_or_unsupported"
+    },
+    {
+      "id": "unans_04664035",
+      "question": "What is the stock price of Meridian Analytics?",
+      "reason": "entity_absent_or_unsupported"
+    },
+    {
+      "id": "unans_4725a75e",
+      "question": "How many patents does the company hold?",
+      "reason": "entity_absent_or_unsupported"
+    },
+    {
+      "id": "unans_de20050d",
+      "question": "What training data was used for the model?",
+      "reason": "entity_absent_or_unsupported"
+    },
+    {
+      "id": "unans_e1454d12",
+      "question": "What training framework was used?",
+      "reason": "entity_absent_or_unsupported"
+    },
+    {
+      "id": "unans_885f9d0e",
+      "question": "What is the average customer lifetime value?",
+      "reason": "entity_absent_or_unsupported"
+    }
+  ]
+}

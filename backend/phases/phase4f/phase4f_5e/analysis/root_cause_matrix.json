@@ -1,0 +1,53 @@
+{
+  "phase": "4F.5-E",
+  "matrix": [
+    {
+      "problem": "EXTRACTION",
+      "cause": "TRAINING",
+      "status": "SUPPORTED",
+      "evidence": "A1/A2 trained on 571 examples with correct span alignment. F1 improves. EM limited by tokenizer."
+    },
+    {
+      "problem": "ABSTENTION",
+      "cause": "DATA",
+      "status": "SUPPORTED",
+      "evidence": "A1/A2 trained on 0 unanswerable examples. No abstention signal in training data. A0 trained on SQuAD 2.0 which has unanswerable."
+    },
+    {
+      "problem": "NUMERIC",
+      "cause": "REPRESENTATION",
+      "status": "SUPPORTED",
+      "evidence": "WordPiece splits decimals. ~60% of NUMERIC EM failures are tokenizer artifacts."
+    },
+    {
+      "problem": "TABLE_CELL",
+      "cause": "REPRESENTATION + DATA",
+      "status": "SUPPORTED",
+      "evidence": "Pipe-delimited table text loses structure. All models fail. 0% EM."
+    },
+    {
+      "problem": "TABLE_ROW",
+      "cause": "MODEL + TRAINING",
+      "status": "PARTIALLY_SUPPORTED",
+      "evidence": "A1 F1=22.1% vs A0 F1=0.0%. Fine-tuning helps row extraction but not cell extraction."
+    },
+    {
+      "problem": "LIST_ITEM",
+      "cause": "MODEL",
+      "status": "PARTIALLY_SUPPORTED",
+      "evidence": "All models 0% EM. Partial overlap only. List boundaries unclear in text."
+    },
+    {
+      "problem": "SECTION_SPECIFIC",
+      "cause": "DATA + MODEL",
+      "status": "SUPPORTED",
+      "evidence": "A0 F1=21.9% vs A1 F1=1.2%. Production 414K training provides section comprehension."
+    },
+    {
+      "problem": "MULTI_CHUNK",
+      "cause": "MODEL + ARCHITECTURE",
+      "status": "PARTIALLY_SUPPORTED",
+      "evidence": "A1 F1=21.0% vs A0 F1=4.0%. Fine-tuning helps but 0% EM. Requires cross-chunk reasoning."
+    }
+  ]
+}

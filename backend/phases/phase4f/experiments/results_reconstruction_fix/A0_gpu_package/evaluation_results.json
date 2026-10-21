@@ -1,0 +1,73 @@
+{
+  "model_dir": "backend/models/documind-qa",
+  "overall": {
+    "exact_match": 13.0,
+    "token_f1": 20.3,
+    "answerability_accuracy": 13.0,
+    "abstention_accuracy": 64.3,
+    "false_abstention": 87.0,
+    "spurious_answer_rate": 1.6,
+    "total_examples": 918,
+    "answerable": 876,
+    "unanswerable": 42,
+    "avg_latency_ms": 164.43
+  },
+  "by_category": {
+    "DATE": {
+      "n": 25,
+      "em": 96.0,
+      "f1": 98.3
+    },
+    "DIRECT_SPAN": {
+      "n": 86,
+      "em": 14.0,
+      "f1": 28.0
+    },
+    "ENTITY": {
+      "n": 22,
+      "em": 77.3,
+      "f1": 84.1
+    },
+    "LIST_ITEM": {
+      "n": 106,
+      "em": 0.0,
+      "f1": 13.1
+    },
+    "LONG_CONTEXT": {
+      "n": 15,
+      "em": 0.0,
+      "f1": 9.8
+    },
+    "MULTI_CHUNK": {
+      "n": 26,
+      "em": 3.8,
+      "f1": 3.8
+    },
+    "NUMERIC": {
+      "n": 97,
+      "em": 48.5,
+      "f1": 59.4
+    },
+    "SECTION_SPECIFIC": {
+      "n": 55,
+      "em": 1.8,
+      "f1": 18.7
+    },
+    "TABLE_CELL": {
+      "n": 362,
+      "em": 3.3,
+      "f1": 5.7
+    },
+    "TABLE_ROW": {
+      "n": 82,
+      "em": 0.0,
+      "f1": 7.4
+    },
+    "UNANSWERABLE": {
+      "n": 42,
+      "em": 0,
+      "f1": 0
+    }
+  },
+  "timestamp": "2026-09-27T19:38:56Z"
+}

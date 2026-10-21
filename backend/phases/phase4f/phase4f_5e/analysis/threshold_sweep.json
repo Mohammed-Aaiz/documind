@@ -1,0 +1,458 @@
+{
+  "A0": [
+    {
+      "threshold": 0.0,
+      "em": 15.7,
+      "f1": 38.7,
+      "false_abstention": 0.0,
+      "unanswerable_abstention": 0.0,
+      "spurious_rate": 100.0,
+      "coverage": 100.0,
+      "n_answered": 140
+    },
+    {
+      "threshold": 0.05,
+      "em": 18.6,
+      "f1": 41.1,
+      "false_abstention": 30.7,
+      "unanswerable_abstention": 19.0,
+      "spurious_rate": 81.0,
+      "coverage": 69.3,
+      "n_answered": 97
+    },
+    {
+      "threshold": 0.1,
+      "em": 19.3,
+      "f1": 42.4,
+      "false_abstention": 37.1,
+      "unanswerable_abstention": 42.9,
+      "spurious_rate": 57.1,
+      "coverage": 62.9,
+      "n_answered": 88
+    },
+    {
+      "threshold": 0.15,
+      "em": 20.5,
+      "f1": 44.3,
+      "false_abstention": 44.3,
+      "unanswerable_abstention": 54.8,
+      "spurious_rate": 45.2,
+      "coverage": 55.7,
+      "n_answered": 78
+    },
+    {
+      "threshold": 0.2,
+      "em": 22.1,
+      "f1": 45.3,
+      "false_abstention": 51.4,
+      "unanswerable_abstention": 59.5,
+      "spurious_rate": 40.5,
+      "coverage": 48.6,
+      "n_answered": 68
+    },
+    {
+      "threshold": 0.25,
+      "em": 24.5,
+      "f1": 47.7,
+      "false_abstention": 65.0,
+      "unanswerable_abstention": 61.9,
+      "spurious_rate": 38.1,
+      "coverage": 35.0,
+      "n_answered": 49
+    },
+    {
+      "threshold": 0.3,
+      "em": 30.0,
+      "f1": 52.0,
+      "false_abstention": 71.4,
+      "unanswerable_abstention": 71.4,
+      "spurious_rate": 28.6,
+      "coverage": 28.6,
+      "n_answered": 40
+    },
+    {
+      "threshold": 0.35,
+      "em": 36.4,
+      "f1": 58.0,
+      "false_abstention": 76.4,
+      "unanswerable_abstention": 76.2,
+      "spurious_rate": 23.8,
+      "coverage": 23.6,
+      "n_answered": 33
+    },
+    {
+      "threshold": 0.4,
+      "em": 38.5,
+      "f1": 63.3,
+      "false_abstention": 81.4,
+      "unanswerable_abstention": 83.3,
+      "spurious_rate": 16.7,
+      "coverage": 18.6,
+      "n_answered": 26
+    },
+    {
+      "threshold": 0.45,
+      "em": 39.1,
+      "f1": 67.2,
+      "false_abstention": 83.6,
+      "unanswerable_abstention": 83.3,
+      "spurious_rate": 16.7,
+      "coverage": 16.4,
+      "n_answered": 23
+    },
+    {
+      "threshold": 0.5,
+      "em": 50.0,
+      "f1": 71.1,
+      "false_abstention": 87.1,
+      "unanswerable_abstention": 92.9,
+      "spurious_rate": 7.1,
+      "coverage": 12.9,
+      "n_answered": 18
+    },
+    {
+      "threshold": 0.6,
+      "em": 54.5,
+      "f1": 77.0,
+      "false_abstention": 92.1,
+      "unanswerable_abstention": 95.2,
+      "spurious_rate": 4.8,
+      "coverage": 7.9,
+      "n_answered": 11
+    },
+    {
+      "threshold": 0.7,
+      "em": 66.7,
+      "f1": 83.3,
+      "false_abstention": 95.7,
+      "unanswerable_abstention": 95.2,
+      "spurious_rate": 4.8,
+      "coverage": 4.3,
+      "n_answered": 6
+    },
+    {
+      "threshold": 0.8,
+      "em": 100.0,
+      "f1": 100.0,
+      "false_abstention": 97.9,
+      "unanswerable_abstention": 97.6,
+      "spurious_rate": 2.4,
+      "coverage": 2.1,
+      "n_answered": 3
+    },
+    {
+      "threshold": 0.9,
+      "em": 100.0,
+      "f1": 100.0,
+      "false_abstention": 99.3,
+      "unanswerable_abstention": 97.6,
+      "spurious_rate": 2.4,
+      "coverage": 0.7,
+      "n_answered": 1
+    }
+  ],
+  "A1": [
+    {
+      "threshold": 0.0,
+      "em": 15.7,
+      "f1": 35.3,
+      "false_abstention": 0.0,
+      "unanswerable_abstention": 0.0,
+      "spurious_rate": 100.0,
+      "coverage": 100.0,
+      "n_answered": 140
+    },
+    {
+      "threshold": 0.05,
+      "em": 24.7,
+      "f1": 46.7,
+      "false_abstention": 42.1,
+      "unanswerable_abstention": 23.8,
+      "spurious_rate": 76.2,
+      "coverage": 57.9,
+      "n_answered": 81
+    },
+    {
+      "threshold": 0.1,
+      "em": 54.2,
+      "f1": 71.3,
+      "false_abstention": 82.9,
+      "unanswerable_abstention": 78.6,
+      "spurious_rate": 21.4,
+      "coverage": 17.1,
+      "n_answered": 24
+    },
+    {
+      "threshold": 0.15,
+      "em": 100.0,
+      "f1": 100.0,
+      "false_abstention": 98.6,
+      "unanswerable_abstention": 95.2,
+      "spurious_rate": 4.8,
+      "coverage": 1.4,
+      "n_answered": 2
+    },
+    {
+      "threshold": 0.2,
+      "em": 0,
+      "f1": 0,
+      "false_abstention": 100.0,
+      "unanswerable_abstention": 100.0,
+      "spurious_rate": 0.0,
+      "coverage": 0.0,
+      "n_answered": 0
+    },
+    {
+      "threshold": 0.25,
+      "em": 0,
+      "f1": 0,
+      "false_abstention": 100.0,
+      "unanswerable_abstention": 100.0,
+      "spurious_rate": 0.0,
+      "coverage": 0.0,
+      "n_answered": 0
+    },
+    {
+      "threshold": 0.3,
+      "em": 0,
+      "f1": 0,
+      "false_abstention": 100.0,
+      "unanswerable_abstention": 100.0,
+      "spurious_rate": 0.0,
+      "coverage": 0.0,
+      "n_answered": 0
+    },
+    {
+      "threshold": 0.35,
+      "em": 0,
+      "f1": 0,
+      "false_abstention": 100.0,
+      "unanswerable_abstention": 100.0,
+      "spurious_rate": 0.0,
+      "coverage": 0.0,
+      "n_answered": 0
+    },
+    {
+      "threshold": 0.4,
+      "em": 0,
+      "f1": 0,
+      "false_abstention": 100.0,
+      "unanswerable_abstention": 100.0,
+      "spurious_rate": 0.0,
+      "coverage": 0.0,
+      "n_answered": 0
+    },
+    {
+      "threshold": 0.45,
+      "em": 0,
+      "f1": 0,
+      "false_abstention": 100.0,
+      "unanswerable_abstention": 100.0,
+      "spurious_rate": 0.0,
+      "coverage": 0.0,
+      "n_answered": 0
+    },
+    {
+      "threshold": 0.5,
+      "em": 0,
+      "f1": 0,
+      "false_abstention": 100.0,
+      "unanswerable_abstention": 100.0,
+      "spurious_rate": 0.0,
+      "coverage": 0.0,
+      "n_answered": 0
+    },
+    {
+      "threshold": 0.6,
+      "em": 0,
+      "f1": 0,
+      "false_abstention": 100.0,
+      "unanswerable_abstention": 100.0,
+      "spurious_rate": 0.0,
+      "coverage": 0.0,
+      "n_answered": 0
+    },
+    {
+      "threshold": 0.7,
+      "em": 0,
+      "f1": 0,
+      "false_abstention": 100.0,
+      "unanswerable_abstention": 100.0,
+      "spurious_rate": 0.0,
+      "coverage": 0.0,
+      "n_answered": 0
+    },
+    {
+      "threshold": 0.8,
+      "em": 0,
+      "f1": 0,
+      "false_abstention": 100.0,
+      "unanswerable_abstention": 100.0,
+      "spurious_rate": 0.0,
+      "coverage": 0.0,
+      "n_answered": 0
+    },
+    {
+      "threshold": 0.9,
+      "em": 0,
+      "f1": 0,
+      "false_abstention": 100.0,
+      "unanswerable_abstention": 100.0,
+      "spurious_rate": 0.0,
+      "coverage": 0.0,
+      "n_answered": 0
+    }
+  ],
+  "A2": [
+    {
+      "threshold": 0.0,
+      "em": 17.1,
+      "f1": 33.8,
+      "false_abstention": 0.0,
+      "unanswerable_abstention": 0.0,
+      "spurious_rate": 100.0,
+      "coverage": 100.0,
+      "n_answered": 140
+    },
+    {
+      "threshold": 0.05,
+      "em": 26.6,
+      "f1": 45.4,
+      "false_abstention": 43.6,
+      "unanswerable_abstention": 35.7,
+      "spurious_rate": 64.3,
+      "coverage": 56.4,
+      "n_answered": 79
+    },
+    {
+      "threshold": 0.1,
+      "em": 41.4,
+      "f1": 57.4,
+      "false_abstention": 79.3,
+      "unanswerable_abstention": 81.0,
+      "spurious_rate": 19.0,
+      "coverage": 20.7,
+      "n_answered": 29
+    },
+    {
+      "threshold": 0.15,
+      "em": 33.3,
+      "f1": 66.7,
+      "false_abstention": 97.9,
+      "unanswerable_abstention": 95.2,
+      "spurious_rate": 4.8,
+      "coverage": 2.1,
+      "n_answered": 3
+    },
+    {
+      "threshold": 0.2,
+      "em": 0,
+      "f1": 0,
+      "false_abstention": 100.0,
+      "unanswerable_abstention": 97.6,
+      "spurious_rate": 2.4,
+      "coverage": 0.0,
+      "n_answered": 0
+    },
+    {
+      "threshold": 0.25,
+      "em": 0,
+      "f1": 0,
+      "false_abstention": 100.0,
+      "unanswerable_abstention": 100.0,
+      "spurious_rate": 0.0,
+      "coverage": 0.0,
+      "n_answered": 0
+    },
+    {
+      "threshold": 0.3,
+      "em": 0,
+      "f1": 0,
+      "false_abstention": 100.0,
+      "unanswerable_abstention": 100.0,
+      "spurious_rate": 0.0,
+      "coverage": 0.0,
+      "n_answered": 0
+    },
+    {
+      "threshold": 0.35,
+      "em": 0,
+      "f1": 0,
+      "false_abstention": 100.0,
+      "unanswerable_abstention": 100.0,
+      "spurious_rate": 0.0,
+      "coverage": 0.0,
+      "n_answered": 0
+    },
+    {
+      "threshold": 0.4,
+      "em": 0,
+      "f1": 0,
+      "false_abstention": 100.0,
+      "unanswerable_abstention": 100.0,
+      "spurious_rate": 0.0,
+      "coverage": 0.0,
+      "n_answered": 0
+    },
+    {
+      "threshold": 0.45,
+      "em": 0,
+      "f1": 0,
+      "false_abstention": 100.0,
+      "unanswerable_abstention": 100.0,
+      "spurious_rate": 0.0,
+      "coverage": 0.0,
+      "n_answered": 0
+    },
+    {
+      "threshold": 0.5,
+      "em": 0,
+      "f1": 0,
+      "false_abstention": 100.0,
+      "unanswerable_abstention": 100.0,
+      "spurious_rate": 0.0,
+      "coverage": 0.0,
+      "n_answered": 0
+    },
+    {
+      "threshold": 0.6,
+      "em": 0,
+      "f1": 0,
+      "false_abstention": 100.0,
+      "unanswerable_abstention": 100.0,
+      "spurious_rate": 0.0,
+      "coverage": 0.0,
+      "n_answered": 0
+    },
+    {
+      "threshold": 0.7,
+      "em": 0,
+      "f1": 0,
+      "false_abstention": 100.0,
+      "unanswerable_abstention": 100.0,
+      "spurious_rate": 0.0,
+      "coverage": 0.0,
+      "n_answered": 0
+    },
+    {
+      "threshold": 0.8,
+      "em": 0,
+      "f1": 0,
+      "false_abstention": 100.0,
+      "unanswerable_abstention": 100.0,
+      "spurious_rate": 0.0,
+      "coverage": 0.0,
+      "n_answered": 0
+    },
+    {
+      "threshold": 0.9,
+      "em": 0,
+      "f1": 0,
+      "false_abstention": 100.0,
+      "unanswerable_abstention": 100.0,
+      "spurious_rate": 0.0,
+      "coverage": 0.0,
+      "n_answered": 0
+    }
+  ]
+}
