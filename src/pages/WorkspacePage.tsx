@@ -1,6 +1,9 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { Page } from '../types';
 import { useWorkspace } from '../context/WorkspaceContext';
+import { VoiceInputButton } from '../components/common/VoiceInputButton';
+import { VoiceSpeakerButton } from '../components/common/VoiceSpeakerButton';
+import { DocumentInsightsPanel } from '../components/common/DocumentInsightsPanel';
 
 interface WorkspacePageProps {
   onNavigate: (page: Page) => void;
@@ -15,6 +18,8 @@ export const WorkspacePage: React.FC<WorkspacePageProps> = () => {
     messages,
     chatInput,
     setChatInput,
+    answerFormat,
+    setAnswerFormat,
     sendMessage,
     isConversationMode,
     sessions,
@@ -29,12 +34,40 @@ export const WorkspacePage: React.FC<WorkspacePageProps> = () => {
   } = useWorkspace();
 
   const [isDragging, setIsDragging] = useState(false);
+  // Which document's Insights panel is open. Local to the workspace — the
+  // shared WorkspaceContext deliberately does not own selection state.
+  const [selectedDocumentId, setSelectedDocumentId] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
   const composerRef = useRef<HTMLDivElement>(null);
 
+  // True while the voice control is recording/transcribing — used to disable
+  // conflicting composer controls.
+  const [voiceBusy, setVoiceBusy] = useState(false);
+
+  // True while an Oracle answer is being read aloud. The microphone is
+  // disabled during that window so a recording cannot capture the
+  // application's own speech. Pending synthesis is not included: nothing is
+  // audible yet, and leaving the microphone usable keeps a hung synthesis
+  // cancellable (starting the microphone aborts it).
+  const [ttsPlaying, setTtsPlaying] = useState(false);
+
+  // Which answers have their full cited-source list expanded, keyed by message
+  // id. Every source the backend returned is reachable: the first three are
+  // shown inline and the rest behind this disclosure. The capability audit
+  // (D-6, 2026-10-14) recorded that the previous fixed `slice(0, 3)` silently
+  // hid every source after the third, so a user could not see all the support
+  // for an answer.
+  const [expandedSources, setExpandedSources] = useState<Record<string, boolean>>({});
+
   const hasFiles = files.length > 0;
+
+  // Insert the transcribed text into the composer without sending it, so the
+  // user can review/edit before asking.
+  const handleTranscript = (text: string) => {
+    setChatInput(chatInput.trim() ? `${chatInput.trimEnd()} ${text}` : text);
+  };
 
   // Auto-scroll to latest message
   useEffect(() => {
@@ -47,6 +80,14 @@ export const WorkspacePage: React.FC<WorkspacePageProps> = () => {
     if (!rawFiles) return;
     addFiles(Array.from(rawFiles));
   };
+
+  // Delete a document, closing its Insights panel first if it is the one open.
+  const handleRemove = async (id: string) => {
+    if (selectedDocumentId === id) setSelectedDocumentId(null);
+    await removeFile(id);
+  };
+
+  const openInsights = (id: string) => setSelectedDocumentId(id);
 
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
@@ -67,18 +108,27 @@ export const WorkspacePage: React.FC<WorkspacePageProps> = () => {
     return 'article';
   };
 
+  // `partial` = searchable but some pages were not extracted; `unknown` = a
+  // status this UI does not recognise. Neither is a spinner state, and neither
+  // may be rendered as `ready`.
   const statusIcon = (status: string) => {
     if (status === 'uploading') return 'cloud_upload';
     if (status === 'processing') return 'hourglass_top';
+    if (status === 'partial') return 'warning';
     if (status === 'error') return 'error';
-    return 'check_circle';
+    if (status === 'unknown') return 'help';
+    if (status === 'ready') return 'check_circle';
+    return 'help';
   };
 
   const statusColor = (status: string) => {
     if (status === 'uploading') return 'text-cyber-cyan';
     if (status === 'processing') return 'text-yellow-400';
+    if (status === 'partial') return 'text-yellow-400';
     if (status === 'error') return 'text-red-400';
-    return 'text-green-400';
+    if (status === 'unknown') return 'text-outline';
+    if (status === 'ready') return 'text-green-400';
+    return 'text-outline';
   };
 
   const formatSessionDate = (iso: string) => {
@@ -197,29 +247,51 @@ export const WorkspacePage: React.FC<WorkspacePageProps> = () => {
                 </h3>
                 <div className="flex flex-col gap-2">
                   {files.map((f) => (
-                    <div key={f.id} className="flex items-center gap-3 p-3 rounded-lg transition-colors hover:bg-surface-bright/10 group"
+                    <div key={f.id}
+                      role="button"
+                      tabIndex={0}
+                      aria-label={`View insights for ${f.name}`}
+                      onClick={() => openInsights(f.id)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault();
+                          openInsights(f.id);
+                        }
+                      }}
+                      className="flex items-center gap-3 p-3 rounded-lg transition-colors hover:bg-surface-bright/10 group cursor-pointer focus:outline-none focus:ring-1 focus:ring-cyber-cyan/50"
                       style={{ background: 'rgba(5,7,10,0.60)', backdropFilter: 'blur(20px)', borderTop: '1px solid rgba(255,255,255,0.1)', borderLeft: '1px solid rgba(255,255,255,0.1)' }}>
                       <span className={`material-symbols-outlined text-[20px] ${f.status === 'error' ? 'text-red-400' : 'text-electric-violet'}`}>{typeIcon(f.type)}</span>
                       <div className="flex-1 min-w-0">
                         <p className="text-on-surface truncate text-xs" style={{ fontFamily: 'Inter', fontSize: '14px' }}>{f.name}</p>
                         <div className="flex items-center gap-2">
                           <p className="text-outline" style={{ fontFamily: 'JetBrains Mono', fontSize: '12px' }}>{f.size}</p>
-                          {f.status !== 'ready' && f.status !== 'error' && (
+                          {/* Only genuinely in-progress states spin: a `partial`
+                              or `unknown` document is not still processing. */}
+                          {(f.status === 'uploading' || f.status === 'processing') && (
                             <span className={`material-symbols-outlined animate-spin ${statusColor(f.status)}`} style={{ fontSize: '10px' }}>progress_activity</span>
                           )}
                           <span className={`material-symbols-outlined ${statusColor(f.status)}`} style={{ fontSize: '12px' }}>{statusIcon(f.status)}</span>
                         </div>
-                        {f.status === 'ready' && f.chunkCount > 0 && (
+                        {(f.status === 'ready' || f.status === 'partial') && f.chunkCount > 0 && (
                           <p className="text-cyber-cyan" style={{ fontFamily: 'JetBrains Mono', fontSize: '10px' }}>{f.chunkCount} chunks</p>
+                        )}
+                        {f.status === 'partial' && (
+                          <p className="text-yellow-400" style={{ fontFamily: 'JetBrains Mono', fontSize: '10px' }}>Partially processed — some pages were not extracted</p>
                         )}
                         {f.status === 'error' && (
                           <p className="text-red-400" style={{ fontFamily: 'JetBrains Mono', fontSize: '10px' }}>Failed</p>
                         )}
+                        {f.status === 'unknown' && (
+                          <p className="text-outline" style={{ fontFamily: 'JetBrains Mono', fontSize: '10px' }}>Unknown status</p>
+                        )}
                       </div>
+                      <span className="material-symbols-outlined text-outline opacity-0 group-hover:opacity-100 transition-opacity" style={{ fontSize: '18px' }} aria-hidden="true">insights</span>
                       <button
-                        onClick={() => removeFile(f.id)}
+                        onClick={(e) => { e.stopPropagation(); handleRemove(f.id); }}
+                        onKeyDown={(e) => e.stopPropagation()}
                         className="opacity-0 group-hover:opacity-100 text-outline hover:text-error transition-all"
                         title="Remove"
+                        aria-label={`Remove ${f.name}`}
                       >
                         <span className="material-symbols-outlined" style={{ fontSize: '14px' }}>close</span>
                       </button>
@@ -298,8 +370,14 @@ export const WorkspacePage: React.FC<WorkspacePageProps> = () => {
                 }
               }}
               placeholder="Ask the Oracle a question..."
-              className="flex-1 bg-transparent border-none text-on-surface focus:outline-none focus:ring-0 placeholder:text-outline-variant text-sm"
+              disabled={voiceBusy}
+              className="flex-1 bg-transparent border-none text-on-surface focus:outline-none focus:ring-0 placeholder:text-outline-variant text-sm disabled:opacity-50"
               style={{ fontFamily: 'Inter', fontSize: '16px' }}
+            />
+            <VoiceInputButton
+              onTranscript={handleTranscript}
+              onBusyChange={setVoiceBusy}
+              disabled={ttsPlaying}
             />
             <button
               onClick={async () => {
@@ -311,7 +389,8 @@ export const WorkspacePage: React.FC<WorkspacePageProps> = () => {
                   }, 100);
                 }
               }}
-              className="w-10 h-10 rounded-full flex items-center justify-center text-white hover:shadow-[0_0_15px_rgba(6,182,212,0.5)] transition-all flex-shrink-0"
+              disabled={voiceBusy}
+              className="w-10 h-10 rounded-full flex items-center justify-center text-white hover:shadow-[0_0_15px_rgba(6,182,212,0.5)] transition-all flex-shrink-0 disabled:opacity-40 disabled:cursor-not-allowed"
               style={{ background: 'linear-gradient(135deg, #8B5CF6, #06B6D4)' }}
               title="Send"
             >
@@ -319,6 +398,14 @@ export const WorkspacePage: React.FC<WorkspacePageProps> = () => {
             </button>
           </div>
         </div>
+
+        {/* Document Insights panel — opened by selecting a document row */}
+        {selectedDocumentId && (
+          <DocumentInsightsPanel
+            documentId={selectedDocumentId}
+            onClose={() => setSelectedDocumentId(null)}
+          />
+        )}
       </div>
     );
   }
@@ -461,7 +548,14 @@ export const WorkspacePage: React.FC<WorkspacePageProps> = () => {
               }
             >
               {msg.sender === 'oracle' && (
-                <span className="text-electric-violet block mb-1" style={{ fontFamily: 'JetBrains Mono', fontSize: '12px' }}>Oracle</span>
+                <div className="flex items-center justify-between mb-1">
+                  <span className="text-electric-violet" style={{ fontFamily: 'JetBrains Mono', fontSize: '12px' }}>Oracle</span>
+                  <VoiceSpeakerButton
+                    text={msg.text}
+                    disabled={voiceBusy}
+                    onPlaybackChange={setTtsPlaying}
+                  />
+                </div>
               )}
               {msg.text}
               {msg.insufficientContext && (
@@ -469,19 +563,131 @@ export const WorkspacePage: React.FC<WorkspacePageProps> = () => {
                   Insufficient context in documents to answer this question.
                 </span>
               )}
+              {/* Verification is reported by the backend for generative answers
+                  only. When it is absent the UI says nothing, rather than
+                  implying the extractive answer was checked. */}
+              {msg.verification && (
+                <div className="mt-2 pt-2 border-t border-white/10">
+                  <span
+                    style={{
+                      fontFamily: 'JetBrains Mono',
+                      fontSize: '9px',
+                      color: msg.verification.verified
+                        ? '#4ade80'
+                        : msg.verification.status === 'PARTIALLY_SUPPORTED'
+                          ? '#fbbf24'
+                          : '#ffb4ab',
+                    }}
+                  >
+                    {msg.verification.verified
+                      ? `EVIDENCE SUPPORTED · ${msg.verification.supportedClaims}/${msg.verification.claimCount} CLAIMS CITED`
+                      : msg.verification.status === 'PARTIALLY_SUPPORTED'
+                        ? `PARTIALLY SUPPORTED · ${msg.verification.supportedClaims}/${msg.verification.claimCount} CLAIMS CITED`
+                        : `NOT SUPPORTED · ${msg.verification.unsupportedClaims.length} CLAIM(S) UNSUPPORTED`}
+                    {msg.marks ? ` · ${msg.marks}-MARK` : ''}
+                  </span>
+                  {(msg.verification.wrongEntityClaims ?? []).slice(0, 1).map((claim) => (
+                    <div
+                      key={`entity-${claim}`}
+                      className="text-red-300 mt-1"
+                      style={{ fontFamily: 'Inter', fontSize: '10px' }}
+                    >
+                      Value belongs to a different entity: “{claim}”
+                    </div>
+                  ))}
+                  {msg.verification.unsupportedClaims.slice(0, 2).map((claim) => (
+                    <div
+                      key={claim}
+                      className="text-outline mt-1"
+                      style={{ fontFamily: 'Inter', fontSize: '10px' }}
+                    >
+                      “{claim}”
+                    </div>
+                  ))}
+                </div>
+              )}
+              {msg.warnings && msg.warnings.length > 0 && (
+                <div className="mt-1">
+                  {msg.warnings.map((warning) => (
+                    <div
+                      key={warning}
+                      className="text-yellow-400/80"
+                      style={{ fontFamily: 'Inter', fontSize: '10px' }}
+                    >
+                      {warning}
+                    </div>
+                  ))}
+                </div>
+              )}
               {msg.sources && msg.sources.length > 0 && (
                 <div className="mt-3 pt-2 border-t border-white/10">
                   <span className="text-outline block mb-1" style={{ fontFamily: 'JetBrains Mono', fontSize: '9px', letterSpacing: '0.1em' }}>SOURCES</span>
-                  {msg.sources.slice(0, 3).map((src) => (
-                    <div key={src.chunkId} className="flex items-center gap-2 mb-1">
-                      <span className="text-cyber-cyan" style={{ fontFamily: 'JetBrains Mono', fontSize: '9px' }}>
-                        {src.documentName}{src.page ? ` p.${src.page}` : ''}
-                      </span>
-                      <span className="text-outline" style={{ fontFamily: 'JetBrains Mono', fontSize: '9px' }}>
-                        {(src.score * 100).toFixed(0)}%
-                      </span>
+                  {msg.sources.slice(0, expandedSources[msg.id] ? msg.sources.length : 3).map((src) => {
+                    // Path provenance comes from the backend. When it is absent
+                    // the server predates it, and `score` is a plain similarity.
+                    const path = src.retrievalPath ?? null;
+                    const pathLabel = (path ?? 'semantic').toUpperCase();
+                    const pathColor =
+                      path === 'hybrid' ? '#a078ff' : path === 'structural' ? '#4cd7f6' : '#958ea0';
+                    const trail = [
+                      ...(src.headingPath ?? []),
+                      src.section ?? null,
+                      src.page ? `p.${src.page}` : null,
+                      src.chunkId.slice(0, 8),
+                    ].filter((part, index, all) => Boolean(part) && all.indexOf(part) === index) as string[];
+
+                    return (
+                      <div key={src.chunkId} className="mb-1">
+                        <div className="flex items-center gap-2">
+                          <span className="text-cyber-cyan" style={{ fontFamily: 'JetBrains Mono', fontSize: '9px' }}>
+                            {src.documentName}{src.page ? ` p.${src.page}` : ''}
+                          </span>
+                          <span style={{ fontFamily: 'JetBrains Mono', fontSize: '9px', color: pathColor }}>
+                            {pathLabel}
+                          </span>
+                          {/* A structural-only source was never scored by the
+                              embedding model, so it shows graph distance
+                              instead of a similarity it does not have. */}
+                          <span className="text-outline" style={{ fontFamily: 'JetBrains Mono', fontSize: '9px' }}>
+                            {path === 'structural'
+                              ? `hop ${src.structuralHops ?? 0}`
+                              : `${(src.score * 100).toFixed(0)}% sim`}
+                          </span>
+                        </div>
+                        {trail.length > 1 && (
+                          <div className="text-outline" style={{ fontFamily: 'JetBrains Mono', fontSize: '8px' }}>
+                            {trail.join(' → ')}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                  {msg.sources.length > 3 && (
+                    <button
+                      onClick={() =>
+                        setExpandedSources((prev) => ({ ...prev, [msg.id]: !prev[msg.id] }))
+                      }
+                      className="text-cyber-cyan hover:text-electric-violet transition-colors mt-1"
+                      style={{ fontFamily: 'JetBrains Mono', fontSize: '9px', letterSpacing: '0.08em' }}
+                    >
+                      {expandedSources[msg.id]
+                        ? 'SHOW FEWER SOURCES'
+                        : `SHOW ALL ${msg.sources.length} SOURCES`}
+                    </button>
+                  )}
+                  {/* Sources that were retrieved but withheld from the QA model
+                      are not evidence for the answer. The backend reports the
+                      counts; the UI states them instead of implying that the
+                      list above is the whole retrieval result. Older servers
+                      that do not report them show no line at all. */}
+                  {typeof msg.omittedSourceCount === 'number' && msg.omittedSourceCount > 0 && (
+                    <div className="text-outline mt-1" style={{ fontFamily: 'JetBrains Mono', fontSize: '8px' }}>
+                      {typeof msg.retrievedSourceCount === 'number'
+                        ? `${msg.retrievedSourceCount} RETRIEVED · `
+                        : ''}
+                      {msg.omittedSourceCount} WITHHELD FROM THE MODEL (CONTEXT LIMIT)
                     </div>
-                  ))}
+                  )}
                 </div>
               )}
             </div>
@@ -499,6 +705,35 @@ export const WorkspacePage: React.FC<WorkspacePageProps> = () => {
           backdropFilter: 'blur(20px)',
         }}
       >
+        <div className="max-w-4xl mx-auto flex items-center gap-2 px-1 pb-1">
+          <span
+            className="text-outline"
+            style={{ fontFamily: 'JetBrains Mono', fontSize: '9px', letterSpacing: '0.08em' }}
+          >
+            ANSWER FORMAT
+          </span>
+          {(['5', '10', '15'] as const).map((marks) => (
+            <button
+              key={marks}
+              onClick={() => setAnswerFormat(marks)}
+              aria-pressed={answerFormat === marks}
+              title={`Request a ${marks}-mark answer`}
+              className="px-2 py-0.5 rounded transition-colors"
+              style={{
+                fontFamily: 'JetBrains Mono',
+                fontSize: '9px',
+                border: '1px solid rgba(255,255,255,0.12)',
+                color: answerFormat === marks ? '#0b0e12' : '#958ea0',
+                background:
+                  answerFormat === marks
+                    ? 'linear-gradient(135deg, #8B5CF6, #06B6D4)'
+                    : 'transparent',
+              }}
+            >
+              {marks}
+            </button>
+          ))}
+        </div>
         <div
           className="rounded-xl p-2 flex items-center gap-3 max-w-4xl mx-auto"
           style={{
@@ -512,12 +747,19 @@ export const WorkspacePage: React.FC<WorkspacePageProps> = () => {
             onChange={(e) => setChatInput(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Ask the Oracle..."
-            className="flex-1 bg-transparent border-none text-on-surface focus:outline-none focus:ring-0 placeholder:text-outline-variant text-sm px-2"
+            disabled={voiceBusy}
+            className="flex-1 bg-transparent border-none text-on-surface focus:outline-none focus:ring-0 placeholder:text-outline-variant text-sm px-2 disabled:opacity-50"
             style={{ fontFamily: 'Inter', fontSize: '15px' }}
+          />
+          <VoiceInputButton
+            onTranscript={handleTranscript}
+            onBusyChange={setVoiceBusy}
+            disabled={ttsPlaying}
           />
           <button
             onClick={sendMessage}
-            className="w-9 h-9 rounded-lg flex items-center justify-center text-white hover:shadow-[0_0_15px_rgba(6,182,212,0.5)] transition-all flex-shrink-0"
+            disabled={voiceBusy}
+            className="w-9 h-9 rounded-lg flex items-center justify-center text-white hover:shadow-[0_0_15px_rgba(6,182,212,0.5)] transition-all flex-shrink-0 disabled:opacity-40 disabled:cursor-not-allowed"
             style={{ background: 'linear-gradient(135deg, #8B5CF6, #06B6D4)' }}
             title="Send"
           >

@@ -1,10 +1,12 @@
 import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
-import { DocumentFile, ChatMessage, ChatSession } from '../types';
+import { DocumentFile, DocumentStatus, ChatMessage, ChatSession } from '../types';
 import {
   apiUploadDocument,
   apiListDocuments,
   apiDeleteDocument,
   apiAskQuestion,
+  apiGenerateAnswer,
+  ApiError,
   apiListSessions,
   apiCreateSession,
   apiGetSessionMessages,
@@ -27,6 +29,9 @@ interface WorkspaceContextType {
   messages: ChatMessage[];
   chatInput: string;
   setChatInput: (v: string) => void;
+  /** Requested academic answer format (marks) for the next question. */
+  answerFormat: '5' | '10' | '15';
+  setAnswerFormat: (v: '5' | '10' | '15') => void;
   sendMessage: () => Promise<void>;
   startNewConversation: () => Promise<void>;
   openConversation: (sessionId: string) => Promise<void>;
@@ -49,13 +54,33 @@ function formatSize(bytes: number): string {
   return `${(bytes / 1024 / 1024).toFixed(1)} MB`;
 }
 
+/**
+ * Map the backend's document status onto the UI's status union.
+ *
+ * An exhaustive switch, deliberately not a cast: an unrecognised value becomes
+ * `'unknown'` and is rendered explicitly, so a status this UI does not know can
+ * never be silently shown as `ready` or as still processing.
+ */
+function mapApiStatus(status: string): DocumentStatus {
+  switch (status) {
+    case 'uploading':
+    case 'processing':
+    case 'ready':
+    case 'partial':
+    case 'error':
+      return status;
+    default:
+      return 'unknown';
+  }
+}
+
 function apiDocToFile(doc: ApiDocument): DocumentFile {
   return {
     id: doc.id,
     name: doc.name,
     size: formatSize(doc.fileSize),
     type: doc.fileType as DocumentFile['type'],
-    status: doc.status as DocumentFile['status'],
+    status: mapApiStatus(doc.status),
     chunkCount: doc.chunkCount,
   };
 }
@@ -71,6 +96,7 @@ export const WorkspaceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   const [sessions, setSessions] = useState<ChatSession[]>([]);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [chatInput, setChatInput] = useState('');
+  const [answerFormat, setAnswerFormat] = useState<'5' | '10' | '15'>('10');
   const [sessionsLoading, setSessionsLoading] = useState(false);
 
   // Drawer
@@ -253,21 +279,50 @@ export const WorkspaceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     apiAddSessionMessage(finalSessionId, 'user', text).catch(() => {});
 
     try {
-      const res = await apiAskQuestion(text);
-      let answerText = res.answer;
-      if (res.insufficientContext || !answerText) {
-        answerText = 'I could not find relevant information in your documents to answer this question.';
+      // Primary engine: grounded generative answering (local, verified).
+      // The extractive baseline is used only when the generator is genuinely
+      // unavailable (503), and the message says so — never a silent fallback.
+      let oracleMsg: ChatMessage;
+      try {
+        const gen = await apiGenerateAnswer(text, answerFormat);
+        let answerText = gen.answer;
+        if (gen.insufficientContext || !answerText) {
+          answerText = 'I could not find relevant information in your documents to answer this question.';
+        }
+        oracleMsg = {
+          id: `temp-oracle-${Date.now() + 1}`,
+          sender: 'oracle',
+          text: answerText,
+          timestamp: new Date().toLocaleTimeString(),
+          sources: gen.sources,
+          insufficientContext: gen.insufficientContext,
+          engine: 'generative',
+          marks: gen.marks,
+          verification: gen.verification,
+          warnings: gen.warnings,
+        };
+      } catch (err) {
+        if (!(err instanceof ApiError) || err.status !== 503) throw err;
+        const res = await apiAskQuestion(text);
+        let answerText = res.answer;
+        if (res.insufficientContext || !answerText) {
+          answerText = 'I could not find relevant information in your documents to answer this question.';
+        }
+        oracleMsg = {
+          id: `temp-oracle-${Date.now() + 1}`,
+          sender: 'oracle',
+          text: answerText,
+          timestamp: new Date().toLocaleTimeString(),
+          sources: res.sources,
+          insufficientContext: res.insufficientContext,
+          retrievedSourceCount: res.reliability.retrievedSourceCount,
+          omittedSourceCount: res.reliability.omittedSourceCount,
+          engine: 'extractive',
+          warnings: ['Generative model unavailable — answered with the extractive baseline.'],
+        };
       }
-
-      const oracleMsg: ChatMessage = {
-        id: `temp-oracle-${Date.now() + 1}`,
-        sender: 'oracle',
-        text: answerText,
-        timestamp: new Date().toLocaleTimeString(),
-        sources: res.sources,
-        insufficientContext: res.insufficientContext,
-      };
       setMessages((prev) => [...prev, oracleMsg]);
+      const answerText = oracleMsg.text;
 
       // Persist oracle message
       apiAddSessionMessage(finalSessionId, 'oracle', answerText).catch(() => {});
@@ -303,6 +358,8 @@ export const WorkspaceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         messages,
         chatInput,
         setChatInput,
+        answerFormat,
+        setAnswerFormat,
         sendMessage,
         startNewConversation,
         openConversation,

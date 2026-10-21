@@ -1,13 +1,46 @@
 export type Page = 'login' | 'workspace' | 'verification' | 'reliability' | 'settings';
 
+/**
+ * Backend document status as represented in the UI.
+ *
+ * `partial` = at least one page produced usable content and at least one page
+ * did not: the document is searchable but incomplete.
+ * `unknown` = a status this UI does not recognise. It is rendered explicitly
+ * rather than assumed to be `ready` or still processing.
+ */
+export type DocumentStatus =
+  | 'uploading'
+  | 'processing'
+  | 'ready'
+  | 'partial'
+  | 'error'
+  | 'unknown';
+
 export interface DocumentFile {
   id: string;
   name: string;
   size: string;
   type: 'pdf' | 'docx' | 'txt';
-  status: 'uploading' | 'processing' | 'ready' | 'error';
+  status: DocumentStatus;
   chunkCount: number;
 }
+
+/**
+ * Which retrieval path(s) found a source. `semantic` = pgvector, `structural` =
+ * document-graph traversal, `hybrid` = both. Null/undefined means the backend
+ * did not report provenance (older server), never that a score was computed.
+ */
+export type RetrievalPath = 'semantic' | 'structural' | 'hybrid';
+
+/**
+ * Granularity of a persisted evidence record. `chunk` = a `document_chunks`
+ * row; `structure_element` = a `document_structure_elements` row reached by
+ * the element-level structural stream; `table_row` = a `document_table_rows`
+ * row offered by the query-gated compact table-evidence band. Null/undefined
+ * means the backend did not report it (e.g. an older server), never that an
+ * element/row was retrieved.
+ */
+export type EvidenceKind = 'chunk' | 'structure_element' | 'table_row';
 
 export interface ChatSource {
   chunkId: string;
@@ -16,6 +49,16 @@ export interface ChatSource {
   documentId: string;
   documentName: string;
   page: number | null;
+  /** Retrieval path provenance, when the backend supplies it. */
+  retrievalPath?: RetrievalPath | null;
+  /** Reciprocal-rank-fusion score. NOT a similarity — `score` remains that. */
+  fusionScore?: number | null;
+  /** Graph hops from the nearest structural seed (0 = the seed). */
+  structuralHops?: number | null;
+  /** Heading hierarchy, when the chunk carries structure metadata. */
+  headingPath?: string[] | null;
+  /** Nearest ancestor heading text. */
+  section?: string | null;
 }
 
 export interface ChatMessage {
@@ -25,6 +68,41 @@ export interface ChatMessage {
   timestamp: string;
   sources?: ChatSource[];
   insufficientContext?: boolean;
+  /**
+   * Sources retrieved before the QA model's context window was applied.
+   * Reported by the backend; undefined means the server did not report it
+   * (never a guessed value).
+   */
+  retrievedSourceCount?: number;
+  /**
+   * Sources that were retrieved but *withheld* from the QA model because the
+   * context window was full. They are not evidence for the answer, so the UI
+   * states the count instead of presenting them as support.
+   */
+  omittedSourceCount?: number;
+  /** Which engine produced this answer, when the backend reports it. */
+  engine?: 'generative' | 'extractive';
+  /** Requested academic answer format (marks). */
+  marks?: number;
+  /**
+   * Deterministic verification of a generative answer. `undefined` means the
+   * answer came from the extractive path or an older server — it does **not**
+   * mean the answer was verified.
+   */
+  verification?: {
+    claimCount: number;
+    supportedClaims: number;
+    unsupportedClaims: string[];
+    uncitedClaims: number;
+    citationAccuracy: number;
+    verified: boolean;
+    /** SUPPORTED | PARTIALLY_SUPPORTED | UNSUPPORTED | INSUFFICIENT_EVIDENCE */
+    status?: string;
+    /** Claims whose numeric value belongs to a different entity. */
+    wrongEntityClaims?: string[];
+  };
+  /** Honest warnings from the backend (unsupported claims, withheld answer). */
+  warnings?: string[];
 }
 
 /**
@@ -61,6 +139,31 @@ export interface ReliabilitySourceRef {
   relevanceScore: number;
   page: number | null;
   status: 'VERIFIED' | 'MARGINAL' | 'UNRESOLVED';
+  retrievalPath?: RetrievalPath | null;
+  fusionScore?: number | null;
+  structuralHops?: number | null;
+  /**
+   * `chunk`, `structure_element` or `table_row` — which persisted record backs
+   * this source. Never inferred from the score.
+   */
+  evidenceKind?: EvidenceKind | null;
+  /**
+   * Nearest ancestor heading text, reported by the endpoint when the source
+   * recorded one at ingestion. Null for legacy chunks that recorded none — an
+   * honest not-recorded state, never a fabricated value.
+   */
+  section?: string | null;
+  /** Parser element type (`section`, `paragraph`, `table`, ...), reported when recorded. */
+  elementType?: string | null;
+  /**
+   * Table-row provenance (`evidenceKind === 'table_row'` only): the aggregate
+   * `table` structure element the row belongs to. Null for every other kind.
+   */
+  tableElementId?: string | null;
+  /** 0-based row index inside that table (header row is 0). Table rows only. */
+  rowIndex?: number | null;
+  /** Whether the row's content embeds the table's header row. Table rows only. */
+  headerRepeated?: boolean | null;
 }
 
 export interface ReliabilityQueryData {
@@ -74,6 +177,39 @@ export interface ReliabilityQueryData {
   factualGrounded: boolean;
   insufficientContext: boolean;
   sources: ReliabilitySourceRef[];
+  /** Real path counts computed by the backend — never estimated in the UI. */
+  semanticSourceCount: number;
+  structuralSourceCount: number;
+  /** Of the structural sources, how many are element-level (`structure_element`). */
+  structuralElementSourceCount: number;
+  /** Of the structural sources, how many are compact table rows (`table_row`). */
+  tableRowSourceCount: number;
+  hybridSourceCount: number;
+  structuralHopMax: number;
+  pathAgreement: boolean;
+  /**
+   * Generative-path metadata for this query. Absent/null means the extractive
+   * baseline produced the answer — never that verification passed.
+   */
+  generation?: {
+    engine: 'generative';
+    model: string;
+    answerFormat: string;
+    marks: number;
+    latencyMs: number;
+    abstained: boolean;
+    verification: {
+      claimCount: number;
+      supportedClaims: number;
+      unsupportedClaims: string[];
+      uncitedClaims: number;
+      citationAccuracy: number;
+      verified: boolean;
+      status?: string;
+      wrongEntityClaims?: string[];
+    };
+    warnings: string[];
+  } | null;
 }
 
 export interface SourceRef {

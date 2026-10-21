@@ -1,35 +1,38 @@
 import React, { useState } from 'react';
-import { useSettings } from '../context/SettingsContext';
+import { useSettings, PersistedSettings } from '../context/SettingsContext';
 import { useAuth } from '../context/AuthContext';
-import { Page, AppSettings } from '../types';
+import { Page } from '../types';
 
 interface SettingsPageProps {
   onNavigate: (page: Page) => void;
 }
 
 export const SettingsPage: React.FC<SettingsPageProps> = ({ onNavigate }) => {
-  const { settings, updateProfile, updateSecurity, updateAIProcessing, updateEnvironment, resetSettings, triggerSaveToast, saveToast } = useSettings();
-  const { logout, updateUser } = useAuth();
+  const {
+    settings,
+    loadState,
+    loadError,
+    saveState,
+    saveError,
+    updateAIProcessing,
+    updateEnvironment,
+    applyConfiguration,
+    discardChanges,
+  } = useSettings();
+  // Identity comes from the authenticated session (`GET /api/auth/me`), never
+  // from a placeholder.
+  const { user, logout } = useAuth();
 
   const [copiedId, setCopiedId] = useState(false);
-  const [isEditingProfile, setIsEditingProfile] = useState(false);
-  const [nameInput, setNameInput] = useState(settings.profile.name);
-  const [emailInput, setEmailInput] = useState(settings.profile.email);
 
   const handleCopyEmail = () => {
-    navigator.clipboard.writeText(settings.profile.email);
+    navigator.clipboard.writeText(user.email);
     setCopiedId(true);
     setTimeout(() => setCopiedId(false), 2000);
   };
 
-  const handleSaveProfile = () => {
-    updateProfile({ name: nameInput, email: emailInput });
-    updateUser({ name: nameInput, email: emailInput });
-    setIsEditingProfile(false);
-    triggerSaveToast();
-  };
-
   const depthLabels = ['Fast', 'Balanced', 'Analytical', 'Deep', 'Comprehensive'];
+  const displayName = user.name || user.email || 'Signed-in user';
 
   return (
     <div className="pt-28 px-4 md:px-16 pb-16 min-h-screen relative z-10 overflow-y-auto">
@@ -58,14 +61,30 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({ onNavigate }) => {
           </div>
         </header>
 
-        {/* Feedback Toast */}
-        {saveToast && (
-          <div className="mb-6 p-4 rounded-xl bg-gradient-to-r from-electric-violet/20 to-cyber-cyan/20 border border-cyber-cyan text-white text-xs flex items-center justify-between shadow-[0_0_25px_rgba(6,182,212,0.3)]" style={{ fontFamily: 'JetBrains Mono' }}>
+        {/* Server state. These banners are the ONLY place this page claims that
+            anything was stored: success requires a confirmed server response. */}
+        {loadState === 'loading' && (
+          <div role="status" className="mb-6 p-4 rounded-xl bg-surface-container-low/60 border border-white/10 text-on-surface-variant text-xs" style={{ fontFamily: 'JetBrains Mono' }}>
+            Loading your saved settings from the server...
+          </div>
+        )}
+        {loadState === 'unavailable' && (
+          <div role="alert" className="mb-6 p-4 rounded-xl bg-error/10 border border-error/40 text-on-surface text-xs" style={{ fontFamily: 'JetBrains Mono' }}>
+            {loadError} The controls below show the server's own column defaults and the server persisted nothing for this session.
+          </div>
+        )}
+        {saveState === 'saved' && (
+          <div role="status" className="mb-6 p-4 rounded-xl bg-gradient-to-r from-electric-violet/20 to-cyber-cyan/20 border border-cyber-cyan text-white text-xs flex items-center justify-between shadow-[0_0_25px_rgba(6,182,212,0.3)]" style={{ fontFamily: 'JetBrains Mono' }}>
             <span className="flex items-center gap-2">
               <span className="material-symbols-outlined text-cyber-cyan">check_circle</span>
-              System configuration applied successfully.
+              Settings saved to the server.
             </span>
             <span className="text-secondary font-bold">SAVED</span>
+          </div>
+        )}
+        {saveState === 'error' && (
+          <div role="alert" className="mb-6 p-4 rounded-xl bg-error/10 border border-error/40 text-on-surface text-xs" style={{ fontFamily: 'JetBrains Mono' }}>
+            {saveError}
           </div>
         )}
 
@@ -78,7 +97,7 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({ onNavigate }) => {
             <div className="relative group cursor-pointer">
               <div className="w-28 h-28 md:w-32 md:h-32 rounded-full p-1 bg-gradient-to-tr from-electric-violet via-surface-container to-cyber-cyan shadow-[0_0_30px_rgba(139,92,246,0.3)]">
                 <div className="w-full h-full rounded-full border-4 border-surface-deep flex items-center justify-center text-white font-bold text-3xl" style={{ fontFamily: 'Geist', background: 'linear-gradient(135deg, #8B5CF6, #06B6D4)' }}>
-                  {settings.profile.name ? settings.profile.name[0].toUpperCase() : 'U'}
+                  {displayName ? displayName[0].toUpperCase() : 'U'}
                 </div>
               </div>
               <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity rounded-full pointer-events-none">
@@ -89,90 +108,38 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({ onNavigate }) => {
 
             {/* User Info */}
             <div className="flex-1 text-center md:text-left">
-              {isEditingProfile ? (
-                <div className="space-y-3 max-w-md">
-                  <div>
-                    <label className="text-xs block mb-1 text-outline" style={{ fontFamily: 'JetBrains Mono' }}>Name</label>
-                    <input
-                      type="text"
-                      value={nameInput}
-                      onChange={(e) => setNameInput(e.target.value)}
-                      className="w-full bg-surface-deep border border-electric-violet/50 rounded px-3 py-1.5 text-white font-semibold"
-                    />
-                  </div>
-                  <div>
-                    <label className="text-xs block mb-1 text-outline" style={{ fontFamily: 'JetBrains Mono' }}>Email</label>
-                    <input
-                      type="email"
-                      value={emailInput}
-                      onChange={(e) => setEmailInput(e.target.value)}
-                      className="w-full bg-surface-deep border border-electric-violet/50 rounded px-3 py-1.5 text-white"
-                    />
-                  </div>
-                  <div className="flex gap-2 pt-2">
+              <h3 className="text-2xl font-bold text-white mb-1" style={{ fontFamily: 'Geist' }}>{displayName}</h3>
+              <p className="text-electric-violet mb-4" style={{ fontFamily: 'JetBrains Mono', fontSize: '12px' }}>Authenticated session</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-6">
+                <div className="space-y-1">
+                  <label className="text-outline block" style={{ fontFamily: 'JetBrains Mono', fontSize: '10px', letterSpacing: '0.1em', fontWeight: 700 }}>EMAIL</label>
+                  <div className="flex items-center gap-2 bg-surface-container-low/60 px-3 py-2 rounded-lg border border-white/5" style={{ fontFamily: 'JetBrains Mono', fontSize: '12px' }}>
+                    <span className="text-on-surface-variant font-semibold">{user.email}</span>
                     <button
-                      onClick={handleSaveProfile}
-                      className="px-4 py-1.5 bg-electric-violet text-white text-xs rounded"
-                      style={{ fontFamily: 'JetBrains Mono' }}
+                      onClick={handleCopyEmail}
+                      className="ml-auto text-outline hover:text-cyber-cyan transition-colors"
+                      title="Copy email"
                     >
-                      Save
-                    </button>
-                    <button
-                      onClick={() => setIsEditingProfile(false)}
-                      className="px-4 py-1.5 bg-surface-container text-outline text-xs rounded"
-                      style={{ fontFamily: 'JetBrains Mono' }}
-                    >
-                      Cancel
+                      <span className="material-symbols-outlined text-[16px]">
+                        {copiedId ? 'check' : 'content_copy'}
+                      </span>
                     </button>
                   </div>
                 </div>
-              ) : (
-                <>
-                  <h3 className="text-2xl font-bold text-white mb-1" style={{ fontFamily: 'Geist' }}>{settings.profile.name}</h3>
-                  <p className="text-electric-violet mb-4" style={{ fontFamily: 'JetBrains Mono', fontSize: '12px' }}>{settings.profile.clearance}</p>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-6">
-                    <div className="space-y-1">
-                      <label className="text-outline block" style={{ fontFamily: 'JetBrains Mono', fontSize: '10px', letterSpacing: '0.1em', fontWeight: 700 }}>EMAIL</label>
-                      <div className="flex items-center gap-2 bg-surface-container-low/60 px-3 py-2 rounded-lg border border-white/5" style={{ fontFamily: 'JetBrains Mono', fontSize: '12px' }}>
-                        <span className="text-on-surface-variant font-semibold">{settings.profile.email}</span>
-                        <button
-                          onClick={handleCopyEmail}
-                          className="ml-auto text-outline hover:text-cyber-cyan transition-colors"
-                          title="Copy email"
-                        >
-                          <span className="material-symbols-outlined text-[16px]">
-                            {copiedId ? 'check' : 'content_copy'}
-                          </span>
-                        </button>
-                      </div>
-                    </div>
-                    <div className="space-y-1">
-                      <label className="text-outline block" style={{ fontFamily: 'JetBrains Mono', fontSize: '10px', letterSpacing: '0.1em', fontWeight: 700 }}>AVATAR URL</label>
-                      <input
-                        className="w-full bg-surface-container-low/60 border border-white/5 rounded-lg px-3 py-2 text-on-surface focus:border-electric-violet/50 focus:ring-1 focus:ring-electric-violet/50 transition-colors"
-                        readOnly
-                        type="email"
-                        value={settings.profile.avatarUrl || '(default gradient)'}
-                      />
-                    </div>
-                  </div>
-                </>
-              )}
+                <div className="space-y-1">
+                  <label className="text-outline block" style={{ fontFamily: 'JetBrains Mono', fontSize: '10px', letterSpacing: '0.1em', fontWeight: 700 }}>AVATAR</label>
+                  <p className="bg-surface-container-low/60 border border-white/5 rounded-lg px-3 py-2 text-on-surface-variant" style={{ fontFamily: 'JetBrains Mono', fontSize: '12px' }}>
+                    {user.avatarUrl || 'No avatar set for this account'}
+                  </p>
+                </div>
+              </div>
             </div>
 
             {/* Actions */}
             <div className="flex flex-row md:flex-col gap-3 w-full md:w-auto">
-              <button
-                onClick={() => {
-                  setNameInput(settings.profile.name);
-                  setEmailInput(settings.profile.email);
-                  setIsEditingProfile(true);
-                }}
-                className="flex-1 md:flex-none px-6 py-2.5 rounded-lg border border-electric-violet/40 bg-electric-violet/10 hover:bg-electric-violet/20 text-electric-violet transition-all"
-                style={{ fontFamily: 'JetBrains Mono', fontSize: '12px' }}
-              >
-                Edit Profile
-              </button>
+              <p className="text-outline text-xs md:max-w-[16rem]" style={{ fontFamily: 'JetBrains Mono' }}>
+                Profile editing is unavailable: the API exposes no profile-update endpoint.
+              </p>
               <button
                 onClick={() => {
                   logout();
@@ -204,25 +171,22 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({ onNavigate }) => {
                 <div>
                   <h5 className="text-base font-semibold text-white mb-1 flex items-center gap-2">
                     Two-Factor Authentication
-                    <span className="bg-electric-violet/20 text-electric-violet font-mono text-[9px] font-bold px-2 py-0.5 rounded">
-                      {settings.security.twoFactor ? 'ACTIVE' : 'STANDBY'}
+                    <span className="bg-surface-container-high text-outline font-mono text-[9px] font-bold px-2 py-0.5 rounded">
+                      NOT IMPLEMENTED
                     </span>
                   </h5>
                   <p className="text-xs text-on-surface-variant">
-                    Require a second verification step when signing into your account.
+                    No two-factor authentication exists in this build. The control is shown as unavailable rather than as a saved preference.
                   </p>
                 </div>
                 <button
-                  onClick={() => updateSecurity({ twoFactor: !settings.security.twoFactor })}
-                  className={`w-12 h-6 rounded-full relative transition-colors cursor-pointer ${
-                    settings.security.twoFactor ? 'bg-electric-violet' : 'bg-surface-container-high'
-                  }`}
+                  type="button"
+                  disabled
+                  aria-disabled="true"
+                  title="Two-factor authentication is not implemented"
+                  className="w-12 h-6 rounded-full relative bg-surface-container-high opacity-60 cursor-not-allowed"
                 >
-                  <div
-                    className={`absolute top-1 w-4 h-4 rounded-full bg-white transition-all shadow-md ${
-                      settings.security.twoFactor ? 'right-1' : 'left-1'
-                    }`}
-                  />
+                  <div className="absolute top-1 left-1 w-4 h-4 rounded-full bg-white shadow-md" />
                 </button>
               </div>
 
@@ -231,32 +195,29 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({ onNavigate }) => {
                 <div>
                   <h5 className="text-base font-semibold text-white mb-1 flex items-center gap-2">
                     End-to-End Encryption
-                    <span className="bg-cyber-cyan/20 text-cyber-cyan font-mono text-[9px] font-bold px-2 py-0.5 rounded">
-                      AES-256-GCM
+                    <span className="bg-surface-container-high text-outline font-mono text-[9px] font-bold px-2 py-0.5 rounded">
+                      NOT IMPLEMENTED
                     </span>
                   </h5>
                   <p className="text-xs text-on-surface-variant">
-                    Encrypt all document transfers and chat communications with your sessions.
+                    No end-to-end encryption layer is implemented. Document data is stored by the DocuMind backend.
                   </p>
                 </div>
                 <button
-                  onClick={() => updateSecurity({ e2eEncryption: !settings.security.e2eEncryption })}
-                  className={`w-12 h-6 rounded-full relative transition-colors cursor-pointer ${
-                    settings.security.e2eEncryption ? 'bg-cyber-cyan' : 'bg-surface-container-high'
-                  }`}
+                  type="button"
+                  disabled
+                  aria-disabled="true"
+                  title="End-to-end encryption is not implemented"
+                  className="w-12 h-6 rounded-full relative bg-surface-container-high opacity-60 cursor-not-allowed"
                 >
-                  <div
-                    className={`absolute top-1 w-4 h-4 rounded-full bg-void-black transition-all shadow-md ${
-                      settings.security.e2eEncryption ? 'right-1' : 'left-1'
-                    }`}
-                  />
+                  <div className="absolute top-1 left-1 w-4 h-4 rounded-full bg-white shadow-md" />
                 </button>
               </div>
 
               {/* Privacy info */}
               <div className="pt-2">
                 <p className="text-on-surface-variant text-xs" style={{ fontFamily: 'JetBrains Mono' }}>
-                  All data is processed locally in your browser session. No documents are uploaded to external servers.
+                  Documents you upload are stored by the DocuMind backend and processed by its local retrieval and QA models. Spoken answers use an external text-to-speech service.
                 </p>
               </div>
             </div>
@@ -300,7 +261,7 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({ onNavigate }) => {
                 <label className="text-outline block" style={{ fontFamily: 'JetBrains Mono', fontSize: '10px', letterSpacing: '0.1em', fontWeight: 700 }}>CONTEXT MEMORY WINDOW</label>
                 <select
                   value={settings.aiProcessing.contextWindow}
-                  onChange={(e) => updateAIProcessing({ contextWindow: e.target.value as AppSettings['aiProcessing']['contextWindow'] })}
+                  onChange={(e) => updateAIProcessing({ contextWindow: e.target.value as PersistedSettings['aiProcessing']['contextWindow'] })}
                   className="w-full bg-surface-container-low/70 border border-white/10 rounded-lg px-3 py-2.5 text-on-surface focus:border-electric-violet/60 focus:ring-0 appearance-none cursor-pointer outline-none transition-colors"
                   style={{ fontFamily: 'JetBrains Mono', fontSize: '12px' }}
                 >
@@ -407,18 +368,19 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({ onNavigate }) => {
         {/* Footer Actions */}
         <div className="flex justify-end gap-4 pb-8">
           <button
-            onClick={resetSettings}
+            onClick={discardChanges}
             className="px-6 py-3 rounded-lg text-outline hover:text-white transition-colors cursor-pointer"
             style={{ fontFamily: 'JetBrains Mono', fontSize: '12px' }}
           >
             Discard Changes
           </button>
           <button
-            onClick={triggerSaveToast}
-            className="px-8 py-3 rounded-lg text-void-black font-bold bg-cyber-cyan hover:bg-secondary transition-colors shadow-[0_0_20px_rgba(6,182,212,0.3)] hover:shadow-[0_0_30px_rgba(6,182,212,0.6)] cursor-pointer"
+            onClick={() => { void applyConfiguration(); }}
+            disabled={saveState === 'saving'}
+            className="px-8 py-3 rounded-lg text-void-black font-bold bg-cyber-cyan hover:bg-secondary transition-colors shadow-[0_0_20px_rgba(6,182,212,0.3)] hover:shadow-[0_0_30px_rgba(6,182,212,0.6)] cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
             style={{ fontFamily: 'JetBrains Mono', fontSize: '12px' }}
           >
-            Apply Configuration
+            {saveState === 'saving' ? 'Applying...' : 'Apply Configuration'}
           </button>
         </div>
       </div>
