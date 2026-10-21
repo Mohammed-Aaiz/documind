@@ -1,0 +1,64 @@
+{
+  "phase": "4F.5-D",
+  "benchmark_version": "v1",
+  "sha256": "1166bf4ff38265c209614ac20261417b7eeb43653f4482dfdf94721fd50a41d0",
+  "total_examples": 182,
+  "answerable": 140,
+  "unanswerable": 42,
+  "document_count": 6,
+  "documents": {
+    "unanswerable_corpus": 42,
+    "company_history_eta": 44,
+    "financial_report_q3": 38,
+    "api_docs_lambda": 20,
+    "dataset_desc_mu": 22,
+    "legal_contract_epsilon": 16
+  },
+  "category_distribution": {
+    "UNANSWERABLE": 42,
+    "TABLE_CELL": 24,
+    "DIRECT_SPAN": 24,
+    "SECTION_SPECIFIC": 16,
+    "LIST_ITEM": 20,
+    "NUMERIC": 20,
+    "TABLE_ROW": 16,
+    "LONG_CONTEXT": 10,
+    "MULTI_CHUNK": 10
+  },
+  "tier_distribution": {
+    "TIER_3_HARD": 62,
+    "TIER_2_STRUCTURED": 80,
+    "TIER_1_CORE": 40
+  },
+  "train_excluded_documents": [
+    "clinical_trial_gamma",
+    "date_corpus",
+    "entity_corpus",
+    "env_monitoring_zeta",
+    "multi_chunk_doc_xi",
+    "ops_manual_delta",
+    "product_comparison_pi",
+    "project_proposal_nu",
+    "regulation_doc_iota",
+    "research_paper_beta",
+    "tech_spec_alpha",
+    "textbook_chapter_theta",
+    "training_material_omega"
+  ],
+  "gold_span_validation": {
+    "valid": 182,
+    "invalid": 0
+  },
+  "token_span_validation": {
+    "valid": 182,
+    "invalid": 0
+  },
+  "leakage": {
+    "document_overlap": 0,
+    "question_overlap": 0
+  },
+  "duplicates": {
+    "exact_question_duplicates": 10
+  },
+  "source_dataset_hash": "a517530354fc9bcaeef6f1aa16c3fb9ce92f1967668386bc66781e6e6bbf2e97"
+}

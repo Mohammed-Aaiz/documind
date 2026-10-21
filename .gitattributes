@@ -1,0 +1,27 @@
+# End-of-line policy for frozen evaluation artifacts.
+#
+# ``backend/phases/phase4f/phase4f_5d/benchmark/qa_benchmark_v1.jsonl`` is a
+# read-only benchmark whose SHA-256 is asserted byte-for-byte by
+# ``backend/tests/unit/evaluation/test_run_artifacts.py`` and re-verified by
+# every runner in ``backend/evaluation/experiments/`` before it measures
+# anything.
+#
+# The pinned digest
+# (1166bf4ff38265c209614ac20261417b7eeb43653f4482dfdf94721fd50a41d0) is the
+# digest of the CRLF rendition of those 182 rows, and this repository is checked
+# out with ``core.autocrlf=true``.  Without this rule, ``git add`` would store
+# the LF rendition and a Linux checkout would hash ``5dff5aaa…`` instead, so the
+# integrity test would fail on a platform that never touched the file.
+#
+# ``-text`` disables end-of-line conversion for one path: git stores the bytes
+# it is given and writes them back unchanged on every platform.  Deliberately
+# narrow — no other file in the repository is affected, and the obsolete
+# pre-migration copy (``backend/phase4f/…``) is retired rather than pinned.
+#
+# The first rule pins this file itself.  It is not decoration: with
+# ``core.autocrlf=true`` a checkout would otherwise write this file with CRLF,
+# git keeps the trailing ``\r`` as part of the pattern, and *every* rule below
+# would silently stop matching.  Verified: a CRLF copy of this file reports
+# ``text: unspecified`` for the benchmark above.
+.gitattributes -text
+backend/phases/phase4f/phase4f_5d/benchmark/qa_benchmark_v1.jsonl -text
