@@ -1,0 +1,1465 @@
+{
+  "artifact": "E0_MEDIA_DETECTION_RECORD",
+  "phase": "Runtime media detection gate (resume point after the 4F.6-H handoff)",
+  "date": "2026-09-23T20:23:21.942256+05:30",
+  "detection_timestamp": "2026-09-23T20:23:21.942256+05:30",
+  "produced_by": "backend/architecture/phase4f_6/e0_diagnostics/tools/detect_runtime_media.py (read-only)",
+  "nature": "Detection, inventory, fingerprinting and acceptance evaluation only. No installation, no PostgreSQL start, no SQL, no database connection, no retrieval, no E0 execution.",
+  "starting_state": "WAITING_FOR_MEDIA",
+  "ending_state": "MEDIA_DETECTED",
+  "final_status": "E0_MEDIA_DETECTED",
+  "gate_case": "C - acceptable media fully detected and fingerprinted",
+  "postgres_candidates": [
+    {
+      "id": "PG-C1",
+      "path": "C:/pg/pg16.zip",
+      "kind": "media_archive_portable",
+      "size_bytes": 304112325,
+      "mtime": "2026-09-02T02:08:07.636329",
+      "sha256": "6a1bfb6435b13d9563ae481445c70ac2a19846bd8a430b12903b408eec300f9b",
+      "evidence": {
+        "form": "zip archive whose root unpacks to pgsql/ (portable Windows distribution)",
+        "architecture": "x64 (contained binaries read as x64_AMD64 from PE headers)",
+        "version": "16.6 (include/pg_config.h: PG_VERSION \"16.6\", PG_VERSION_NUM 160006)",
+        "executables_present": [
+          "bin/postgres.exe",
+          "bin/pg_ctl.exe",
+          "bin/psql.exe",
+          "bin/pg_config.exe",
+          "bin/initdb.exe"
+        ]
+      },
+      "acceptance": "PASS"
+    },
+    {
+      "id": "PG-C2",
+      "path": "C:/pg/pg16/pgsql",
+      "kind": "extracted_distribution",
+      "size_bytes": null,
+      "sha256": null,
+      "evidence": {
+        "binaries": {
+          "postgres.exe": true,
+          "pg_ctl.exe": true,
+          "psql.exe": true,
+          "pg_config.exe": true,
+          "initdb.exe": true
+        },
+        "version": {
+          "PG_MAJORVERSION": "16",
+          "PG_VERSION": "16.6",
+          "PG_VERSION_NUM": "160006"
+        },
+        "postgres_exe_pe_machine": "x64_AMD64"
+      },
+      "acceptance": "PASS"
+    },
+    {
+      "id": "PG-C3",
+      "path": "C:/pgdata/pgsql",
+      "kind": "installed_distribution",
+      "size_bytes": null,
+      "sha256": null,
+      "evidence": {
+        "binaries": {
+          "postgres.exe": true,
+          "pg_ctl.exe": true,
+          "psql.exe": true,
+          "pg_config.exe": true,
+          "initdb.exe": true
+        },
+        "version": {
+          "PG_MAJORVERSION": "16",
+          "PG_VERSION": "16.6",
+          "PG_VERSION_NUM": "160006"
+        },
+        "postgres_exe_pe_machine": "x64_AMD64",
+        "layout": "EDB Windows installer layout (bin, doc, include, lib, share, pgAdmin 4, StackBuilder)"
+      },
+      "acceptance": "PASS"
+    },
+    {
+      "id": "PG-C4",
+      "path": "C:/pg/data",
+      "kind": "initialised_cluster_data_dir",
+      "PG_VERSION": "16",
+      "acceptance": "PASS (observed; not started, not accessed)"
+    },
+    {
+      "id": "PG-C5",
+      "path": "C:/pgdata/data",
+      "kind": "initialised_cluster_data_dir",
+      "PG_VERSION": "16",
+      "acceptance": "PASS (observed; not started, not accessed)"
+    }
+  ],
+  "pgvector_candidates": [
+    {
+      "id": "PGV-C1",
+      "path": "C:/pg/pgvector.zip",
+      "kind": "media_archive",
+      "size_bytes": 169595,
+      "mtime": "2026-09-02T02:24:25.762858",
+      "sha256": "faeaecb100488397ce5d38424b8c931be0f29e1668be7d4e75c26fe2eb056522",
+      "evidence": {
+        "contains": [
+          "lib/vector.dll",
+          "share/extension/vector.control",
+          "share/extension/vector.sql",
+          "share/extension/vector--*.sql (upgrade chain through 0.8.6)",
+          "include/server/extension/vector/*.h",
+          "readme.txt"
+        ]
+      },
+      "acceptance": "PASS"
+    },
+    {
+      "id": "PGV-C2",
+      "path": "C:/pg/pgvector_tmp",
+      "kind": "extracted_media",
+      "evidence": {
+        "file_count": 48,
+        "vector_control": "comment = 'vector data type and ivfflat and hnsw access methods'\ndefault_version = '0.8.6'\nmodule_pathname = '$libdir/vector'\nrelocatable = true\n",
+        "latest_sql": "vector--0.8.6.sql present",
+        "vector_dll": "lib/vector.dll",
+        "vector_dll_pe_machine": "x64_AMD64",
+        "vector_dll_sha256": "64157853678df00a82c0b7bd1cfc311ddac4f8a53d27b9f101c1327b963ccf50",
+        "readme": "https://github.com/andreiramani/pgvector_pgsql_windows\n------------------------------------------------------\n\n- ONLY for PostgreSQL v16 - Windows x64\n- Stop PostgreSQL using services.msc\n- Extract the zip file to your Postgres installed folder\n- Start PostgreSQL service\n- Run query: \nCREATE EXTENSION vector\n- Run this query to check if the extension is enable (t):\nSELECT extname,extrelocatable,extversion FROM pg_extension where extname='vector'\n\n\n=============================\nUPGRADE FROM PREVIOUS VERSION\n=============================\n- Stop PostgreSQL using services.msc\n- Extract the zip file to your Postgres installed folder, on overwrite dialog option, choose \"Yes to all\"\n- Start PostgreSQL service\n- Run query: \nALTER EXTENSION vector UPDATE\n- Check the version in the current database with:\nSELECT extversion FROM pg_extension WHERE extname = 'vector'\n\n"
+      },
+      "acceptance": "PASS"
+    },
+    {
+      "id": "PGV-C3",
+      "path": "C:/pgdata/pgsql",
+      "kind": "installed_into_pg16_tree",
+      "evidence": {
+        "vector_dll": "lib/vector.dll",
+        "vector_dll_pe_machine": "x64_AMD64",
+        "vector_dll_sha256": "64157853678df00a82c0b7bd1cfc311ddac4f8a53d27b9f101c1327b963ccf50",
+        "vector_control": "# pgvector extension\ncomment = 'Open-source vector similarity search for Postgres'\ndefault_version = '0.8.6'\nmodule_pathname = '$libdir/vector'\nrelocatable = false\ntrusted = true\n",
+        "target_tree": "PostgreSQL 16.6 x64 installation tree (directory placement evidence, not filename)"
+      },
+      "acceptance": "PASS"
+    },
+    {
+      "id": "PGV-C4",
+      "path": "C:/pg/pg16/pgsql",
+      "kind": "merged_into_extracted_pg16_tree",
+      "evidence": {
+        "vector_dll": "lib/vector.dll",
+        "vector_dll_pe_machine": "x64_AMD64",
+        "vector_dll_sha256": "64157853678df00a82c0b7bd1cfc311ddac4f8a53d27b9f101c1327b963ccf50",
+        "vector_control": "comment = 'vector data type and ivfflat and hnsw access methods'\ndefault_version = '0.8.6'\nmodule_pathname = '$libdir/vector'\nrelocatable = true\n"
+      },
+      "acceptance": "PASS"
+    }
+  ],
+  "media_fingerprints": [
+    {
+      "path": "C:/pg/pg16.zip",
+      "filename": "pg16.zip",
+      "size_bytes": 304112325,
+      "mtime": "2026-09-02T02:08:07.636329",
+      "sha256": "6a1bfb6435b13d9563ae481445c70ac2a19846bd8a430b12903b408eec300f9b",
+      "role": "postgresql_media"
+    },
+    {
+      "path": "C:/pg/pgvector.zip",
+      "filename": "pgvector.zip",
+      "size_bytes": 169595,
+      "mtime": "2026-09-02T02:24:25.762858",
+      "sha256": "faeaecb100488397ce5d38424b8c931be0f29e1668be7d4e75c26fe2eb056522",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pgdata/pgsql/bin/postgres.exe",
+      "filename": "postgres.exe",
+      "size_bytes": 8656384,
+      "mtime": "2024-11-19T09:51:42",
+      "sha256": "adf37afd68eed425d2abbb4b1a06608d4950f12f0a4791534c75b9bdc3f30ebc",
+      "role": "postgresql_runtime_binary"
+    },
+    {
+      "path": "C:/pgdata/pgsql/bin/pg_ctl.exe",
+      "filename": "pg_ctl.exe",
+      "size_bytes": 123392,
+      "mtime": "2024-11-19T09:51:42",
+      "sha256": "234af6e08e2886d62bdf9a0598148641f0a4722bb36769dcf72af03efaef166d",
+      "role": "postgresql_runtime_binary"
+    },
+    {
+      "path": "C:/pgdata/pgsql/bin/psql.exe",
+      "filename": "psql.exe",
+      "size_bytes": 601088,
+      "mtime": "2024-11-19T09:51:42",
+      "sha256": "d7973104430cf0abeac36fd6e524a379a7425c99ea7457a630ac7024c88df01b",
+      "role": "postgresql_runtime_binary"
+    },
+    {
+      "path": "C:/pgdata/pgsql/bin/pg_config.exe",
+      "filename": "pg_config.exe",
+      "size_bytes": 83456,
+      "mtime": "2024-11-19T09:51:42",
+      "sha256": "9076e8c3c7287f99947568d147d6bdfcade43bda43481d0f2926605361d55060",
+      "role": "postgresql_runtime_binary"
+    },
+    {
+      "path": "C:/pgdata/pgsql/bin/initdb.exe",
+      "filename": "initdb.exe",
+      "size_bytes": 210432,
+      "mtime": "2024-11-19T09:51:42",
+      "sha256": "63cc7c89606b272239016537e1a7d884f571000ca7404b7ea0b17d62aeadfa6d",
+      "role": "postgresql_runtime_binary"
+    },
+    {
+      "path": "C:/pg/pgvector_tmp/lib/vector.dll",
+      "filename": "vector.dll",
+      "size_bytes": 279040,
+      "mtime": "2026-07-30T08:01:12",
+      "sha256": "64157853678df00a82c0b7bd1cfc311ddac4f8a53d27b9f101c1327b963ccf50",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pgvector_tmp/share/extension/vector--0.1.0--0.1.1.sql",
+      "filename": "vector--0.1.0--0.1.1.sql",
+      "size_bytes": 2047,
+      "mtime": "2026-07-30T01:28:54",
+      "sha256": "7b98ca899d63e8128ea3c980634b2d675e0dc6e7f27843e666d4e9980db0ab63",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pgvector_tmp/share/extension/vector--0.1.1--0.1.3.sql",
+      "filename": "vector--0.1.1--0.1.3.sql",
+      "size_bytes": 153,
+      "mtime": "2026-07-30T01:28:54",
+      "sha256": "57024ba8abad34b9ca151310748518b061a36e2df9b5ba0487e1cd186b1a208f",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pgvector_tmp/share/extension/vector--0.1.3--0.1.4.sql",
+      "filename": "vector--0.1.3--0.1.4.sql",
+      "size_bytes": 153,
+      "mtime": "2026-07-30T01:28:54",
+      "sha256": "98e7caa4958e026c56613ed779abe469adca9e5e82190d20e19aa345c5e6f71f",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pgvector_tmp/share/extension/vector--0.1.4--0.1.5.sql",
+      "filename": "vector--0.1.4--0.1.5.sql",
+      "size_bytes": 153,
+      "mtime": "2026-07-30T01:28:54",
+      "sha256": "3fa555492b673f9e0402fefdbd3fc0e479afb29b7141b49145bed8dc691b2c4f",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pgvector_tmp/share/extension/vector--0.1.5--0.1.6.sql",
+      "filename": "vector--0.1.5--0.1.6.sql",
+      "size_bytes": 153,
+      "mtime": "2026-07-30T01:28:54",
+      "sha256": "557e3d9df2b9f5a5a2428545dbcfa7d99d62f489bbd44127445a36663a8953d1",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pgvector_tmp/share/extension/vector--0.1.6--0.1.7.sql",
+      "filename": "vector--0.1.6--0.1.7.sql",
+      "size_bytes": 403,
+      "mtime": "2026-07-30T01:28:54",
+      "sha256": "0975ff29e6b8268382253ce0e75cc6b5364582280ef1a7b40a137ce4c6267887",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pgvector_tmp/share/extension/vector--0.1.7--0.1.8.sql",
+      "filename": "vector--0.1.7--0.1.8.sql",
+      "size_bytes": 396,
+      "mtime": "2026-07-30T01:28:54",
+      "sha256": "fcac329c0901fdcb1d3884e7bf8017c75632136dea88fb8b6352de7e61d4aba5",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pgvector_tmp/share/extension/vector--0.1.8--0.2.0.sql",
+      "filename": "vector--0.1.8--0.2.0.sql",
+      "size_bytes": 153,
+      "mtime": "2026-07-30T01:28:54",
+      "sha256": "ac330285f527a73d4def55b5de17eae6729a0c052139bb0345aa1a92af96d516",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pgvector_tmp/share/extension/vector--0.2.0--0.2.1.sql",
+      "filename": "vector--0.2.0--0.2.1.sql",
+      "size_bytes": 744,
+      "mtime": "2026-07-30T01:28:54",
+      "sha256": "0ccec7b1bc7c5e76f5da10b06713e45b08aebcdca7c833ffb4fda8f44d7ae872",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pgvector_tmp/share/extension/vector--0.2.1--0.2.2.sql",
+      "filename": "vector--0.2.1--0.2.2.sql",
+      "size_bytes": 153,
+      "mtime": "2026-07-30T01:28:54",
+      "sha256": "79a1492abf44c7641893b9f80ce51ee9a12e523f35a3350bf859e16d06dfaa25",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pgvector_tmp/share/extension/vector--0.2.2--0.2.3.sql",
+      "filename": "vector--0.2.2--0.2.3.sql",
+      "size_bytes": 153,
+      "mtime": "2026-07-30T01:28:54",
+      "sha256": "a46540236f5eef0955c7b48a34c468332ffdf28242ec39e3e93ff3129e9a5d61",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pgvector_tmp/share/extension/vector--0.2.3--0.2.4.sql",
+      "filename": "vector--0.2.3--0.2.4.sql",
+      "size_bytes": 153,
+      "mtime": "2026-07-30T01:28:54",
+      "sha256": "def15581c900e51eab8ebde541ada84f36ba9c1c39c6e5c272d1523ed114ccdd",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pgvector_tmp/share/extension/vector--0.2.4--0.2.5.sql",
+      "filename": "vector--0.2.4--0.2.5.sql",
+      "size_bytes": 153,
+      "mtime": "2026-07-30T01:28:54",
+      "sha256": "bc11f67c5e2aa15709332d68d91cdfffc80189403608d7ceed2da573edd8eab8",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pgvector_tmp/share/extension/vector--0.2.5--0.2.6.sql",
+      "filename": "vector--0.2.5--0.2.6.sql",
+      "size_bytes": 153,
+      "mtime": "2026-07-30T01:28:54",
+      "sha256": "a9d31e2be0607f0462399e0b8f79a2e267fef8117b1c50a9e9b1c7758cd9e29a",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pgvector_tmp/share/extension/vector--0.2.6--0.2.7.sql",
+      "filename": "vector--0.2.6--0.2.7.sql",
+      "size_bytes": 153,
+      "mtime": "2026-07-30T01:28:54",
+      "sha256": "25cf8bc50ee366705e58fd3ccc8ea1d4069e7ad3558dd220fbe0ebc1ac28a0ff",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pgvector_tmp/share/extension/vector--0.2.7--0.3.0.sql",
+      "filename": "vector--0.2.7--0.3.0.sql",
+      "size_bytes": 153,
+      "mtime": "2026-07-30T01:28:54",
+      "sha256": "4edaecabf8186776e0eae84b6312885cb0c6cf4e83ae698a547e735f113231f8",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pgvector_tmp/share/extension/vector--0.3.0--0.3.1.sql",
+      "filename": "vector--0.3.0--0.3.1.sql",
+      "size_bytes": 153,
+      "mtime": "2026-07-30T01:28:54",
+      "sha256": "f6b5b78e08bd948567a0a56d7102d53b5ab1d2cde7ccf41e41bd899642406a1c",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pgvector_tmp/share/extension/vector--0.3.1--0.3.2.sql",
+      "filename": "vector--0.3.1--0.3.2.sql",
+      "size_bytes": 153,
+      "mtime": "2026-07-30T01:28:54",
+      "sha256": "d04695948d418cc70cfb688aa2e34ae83b3a7dc00ec93e5b53b0dbc3ead8c6ac",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pgvector_tmp/share/extension/vector--0.3.2--0.4.0.sql",
+      "filename": "vector--0.3.2--0.4.0.sql",
+      "size_bytes": 864,
+      "mtime": "2026-07-30T01:28:54",
+      "sha256": "5ac5156b94b840961ad6a212bc1fd4bd090c3b6948d760c221d5db469d100712",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pgvector_tmp/share/extension/vector--0.4.0--0.4.1.sql",
+      "filename": "vector--0.4.0--0.4.1.sql",
+      "size_bytes": 153,
+      "mtime": "2026-07-30T01:28:54",
+      "sha256": "190593e701eb39797e357aacf515ef904674e7a5eb67cda7f9dd1bf8e510439e",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pgvector_tmp/share/extension/vector--0.4.1--0.4.2.sql",
+      "filename": "vector--0.4.1--0.4.2.sql",
+      "size_bytes": 153,
+      "mtime": "2026-07-30T01:28:54",
+      "sha256": "7ca4a21f4bba3a9d0b2bc9d3cac1e1677be1c513ddaecc20e4f5b084cc89d2a9",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pgvector_tmp/share/extension/vector--0.4.2--0.4.3.sql",
+      "filename": "vector--0.4.2--0.4.3.sql",
+      "size_bytes": 153,
+      "mtime": "2026-07-30T01:28:54",
+      "sha256": "2f980ceb5fdab1b0e8e88fac0554cffce7477f82217aec66feb558a7eda9e2b9",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pgvector_tmp/share/extension/vector--0.4.3--0.4.4.sql",
+      "filename": "vector--0.4.3--0.4.4.sql",
+      "size_bytes": 153,
+      "mtime": "2026-07-30T01:28:54",
+      "sha256": "bef1ec174a0bbceebdf4defebbf9f7514500bfc89d44e481cdf8a2692989ca52",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pgvector_tmp/share/extension/vector--0.4.4--0.5.0.sql",
+      "filename": "vector--0.4.4--0.5.0.sql",
+      "size_bytes": 1426,
+      "mtime": "2026-07-30T01:28:54",
+      "sha256": "1d0b08225f08a59a78dd90e5ccd33c6f12913a51d65392c784f6907272c40292",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pgvector_tmp/share/extension/vector--0.5.0--0.5.1.sql",
+      "filename": "vector--0.5.0--0.5.1.sql",
+      "size_bytes": 153,
+      "mtime": "2026-07-30T01:28:54",
+      "sha256": "9654eb95f90ccef166e84f9991cc2ed4f50ef3f0e49bdd60860fdac9124eb1ab",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pgvector_tmp/share/extension/vector--0.5.1--0.6.0.sql",
+      "filename": "vector--0.5.1--0.6.0.sql",
+      "size_bytes": 243,
+      "mtime": "2026-07-30T01:28:54",
+      "sha256": "f75c37c441bf79d4b41766409118d519b2ed491c807636da11ecf40df87a96b8",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pgvector_tmp/share/extension/vector--0.6.0--0.6.1.sql",
+      "filename": "vector--0.6.0--0.6.1.sql",
+      "size_bytes": 459,
+      "mtime": "2026-07-30T01:28:54",
+      "sha256": "2b0c4292e217cd7fabc3b008f60728a1c5da2b55c77c12afcd96dff3243e28bd",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pgvector_tmp/share/extension/vector--0.6.1--0.6.2.sql",
+      "filename": "vector--0.6.1--0.6.2.sql",
+      "size_bytes": 153,
+      "mtime": "2026-07-30T01:28:54",
+      "sha256": "0c51abf5c5f89150a1b0ce8424a461471b8543687252cf3827c04c81d4712224",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pgvector_tmp/share/extension/vector--0.6.2--0.7.0.sql",
+      "filename": "vector--0.6.2--0.7.0.sql",
+      "size_bytes": 20375,
+      "mtime": "2026-07-30T01:28:54",
+      "sha256": "97732d03249e50f32b43ea46a81acd21f6770b65dcfeb1c45f86ce483fe8dbd6",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pgvector_tmp/share/extension/vector--0.7.0--0.7.1.sql",
+      "filename": "vector--0.7.0--0.7.1.sql",
+      "size_bytes": 153,
+      "mtime": "2026-07-30T01:28:54",
+      "sha256": "936696328866f90b7c9f4085b18d46f9bb938acd22ab2416ddd77650857f3dc2",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pgvector_tmp/share/extension/vector--0.7.1--0.7.2.sql",
+      "filename": "vector--0.7.1--0.7.2.sql",
+      "size_bytes": 153,
+      "mtime": "2026-07-30T01:28:54",
+      "sha256": "ed25b8ad8066518108c06ea80e2e931172e58aacebd024d753e0c2fb294168fa",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pgvector_tmp/share/extension/vector--0.7.2--0.7.3.sql",
+      "filename": "vector--0.7.2--0.7.3.sql",
+      "size_bytes": 153,
+      "mtime": "2026-07-30T01:28:54",
+      "sha256": "59507662ab28371501e610e4dffbb0588216f2e7efbdc4202212600573cc138f",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pgvector_tmp/share/extension/vector--0.7.3--0.7.4.sql",
+      "filename": "vector--0.7.3--0.7.4.sql",
+      "size_bytes": 153,
+      "mtime": "2026-07-30T01:28:54",
+      "sha256": "122d2985b021236c02258e3d28d9151d7eb4987ccce2875137390b5209b8c379",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pgvector_tmp/share/extension/vector--0.7.4--0.8.0.sql",
+      "filename": "vector--0.7.4--0.8.0.sql",
+      "size_bytes": 1227,
+      "mtime": "2026-07-30T01:28:54",
+      "sha256": "54bfa94b97113d5a2923434ca49e049dd04027a20142babeea2e6c1ae19ff157",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pgvector_tmp/share/extension/vector--0.8.0--0.8.1.sql",
+      "filename": "vector--0.8.0--0.8.1.sql",
+      "size_bytes": 153,
+      "mtime": "2026-07-30T01:28:54",
+      "sha256": "3740d7be31c57afd9e39aed6a79eb4f4ce11ed98f800279263ea84d36e59a858",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pgvector_tmp/share/extension/vector--0.8.1--0.8.2.sql",
+      "filename": "vector--0.8.1--0.8.2.sql",
+      "size_bytes": 153,
+      "mtime": "2026-07-30T01:28:54",
+      "sha256": "cae4091b67aef59e3af8eca0593cd2e0f9798641e5ab82847e79950b1e40618d",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pgvector_tmp/share/extension/vector--0.8.2--0.8.3.sql",
+      "filename": "vector--0.8.2--0.8.3.sql",
+      "size_bytes": 153,
+      "mtime": "2026-07-30T01:28:54",
+      "sha256": "6ffb6557d31466d1395ca04726761a9e6bb39b22695e7c97f6c91c8257918ee3",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pgvector_tmp/share/extension/vector--0.8.3--0.8.4.sql",
+      "filename": "vector--0.8.3--0.8.4.sql",
+      "size_bytes": 153,
+      "mtime": "2026-07-30T01:28:54",
+      "sha256": "58df40c3a5167e4b31fa47a6ab676713af7185a8dee0e693128b4fc05aff8949",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pgvector_tmp/share/extension/vector--0.8.4--0.8.5.sql",
+      "filename": "vector--0.8.4--0.8.5.sql",
+      "size_bytes": 153,
+      "mtime": "2026-07-30T01:28:54",
+      "sha256": "35bf2123e2c539fa92eb0262d31f542eccce34a161287f02359b128decc6ccfe",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pgvector_tmp/share/extension/vector--0.8.5--0.8.6.sql",
+      "filename": "vector--0.8.5--0.8.6.sql",
+      "size_bytes": 153,
+      "mtime": "2026-07-30T01:28:54",
+      "sha256": "28cf4605f53cfc5f1ab27fbaa052ded2614e19827a33eb305f4bcd0ec1769531",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pgvector_tmp/share/extension/vector--0.8.6.sql",
+      "filename": "vector--0.8.6.sql",
+      "size_bytes": 31171,
+      "mtime": "2026-07-30T01:28:54",
+      "sha256": "7fb5bb279ef83bf9204bfac7405bb5c9a05e49f5ac7d64d1eb4464d103b80f32",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pgvector_tmp/share/extension/vector.control",
+      "filename": "vector.control",
+      "size_bytes": 145,
+      "mtime": "2026-07-30T01:28:54",
+      "sha256": "f1e1717c0c1da9c200ff3a53acf1d14eba5e3f70da928a723b247b0b1059417d",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pgvector_tmp/share/extension/vector.sql",
+      "filename": "vector.sql",
+      "size_bytes": 31171,
+      "mtime": "2026-07-30T01:28:54",
+      "sha256": "7fb5bb279ef83bf9204bfac7405bb5c9a05e49f5ac7d64d1eb4464d103b80f32",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pgdata/pgsql/lib/vector.dll",
+      "filename": "vector.dll",
+      "size_bytes": 279040,
+      "mtime": "2026-09-16T02:52:54.290855",
+      "sha256": "64157853678df00a82c0b7bd1cfc311ddac4f8a53d27b9f101c1327b963ccf50",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pgdata/pgsql/share/extension/vector--0.1.0--0.1.1.sql",
+      "filename": "vector--0.1.0--0.1.1.sql",
+      "size_bytes": 2047,
+      "mtime": "2026-09-16T02:53:41.443724",
+      "sha256": "7b98ca899d63e8128ea3c980634b2d675e0dc6e7f27843e666d4e9980db0ab63",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pgdata/pgsql/share/extension/vector--0.1.1--0.1.3.sql",
+      "filename": "vector--0.1.1--0.1.3.sql",
+      "size_bytes": 153,
+      "mtime": "2026-09-16T02:53:41.447759",
+      "sha256": "57024ba8abad34b9ca151310748518b061a36e2df9b5ba0487e1cd186b1a208f",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pgdata/pgsql/share/extension/vector--0.1.3--0.1.4.sql",
+      "filename": "vector--0.1.3--0.1.4.sql",
+      "size_bytes": 153,
+      "mtime": "2026-09-16T02:53:41.450760",
+      "sha256": "98e7caa4958e026c56613ed779abe469adca9e5e82190d20e19aa345c5e6f71f",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pgdata/pgsql/share/extension/vector--0.1.4--0.1.5.sql",
+      "filename": "vector--0.1.4--0.1.5.sql",
+      "size_bytes": 153,
+      "mtime": "2026-09-16T02:53:41.454758",
+      "sha256": "3fa555492b673f9e0402fefdbd3fc0e479afb29b7141b49145bed8dc691b2c4f",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pgdata/pgsql/share/extension/vector--0.1.5--0.1.6.sql",
+      "filename": "vector--0.1.5--0.1.6.sql",
+      "size_bytes": 153,
+      "mtime": "2026-09-16T02:53:41.458761",
+      "sha256": "557e3d9df2b9f5a5a2428545dbcfa7d99d62f489bbd44127445a36663a8953d1",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pgdata/pgsql/share/extension/vector--0.1.6--0.1.7.sql",
+      "filename": "vector--0.1.6--0.1.7.sql",
+      "size_bytes": 403,
+      "mtime": "2026-09-16T02:53:41.462955",
+      "sha256": "0975ff29e6b8268382253ce0e75cc6b5364582280ef1a7b40a137ce4c6267887",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pgdata/pgsql/share/extension/vector--0.1.7--0.1.8.sql",
+      "filename": "vector--0.1.7--0.1.8.sql",
+      "size_bytes": 396,
+      "mtime": "2026-09-16T02:53:41.465957",
+      "sha256": "fcac329c0901fdcb1d3884e7bf8017c75632136dea88fb8b6352de7e61d4aba5",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pgdata/pgsql/share/extension/vector--0.1.8--0.2.0.sql",
+      "filename": "vector--0.1.8--0.2.0.sql",
+      "size_bytes": 153,
+      "mtime": "2026-09-16T02:53:41.468957",
+      "sha256": "ac330285f527a73d4def55b5de17eae6729a0c052139bb0345aa1a92af96d516",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pgdata/pgsql/share/extension/vector--0.2.0--0.2.1.sql",
+      "filename": "vector--0.2.0--0.2.1.sql",
+      "size_bytes": 744,
+      "mtime": "2026-09-16T02:53:41.479957",
+      "sha256": "0ccec7b1bc7c5e76f5da10b06713e45b08aebcdca7c833ffb4fda8f44d7ae872",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pgdata/pgsql/share/extension/vector--0.2.1--0.2.2.sql",
+      "filename": "vector--0.2.1--0.2.2.sql",
+      "size_bytes": 153,
+      "mtime": "2026-09-16T02:53:41.501965",
+      "sha256": "79a1492abf44c7641893b9f80ce51ee9a12e523f35a3350bf859e16d06dfaa25",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pgdata/pgsql/share/extension/vector--0.2.2--0.2.3.sql",
+      "filename": "vector--0.2.2--0.2.3.sql",
+      "size_bytes": 153,
+      "mtime": "2026-09-16T02:53:41.523021",
+      "sha256": "a46540236f5eef0955c7b48a34c468332ffdf28242ec39e3e93ff3129e9a5d61",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pgdata/pgsql/share/extension/vector--0.2.3--0.2.4.sql",
+      "filename": "vector--0.2.3--0.2.4.sql",
+      "size_bytes": 153,
+      "mtime": "2026-09-16T02:53:41.544020",
+      "sha256": "def15581c900e51eab8ebde541ada84f36ba9c1c39c6e5c272d1523ed114ccdd",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pgdata/pgsql/share/extension/vector--0.2.4--0.2.5.sql",
+      "filename": "vector--0.2.4--0.2.5.sql",
+      "size_bytes": 153,
+      "mtime": "2026-09-16T02:53:41.562020",
+      "sha256": "bc11f67c5e2aa15709332d68d91cdfffc80189403608d7ceed2da573edd8eab8",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pgdata/pgsql/share/extension/vector--0.2.5--0.2.6.sql",
+      "filename": "vector--0.2.5--0.2.6.sql",
+      "size_bytes": 153,
+      "mtime": "2026-09-16T02:53:41.582019",
+      "sha256": "a9d31e2be0607f0462399e0b8f79a2e267fef8117b1c50a9e9b1c7758cd9e29a",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pgdata/pgsql/share/extension/vector--0.2.6--0.2.7.sql",
+      "filename": "vector--0.2.6--0.2.7.sql",
+      "size_bytes": 153,
+      "mtime": "2026-09-16T02:53:41.604021",
+      "sha256": "25cf8bc50ee366705e58fd3ccc8ea1d4069e7ad3558dd220fbe0ebc1ac28a0ff",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pgdata/pgsql/share/extension/vector--0.2.7--0.3.0.sql",
+      "filename": "vector--0.2.7--0.3.0.sql",
+      "size_bytes": 153,
+      "mtime": "2026-09-16T02:53:41.622019",
+      "sha256": "4edaecabf8186776e0eae84b6312885cb0c6cf4e83ae698a547e735f113231f8",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pgdata/pgsql/share/extension/vector--0.3.0--0.3.1.sql",
+      "filename": "vector--0.3.0--0.3.1.sql",
+      "size_bytes": 153,
+      "mtime": "2026-09-16T02:53:41.641372",
+      "sha256": "f6b5b78e08bd948567a0a56d7102d53b5ab1d2cde7ccf41e41bd899642406a1c",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pgdata/pgsql/share/extension/vector--0.3.1--0.3.2.sql",
+      "filename": "vector--0.3.1--0.3.2.sql",
+      "size_bytes": 153,
+      "mtime": "2026-09-16T02:53:41.663384",
+      "sha256": "d04695948d418cc70cfb688aa2e34ae83b3a7dc00ec93e5b53b0dbc3ead8c6ac",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pgdata/pgsql/share/extension/vector--0.3.2--0.4.0.sql",
+      "filename": "vector--0.3.2--0.4.0.sql",
+      "size_bytes": 864,
+      "mtime": "2026-09-16T02:53:41.683383",
+      "sha256": "5ac5156b94b840961ad6a212bc1fd4bd090c3b6948d760c221d5db469d100712",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pgdata/pgsql/share/extension/vector--0.4.0--0.4.1.sql",
+      "filename": "vector--0.4.0--0.4.1.sql",
+      "size_bytes": 153,
+      "mtime": "2026-09-16T02:53:41.706683",
+      "sha256": "190593e701eb39797e357aacf515ef904674e7a5eb67cda7f9dd1bf8e510439e",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pgdata/pgsql/share/extension/vector--0.4.1--0.4.2.sql",
+      "filename": "vector--0.4.1--0.4.2.sql",
+      "size_bytes": 153,
+      "mtime": "2026-09-16T02:53:41.729891",
+      "sha256": "7ca4a21f4bba3a9d0b2bc9d3cac1e1677be1c513ddaecc20e4f5b084cc89d2a9",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pgdata/pgsql/share/extension/vector--0.4.2--0.4.3.sql",
+      "filename": "vector--0.4.2--0.4.3.sql",
+      "size_bytes": 153,
+      "mtime": "2026-09-16T02:53:41.749130",
+      "sha256": "2f980ceb5fdab1b0e8e88fac0554cffce7477f82217aec66feb558a7eda9e2b9",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pgdata/pgsql/share/extension/vector--0.4.3--0.4.4.sql",
+      "filename": "vector--0.4.3--0.4.4.sql",
+      "size_bytes": 153,
+      "mtime": "2026-09-16T02:53:41.770190",
+      "sha256": "bef1ec174a0bbceebdf4defebbf9f7514500bfc89d44e481cdf8a2692989ca52",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pgdata/pgsql/share/extension/vector--0.4.4--0.5.0.sql",
+      "filename": "vector--0.4.4--0.5.0.sql",
+      "size_bytes": 1426,
+      "mtime": "2026-09-16T02:53:41.795227",
+      "sha256": "1d0b08225f08a59a78dd90e5ccd33c6f12913a51d65392c784f6907272c40292",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pgdata/pgsql/share/extension/vector--0.5.0--0.5.1.sql",
+      "filename": "vector--0.5.0--0.5.1.sql",
+      "size_bytes": 153,
+      "mtime": "2026-09-16T02:53:41.821224",
+      "sha256": "9654eb95f90ccef166e84f9991cc2ed4f50ef3f0e49bdd60860fdac9124eb1ab",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pgdata/pgsql/share/extension/vector--0.5.1--0.6.0.sql",
+      "filename": "vector--0.5.1--0.6.0.sql",
+      "size_bytes": 243,
+      "mtime": "2026-09-16T02:53:41.843593",
+      "sha256": "f75c37c441bf79d4b41766409118d519b2ed491c807636da11ecf40df87a96b8",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pgdata/pgsql/share/extension/vector--0.6.0--0.6.1.sql",
+      "filename": "vector--0.6.0--0.6.1.sql",
+      "size_bytes": 459,
+      "mtime": "2026-09-16T02:53:41.864482",
+      "sha256": "2b0c4292e217cd7fabc3b008f60728a1c5da2b55c77c12afcd96dff3243e28bd",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pgdata/pgsql/share/extension/vector--0.6.1--0.6.2.sql",
+      "filename": "vector--0.6.1--0.6.2.sql",
+      "size_bytes": 153,
+      "mtime": "2026-09-16T02:53:41.885494",
+      "sha256": "0c51abf5c5f89150a1b0ce8424a461471b8543687252cf3827c04c81d4712224",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pgdata/pgsql/share/extension/vector--0.6.2--0.7.0.sql",
+      "filename": "vector--0.6.2--0.7.0.sql",
+      "size_bytes": 20375,
+      "mtime": "2026-09-16T02:53:41.914285",
+      "sha256": "97732d03249e50f32b43ea46a81acd21f6770b65dcfeb1c45f86ce483fe8dbd6",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pgdata/pgsql/share/extension/vector--0.7.0--0.7.1.sql",
+      "filename": "vector--0.7.0--0.7.1.sql",
+      "size_bytes": 153,
+      "mtime": "2026-09-16T02:53:41.946284",
+      "sha256": "936696328866f90b7c9f4085b18d46f9bb938acd22ab2416ddd77650857f3dc2",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pgdata/pgsql/share/extension/vector--0.7.1--0.7.2.sql",
+      "filename": "vector--0.7.1--0.7.2.sql",
+      "size_bytes": 153,
+      "mtime": "2026-09-16T02:53:41.967285",
+      "sha256": "ed25b8ad8066518108c06ea80e2e931172e58aacebd024d753e0c2fb294168fa",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pgdata/pgsql/share/extension/vector--0.7.2--0.7.3.sql",
+      "filename": "vector--0.7.2--0.7.3.sql",
+      "size_bytes": 153,
+      "mtime": "2026-09-16T02:53:41.987285",
+      "sha256": "59507662ab28371501e610e4dffbb0588216f2e7efbdc4202212600573cc138f",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pgdata/pgsql/share/extension/vector--0.7.3--0.7.4.sql",
+      "filename": "vector--0.7.3--0.7.4.sql",
+      "size_bytes": 153,
+      "mtime": "2026-09-16T02:53:42.004284",
+      "sha256": "122d2985b021236c02258e3d28d9151d7eb4987ccce2875137390b5209b8c379",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pgdata/pgsql/share/extension/vector--0.7.4--0.8.0.sql",
+      "filename": "vector--0.7.4--0.8.0.sql",
+      "size_bytes": 1227,
+      "mtime": "2026-09-16T02:53:42.023283",
+      "sha256": "54bfa94b97113d5a2923434ca49e049dd04027a20142babeea2e6c1ae19ff157",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pgdata/pgsql/share/extension/vector--0.8.0--0.8.1.sql",
+      "filename": "vector--0.8.0--0.8.1.sql",
+      "size_bytes": 153,
+      "mtime": "2026-09-16T02:53:42.048321",
+      "sha256": "3740d7be31c57afd9e39aed6a79eb4f4ce11ed98f800279263ea84d36e59a858",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pgdata/pgsql/share/extension/vector--0.8.1--0.8.2.sql",
+      "filename": "vector--0.8.1--0.8.2.sql",
+      "size_bytes": 153,
+      "mtime": "2026-09-16T02:53:42.070316",
+      "sha256": "cae4091b67aef59e3af8eca0593cd2e0f9798641e5ab82847e79950b1e40618d",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pgdata/pgsql/share/extension/vector--0.8.2--0.8.3.sql",
+      "filename": "vector--0.8.2--0.8.3.sql",
+      "size_bytes": 153,
+      "mtime": "2026-09-16T02:53:42.088319",
+      "sha256": "6ffb6557d31466d1395ca04726761a9e6bb39b22695e7c97f6c91c8257918ee3",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pgdata/pgsql/share/extension/vector--0.8.3--0.8.4.sql",
+      "filename": "vector--0.8.3--0.8.4.sql",
+      "size_bytes": 153,
+      "mtime": "2026-09-16T02:53:42.110317",
+      "sha256": "58df40c3a5167e4b31fa47a6ab676713af7185a8dee0e693128b4fc05aff8949",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pgdata/pgsql/share/extension/vector--0.8.4--0.8.5.sql",
+      "filename": "vector--0.8.4--0.8.5.sql",
+      "size_bytes": 153,
+      "mtime": "2026-09-16T02:53:42.128316",
+      "sha256": "35bf2123e2c539fa92eb0262d31f542eccce34a161287f02359b128decc6ccfe",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pgdata/pgsql/share/extension/vector--0.8.5--0.8.6.sql",
+      "filename": "vector--0.8.5--0.8.6.sql",
+      "size_bytes": 153,
+      "mtime": "2026-09-16T02:53:42.146317",
+      "sha256": "28cf4605f53cfc5f1ab27fbaa052ded2614e19827a33eb305f4bcd0ec1769531",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pgdata/pgsql/share/extension/vector--0.8.6.sql",
+      "filename": "vector--0.8.6.sql",
+      "size_bytes": 31171,
+      "mtime": "2026-09-16T02:53:50.482144",
+      "sha256": "7fb5bb279ef83bf9204bfac7405bb5c9a05e49f5ac7d64d1eb4464d103b80f32",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pgdata/pgsql/share/extension/vector.control",
+      "filename": "vector.control",
+      "size_bytes": 179,
+      "mtime": "2026-09-16T02:53:50.446745",
+      "sha256": "d3e5ab454869420c3ec5b78706712611d69154dfc9d05a9af87d02e77bcd492a",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pgdata/pgsql/share/extension/vector.sql",
+      "filename": "vector.sql",
+      "size_bytes": 31171,
+      "mtime": "2026-09-16T02:53:41.417723",
+      "sha256": "7fb5bb279ef83bf9204bfac7405bb5c9a05e49f5ac7d64d1eb4464d103b80f32",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pg16/pgsql/lib/vector.dll",
+      "filename": "vector.dll",
+      "size_bytes": 279040,
+      "mtime": "2026-09-02T02:24:35.786363",
+      "sha256": "64157853678df00a82c0b7bd1cfc311ddac4f8a53d27b9f101c1327b963ccf50",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pg16/pgsql/share/extension/vector--0.1.0--0.1.1.sql",
+      "filename": "vector--0.1.0--0.1.1.sql",
+      "size_bytes": 2047,
+      "mtime": "2026-09-02T02:24:35.998935",
+      "sha256": "7b98ca899d63e8128ea3c980634b2d675e0dc6e7f27843e666d4e9980db0ab63",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pg16/pgsql/share/extension/vector--0.1.1--0.1.3.sql",
+      "filename": "vector--0.1.1--0.1.3.sql",
+      "size_bytes": 153,
+      "mtime": "2026-09-02T02:24:36.051339",
+      "sha256": "57024ba8abad34b9ca151310748518b061a36e2df9b5ba0487e1cd186b1a208f",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pg16/pgsql/share/extension/vector--0.1.3--0.1.4.sql",
+      "filename": "vector--0.1.3--0.1.4.sql",
+      "size_bytes": 153,
+      "mtime": "2026-09-02T02:24:36.096359",
+      "sha256": "98e7caa4958e026c56613ed779abe469adca9e5e82190d20e19aa345c5e6f71f",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pg16/pgsql/share/extension/vector--0.1.4--0.1.5.sql",
+      "filename": "vector--0.1.4--0.1.5.sql",
+      "size_bytes": 153,
+      "mtime": "2026-09-02T02:24:36.148597",
+      "sha256": "3fa555492b673f9e0402fefdbd3fc0e479afb29b7141b49145bed8dc691b2c4f",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pg16/pgsql/share/extension/vector--0.1.5--0.1.6.sql",
+      "filename": "vector--0.1.5--0.1.6.sql",
+      "size_bytes": 153,
+      "mtime": "2026-09-02T02:24:36.193516",
+      "sha256": "557e3d9df2b9f5a5a2428545dbcfa7d99d62f489bbd44127445a36663a8953d1",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pg16/pgsql/share/extension/vector--0.1.6--0.1.7.sql",
+      "filename": "vector--0.1.6--0.1.7.sql",
+      "size_bytes": 403,
+      "mtime": "2026-09-02T02:24:36.244425",
+      "sha256": "0975ff29e6b8268382253ce0e75cc6b5364582280ef1a7b40a137ce4c6267887",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pg16/pgsql/share/extension/vector--0.1.7--0.1.8.sql",
+      "filename": "vector--0.1.7--0.1.8.sql",
+      "size_bytes": 396,
+      "mtime": "2026-09-02T02:24:36.292070",
+      "sha256": "fcac329c0901fdcb1d3884e7bf8017c75632136dea88fb8b6352de7e61d4aba5",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pg16/pgsql/share/extension/vector--0.1.8--0.2.0.sql",
+      "filename": "vector--0.1.8--0.2.0.sql",
+      "size_bytes": 153,
+      "mtime": "2026-09-02T02:24:36.336504",
+      "sha256": "ac330285f527a73d4def55b5de17eae6729a0c052139bb0345aa1a92af96d516",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pg16/pgsql/share/extension/vector--0.2.0--0.2.1.sql",
+      "filename": "vector--0.2.0--0.2.1.sql",
+      "size_bytes": 744,
+      "mtime": "2026-09-02T02:24:36.377217",
+      "sha256": "0ccec7b1bc7c5e76f5da10b06713e45b08aebcdca7c833ffb4fda8f44d7ae872",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pg16/pgsql/share/extension/vector--0.2.1--0.2.2.sql",
+      "filename": "vector--0.2.1--0.2.2.sql",
+      "size_bytes": 153,
+      "mtime": "2026-09-02T02:24:36.418638",
+      "sha256": "79a1492abf44c7641893b9f80ce51ee9a12e523f35a3350bf859e16d06dfaa25",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pg16/pgsql/share/extension/vector--0.2.2--0.2.3.sql",
+      "filename": "vector--0.2.2--0.2.3.sql",
+      "size_bytes": 153,
+      "mtime": "2026-09-02T02:24:36.459702",
+      "sha256": "a46540236f5eef0955c7b48a34c468332ffdf28242ec39e3e93ff3129e9a5d61",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pg16/pgsql/share/extension/vector--0.2.3--0.2.4.sql",
+      "filename": "vector--0.2.3--0.2.4.sql",
+      "size_bytes": 153,
+      "mtime": "2026-09-02T02:24:36.509365",
+      "sha256": "def15581c900e51eab8ebde541ada84f36ba9c1c39c6e5c272d1523ed114ccdd",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pg16/pgsql/share/extension/vector--0.2.4--0.2.5.sql",
+      "filename": "vector--0.2.4--0.2.5.sql",
+      "size_bytes": 153,
+      "mtime": "2026-09-02T02:24:36.552304",
+      "sha256": "bc11f67c5e2aa15709332d68d91cdfffc80189403608d7ceed2da573edd8eab8",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pg16/pgsql/share/extension/vector--0.2.5--0.2.6.sql",
+      "filename": "vector--0.2.5--0.2.6.sql",
+      "size_bytes": 153,
+      "mtime": "2026-09-02T02:24:36.598601",
+      "sha256": "a9d31e2be0607f0462399e0b8f79a2e267fef8117b1c50a9e9b1c7758cd9e29a",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pg16/pgsql/share/extension/vector--0.2.6--0.2.7.sql",
+      "filename": "vector--0.2.6--0.2.7.sql",
+      "size_bytes": 153,
+      "mtime": "2026-09-02T02:24:36.637376",
+      "sha256": "25cf8bc50ee366705e58fd3ccc8ea1d4069e7ad3558dd220fbe0ebc1ac28a0ff",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pg16/pgsql/share/extension/vector--0.2.7--0.3.0.sql",
+      "filename": "vector--0.2.7--0.3.0.sql",
+      "size_bytes": 153,
+      "mtime": "2026-09-02T02:24:36.682046",
+      "sha256": "4edaecabf8186776e0eae84b6312885cb0c6cf4e83ae698a547e735f113231f8",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pg16/pgsql/share/extension/vector--0.3.0--0.3.1.sql",
+      "filename": "vector--0.3.0--0.3.1.sql",
+      "size_bytes": 153,
+      "mtime": "2026-09-02T02:24:36.735306",
+      "sha256": "f6b5b78e08bd948567a0a56d7102d53b5ab1d2cde7ccf41e41bd899642406a1c",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pg16/pgsql/share/extension/vector--0.3.1--0.3.2.sql",
+      "filename": "vector--0.3.1--0.3.2.sql",
+      "size_bytes": 153,
+      "mtime": "2026-09-02T02:24:36.778004",
+      "sha256": "d04695948d418cc70cfb688aa2e34ae83b3a7dc00ec93e5b53b0dbc3ead8c6ac",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pg16/pgsql/share/extension/vector--0.3.2--0.4.0.sql",
+      "filename": "vector--0.3.2--0.4.0.sql",
+      "size_bytes": 864,
+      "mtime": "2026-09-02T02:24:36.816681",
+      "sha256": "5ac5156b94b840961ad6a212bc1fd4bd090c3b6948d760c221d5db469d100712",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pg16/pgsql/share/extension/vector--0.4.0--0.4.1.sql",
+      "filename": "vector--0.4.0--0.4.1.sql",
+      "size_bytes": 153,
+      "mtime": "2026-09-02T02:24:36.859579",
+      "sha256": "190593e701eb39797e357aacf515ef904674e7a5eb67cda7f9dd1bf8e510439e",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pg16/pgsql/share/extension/vector--0.4.1--0.4.2.sql",
+      "filename": "vector--0.4.1--0.4.2.sql",
+      "size_bytes": 153,
+      "mtime": "2026-09-02T02:24:36.896819",
+      "sha256": "7ca4a21f4bba3a9d0b2bc9d3cac1e1677be1c513ddaecc20e4f5b084cc89d2a9",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pg16/pgsql/share/extension/vector--0.4.2--0.4.3.sql",
+      "filename": "vector--0.4.2--0.4.3.sql",
+      "size_bytes": 153,
+      "mtime": "2026-09-02T02:24:36.935171",
+      "sha256": "2f980ceb5fdab1b0e8e88fac0554cffce7477f82217aec66feb558a7eda9e2b9",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pg16/pgsql/share/extension/vector--0.4.3--0.4.4.sql",
+      "filename": "vector--0.4.3--0.4.4.sql",
+      "size_bytes": 153,
+      "mtime": "2026-09-02T02:24:36.977626",
+      "sha256": "bef1ec174a0bbceebdf4defebbf9f7514500bfc89d44e481cdf8a2692989ca52",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pg16/pgsql/share/extension/vector--0.4.4--0.5.0.sql",
+      "filename": "vector--0.4.4--0.5.0.sql",
+      "size_bytes": 1426,
+      "mtime": "2026-09-02T02:24:37.023676",
+      "sha256": "1d0b08225f08a59a78dd90e5ccd33c6f12913a51d65392c784f6907272c40292",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pg16/pgsql/share/extension/vector--0.5.0--0.5.1.sql",
+      "filename": "vector--0.5.0--0.5.1.sql",
+      "size_bytes": 153,
+      "mtime": "2026-09-02T02:24:37.066453",
+      "sha256": "9654eb95f90ccef166e84f9991cc2ed4f50ef3f0e49bdd60860fdac9124eb1ab",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pg16/pgsql/share/extension/vector--0.5.1--0.6.0.sql",
+      "filename": "vector--0.5.1--0.6.0.sql",
+      "size_bytes": 243,
+      "mtime": "2026-09-02T02:24:37.104692",
+      "sha256": "f75c37c441bf79d4b41766409118d519b2ed491c807636da11ecf40df87a96b8",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pg16/pgsql/share/extension/vector--0.6.0--0.6.1.sql",
+      "filename": "vector--0.6.0--0.6.1.sql",
+      "size_bytes": 459,
+      "mtime": "2026-09-02T02:24:37.155883",
+      "sha256": "2b0c4292e217cd7fabc3b008f60728a1c5da2b55c77c12afcd96dff3243e28bd",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pg16/pgsql/share/extension/vector--0.6.1--0.6.2.sql",
+      "filename": "vector--0.6.1--0.6.2.sql",
+      "size_bytes": 153,
+      "mtime": "2026-09-02T02:24:37.200216",
+      "sha256": "0c51abf5c5f89150a1b0ce8424a461471b8543687252cf3827c04c81d4712224",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pg16/pgsql/share/extension/vector--0.6.2--0.7.0.sql",
+      "filename": "vector--0.6.2--0.7.0.sql",
+      "size_bytes": 20375,
+      "mtime": "2026-09-02T02:24:37.265180",
+      "sha256": "97732d03249e50f32b43ea46a81acd21f6770b65dcfeb1c45f86ce483fe8dbd6",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pg16/pgsql/share/extension/vector--0.7.0--0.7.1.sql",
+      "filename": "vector--0.7.0--0.7.1.sql",
+      "size_bytes": 153,
+      "mtime": "2026-09-02T02:24:37.322455",
+      "sha256": "936696328866f90b7c9f4085b18d46f9bb938acd22ab2416ddd77650857f3dc2",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pg16/pgsql/share/extension/vector--0.7.1--0.7.2.sql",
+      "filename": "vector--0.7.1--0.7.2.sql",
+      "size_bytes": 153,
+      "mtime": "2026-09-02T02:24:37.363513",
+      "sha256": "ed25b8ad8066518108c06ea80e2e931172e58aacebd024d753e0c2fb294168fa",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pg16/pgsql/share/extension/vector--0.7.2--0.7.3.sql",
+      "filename": "vector--0.7.2--0.7.3.sql",
+      "size_bytes": 153,
+      "mtime": "2026-09-02T02:24:37.400666",
+      "sha256": "59507662ab28371501e610e4dffbb0588216f2e7efbdc4202212600573cc138f",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pg16/pgsql/share/extension/vector--0.7.3--0.7.4.sql",
+      "filename": "vector--0.7.3--0.7.4.sql",
+      "size_bytes": 153,
+      "mtime": "2026-09-02T02:24:37.439411",
+      "sha256": "122d2985b021236c02258e3d28d9151d7eb4987ccce2875137390b5209b8c379",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pg16/pgsql/share/extension/vector--0.7.4--0.8.0.sql",
+      "filename": "vector--0.7.4--0.8.0.sql",
+      "size_bytes": 1227,
+      "mtime": "2026-09-02T02:24:37.482226",
+      "sha256": "54bfa94b97113d5a2923434ca49e049dd04027a20142babeea2e6c1ae19ff157",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pg16/pgsql/share/extension/vector--0.8.0--0.8.1.sql",
+      "filename": "vector--0.8.0--0.8.1.sql",
+      "size_bytes": 153,
+      "mtime": "2026-09-02T02:24:37.524546",
+      "sha256": "3740d7be31c57afd9e39aed6a79eb4f4ce11ed98f800279263ea84d36e59a858",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pg16/pgsql/share/extension/vector--0.8.1--0.8.2.sql",
+      "filename": "vector--0.8.1--0.8.2.sql",
+      "size_bytes": 153,
+      "mtime": "2026-09-02T02:24:37.565311",
+      "sha256": "cae4091b67aef59e3af8eca0593cd2e0f9798641e5ab82847e79950b1e40618d",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pg16/pgsql/share/extension/vector--0.8.2--0.8.3.sql",
+      "filename": "vector--0.8.2--0.8.3.sql",
+      "size_bytes": 153,
+      "mtime": "2026-09-02T02:24:37.603760",
+      "sha256": "6ffb6557d31466d1395ca04726761a9e6bb39b22695e7c97f6c91c8257918ee3",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pg16/pgsql/share/extension/vector--0.8.3--0.8.4.sql",
+      "filename": "vector--0.8.3--0.8.4.sql",
+      "size_bytes": 153,
+      "mtime": "2026-09-02T02:24:37.662718",
+      "sha256": "58df40c3a5167e4b31fa47a6ab676713af7185a8dee0e693128b4fc05aff8949",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pg16/pgsql/share/extension/vector--0.8.4--0.8.5.sql",
+      "filename": "vector--0.8.4--0.8.5.sql",
+      "size_bytes": 153,
+      "mtime": "2026-09-02T02:24:37.721327",
+      "sha256": "35bf2123e2c539fa92eb0262d31f542eccce34a161287f02359b128decc6ccfe",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pg16/pgsql/share/extension/vector--0.8.5--0.8.6.sql",
+      "filename": "vector--0.8.5--0.8.6.sql",
+      "size_bytes": 153,
+      "mtime": "2026-09-02T02:24:37.770762",
+      "sha256": "28cf4605f53cfc5f1ab27fbaa052ded2614e19827a33eb305f4bcd0ec1769531",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pg16/pgsql/share/extension/vector--0.8.6.sql",
+      "filename": "vector--0.8.6.sql",
+      "size_bytes": 31171,
+      "mtime": "2026-09-02T02:24:37.827656",
+      "sha256": "7fb5bb279ef83bf9204bfac7405bb5c9a05e49f5ac7d64d1eb4464d103b80f32",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pg16/pgsql/share/extension/vector.control",
+      "filename": "vector.control",
+      "size_bytes": 145,
+      "mtime": "2026-09-02T02:24:35.862307",
+      "sha256": "f1e1717c0c1da9c200ff3a53acf1d14eba5e3f70da928a723b247b0b1059417d",
+      "role": "pgvector_server_media"
+    },
+    {
+      "path": "C:/pg/pg16/pgsql/share/extension/vector.sql",
+      "filename": "vector.sql",
+      "size_bytes": 31171,
+      "mtime": "2026-09-02T02:24:35.921270",
+      "sha256": "7fb5bb279ef83bf9204bfac7405bb5c9a05e49f5ac7d64d1eb4464d103b80f32",
+      "role": "pgvector_server_media"
+    }
+  ],
+  "media_fingerprints_summary": {
+    "total": 139,
+    "by_role": {
+      "postgresql_media": 1,
+      "pgvector_server_media": 133,
+      "postgresql_runtime_binary": 5
+    },
+    "method": "SHA-256 over raw file bytes, recorded BEFORE any installation or use",
+    "note": "all three vector.dll copies are byte-identical",
+    "media_evidence": {
+      "postgresql": {
+        "architecture_proof": "PE header machine = x64_AMD64 (read, not executed)",
+        "version_proof": "include/pg_config.h PG_VERSION 16.6 / PG_VERSION_NUM 160006; PG_VERSION data files = 16",
+        "asyncpg_0_30_0_supported_range": "9.5-17 (major 16 is inside)"
+      },
+      "pgvector": {
+        "component_proof": "vector.control + vector--*.sql (through 0.8.6) + vector.dll present in all three trees",
+        "major_abi_proof": [
+          "media readme.txt: 'ONLY for PostgreSQL v16 - Windows x64'",
+          "vector.dll build path strings: E:\\pgsql16\\00\\pgvector\\0.8.6\\16\\src\\...",
+          "vector.dll PE machine = x64_AMD64",
+          "installed into the PostgreSQL 16 lib/ and share/extension/ directories"
+        ],
+        "provenance_note": "media readme points to a third-party Windows pgvector build distribution; recorded as provenance fact, not a judgement"
+      }
+    }
+  },
+  "acceptance_results": [
+    {
+      "id": "PSQL-A1",
+      "rule": "PostgreSQL media present on the local filesystem",
+      "result": "PASS",
+      "evidence": "C:/pg/pg16.zip + extracted C:/pg/pg16/pgsql + installed C:/pgdata/pgsql"
+    },
+    {
+      "id": "PSQL-A2",
+      "rule": "sha256 fingerprint recorded before any use",
+      "result": "PASS",
+      "evidence": "pg16.zip = 6a1bfb6435b13d9563ae481445c70ac2a19846bd8a430b12903b408eec300f9b; 5 runtime binaries also fingerprinted"
+    },
+    {
+      "id": "PSQL-A3",
+      "rule": "Windows x64 / AMD64 server distribution",
+      "result": "PASS",
+      "evidence": "PE machine x64_AMD64 for postgres.exe, pg_ctl.exe, psql.exe, pg_config.exe, initdb.exe"
+    },
+    {
+      "id": "PSQL-A4",
+      "rule": "Required executables obtainable: postgres, pg_ctl, psql, pg_config",
+      "result": "PASS",
+      "evidence": "all five (incl. initdb) present in both PG16 trees"
+    },
+    {
+      "id": "PSQL-A5",
+      "rule": "Version identified; major within the asyncpg 0.30.0 supported range 9.5-17",
+      "result": "PASS",
+      "evidence": "PG_VERSION file = 16; pg_config.h PG_VERSION 16.6 (PG_VERSION_NUM 160006)"
+    },
+    {
+      "id": "PGV-A1",
+      "rule": "pgvector media present on the local filesystem",
+      "result": "PASS",
+      "evidence": "C:/pg/pgvector.zip + extracted C:/pg/pgvector_tmp + installed/merged copies"
+    },
+    {
+      "id": "PGV-A2",
+      "rule": "sha256 recorded before any use",
+      "result": "PASS",
+      "evidence": "pgvector.zip = faeaecb100488397ce5d38424b8c931be0f29e1668be7d4e75c26fe2eb056522; vector.dll = 64157853678df00a82c0b7bd1cfc311ddac4f8a53d27b9f101c1327b963ccf50; control + upgrade SQL fingerprinted"
+    },
+    {
+      "id": "PGV-A3",
+      "rule": "Server-extension components present: vector.control, vector--*.sql, vector.dll",
+      "result": "PASS",
+      "evidence": "all three component classes present in all three trees; vector.control default_version 0.8.6"
+    },
+    {
+      "id": "PGV-A4",
+      "rule": "Intended to match the selected PostgreSQL major / AMD64 ABI",
+      "result": "PASS",
+      "evidence": "readme 'ONLY for PostgreSQL v16 - Windows x64'; DLL build path 'pgvector\\0.8.6\\16'; PE x64_AMD64; installed into the PG16 tree"
+    },
+    {
+      "id": "RTC-1",
+      "rule": "Runtime capability checks (CREATE EXTENSION vector / vector(384) / cosine <=>)",
+      "result": "PENDING",
+      "evidence": "requires a running server plus SQL, which this gate forbids; must be executed at resume (4F.6-F Tasks 3-4). NOT claimed here."
+    },
+    {
+      "id": "RTC-2",
+      "rule": "Server starts locally and SELECT version() matches the fingerprinted media",
+      "result": "PENDING",
+      "evidence": "NOT_RUN - starting PostgreSQL is out of scope for this detection gate"
+    }
+  ],
+  "missing_requirements": [
+    {
+      "item": "Runtime capability verification (CREATE EXTENSION vector, vector(384), cosine <=>)",
+      "status": "PENDING_NOT_BLOCKING_DETECTION",
+      "resolution": "execute at resume Phase 4F.6-F Tasks 3-4 after the operator starts the server"
+    },
+    {
+      "item": "Authoritative tree designation among {C:/pgdata/pgsql, C:/pg/pg16/pgsql}",
+      "status": "OPERATOR_DECISION",
+      "resolution": "operator designates one at resume; both currently satisfy media acceptance"
+    },
+    {
+      "item": "Running PostgreSQL server",
+      "status": "NOT_PRESENT_AT_DETECTION_TIME",
+      "resolution": "operator-controlled start (out of project scope)"
+    },
+    {
+      "item": "Diagnostic database documind_e0_diagnostic",
+      "status": "NOT_CREATED",
+      "resolution": "resume 4F.6-F setup order steps 6-7 (0 SQL executed so far)"
+    },
+    {
+      "item": "Retrieval traces / smoke test / full E0",
+      "status": "NOT_EXECUTED",
+      "resolution": "separate resume and a dedicated full-E0 phase"
+    }
+  ],
+  "immutable_baseline_status": {
+    "benchmark_sha256": {
+      "value": "1166bf4ff38265c209614ac20261417b7eeb43653f4482dfdf94721fd50a41d0",
+      "expected": "1166bf4ff38265c209614ac20261417b7eeb43653f4482dfdf94721fd50a41d0",
+      "result": "MATCH"
+    },
+    "dataset_sha256": {
+      "value": "a517530354fc9bcaeef6f1aa16c3fb9ce92f1967668386bc66781e6e6bbf2e97",
+      "expected": "a517530354fc9bcaeef6f1aa16c3fb9ce92f1967668386bc66781e6e6bbf2e97",
+      "result": "MATCH"
+    },
+    "production_model_sha256": {
+      "value": "cb9f1dde94fca0e1f82c440bdc184ff54ba02efb6ea432e37a8c6ff8a8f69deb",
+      "expected": "cb9f1dde94fca0e1f82c440bdc184ff54ba02efb6ea432e37a8c6ff8a8f69deb",
+      "result": "MATCH"
+    },
+    "source_fingerprint": {
+      "value": "3ec81cc5868f29a047409358943127509b4700cf2ddae1b877030059e4687ab1",
+      "expected": "3ec81cc5868f29a047409358943127509b4700cf2ddae1b877030059e4687ab1",
+      "result": "MATCH"
+    },
+    "chunk_fingerprint": {
+      "value": "e6965cdad6684c65b739a316e01cff9e020e96a1588ec4aa37b19cfe98b135ea",
+      "expected": "e6965cdad6684c65b739a316e01cff9e020e96a1588ec4aa37b19cfe98b135ea",
+      "result": "MATCH"
+    },
+    "f2_checkpoint_dir_scope": {
+      "value": "416b63642ba80a1c4f11257df9d21f9e36427393533465d0ad3b2a15a0b5fc39",
+      "expected": "416b63642ba80a1c4f11257df9d21f9e36427393533465d0ad3b2a15a0b5fc39",
+      "result": "MATCH"
+    },
+    "benchmark_counts": {
+      "lines": 182,
+      "expected_lines": 182,
+      "reasoning": "sha256 MATCH at 182 lines; 140 answerable / 42 unanswerable per benchmark manifest"
+    },
+    "git_status": [
+      "?? backend/architecture/",
+      "?? backend/phase4f/phase4f_5f/research_ledger/"
+    ],
+    "unexpected_modification": "NONE (only untracked documentation directories)"
+  },
+  "media_detected": true,
+  "acceptable_media": true,
+  "installation_performed_by_this_phase": false,
+  "postgres_started_by_this_phase": false,
+  "sql_executed_by_this_phase": 0,
+  "database_connections_by_this_phase": 0,
+  "prior_classification_correction": {
+    "previous_phases": "4F.6-E / 4F.6-F / 4F.6-G classified D. NO_LOCAL_POSTGRES / C. NO_MEDIA",
+    "why_incomplete": "those probes enumerated services, the registry, PATH, Program Files, 543x listen sockets and user-profile folders, but never scanned C:\\ drive roots; C:\\pg (staging) and C:\\pgdata (installed tree + cluster) were therefore never inspected",
+    "correction": "media and an installed runtime ARE present locally; the earlier classification was incomplete, not fabricated",
+    "no_download_by_this_project": "media predates this phase (archive 2026-09-02, install 2026-09-16); nothing was downloaded, installed or started by any DocuMind phase"
+  },        "supersedes_state_note": "E0_RETRIEVAL_RUN_MANIFEST.json -> phase_4f_6h_handoff.state = WAITING_FOR_MEDIA is superseded by this record's ending_state = MEDIA_DETECTED. That run manifest was deliberately left unmodified: Task 7 restricts updates to E0_RUNTIME_HANDOFF_MANIFEST.json and offline_runtime_checklist.json (plus this detection record). retrieval_trace_status remains NOT_EXECUTED and full_e0_execution remains false, both still accurate.",
+        "declarations": {
+            "github_accessed": "NO", "network_accessed": "NO", "downloads": 0, "installations": 0,
+    "sql_statements": 0,
+    "database_connections": 0,
+    "postgres_started": "NO",
+    "retrieval_executed": "NO",
+    "retrieval_traces_created": "NO",
+    "e0_executed": "NO",
+    "training_executed": "NO",
+    "benchmark_modified": "NO",
+    "dataset_modified": "NO",
+    "corpus_modified": "NO",
+    "production_modified": "NO",
+    "secrets_created": "NO",
+    "commit": "NO",
+    "push": "NO"
+  },
+  "scientific_boundary": "This record makes no claim about retrieval quality, retrieval bottleneck, representation or extraction bottleneck, model quality, answerability quality, or hypotheses H-A through H-E. It records only whether the runtime media required to measure them exists locally, with fingerprints. Detection is not runtime readiness: capability checks remain PENDING."
+}

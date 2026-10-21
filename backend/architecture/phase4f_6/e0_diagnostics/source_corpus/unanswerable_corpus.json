@@ -1,0 +1,36 @@
+{
+  "document_id": "unanswerable_corpus",
+  "source_type": "VIRTUAL_CORPUS (not a coherent document)",
+  "classification": "B_DETERMINISTIC_SOURCE_RECONSTRUCTIBLE",
+  "generator_provenance": {
+    "path": "backend/phase4f/dataset/expand_and_audit.py",
+    "symbols": [
+      "ExampleGenerator.gen_unanswerable",
+      "unanswerable_pairs (static list)"
+    ],
+    "all_42_context_literals_present_in_generator_source": true,
+    "required_inputs": "benchmark records (authoritative carrier) + generator source (cross-check)",
+    "reconstruction_method": "document_text = the 42 benchmark distractor contexts in benchmark order; each literal verified present in the generator's static pair list"
+  },
+  "document_text": "The system uses sentence transformer models for generating 768-dimensional vectors.\n\nThe board of directors consists of 9 members.\n\nDocuments are processed into chunks of 384 tokens with 64-token overlap.\n\nCTO: James Whitfield, CFO: Robert Tanaka, COO: Elena Vasquez.\n\nThe backend is written in Python with FastAPI.\n\nMeridian Analytics Ltd. is a United Kingdom limited company.\n\nApex Computing has 2,847 employees and annual revenue of $1.24 billion.\n\nThe system uses DistilBERT for question answering.\n\nThe platform uses PostgreSQL 16.2 with pgvector 0.7.0 extension.\n\nRevenue grew 12.4 percent year-over-year in Q3 2025.\n\nData breach notification must occur within 72 hours of discovery.\n\nThe system accepts PDF, DOCX, TXT, and HTML formats with a 100 MB limit.\n\nThe Aurora X7 weighs approximately 450 grams and has IP67 rating.\n\nThe error rate was 0.3 percent for Q3 2025.\n\nThe system achieved an accuracy of 94.2 percent on structured extraction.\n\nThe latest stable version as of September 2025 is Docker Engine 27.3.1.\n\nThe Aurora X7 features a quad-core ARM Cortex-A72 processor.\n\nThe project is led by Dr. Sarah Chen as CEO.\n\nDocker has been downloaded over 13 billion times since 2013.\n\nTemperature ranged from minus 42.3 to 48.7 degrees Celsius across all stations.\n\nThe system achieved 99.97 percent uptime for Q3 2025.\n\nDocuMind uses retrieval-augmented generation with extractive QA.\n\nApex Computing employs 2,847 people across 14 offices worldwide.\n\nThe platform uses PostgreSQL 16.2 with pgvector 0.7.0 for vector operations.\n\nEnterprise Solutions division posted revenue of $412.5 million.\n\nThe system supports up to 500 documents per minute.\n\nCloudDocs Enterprise is a cloud-based document management solution with no hardware components.\n\nThe SLA targets 99.95 percent uptime with maximum p99 latency of 500 milliseconds.\n\nPgBouncer manages connection pooling with a maximum of 100 concurrent connections.\n\nRevenue grew 12.4 percent year-over-year in Q3 2025.\n\nAir quality monitoring was conducted at six stations across Portland.\n\nFileCore Pro has an annual license fee of $52,000.\n\nApex Computing was founded by Dr. Margaret Liu and James Whitfield.\n\nThe system processes an average of 45,000 documents per day.\n\nScheduled maintenance windows occur on the first Saturday of each month.\n\nThe Aurora X7 supports operating temperatures from minus 40 to 85 degrees Celsius. PaperStack v8.1 is a software product.\n\nEncryption at rest uses AES-256 and encryption in transit uses TLS 1.3.\n\nA vector database is a specialized data management system for high-dimensional vectors.\n\nOrganizations must implement regular security audits at least annually.\n\nThe system achieved 94.2 percent accuracy on extraction tasks.\n\nThe SLA targets 99.95 percent uptime with maximum p99 latency of 500 milliseconds.\n\nThe API enforces rate limiting of 100 requests per minute for standard accounts.",
+  "document_sha256": "ca0ef7ab95eb818636af8a217a065ec585835f07b17fca26830ee961e82821a5",
+  "document_bytes": 2892,
+  "structure": {
+    "sections": 0,
+    "paragraphs": 42,
+    "tables": 0,
+    "lists": 0,
+    "virtual": true
+  },
+  "benchmark_document_id_mapping": {
+    "benchmark_version": "v1",
+    "answerable_examples": 0,
+    "unanswerable_examples": 42,
+    "total": 42,
+    "expected_from_manifest": 42,
+    "matches_manifest": true
+  },
+  "notes": "Virtual corpus: contexts are standalone distractor sentences, not spans of one source document. Chunked as flat paragraphs for corpus completeness. No gold evidence is asserted for its (unanswerable) examples.",
+  "isolated_artifact": true,
+  "production_storage_touched": false
+}

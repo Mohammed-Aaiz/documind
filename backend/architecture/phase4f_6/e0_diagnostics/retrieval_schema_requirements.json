@@ -1,0 +1,131 @@
+{
+  "artifact": "retrieval_schema_requirements",
+  "corrections_2026_09_27": {
+    "see": "backend/architecture/phase4f_6/decision/E0_ERRATUM_2026-09-27.md",
+    "policy": "Every pre-existing value in this file is preserved unaltered as the historical observation. This key is additive only.",
+    "corrected": [
+      "C9: the 'alembic' source entry is a probe artifact - the probe searched for a directory named 'alembic/', which does not exist; the Alembic environment is backend/alembic.ini + backend/migrations/ (tracked). The runbook cited here also documents backend/migrations/env.py and 'alembic upgrade head' on the same page."
+    ]
+  },
+  "phase": "4F.6-E",
+  "task": "Task 4 — diagnostic-only schema requirements extracted from existing models/SQL (no migrations applied, no production schema touched)",
+  "date": "2026-09-23",
+  "sources": [
+    "backend/documents/models.py (Document, DocumentChunk)",
+    "backend/auth/models.py (User — FK target)",
+    "backend/chat/rag.py::retrieve_chunks SQL",
+    "backend/embeddings/routes.py::semantic_search SQL (byte-identical retrieval SQL at both call sites)",
+    "backend/storage/database.py (Base, engine from config.database_url)",
+    "backend/tests/conftest.py:115 (only in-repo schema creation path: Base.metadata.create_all)",
+    "runbooks/migration-failure.md (records that production table-creation method is NOT VERIFIED in this repo; no alembic directory exists)"
+  ],
+  "principle": "understand the existing retrieval contract, not redesign it; nothing in this file was applied to any database",
+  "extension_required": {
+    "name": "vector (pgvector)",
+    "why": "column type Vector(384) and operator <=> exist only with the server extension",
+    "server_extension_present_on_machine": false,
+    "client_library_present": "pgvector==0.5.0 (Python, backend/venv) — type adapter only, cannot substitute for the server extension"
+  },
+  "required_tables": {
+    "users": {
+      "purpose": "FK target for documents.user_id; retrieval filters d.user_id = :user_id",
+      "columns": [
+        {"name": "id", "type": "uuid PK", "nullable": false, "default": "uuid4 app-side"},
+        {"name": "email", "type": "varchar(255)", "nullable": false, "unique": true, "index": true},
+        {"name": "name", "type": "varchar(255)", "nullable": false, "default": "User"},
+        {"name": "hashed_password", "type": "varchar(255)", "nullable": false},
+        {"name": "avatar_url", "type": "varchar(512)", "nullable": true},
+        {"name": "clearance", "type": "varchar(100)", "nullable": false, "default": "Level 1 — Viewer"},
+        {"name": "is_active", "type": "boolean", "nullable": false, "default": true},
+        {"name": "two_factor_enabled", "type": "boolean", "nullable": false, "default": false},
+        {"name": "e2e_encryption", "type": "boolean", "nullable": false, "default": true},
+        {"name": "created_at", "type": "timestamptz", "default": "now()"},
+        {"name": "updated_at", "type": "timestamptz", "nullable": true}
+      ],
+      "retrieval_minimum": ["id"]
+    },
+    "documents": {
+      "columns": [
+        {"name": "id", "type": "uuid PK", "default": "uuid4 app-side"},
+        {"name": "user_id", "type": "uuid FK -> users.id ON DELETE CASCADE", "nullable": false, "index": true},
+        {"name": "name", "type": "varchar(512)", "nullable": false, "returned_as": "document_name in retrieval results"},
+        {"name": "file_type", "type": "varchar(10)", "nullable": false, "comment": "pdf, docx, txt"},
+        {"name": "file_size", "type": "integer", "nullable": false},
+        {"name": "stored_path", "type": "varchar(1024)", "nullable": false},
+        {"name": "content_hash", "type": "varchar(64)", "nullable": true, "index": true, "diagnostic_use": "carries document_sha256 (exact 64-char fit)"},
+        {"name": "chunker_version", "type": "varchar(64)", "nullable": true, "diagnostic_use": "chunk-v1-legacy-chars-1000-200"},
+        {"name": "parser_version", "type": "varchar(64)", "nullable": true},
+        {"name": "embedding_model", "type": "varchar(128)", "nullable": true, "diagnostic_use": "all-MiniLM-L6-v2"},
+        {"name": "chunk_count", "type": "integer", "nullable": false, "default": 0},
+        {"name": "status", "type": "varchar(20)", "nullable": false, "default": "uploaded"},
+        {"name": "embedding_status", "type": "varchar(20)", "nullable": false, "default": "pending", "retrieval_filter": "must equal 'ready'"},
+        {"name": "created_at", "type": "timestamptz", "default": "now()"},
+        {"name": "updated_at", "type": "timestamptz", "nullable": true},
+        {"name": "processing_started_at", "type": "timestamptz", "nullable": true}
+      ]
+    },
+    "document_chunks": {
+      "columns": [
+        {"name": "id", "type": "uuid PK", "default": "uuid4 app-side", "returned_as": "chunk_id"},
+        {"name": "document_id", "type": "uuid FK -> documents.id ON DELETE CASCADE", "nullable": false, "index": true},
+        {"name": "chunk_index", "type": "integer", "nullable": false, "diagnostic_use": "isolated chunk sequence"},
+        {"name": "content", "type": "text", "nullable": false},
+        {"name": "page", "type": "integer", "nullable": true},
+        {"name": "embedding", "type": "vector(384)", "nullable": true, "retrieval_filter": "IS NOT NULL required"},
+        {"name": "embedding_id", "type": "varchar(255)", "nullable": true, "diagnostic_use": "carries isolated chunk_id string (company_history_eta::c000)"},
+        {"name": "heading_path", "type": "json", "nullable": true, "returned_as": "structure metadata (rag path)"},
+        {"name": "section", "type": "varchar(512)", "nullable": true, "returned_as": "structure metadata (rag path)"},
+        {"name": "element_type", "type": "varchar(32)", "nullable": true, "returned_as": "structure metadata (rag path)"},
+        {"name": "chunker_version", "type": "varchar(64)", "nullable": true, "returned_as": "structure metadata (rag path)"},
+        {"name": "token_count", "type": "integer", "nullable": true, "returned_as": "structure metadata (rag path)"},
+        {"name": "created_at", "type": "timestamptz", "default": "now()"}
+      ]
+    }
+  },
+  "vector_contract": {
+    "dimensionality": 384,
+    "column": "document_chunks.embedding vector(384)",
+    "distance_metric": "cosine distance via pgvector operator <=>",
+    "similarity_formula": "1 - (dc.embedding <=> CAST(:embedding AS vector))",
+    "embedding_source": "embeddings/model.py all-MiniLM-L6-v2 (verified offline this phase)"
+  },
+  "metadata_filters_in_retrieval_sql": [
+    "d.user_id = :user_id",
+    "d.embedding_status = 'ready'",
+    "dc.embedding IS NOT NULL"
+  ],
+  "ordering_and_limit": "ORDER BY dc.embedding <=> CAST(:embedding AS vector) LIMIT :top_k (top_k default 5)",
+  "returned_fields": ["dc.id chunk_id", "dc.content", "dc.document_id", "d.name document_name", "dc.page", "similarity", "dc.heading_path", "dc.section", "dc.element_type", "dc.token_count", "dc.chunker_version"],
+  "indexes_required_by_current_retrieval_sql": [
+    {"table": "documents", "column": "user_id", "declared": "index=True in model", "status": "declared in model"},
+    {"table": "document_chunks", "column": "document_id", "declared": "index=True in model", "status": "declared in model"},
+    {"table": "users", "column": "email", "declared": "unique index", "status": "declared (not used by retrieval SQL)"},
+    {"table": "documents", "column": "content_hash", "declared": "index=True", "status": "declared (not used by retrieval SQL)"},
+    {"table": "document_chunks", "column": "embedding", "ann_index": "NONE declared in code (no ivfflat/hnsw created anywhere in repo)", "note": "current SQL works via exact scan + ORDER BY/LIMIT; at 93 chunks no ANN index is required by the contract"}
+  ],
+  "identifier_mapping_for_diagnostic_ingestion": {
+    "note": "existing schema uses UUID PKs; isolated corpus uses string ids — reversible mapping, no schema change",
+    "document_id": "isolated string document_id -> documents.name (verbatim); documents.id = deterministic UUIDv5 in a fixed diagnostic namespace (recorded in sidecar)",
+    "chunk_id": "isolated 'doc_id::cNNN' -> document_chunks.embedding_id (varchar 255, verbatim); document_chunks.id = deterministic UUIDv5 (recorded in sidecar)",
+    "source_offsets": "documents.documents has NO source_start/source_end columns — offsets preserved ONLY via diagnostic sidecar (below) and in the isolated corpus files",
+    "source_hashes": "documents.content_hash <- document_sha256; per-chunk text hash -> sidecar"
+  },
+  "diagnostic_only_sidecar": {
+    "name": "e0_chunk_provenance",
+    "status": "PROPOSED for the diagnostic database only — NOT part of the retrieval contract, NOT created anywhere, production schema untouched",
+    "columns": ["chunk_pk uuid", "isolated_chunk_id text", "source_start int", "source_end int", "source_document_sha256 text", "chunk_sha256 text", "structure json"],
+    "purpose": "satisfies Task 8 preservation requirements (source offsets, hashes, structure ids) without altering the existing retrieval schema"
+  },
+  "schema_creation_path": {
+    "in_repo": "backend/tests/conftest.py:115 Base.metadata.create_all (test fixture pattern)",
+    "alembic": "absent (glob backend/**/alembic = 0 files)",
+    "production": "NOT VERIFIED in repo per runbooks/migration-failure.md — must NOT be applied or assumed",
+    "action_taken_this_phase": "NONE — requirements documented only; no DDL executed"
+  },
+  "validation": {
+    "migrations_applied": false,
+    "production_schema_touched": false,
+    "ddl_executed": false,
+    "tables_created": 0
+  }
+}

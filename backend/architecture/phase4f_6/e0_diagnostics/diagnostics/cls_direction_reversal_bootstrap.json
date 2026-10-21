@@ -1,0 +1,370 @@
+{
+  "artifact": "cls_direction_reversal_bootstrap",
+  "seed": 20260923,
+  "iterations": 10000,
+  "scheme": "stratified with replacement (140 answerable, 42 unanswerable); percentile 2.5/97.5",
+  "rows": [
+    {
+      "checkpoint": "F2",
+      "statistic": "null_score",
+      "seed": 20260923,
+      "iterations": 10000,
+      "stratified": {
+        "answerable": 140,
+        "unanswerable": 42
+      },
+      "mean_separation_point": -0.0787,
+      "mean_separation_ci95": [
+        -0.1536,
+        -0.0036
+      ],
+      "auc_point": 0.4303,
+      "auc_ci95": [
+        0.3378,
+        0.5257
+      ],
+      "ks_point": 0.2286,
+      "ks_ci95": [
+        0.1714,
+        0.3214
+      ],
+      "ks_bootstrap_method": "vectorised tie-grouped ECDF (validated against scipy at the point estimate)"
+    },
+    {
+      "checkpoint": "F2",
+      "statistic": "cls_start_logit",
+      "seed": 20260923,
+      "iterations": 10000,
+      "stratified": {
+        "answerable": 140,
+        "unanswerable": 42
+      },
+      "mean_separation_point": -0.0531,
+      "mean_separation_ci95": [
+        -0.1079,
+        0.0024
+      ],
+      "auc_point": 0.4303,
+      "auc_ci95": [
+        0.3474,
+        0.5148
+      ],
+      "ks_point": 0.2381,
+      "ks_ci95": [
+        0.1762,
+        0.3667
+      ],
+      "ks_bootstrap_method": "vectorised tie-grouped ECDF (validated against scipy at the point estimate)"
+    },
+    {
+      "checkpoint": "F2",
+      "statistic": "cls_end_logit",
+      "seed": 20260923,
+      "iterations": 10000,
+      "stratified": {
+        "answerable": 140,
+        "unanswerable": 42
+      },
+      "mean_separation_point": -0.0256,
+      "mean_separation_ci95": [
+        -0.0699,
+        0.0166
+      ],
+      "auc_point": 0.4391,
+      "auc_ci95": [
+        0.3517,
+        0.5262
+      ],
+      "ks_point": 0.2357,
+      "ks_ci95": [
+        0.15,
+        0.381
+      ],
+      "ks_bootstrap_method": "vectorised tie-grouped ECDF (validated against scipy at the point estimate)"
+    },
+    {
+      "checkpoint": "F2",
+      "statistic": "best_answer_score",
+      "seed": 20260923,
+      "iterations": 10000,
+      "stratified": {
+        "answerable": 140,
+        "unanswerable": 42
+      },
+      "mean_separation_point": 0.6412,
+      "mean_separation_ci95": [
+        0.3748,
+        0.9042
+      ],
+      "auc_point": 0.725,
+      "auc_ci95": [
+        0.627,
+        0.8167
+      ],
+      "ks_point": 0.431,
+      "ks_ci95": [
+        0.3048,
+        0.6
+      ],
+      "ks_bootstrap_method": "vectorised tie-grouped ECDF (validated against scipy at the point estimate)"
+    },
+    {
+      "checkpoint": "F2",
+      "statistic": "margin",
+      "seed": 20260923,
+      "iterations": 10000,
+      "stratified": {
+        "answerable": 140,
+        "unanswerable": 42
+      },
+      "mean_separation_point": 0.5625,
+      "mean_separation_ci95": [
+        0.3336,
+        0.7885
+      ],
+      "auc_point": 0.7338,
+      "auc_ci95": [
+        0.6398,
+        0.8202
+      ],
+      "ks_point": 0.3833,
+      "ks_ci95": [
+        0.2762,
+        0.5595
+      ],
+      "ks_bootstrap_method": "vectorised tie-grouped ECDF (validated against scipy at the point estimate)"
+    },
+    {
+      "checkpoint": "F2",
+      "statistic": "confidence",
+      "seed": 20260923,
+      "iterations": 10000,
+      "stratified": {
+        "answerable": 140,
+        "unanswerable": 42
+      },
+      "mean_separation_point": 0.0016,
+      "mean_separation_ci95": [
+        -0.0028,
+        0.0062
+      ],
+      "auc_point": 0.5224,
+      "auc_ci95": [
+        0.4267,
+        0.616
+      ],
+      "ks_point": 0.15,
+      "ks_ci95": [
+        0.131,
+        0.319
+      ],
+      "ks_bootstrap_method": "vectorised tie-grouped ECDF (validated against scipy at the point estimate)"
+    },
+    {
+      "checkpoint": "A0",
+      "statistic": "null_score",
+      "seed": 20260923,
+      "iterations": 10000,
+      "stratified": {
+        "answerable": 140,
+        "unanswerable": 42
+      },
+      "mean_separation_point": 0.5615,
+      "mean_separation_ci95": [
+        -0.5939,
+        1.7391
+      ],
+      "auc_point": 0.5257,
+      "auc_ci95": [
+        0.44,
+        0.6088
+      ],
+      "ks_point": 0.219,
+      "ks_ci95": [
+        0.1905,
+        0.3452
+      ],
+      "ks_bootstrap_method": "vectorised tie-grouped ECDF (validated against scipy at the point estimate)"
+    },
+    {
+      "checkpoint": "A0",
+      "statistic": "cls_start_logit",
+      "seed": 20260923,
+      "iterations": 10000,
+      "stratified": {
+        "answerable": 140,
+        "unanswerable": 42
+      },
+      "mean_separation_point": 0.2861,
+      "mean_separation_ci95": [
+        -0.3031,
+        0.8858
+      ],
+      "auc_point": 0.5189,
+      "auc_ci95": [
+        0.4332,
+        0.6037
+      ],
+      "ks_point": 0.2214,
+      "ks_ci95": [
+        0.1833,
+        0.3262
+      ],
+      "ks_bootstrap_method": "vectorised tie-grouped ECDF (validated against scipy at the point estimate)"
+    },
+    {
+      "checkpoint": "A0",
+      "statistic": "cls_end_logit",
+      "seed": 20260923,
+      "iterations": 10000,
+      "stratified": {
+        "answerable": 140,
+        "unanswerable": 42
+      },
+      "mean_separation_point": 0.2754,
+      "mean_separation_ci95": [
+        -0.295,
+        0.8561
+      ],
+      "auc_point": 0.5257,
+      "auc_ci95": [
+        0.4403,
+        0.6087
+      ],
+      "ks_point": 0.2476,
+      "ks_ci95": [
+        0.2024,
+        0.3667
+      ],
+      "ks_bootstrap_method": "vectorised tie-grouped ECDF (validated against scipy at the point estimate)"
+    },
+    {
+      "checkpoint": "A0",
+      "statistic": "best_answer_score",
+      "seed": 20260923,
+      "iterations": 10000,
+      "stratified": {
+        "answerable": 140,
+        "unanswerable": 42
+      },
+      "mean_separation_point": 0.1287,
+      "mean_separation_ci95": [
+        -1.4147,
+        1.6516
+      ],
+      "auc_point": 0.5054,
+      "auc_ci95": [
+        0.4078,
+        0.6043
+      ],
+      "ks_point": 0.1095,
+      "ks_ci95": [
+        0.1024,
+        0.2976
+      ],
+      "ks_bootstrap_method": "vectorised tie-grouped ECDF (validated against scipy at the point estimate)"
+    },
+    {
+      "checkpoint": "A0",
+      "statistic": "margin",
+      "seed": 20260923,
+      "iterations": 10000,
+      "stratified": {
+        "answerable": 140,
+        "unanswerable": 42
+      },
+      "mean_separation_point": 0.6902,
+      "mean_separation_ci95": [
+        -1.2723,
+        2.7626
+      ],
+      "auc_point": 0.5432,
+      "auc_ci95": [
+        0.4508,
+        0.6388
+      ],
+      "ks_point": 0.2071,
+      "ks_ci95": [
+        0.1405,
+        0.3548
+      ],
+      "ks_bootstrap_method": "vectorised tie-grouped ECDF (validated against scipy at the point estimate)"
+    },
+    {
+      "checkpoint": "A0",
+      "statistic": "confidence",
+      "seed": 20260923,
+      "iterations": 10000,
+      "stratified": {
+        "answerable": 140,
+        "unanswerable": 42
+      },
+      "mean_separation_point": -0.0096,
+      "mean_separation_ci95": [
+        -0.0823,
+        0.0675
+      ],
+      "auc_point": 0.4991,
+      "auc_ci95": [
+        0.4005,
+        0.5961
+      ],
+      "ks_point": 0.1357,
+      "ks_ci95": [
+        0.1167,
+        0.3095
+      ],
+      "ks_bootstrap_method": "vectorised tie-grouped ECDF (validated against scipy at the point estimate)"
+    }
+  ],
+  "paired_delta_auc": {
+    "null_score": {
+      "delta_auc": -0.0954,
+      "ci95_paired": [
+        -0.2248,
+        0.033
+      ],
+      "excludes_0": false
+    },
+    "cls_start_logit": {
+      "delta_auc": -0.0886,
+      "ci95_paired": [
+        -0.2134,
+        0.0383
+      ],
+      "excludes_0": false
+    },
+    "cls_end_logit": {
+      "delta_auc": -0.0866,
+      "ci95_paired": [
+        -0.2075,
+        0.0337
+      ],
+      "excludes_0": false
+    },
+    "best_answer_score": {
+      "delta_auc": 0.2196,
+      "ci95_paired": [
+        0.0833,
+        0.3486
+      ],
+      "excludes_0": true
+    },
+    "margin": {
+      "delta_auc": 0.1906,
+      "ci95_paired": [
+        0.056,
+        0.3155
+      ],
+      "excludes_0": true
+    },
+    "confidence": {
+      "delta_auc": 0.0233,
+      "ci95_paired": [
+        -0.11,
+        0.1629
+      ],
+      "excludes_0": false
+    }
+  }
+}

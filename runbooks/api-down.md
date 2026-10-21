@@ -22,12 +22,13 @@ P0
    (run from the host that should be serving the API).
 2. Check whether the process is running:
    `uvicorn main:app --host 0.0.0.0 --port 8000` should be active in `backend/`
-   (see `backend/start_server.py` for the expected invocation).
+   (see `backend/scripts/start_server.py` for the expected invocation).
 3. Do not change environment variables, config, or code yet — diagnose first.
 
 ## Diagnosis
-1. **Process alive?** Check the uvicorn process/terminal. `start_server.py`
-   waits up to 20s for `/api/health` and reports "Server failed to start" on failure.
+1. **Process alive?** Check the uvicorn process/terminal.
+   `backend/scripts/start_server.py` waits up to 120 s for `/api/health` (the
+   first request warms the QA model) and reports a failure to become healthy.
 2. **Startup errors?** Restarting in the foreground shows the traceback. Common
    causes visible at import time:
    - `config.py` cannot load `.env` (malformed env file).

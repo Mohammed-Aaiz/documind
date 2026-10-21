@@ -1,0 +1,1248 @@
+{
+  "provenance_2026_09_28": {
+    "status": "PRE-RECONSTRUCTION-FIX: the answer TEXT in the input predictions was produced by tokenizer.decode(), which re-inserts spaces at subword boundaries and corrupted every value the tokenizer split ('142.6 million' -> '142. 6 million', '$4,900' -> '$ 4, 900', '2011-2020' -> '2011 - 2020').",
+    "scope": "EM/F1 values and the 'original_correct' rate are affected. The five statistics' rankings and the abstention sets are NOT affected.",
+    "unaffected": "logit/score-derived signals (null_score, margin, cls_start_logit, start/end logits) are unchanged by the fix: score and span are bit-identical before vs after.",
+    "measured_effect": "same 182 examples, same checkpoints, same spans, only the decoder changed: F2 answerable EM 2.86% -> 14.29%, F1 16.92% -> 28.91% (re-run 2026-09-28). Leaked population; not a generalization result.",
+    "fix": "backend/answer_span.py, shared by chat/qa_model.py and all Phase 4F runners.",
+    "details": "backend/architecture/phase4f_6/decision/E0_PREDICTION_PROVENANCE_2026-09-28.md",
+    "input_not_regenerated": "model_40min_predictions.json (sha256 d7d9d65e944488ac...) was NOT regenerated: nothing in the repository produces it and the re-scoring tools pin that hash."
+  },
+  "experiment": "fixed_K47_score_statistic_ranking",
+  "phase": "single-variable re-ranking of frozen predictions (ranking statistic only)",
+  "date": "2026-09-23T20:46:10.905095+05:30",
+  "K": {
+    "value": 47,
+    "fixed_before_evaluation": true,
+    "searched": false,
+    "tuned": false,
+    "K_pct_of_182": 25.8
+  },
+  "method": {
+    "tie_break": "example_id ascending",
+    "statistics": {
+      "null_score": {
+        "direction": "DESC",
+        "justification": "cls_start + cls_end; high = the no-answer ([CLS]) score dominates",
+        "recorded_field": "null_score"
+      },
+      "best_answer_score": {
+        "direction": "ASC",
+        "justification": "best_start_logit + best_end_logit; high = a strong answer span exists, so low values abstain",
+        "recorded_field": "best_answer_score"
+      },
+      "cls_start": {
+        "direction": "DESC",
+        "justification": "[CLS] start logit; high = no-answer start",
+        "recorded_field": "cls_start_logit"
+      },
+      "cls_end": {
+        "direction": "DESC",
+        "justification": "[CLS] end logit; high = no-answer end",
+        "recorded_field": "cls_end_logit"
+      },
+      "margin": {
+        "direction": "DESC",
+        "justification": "null_score - best_answer_score (definition preserved); high = null dominates the best span",
+        "recorded_field": "margin"
+      }
+    },
+    "derived_statistics_created": false,
+    "statistics_silently_reversed": false,
+    "only_variable_changed": "ranking statistic used to select the fixed K=47 abstention set"
+  },
+  "chance_reference": {
+    "unanswerable_expected_in_a_random_47": 10.85,
+    "note": "K/182 * 42; a descriptive reference for the fixed budget, not a fitted value"
+  },
+  "classification_rule_pre_specified": {
+    "MORE_INFORMATIVE_THAN_NULL": "delta_true >= +3 AND delta_false <= 0",
+    "LESS_INFORMATIVE_THAN_NULL": "delta_true <= -3 AND delta_false >= 0",
+    "SIMILAR_TO_NULL": "|delta_true| <= 2 AND |delta_false| <= 2 AND |delta_F1| <= 1.5",
+    "INSUFFICIENT_DIFFERENCE": "otherwise (mixed/inconsistent movement that crosses none of the above)"
+  },
+  "reference_null_score_K47": {
+    "F2": {
+      "EM": 2.86,
+      "F1": 16.92
+    },
+    "A0": {
+      "EM": 5.0,
+      "F1": 18.32
+    }
+  },
+  "inputs": {
+    "predictions_file": "backend/architecture/phase4f_6/e0_diagnostics/diagnostics/model_40min_predictions.json",
+    "predictions_sha256": "d7d9d65e944488ac26a0e197df589fbb4955aafe635fac82f52d2c6e4a649fa9",
+    "benchmark_sha256": "1166bf4ff38265c209614ac20261417b7eeb43653f4482dfdf94721fd50a41d0",
+    "benchmark_sha256_verified": true
+  },
+  "models": {
+    "F2": {
+      "checkpoint": "backend/phase4f/phase4f_5f/f2/checkpoints/F2/checkpoint_epoch2",
+      "model_sha256": "717463178eeb37ee3a6424063e8666b6586dd15ee50d745c1ab3d16bb4b164b0",
+      "n": 182,
+      "chance_unanswerable_in_top_47": 10.85,
+      "statistics": {
+        "null_score": {
+          "true_abstention": "8/42",
+          "true_abstention_count": 8,
+          "true_abstention_pct": 19.0,
+          "false_abstention": "39/140",
+          "false_abstention_count": 39,
+          "false_abstention_pct": 27.9,
+          "spurious": 34,
+          "spurious_rate_pct": 18.7,
+          "EM_answerable_pct": 2.86,
+          "F1_answerable_pct": 16.92,
+          "answerable_coverage_pct": 72.14,
+          "conditional_EM_among_retained_pct": 3.96,
+          "conditional_F1_among_retained_pct": 23.46,
+          "correct_answers_retained": 4,
+          "incorrect_answers_retained": 97,
+          "correct_answers_abstained": 0,
+          "incorrect_answers_abstained": 39,
+          "abstention_precision": 0.1702,
+          "overall_nonempty_coverage_pct": 74.18,
+          "by_category": {
+            "UNANSWERABLE": {
+              "n": 42,
+              "abstained": 8,
+              "retained": 34,
+              "EM": null,
+              "F1": null
+            },
+            "TABLE_CELL": {
+              "n": 24,
+              "abstained": 2,
+              "retained": 22,
+              "EM": 0.0,
+              "F1": 1.2
+            },
+            "DIRECT_SPAN": {
+              "n": 24,
+              "abstained": 1,
+              "retained": 23,
+              "EM": 12.5,
+              "F1": 46.3
+            },
+            "SECTION_SPECIFIC": {
+              "n": 16,
+              "abstained": 13,
+              "retained": 3,
+              "EM": 0.0,
+              "F1": 0.0
+            },
+            "LIST_ITEM": {
+              "n": 20,
+              "abstained": 6,
+              "retained": 14,
+              "EM": 0.0,
+              "F1": 10.8
+            },
+            "NUMERIC": {
+              "n": 20,
+              "abstained": 0,
+              "retained": 20,
+              "EM": 5.0,
+              "F1": 39.8
+            },
+            "TABLE_ROW": {
+              "n": 16,
+              "abstained": 0,
+              "retained": 16,
+              "EM": 0.0,
+              "F1": 11.1
+            },
+            "LONG_CONTEXT": {
+              "n": 10,
+              "abstained": 10,
+              "retained": 0,
+              "EM": 0.0,
+              "F1": 0.0
+            },
+            "MULTI_CHUNK": {
+              "n": 10,
+              "abstained": 7,
+              "retained": 3,
+              "EM": 0.0,
+              "F1": 4.0
+            }
+          },
+          "statistic": "null_score",
+          "direction": "DESC",
+          "direction_justification": "cls_start + cls_end; high = the no-answer ([CLS]) score dominates",
+          "K": 47,
+          "abstain_set_overlap_with_null_score": 47,
+          "abstain_set_jaccard_with_null_score": 1.0,
+          "delta_vs_null_score": {
+            "delta_true_abstention": 0,
+            "delta_false_abstention": 0,
+            "delta_F1": 0.0
+          },
+          "classification_vs_null_score": "SIMILAR_TO_NULL",
+          "category_abstention_share": {
+            "UNANSWERABLE": 0.1905,
+            "TABLE_CELL": 0.0833,
+            "DIRECT_SPAN": 0.0417,
+            "SECTION_SPECIFIC": 0.8125,
+            "LIST_ITEM": 0.3,
+            "NUMERIC": 0.0,
+            "TABLE_ROW": 0.0,
+            "LONG_CONTEXT": 1.0,
+            "MULTI_CHUNK": 0.7
+          }
+        },
+        "best_answer_score": {
+          "true_abstention": "21/42",
+          "true_abstention_count": 21,
+          "true_abstention_pct": 50.0,
+          "false_abstention": "26/140",
+          "false_abstention_count": 26,
+          "false_abstention_pct": 18.6,
+          "spurious": 21,
+          "spurious_rate_pct": 11.5,
+          "EM_answerable_pct": 2.86,
+          "F1_answerable_pct": 15.41,
+          "answerable_coverage_pct": 81.43,
+          "conditional_EM_among_retained_pct": 3.51,
+          "conditional_F1_among_retained_pct": 18.92,
+          "correct_answers_retained": 4,
+          "incorrect_answers_retained": 110,
+          "correct_answers_abstained": 0,
+          "incorrect_answers_abstained": 26,
+          "abstention_precision": 0.4468,
+          "overall_nonempty_coverage_pct": 74.18,
+          "by_category": {
+            "UNANSWERABLE": {
+              "n": 42,
+              "abstained": 21,
+              "retained": 21,
+              "EM": null,
+              "F1": null
+            },
+            "TABLE_CELL": {
+              "n": 24,
+              "abstained": 1,
+              "retained": 23,
+              "EM": 0.0,
+              "F1": 0.0
+            },
+            "DIRECT_SPAN": {
+              "n": 24,
+              "abstained": 0,
+              "retained": 24,
+              "EM": 12.5,
+              "F1": 47.4
+            },
+            "SECTION_SPECIFIC": {
+              "n": 16,
+              "abstained": 3,
+              "retained": 13,
+              "EM": 0.0,
+              "F1": 0.7
+            },
+            "LIST_ITEM": {
+              "n": 20,
+              "abstained": 11,
+              "retained": 9,
+              "EM": 0.0,
+              "F1": 6.4
+            },
+            "NUMERIC": {
+              "n": 20,
+              "abstained": 7,
+              "retained": 13,
+              "EM": 5.0,
+              "F1": 25.5
+            },
+            "TABLE_ROW": {
+              "n": 16,
+              "abstained": 4,
+              "retained": 12,
+              "EM": 0.0,
+              "F1": 3.3
+            },
+            "LONG_CONTEXT": {
+              "n": 10,
+              "abstained": 0,
+              "retained": 10,
+              "EM": 0.0,
+              "F1": 10.0
+            },
+            "MULTI_CHUNK": {
+              "n": 10,
+              "abstained": 0,
+              "retained": 10,
+              "EM": 0.0,
+              "F1": 21.7
+            }
+          },
+          "statistic": "best_answer_score",
+          "direction": "ASC",
+          "direction_justification": "best_start_logit + best_end_logit; high = a strong answer span exists, so low values abstain",
+          "K": 47,
+          "abstain_set_overlap_with_null_score": 2,
+          "abstain_set_jaccard_with_null_score": 0.0217,
+          "delta_vs_null_score": {
+            "delta_true_abstention": 13,
+            "delta_false_abstention": -13,
+            "delta_F1": -1.51
+          },
+          "classification_vs_null_score": "MORE_INFORMATIVE_THAN_NULL",
+          "category_abstention_share": {
+            "UNANSWERABLE": 0.5,
+            "TABLE_CELL": 0.0417,
+            "DIRECT_SPAN": 0.0,
+            "SECTION_SPECIFIC": 0.1875,
+            "LIST_ITEM": 0.55,
+            "NUMERIC": 0.35,
+            "TABLE_ROW": 0.25,
+            "LONG_CONTEXT": 0.0,
+            "MULTI_CHUNK": 0.0
+          }
+        },
+        "cls_start": {
+          "true_abstention": "4/42",
+          "true_abstention_count": 4,
+          "true_abstention_pct": 9.5,
+          "false_abstention": "43/140",
+          "false_abstention_count": 43,
+          "false_abstention_pct": 30.7,
+          "spurious": 38,
+          "spurious_rate_pct": 20.9,
+          "EM_answerable_pct": 2.14,
+          "F1_answerable_pct": 14.97,
+          "answerable_coverage_pct": 69.29,
+          "conditional_EM_among_retained_pct": 3.09,
+          "conditional_F1_among_retained_pct": 21.61,
+          "correct_answers_retained": 3,
+          "incorrect_answers_retained": 94,
+          "correct_answers_abstained": 1,
+          "incorrect_answers_abstained": 42,
+          "abstention_precision": 0.0851,
+          "overall_nonempty_coverage_pct": 74.18,
+          "by_category": {
+            "UNANSWERABLE": {
+              "n": 42,
+              "abstained": 4,
+              "retained": 38,
+              "EM": null,
+              "F1": null
+            },
+            "TABLE_CELL": {
+              "n": 24,
+              "abstained": 0,
+              "retained": 24,
+              "EM": 0.0,
+              "F1": 1.2
+            },
+            "DIRECT_SPAN": {
+              "n": 24,
+              "abstained": 8,
+              "retained": 16,
+              "EM": 8.3,
+              "F1": 34.9
+            },
+            "SECTION_SPECIFIC": {
+              "n": 16,
+              "abstained": 12,
+              "retained": 4,
+              "EM": 0.0,
+              "F1": 0.0
+            },
+            "LIST_ITEM": {
+              "n": 20,
+              "abstained": 6,
+              "retained": 14,
+              "EM": 0.0,
+              "F1": 10.8
+            },
+            "NUMERIC": {
+              "n": 20,
+              "abstained": 0,
+              "retained": 20,
+              "EM": 5.0,
+              "F1": 39.8
+            },
+            "TABLE_ROW": {
+              "n": 16,
+              "abstained": 0,
+              "retained": 16,
+              "EM": 0.0,
+              "F1": 11.1
+            },
+            "LONG_CONTEXT": {
+              "n": 10,
+              "abstained": 10,
+              "retained": 0,
+              "EM": 0.0,
+              "F1": 0.0
+            },
+            "MULTI_CHUNK": {
+              "n": 10,
+              "abstained": 7,
+              "retained": 3,
+              "EM": 0.0,
+              "F1": 4.0
+            }
+          },
+          "statistic": "cls_start",
+          "direction": "DESC",
+          "direction_justification": "[CLS] start logit; high = no-answer start",
+          "K": 47,
+          "abstain_set_overlap_with_null_score": 38,
+          "abstain_set_jaccard_with_null_score": 0.6786,
+          "delta_vs_null_score": {
+            "delta_true_abstention": -4,
+            "delta_false_abstention": 4,
+            "delta_F1": -1.95
+          },
+          "classification_vs_null_score": "LESS_INFORMATIVE_THAN_NULL",
+          "category_abstention_share": {
+            "UNANSWERABLE": 0.0952,
+            "TABLE_CELL": 0.0,
+            "DIRECT_SPAN": 0.3333,
+            "SECTION_SPECIFIC": 0.75,
+            "LIST_ITEM": 0.3,
+            "NUMERIC": 0.0,
+            "TABLE_ROW": 0.0,
+            "LONG_CONTEXT": 1.0,
+            "MULTI_CHUNK": 0.7
+          }
+        },
+        "cls_end": {
+          "true_abstention": "5/42",
+          "true_abstention_count": 5,
+          "true_abstention_pct": 11.9,
+          "false_abstention": "42/140",
+          "false_abstention_count": 42,
+          "false_abstention_pct": 30.0,
+          "spurious": 37,
+          "spurious_rate_pct": 20.3,
+          "EM_answerable_pct": 2.86,
+          "F1_answerable_pct": 18.09,
+          "answerable_coverage_pct": 70.0,
+          "conditional_EM_among_retained_pct": 4.08,
+          "conditional_F1_among_retained_pct": 25.84,
+          "correct_answers_retained": 4,
+          "incorrect_answers_retained": 94,
+          "correct_answers_abstained": 0,
+          "incorrect_answers_abstained": 42,
+          "abstention_precision": 0.1064,
+          "overall_nonempty_coverage_pct": 74.18,
+          "by_category": {
+            "UNANSWERABLE": {
+              "n": 42,
+              "abstained": 5,
+              "retained": 37,
+              "EM": null,
+              "F1": null
+            },
+            "TABLE_CELL": {
+              "n": 24,
+              "abstained": 17,
+              "retained": 7,
+              "EM": 0.0,
+              "F1": 1.2
+            },
+            "DIRECT_SPAN": {
+              "n": 24,
+              "abstained": 0,
+              "retained": 24,
+              "EM": 12.5,
+              "F1": 47.4
+            },
+            "SECTION_SPECIFIC": {
+              "n": 16,
+              "abstained": 5,
+              "retained": 11,
+              "EM": 0.0,
+              "F1": 0.7
+            },
+            "LIST_ITEM": {
+              "n": 20,
+              "abstained": 4,
+              "retained": 16,
+              "EM": 0.0,
+              "F1": 12.3
+            },
+            "NUMERIC": {
+              "n": 20,
+              "abstained": 0,
+              "retained": 20,
+              "EM": 5.0,
+              "F1": 39.8
+            },
+            "TABLE_ROW": {
+              "n": 16,
+              "abstained": 7,
+              "retained": 9,
+              "EM": 0.0,
+              "F1": 8.5
+            },
+            "LONG_CONTEXT": {
+              "n": 10,
+              "abstained": 7,
+              "retained": 3,
+              "EM": 0.0,
+              "F1": 5.0
+            },
+            "MULTI_CHUNK": {
+              "n": 10,
+              "abstained": 2,
+              "retained": 8,
+              "EM": 0.0,
+              "F1": 12.7
+            }
+          },
+          "statistic": "cls_end",
+          "direction": "DESC",
+          "direction_justification": "[CLS] end logit; high = no-answer end",
+          "K": 47,
+          "abstain_set_overlap_with_null_score": 21,
+          "abstain_set_jaccard_with_null_score": 0.2877,
+          "delta_vs_null_score": {
+            "delta_true_abstention": -3,
+            "delta_false_abstention": 3,
+            "delta_F1": 1.17
+          },
+          "classification_vs_null_score": "LESS_INFORMATIVE_THAN_NULL",
+          "category_abstention_share": {
+            "UNANSWERABLE": 0.119,
+            "TABLE_CELL": 0.7083,
+            "DIRECT_SPAN": 0.0,
+            "SECTION_SPECIFIC": 0.3125,
+            "LIST_ITEM": 0.2,
+            "NUMERIC": 0.0,
+            "TABLE_ROW": 0.4375,
+            "LONG_CONTEXT": 0.7,
+            "MULTI_CHUNK": 0.2
+          }
+        },
+        "margin": {
+          "true_abstention": "20/42",
+          "true_abstention_count": 20,
+          "true_abstention_pct": 47.6,
+          "false_abstention": "27/140",
+          "false_abstention_count": 27,
+          "false_abstention_pct": 19.3,
+          "spurious": 22,
+          "spurious_rate_pct": 12.1,
+          "EM_answerable_pct": 2.86,
+          "F1_answerable_pct": 15.62,
+          "answerable_coverage_pct": 80.71,
+          "conditional_EM_among_retained_pct": 3.54,
+          "conditional_F1_among_retained_pct": 19.35,
+          "correct_answers_retained": 4,
+          "incorrect_answers_retained": 109,
+          "correct_answers_abstained": 0,
+          "incorrect_answers_abstained": 27,
+          "abstention_precision": 0.4255,
+          "overall_nonempty_coverage_pct": 74.18,
+          "by_category": {
+            "UNANSWERABLE": {
+              "n": 42,
+              "abstained": 20,
+              "retained": 22,
+              "EM": null,
+              "F1": null
+            },
+            "TABLE_CELL": {
+              "n": 24,
+              "abstained": 1,
+              "retained": 23,
+              "EM": 0.0,
+              "F1": 0.0
+            },
+            "DIRECT_SPAN": {
+              "n": 24,
+              "abstained": 0,
+              "retained": 24,
+              "EM": 12.5,
+              "F1": 47.4
+            },
+            "SECTION_SPECIFIC": {
+              "n": 16,
+              "abstained": 4,
+              "retained": 12,
+              "EM": 0.0,
+              "F1": 0.7
+            },
+            "LIST_ITEM": {
+              "n": 20,
+              "abstained": 8,
+              "retained": 12,
+              "EM": 0.0,
+              "F1": 10.1
+            },
+            "NUMERIC": {
+              "n": 20,
+              "abstained": 6,
+              "retained": 14,
+              "EM": 5.0,
+              "F1": 25.5
+            },
+            "TABLE_ROW": {
+              "n": 16,
+              "abstained": 3,
+              "retained": 13,
+              "EM": 0.0,
+              "F1": 6.2
+            },
+            "LONG_CONTEXT": {
+              "n": 10,
+              "abstained": 5,
+              "retained": 5,
+              "EM": 0.0,
+              "F1": 1.0
+            },
+            "MULTI_CHUNK": {
+              "n": 10,
+              "abstained": 0,
+              "retained": 10,
+              "EM": 0.0,
+              "F1": 21.7
+            }
+          },
+          "statistic": "margin",
+          "direction": "DESC",
+          "direction_justification": "null_score - best_answer_score (definition preserved); high = null dominates the best span",
+          "K": 47,
+          "abstain_set_overlap_with_null_score": 9,
+          "abstain_set_jaccard_with_null_score": 0.1059,
+          "delta_vs_null_score": {
+            "delta_true_abstention": 12,
+            "delta_false_abstention": -12,
+            "delta_F1": -1.3
+          },
+          "classification_vs_null_score": "MORE_INFORMATIVE_THAN_NULL",
+          "category_abstention_share": {
+            "UNANSWERABLE": 0.4762,
+            "TABLE_CELL": 0.0417,
+            "DIRECT_SPAN": 0.0,
+            "SECTION_SPECIFIC": 0.25,
+            "LIST_ITEM": 0.4,
+            "NUMERIC": 0.3,
+            "TABLE_ROW": 0.1875,
+            "LONG_CONTEXT": 0.5,
+            "MULTI_CHUNK": 0.0
+          }
+        }
+      }
+    },
+    "A0": {
+      "checkpoint": "backend/models/documind-qa",
+      "model_sha256": "cb9f1dde94fca0e1f82c440bdc184ff54ba02efb6ea432e37a8c6ff8a8f69deb",
+      "n": 182,
+      "chance_unanswerable_in_top_47": 10.85,
+      "statistics": {
+        "null_score": {
+          "true_abstention": "6/42",
+          "true_abstention_count": 6,
+          "true_abstention_pct": 14.3,
+          "false_abstention": "41/140",
+          "false_abstention_count": 41,
+          "false_abstention_pct": 29.3,
+          "spurious": 36,
+          "spurious_rate_pct": 19.8,
+          "EM_answerable_pct": 5.0,
+          "F1_answerable_pct": 18.32,
+          "answerable_coverage_pct": 70.71,
+          "conditional_EM_among_retained_pct": 7.07,
+          "conditional_F1_among_retained_pct": 25.9,
+          "correct_answers_retained": 7,
+          "incorrect_answers_retained": 92,
+          "correct_answers_abstained": 0,
+          "incorrect_answers_abstained": 41,
+          "abstention_precision": 0.1277,
+          "overall_nonempty_coverage_pct": 74.18,
+          "by_category": {
+            "UNANSWERABLE": {
+              "n": 42,
+              "abstained": 6,
+              "retained": 36,
+              "EM": null,
+              "F1": null
+            },
+            "TABLE_CELL": {
+              "n": 24,
+              "abstained": 8,
+              "retained": 16,
+              "EM": 8.3,
+              "F1": 10.4
+            },
+            "DIRECT_SPAN": {
+              "n": 24,
+              "abstained": 10,
+              "retained": 14,
+              "EM": 8.3,
+              "F1": 24.9
+            },
+            "SECTION_SPECIFIC": {
+              "n": 16,
+              "abstained": 0,
+              "retained": 16,
+              "EM": 0.0,
+              "F1": 21.9
+            },
+            "LIST_ITEM": {
+              "n": 20,
+              "abstained": 6,
+              "retained": 14,
+              "EM": 0.0,
+              "F1": 12.3
+            },
+            "NUMERIC": {
+              "n": 20,
+              "abstained": 5,
+              "retained": 15,
+              "EM": 15.0,
+              "F1": 35.0
+            },
+            "TABLE_ROW": {
+              "n": 16,
+              "abstained": 9,
+              "retained": 7,
+              "EM": 0.0,
+              "F1": 15.3
+            },
+            "LONG_CONTEXT": {
+              "n": 10,
+              "abstained": 0,
+              "retained": 10,
+              "EM": 0.0,
+              "F1": 11.2
+            },
+            "MULTI_CHUNK": {
+              "n": 10,
+              "abstained": 3,
+              "retained": 7,
+              "EM": 0.0,
+              "F1": 6.5
+            }
+          },
+          "statistic": "null_score",
+          "direction": "DESC",
+          "direction_justification": "cls_start + cls_end; high = the no-answer ([CLS]) score dominates",
+          "K": 47,
+          "abstain_set_overlap_with_null_score": 47,
+          "abstain_set_jaccard_with_null_score": 1.0,
+          "delta_vs_null_score": {
+            "delta_true_abstention": 0,
+            "delta_false_abstention": 0,
+            "delta_F1": 0.0
+          },
+          "classification_vs_null_score": "SIMILAR_TO_NULL",
+          "category_abstention_share": {
+            "UNANSWERABLE": 0.1429,
+            "TABLE_CELL": 0.3333,
+            "DIRECT_SPAN": 0.4167,
+            "SECTION_SPECIFIC": 0.0,
+            "LIST_ITEM": 0.3,
+            "NUMERIC": 0.25,
+            "TABLE_ROW": 0.5625,
+            "LONG_CONTEXT": 0.0,
+            "MULTI_CHUNK": 0.3
+          }
+        },
+        "best_answer_score": {
+          "true_abstention": "11/42",
+          "true_abstention_count": 11,
+          "true_abstention_pct": 26.2,
+          "false_abstention": "36/140",
+          "false_abstention_count": 36,
+          "false_abstention_pct": 25.7,
+          "spurious": 31,
+          "spurious_rate_pct": 17.0,
+          "EM_answerable_pct": 2.14,
+          "F1_answerable_pct": 17.03,
+          "answerable_coverage_pct": 74.29,
+          "conditional_EM_among_retained_pct": 2.88,
+          "conditional_F1_among_retained_pct": 22.93,
+          "correct_answers_retained": 3,
+          "incorrect_answers_retained": 101,
+          "correct_answers_abstained": 4,
+          "incorrect_answers_abstained": 32,
+          "abstention_precision": 0.234,
+          "overall_nonempty_coverage_pct": 74.18,
+          "by_category": {
+            "UNANSWERABLE": {
+              "n": 42,
+              "abstained": 11,
+              "retained": 31,
+              "EM": null,
+              "F1": null
+            },
+            "TABLE_CELL": {
+              "n": 24,
+              "abstained": 5,
+              "retained": 19,
+              "EM": 0.0,
+              "F1": 1.5
+            },
+            "DIRECT_SPAN": {
+              "n": 24,
+              "abstained": 4,
+              "retained": 20,
+              "EM": 4.2,
+              "F1": 31.2
+            },
+            "SECTION_SPECIFIC": {
+              "n": 16,
+              "abstained": 1,
+              "retained": 15,
+              "EM": 0.0,
+              "F1": 17.7
+            },
+            "LIST_ITEM": {
+              "n": 20,
+              "abstained": 4,
+              "retained": 16,
+              "EM": 0.0,
+              "F1": 11.9
+            },
+            "NUMERIC": {
+              "n": 20,
+              "abstained": 2,
+              "retained": 18,
+              "EM": 10.0,
+              "F1": 37.7
+            },
+            "TABLE_ROW": {
+              "n": 16,
+              "abstained": 12,
+              "retained": 4,
+              "EM": 0.0,
+              "F1": 9.1
+            },
+            "LONG_CONTEXT": {
+              "n": 10,
+              "abstained": 2,
+              "retained": 8,
+              "EM": 0.0,
+              "F1": 10.0
+            },
+            "MULTI_CHUNK": {
+              "n": 10,
+              "abstained": 6,
+              "retained": 4,
+              "EM": 0.0,
+              "F1": 8.0
+            }
+          },
+          "statistic": "best_answer_score",
+          "direction": "ASC",
+          "direction_justification": "best_start_logit + best_end_logit; high = a strong answer span exists, so low values abstain",
+          "K": 47,
+          "abstain_set_overlap_with_null_score": 14,
+          "abstain_set_jaccard_with_null_score": 0.175,
+          "delta_vs_null_score": {
+            "delta_true_abstention": 5,
+            "delta_false_abstention": -5,
+            "delta_F1": -1.29
+          },
+          "classification_vs_null_score": "MORE_INFORMATIVE_THAN_NULL",
+          "category_abstention_share": {
+            "UNANSWERABLE": 0.2619,
+            "TABLE_CELL": 0.2083,
+            "DIRECT_SPAN": 0.1667,
+            "SECTION_SPECIFIC": 0.0625,
+            "LIST_ITEM": 0.2,
+            "NUMERIC": 0.1,
+            "TABLE_ROW": 0.75,
+            "LONG_CONTEXT": 0.2,
+            "MULTI_CHUNK": 0.6
+          }
+        },
+        "cls_start": {
+          "true_abstention": "6/42",
+          "true_abstention_count": 6,
+          "true_abstention_pct": 14.3,
+          "false_abstention": "41/140",
+          "false_abstention_count": 41,
+          "false_abstention_pct": 29.3,
+          "spurious": 36,
+          "spurious_rate_pct": 19.8,
+          "EM_answerable_pct": 5.0,
+          "F1_answerable_pct": 18.08,
+          "answerable_coverage_pct": 70.71,
+          "conditional_EM_among_retained_pct": 7.07,
+          "conditional_F1_among_retained_pct": 25.56,
+          "correct_answers_retained": 7,
+          "incorrect_answers_retained": 92,
+          "correct_answers_abstained": 0,
+          "incorrect_answers_abstained": 41,
+          "abstention_precision": 0.1277,
+          "overall_nonempty_coverage_pct": 74.18,
+          "by_category": {
+            "UNANSWERABLE": {
+              "n": 42,
+              "abstained": 6,
+              "retained": 36,
+              "EM": null,
+              "F1": null
+            },
+            "TABLE_CELL": {
+              "n": 24,
+              "abstained": 8,
+              "retained": 16,
+              "EM": 8.3,
+              "F1": 10.4
+            },
+            "DIRECT_SPAN": {
+              "n": 24,
+              "abstained": 10,
+              "retained": 14,
+              "EM": 8.3,
+              "F1": 24.9
+            },
+            "SECTION_SPECIFIC": {
+              "n": 16,
+              "abstained": 0,
+              "retained": 16,
+              "EM": 0.0,
+              "F1": 21.9
+            },
+            "LIST_ITEM": {
+              "n": 20,
+              "abstained": 6,
+              "retained": 14,
+              "EM": 0.0,
+              "F1": 12.3
+            },
+            "NUMERIC": {
+              "n": 20,
+              "abstained": 6,
+              "retained": 14,
+              "EM": 15.0,
+              "F1": 33.3
+            },
+            "TABLE_ROW": {
+              "n": 16,
+              "abstained": 9,
+              "retained": 7,
+              "EM": 0.0,
+              "F1": 15.3
+            },
+            "LONG_CONTEXT": {
+              "n": 10,
+              "abstained": 0,
+              "retained": 10,
+              "EM": 0.0,
+              "F1": 11.2
+            },
+            "MULTI_CHUNK": {
+              "n": 10,
+              "abstained": 2,
+              "retained": 8,
+              "EM": 0.0,
+              "F1": 6.5
+            }
+          },
+          "statistic": "cls_start",
+          "direction": "DESC",
+          "direction_justification": "[CLS] start logit; high = no-answer start",
+          "K": 47,
+          "abstain_set_overlap_with_null_score": 46,
+          "abstain_set_jaccard_with_null_score": 0.9583,
+          "delta_vs_null_score": {
+            "delta_true_abstention": 0,
+            "delta_false_abstention": 0,
+            "delta_F1": -0.24
+          },
+          "classification_vs_null_score": "SIMILAR_TO_NULL",
+          "category_abstention_share": {
+            "UNANSWERABLE": 0.1429,
+            "TABLE_CELL": 0.3333,
+            "DIRECT_SPAN": 0.4167,
+            "SECTION_SPECIFIC": 0.0,
+            "LIST_ITEM": 0.3,
+            "NUMERIC": 0.3,
+            "TABLE_ROW": 0.5625,
+            "LONG_CONTEXT": 0.0,
+            "MULTI_CHUNK": 0.2
+          }
+        },
+        "cls_end": {
+          "true_abstention": "5/42",
+          "true_abstention_count": 5,
+          "true_abstention_pct": 11.9,
+          "false_abstention": "42/140",
+          "false_abstention_count": 42,
+          "false_abstention_pct": 30.0,
+          "spurious": 37,
+          "spurious_rate_pct": 20.3,
+          "EM_answerable_pct": 5.0,
+          "F1_answerable_pct": 18.22,
+          "answerable_coverage_pct": 70.0,
+          "conditional_EM_among_retained_pct": 7.14,
+          "conditional_F1_among_retained_pct": 26.03,
+          "correct_answers_retained": 7,
+          "incorrect_answers_retained": 91,
+          "correct_answers_abstained": 0,
+          "incorrect_answers_abstained": 42,
+          "abstention_precision": 0.1064,
+          "overall_nonempty_coverage_pct": 74.18,
+          "by_category": {
+            "UNANSWERABLE": {
+              "n": 42,
+              "abstained": 5,
+              "retained": 37,
+              "EM": null,
+              "F1": null
+            },
+            "TABLE_CELL": {
+              "n": 24,
+              "abstained": 8,
+              "retained": 16,
+              "EM": 8.3,
+              "F1": 10.4
+            },
+            "DIRECT_SPAN": {
+              "n": 24,
+              "abstained": 10,
+              "retained": 14,
+              "EM": 8.3,
+              "F1": 24.9
+            },
+            "SECTION_SPECIFIC": {
+              "n": 16,
+              "abstained": 0,
+              "retained": 16,
+              "EM": 0.0,
+              "F1": 21.9
+            },
+            "LIST_ITEM": {
+              "n": 20,
+              "abstained": 6,
+              "retained": 14,
+              "EM": 0.0,
+              "F1": 12.3
+            },
+            "NUMERIC": {
+              "n": 20,
+              "abstained": 5,
+              "retained": 15,
+              "EM": 15.0,
+              "F1": 35.0
+            },
+            "TABLE_ROW": {
+              "n": 16,
+              "abstained": 10,
+              "retained": 6,
+              "EM": 0.0,
+              "F1": 14.5
+            },
+            "LONG_CONTEXT": {
+              "n": 10,
+              "abstained": 0,
+              "retained": 10,
+              "EM": 0.0,
+              "F1": 11.2
+            },
+            "MULTI_CHUNK": {
+              "n": 10,
+              "abstained": 3,
+              "retained": 7,
+              "EM": 0.0,
+              "F1": 6.5
+            }
+          },
+          "statistic": "cls_end",
+          "direction": "DESC",
+          "direction_justification": "[CLS] end logit; high = no-answer end",
+          "K": 47,
+          "abstain_set_overlap_with_null_score": 45,
+          "abstain_set_jaccard_with_null_score": 0.9184,
+          "delta_vs_null_score": {
+            "delta_true_abstention": -1,
+            "delta_false_abstention": 1,
+            "delta_F1": -0.1
+          },
+          "classification_vs_null_score": "SIMILAR_TO_NULL",
+          "category_abstention_share": {
+            "UNANSWERABLE": 0.119,
+            "TABLE_CELL": 0.3333,
+            "DIRECT_SPAN": 0.4167,
+            "SECTION_SPECIFIC": 0.0,
+            "LIST_ITEM": 0.3,
+            "NUMERIC": 0.25,
+            "TABLE_ROW": 0.625,
+            "LONG_CONTEXT": 0.0,
+            "MULTI_CHUNK": 0.3
+          }
+        },
+        "margin": {
+          "true_abstention": "7/42",
+          "true_abstention_count": 7,
+          "true_abstention_pct": 16.7,
+          "false_abstention": "40/140",
+          "false_abstention_count": 40,
+          "false_abstention_pct": 28.6,
+          "spurious": 35,
+          "spurious_rate_pct": 19.2,
+          "EM_answerable_pct": 3.57,
+          "F1_answerable_pct": 17.36,
+          "answerable_coverage_pct": 71.43,
+          "conditional_EM_among_retained_pct": 5.0,
+          "conditional_F1_among_retained_pct": 24.31,
+          "correct_answers_retained": 5,
+          "incorrect_answers_retained": 95,
+          "correct_answers_abstained": 2,
+          "incorrect_answers_abstained": 38,
+          "abstention_precision": 0.1489,
+          "overall_nonempty_coverage_pct": 74.18,
+          "by_category": {
+            "UNANSWERABLE": {
+              "n": 42,
+              "abstained": 7,
+              "retained": 35,
+              "EM": null,
+              "F1": null
+            },
+            "TABLE_CELL": {
+              "n": 24,
+              "abstained": 8,
+              "retained": 16,
+              "EM": 0.0,
+              "F1": 0.6
+            },
+            "DIRECT_SPAN": {
+              "n": 24,
+              "abstained": 7,
+              "retained": 17,
+              "EM": 8.3,
+              "F1": 28.4
+            },
+            "SECTION_SPECIFIC": {
+              "n": 16,
+              "abstained": 0,
+              "retained": 16,
+              "EM": 0.0,
+              "F1": 21.9
+            },
+            "LIST_ITEM": {
+              "n": 20,
+              "abstained": 6,
+              "retained": 14,
+              "EM": 0.0,
+              "F1": 12.3
+            },
+            "NUMERIC": {
+              "n": 20,
+              "abstained": 1,
+              "retained": 19,
+              "EM": 15.0,
+              "F1": 41.4
+            },
+            "TABLE_ROW": {
+              "n": 16,
+              "abstained": 13,
+              "retained": 3,
+              "EM": 0.0,
+              "F1": 7.4
+            },
+            "LONG_CONTEXT": {
+              "n": 10,
+              "abstained": 0,
+              "retained": 10,
+              "EM": 0.0,
+              "F1": 11.2
+            },
+            "MULTI_CHUNK": {
+              "n": 10,
+              "abstained": 5,
+              "retained": 5,
+              "EM": 0.0,
+              "F1": 8.0
+            }
+          },
+          "statistic": "margin",
+          "direction": "DESC",
+          "direction_justification": "null_score - best_answer_score (definition preserved); high = null dominates the best span",
+          "K": 47,
+          "abstain_set_overlap_with_null_score": 30,
+          "abstain_set_jaccard_with_null_score": 0.4688,
+          "delta_vs_null_score": {
+            "delta_true_abstention": 1,
+            "delta_false_abstention": -1,
+            "delta_F1": -0.96
+          },
+          "classification_vs_null_score": "SIMILAR_TO_NULL",
+          "category_abstention_share": {
+            "UNANSWERABLE": 0.1667,
+            "TABLE_CELL": 0.3333,
+            "DIRECT_SPAN": 0.2917,
+            "SECTION_SPECIFIC": 0.0,
+            "LIST_ITEM": 0.3,
+            "NUMERIC": 0.05,
+            "TABLE_ROW": 0.8125,
+            "LONG_CONTEXT": 0.0,
+            "MULTI_CHUNK": 0.5
+          }
+        }
+      }
+    }
+  },
+  "checkpoint_comparison_at_K47": {
+    "null_score": {
+      "F2_true_abstention": "8/42",
+      "A0_true_abstention": "6/42",
+      "F2_false_abstention": "39/140",
+      "A0_false_abstention": "41/140",
+      "F2_conditional_F1": 23.46,
+      "A0_conditional_F1": 25.9,
+      "true_abstention_gap_A0_minus_F2": -2,
+      "false_abstention_gap_A0_minus_F2": 2
+    },
+    "best_answer_score": {
+      "F2_true_abstention": "21/42",
+      "A0_true_abstention": "11/42",
+      "F2_false_abstention": "26/140",
+      "A0_false_abstention": "36/140",
+      "F2_conditional_F1": 18.92,
+      "A0_conditional_F1": 22.93,
+      "true_abstention_gap_A0_minus_F2": -10,
+      "false_abstention_gap_A0_minus_F2": 10
+    },
+    "cls_start": {
+      "F2_true_abstention": "4/42",
+      "A0_true_abstention": "6/42",
+      "F2_false_abstention": "43/140",
+      "A0_false_abstention": "41/140",
+      "F2_conditional_F1": 21.61,
+      "A0_conditional_F1": 25.56,
+      "true_abstention_gap_A0_minus_F2": 2,
+      "false_abstention_gap_A0_minus_F2": -2
+    },
+    "cls_end": {
+      "F2_true_abstention": "5/42",
+      "A0_true_abstention": "5/42",
+      "F2_false_abstention": "42/140",
+      "A0_false_abstention": "42/140",
+      "F2_conditional_F1": 25.84,
+      "A0_conditional_F1": 26.03,
+      "true_abstention_gap_A0_minus_F2": 0,
+      "false_abstention_gap_A0_minus_F2": 0
+    },
+    "margin": {
+      "F2_true_abstention": "20/42",
+      "A0_true_abstention": "7/42",
+      "F2_false_abstention": "27/140",
+      "A0_false_abstention": "40/140",
+      "F2_conditional_F1": 19.35,
+      "A0_conditional_F1": 24.31,
+      "true_abstention_gap_A0_minus_F2": -13,
+      "false_abstention_gap_A0_minus_F2": 13
+    }
+  },
+  "interpretation_boundary": [
+    "No inference, no model loading, no training, no database, no retrieval was used.",
+    "K=47 was fixed before evaluation and was neither searched nor tuned.",
+    "No threshold is used in this experiment.",
+    "Statistics are used exactly as recorded; none was reversed or re-derived.",
+    "Classifications are descriptive comparisons to null_score under a pre-specified rule; no statistic is declared a winner.",
+    "No architectural claim (H-A..H-E) is made."
+  ]
+}

@@ -1,0 +1,159 @@
+{
+  "artifact": "PROTOCOL_V2_SPAN_SELECTION_ROLLOUT",
+  "date": "2026-09-29",
+  "note": "Replays the Phase 4F evaluation runners against the two answer-span selection protocols now switchable via PHASE4F_SPAN_SELECTION. Every number below comes from a run executed on 2026-09-29 against the on-disk checkpoints; v1 and v2 read the SAME logits and differ only in the selection rule. The benchmark population is 100% leaked (all example_ids appear in training_data.jsonl / training_data_v3.jsonl) -- these are not generalization results.",
+  "what_changed": "The 10 Phase 4F runners were switched from their inline greedy argmax chain to the shared answer_span.select_answer_span(). select_answer_span defaults to the joint rule (maximise start_logit + end_logit), which is what production (chat/qa_model.py) already used. Setting PHASE4F_SPAN_SELECTION=argmax_chain restores the recorded v1 behaviour (recorded_argmax_chain: argmax(start), then argmax(end) within a 50-token window, [CLS] NOT masked, ties to lowest index).",
+  "protocol_switch": {
+    "env_var": "PHASE4F_SPAN_SELECTION",
+    "v1": "argmax_chain",
+    "v2": "joint (default, no env var set)"
+  },
+  "replays": [
+    {
+      "runner": "backend/phase4f/phase4f_5/evaluation/evaluate.py",
+      "dataset": "backend/phase4f/phase4f_5/dataset/derived_dataset.jsonl",
+      "split": "test",
+      "n_examples": 221,
+      "eval_version": "4F.5-eval-v1",
+      "outputs": [
+        "phase4f_5/results/{a0,a1,a2}_test.protocol_v1_argmaxchain.json",
+        "phase4f_5/results/{a0,a1,a2}_test.protocol_v2_joint.json"
+      ],
+      "results_percent": {
+        "A0_production": {
+          "model_dir": "backend/models/documind-qa",
+          "v1_argmax_chain": {"em": 8.6, "f1": 14.7},
+          "v2_joint": {"em": 13.1, "f1": 29.6},
+          "delta": {"em_pp": 4.5, "f1_pp": 14.9},
+          "v2_latency_ms": 235.43
+        },
+        "A1_checkpoint_epoch3": {
+          "model_dir": "backend/phase4f/phase4f_5/checkpoints/A1/checkpoint_epoch3",
+          "v1_argmax_chain": {"em": 11.3, "f1": 29.9},
+          "v2_joint": {"em": 11.3, "f1": 29.3},
+          "delta": {"em_pp": 0.0, "f1_pp": -0.6}
+        },
+        "A2_checkpoint_epoch3": {
+          "model_dir": "backend/phase4f/phase4f_5/checkpoints/A2/checkpoint_epoch3",
+          "v1_argmax_chain": {"em": 10.9, "f1": 27.5},
+          "v2_joint": {"em": 10.9, "f1": 27.0},
+          "delta": {"em_pp": 0.0, "f1_pp": -0.5}
+        }
+      },
+      "wall_time_seconds": {"A0_v2": 60, "A0_v1": 45, "A1_v2": 47, "A1_v1": 47, "A2_v2": 122, "A2_v1": 97}
+    },
+    {
+      "runner": "backend/phase4f/phase4f_5f/f2/threshold_experiment/run_threshold_experiment.py",
+      "model": "backend/phase4f/phase4f_5f/f2/checkpoints/F2/checkpoint_epoch2",
+      "v1_source": "threshold_experiment.pre_joint_selection_v1/ (verified byte-identical to the live directory immediately before the v2 replay, via diff -rq)",
+      "v2_source": "threshold_experiment/ (fresh run, wall time 149s)",
+      "splits": {
+        "benchmark_n": 182,
+        "validation": "selected-mode subset, null_score >= 1.5705",
+        "holdout": "unanswerable-only, n=14"
+      },
+      "results_percent": {
+        "benchmark_overall": {"v1": {"em": 14.29, "f1": 28.91}, "v2": {"em": 15.0, "f1": 29.69}, "delta_pp": {"em": 0.71, "f1": 0.78}},
+        "benchmark_by_category_changed": {
+          "TABLE_CELL": {"v1": {"em": 4.17, "f1": 12.08}, "v2": {"em": 8.33, "f1": 16.25}},
+          "TABLE_ROW": {"v1": {"f1": 31.19}, "v2": {"f1": 31.74}}
+        },
+        "validation_selected": {"v1": {"em": 20.0, "f1": 33.55}, "v2": {"em": 18.82, "f1": 32.83}, "delta_pp": {"em": -1.18, "f1": -0.72}},
+        "holdout": {"v1": {"abstention_rate": 14.29, "spurious_rate": 85.71}, "v2": {"abstention_rate": 14.29, "spurious_rate": 85.71}, "differing_leaf_paths": 0}
+      },
+      "decision_rule_unchanged": "null_score >= 1.5705",
+      "changed_files_vs_v1": [
+        "benchmark_result.json",
+        "margin_sweep.json",
+        "raw_predictions_benchmark.json",
+        "raw_predictions_holdout.json",
+        "raw_predictions_validation.json",
+        "stability_analysis.json",
+        "threshold_experiment_manifest.json",
+        "threshold_sweep.json",
+        "validation_calibration.json"
+      ]
+    },
+    {
+      "runner": "backend/phase4f/phase4f_5e/run_analysis.py",
+      "dataset": "backend/phase4f/phase4f_5d/benchmark/qa_benchmark_v1.jsonl (n=182)",
+      "v1_source": "phase4f_5e/analysis.pre_joint_selection_v1/",
+      "v2_source": "phase4f_5e/analysis/ (fresh run, wall time 349s)",
+      "results_percent": {
+        "A0_overall": {"v1": {"em": 7.9, "f1": 18.9}, "v2": {"em": 15.7, "f1": 38.7}},
+        "A1_overall": {"v1": {"f1": 35.7}, "v2": {"f1": 35.3}},
+        "A1_vs_A0_overall": {"v1": {"em_delta": 7.8, "f1_delta": 16.8}, "v2": {"em_delta": 0.0, "f1_delta": -3.4}},
+        "A0_answerable_correct_count": {"v1": 11, "v2": 22},
+        "A0_unanswerable_abstained_count": {"v1": 27, "v2": 0}
+      },
+      "changed_files_vs_v1": [
+        "confidence_distribution.json",
+        "f1_gain_analysis.json",
+        "threshold_sweep.json",
+        "unanswerable_audit.json"
+      ]
+    }
+  ],
+  "cross_check": {
+    "claim": "The phase4f_5e v1 baseline independently reproduces the Exp-3 measurement on the same 182-example benchmark.",
+    "phase4f_5e_v1_A0": {"em": 7.9, "f1": 18.9},
+    "SPAN_SELECTION_PROTOCOL_EXPERIMENT_S0_recorded_argmax_nomask50_A0": {"em_percent": 7.86, "f1_percent": 18.86},
+    "agreement": "consistent"
+  },
+  "baseline_caveat": {
+    "finding": "The Sep-21 on-disk phase4f_5/results/{a0,a1,a2}_test.json are NOT a usable v1 baseline.",
+    "detail": "They report A0 EM 3.2 / F1 8.6, A1 EM 1.8 / F1 14.4, A2 EM 0.9 / F1 12.3. Replaying the faithful v1 protocol with the current code gives A0 8.6 / 14.7, A1 11.3 / 29.9, A2 10.9 / 27.5. The on-disk files are byte-equal in their overall block to the phase4f_5/results.pre_reconstruction_fix snapshot, i.e. they predate the Exp-1 answer-reconstruction fix. The .pre_joint_selection_v1 snapshot taken from them therefore captures a stale pre-reconstruction-fix state, not v1-of-today.",
+    "consequence": "Protocol deltas must be measured against a fresh v1 replay, not against the Sep-21 files. The phase4f_5e and threshold_experiment v1 snapshots are NOT affected by this problem (the threshold_experiment snapshot was verified byte-identical to the pre-replay live directory; the phase4f_5e v1 numbers cross-check against Exp 3)."
+  },
+  "runners_not_replayed": [
+    {
+      "runner": "backend/phase4f/experiments/evaluate.py",
+      "dataset": "backend/phase4f/dataset/training_data_v3.jsonl (n=918)",
+      "reason": "The A0-A3 model checkpoint directories this runner consumes were not present on disk (only its output directories phase4f/experiments/results/{A0,A1,A2,A3} exist), so it cannot be replayed without fabricating a model directory."
+    },
+    {
+      "runner": "backend/phase4f/phase4f_5d/build_benchmark.py",
+      "reason": "Cannot affect any protocol-dependent metric and would risk the frozen benchmark. Verified: the script performs no model inference (no logits/argmax/torch/AutoModel/checkpoint references) and writes only dataset-shape audits (test_composition, category_balance, unanswerable_audit, leakage_audit, duplicate_audit, gold_span_validation). It unconditionally rewrites backend/phase4f/phase4f_5d/benchmark/qa_benchmark_v1.jsonl with no checksum guard, and that file is git-tracked and sha256-pinned to 1166bf4ff38265c209614ac20261417b7eeb43653f4482dfdf94721fd50a41d0 (re-verified unchanged on 2026-09-29).",
+      "hardening_required": "Add a write guard so the frozen benchmark is only written when its checksum matches an expected value, or split frozen-benchmark construction from analysis emission."
+    },
+    {
+      "runner": "phase4f_5d/analysis/{a0,a1,a2}_benchmark_v1.json, benchmark_comparison.json",
+      "reason": "No producer script for these metric files exists on disk; they were left untouched rather than regenerated by guesswork. Their signal is covered by the phase4f_5e replay above, which recomputes A0/A1 metrics on the same frozen benchmark."
+    }
+  ],
+  "findings": {
+    "ROLL1_joint_helps_A0_strongly": {
+      "status": "CONFIRMED",
+      "detail": "A0 (production) gains on every replay: +4.5pp EM / +14.9pp F1 (221-example test split), +7.8pp EM / +19.8pp F1 (182-example benchmark via phase4f_5e)."
+    },
+    "ROLL2_joint_is_not_uniformly_better": {
+      "status": "CONFIRMED",
+      "detail": "A1 and A2 show no EM change and a marginal F1 regression (A1 -0.6pp on the test split, -0.4pp on the benchmark; A2 -0.5pp). F2 shows +0.71pp EM / +0.78pp F1 on the benchmark but -1.18pp EM / -0.72pp F1 on validation. The upgrade is not a uniform improvement and must not be reported as one."
+    },
+    "ROLL3_joint_changes_the_research_conclusion": {
+      "status": "CONFIRMED",
+      "detail": "Under v1 the fine-tuned A1 looked clearly better than production A0 (em_delta +7.8pp, f1_delta +16.8pp). Under v2 the EM advantage vanishes (0.0pp) and A1 is now WORSE on F1 (-3.4pp). Any earlier conclusion that A1 beats A0 rests on the v1 selection rule."
+    },
+    "ROLL4_joint_removes_A0_accidental_abstention": {
+      "status": "CONFIRMED",
+      "detail": "A0 unanswerable_abstained count falls 27 -> 0 and answerable_correct count rises 11 -> 22 (182-example benchmark). Under v1 the greedy chain frequently produced an empty string, which was being read as abstention. The v1 abstention behaviour was partly an artifact of the selection rule, not calibrated abstention."
+    },
+    "ROLL5_threshold_selection_is_stable_across_protocols": {
+      "status": "CONFIRMED",
+      "detail": "The F2 threshold experiment selects the same decision rule (null_score >= 1.5705) under both protocols, and the unanswerable-only holdout is byte-identical (0 differing leaf paths). The protocol change moves answerable quality, not the abstention calibration."
+    }
+  },
+  "verdict": "PROTOCOL_V2_ADOPTED_AS_DEFAULT_BUT_NOT_A_UNIFORM_IMPROVEMENT",
+  "adoption_notes": [
+    "v2 (joint) is the production rule already used by chat/qa_model.py, so adopting it as the runner default removes a research/serving divergence rather than introducing a new method.",
+    "v1 numbers remain reproducible at any time via PHASE4F_SPAN_SELECTION=argmax_chain.",
+    "The A1-vs-A0 finding must be re-stated under v2; earlier v1-based comparisons are not interchangeable.",
+    "Do not claim a uniform improvement: gains are concentrated in A0 and in TABLE_CELL."
+  ],
+  "limitations": [
+    "Population is 100% leaked (every example_id appears in training data); this is a protocol/measurement comparison, never a generalization claim.",
+    "One example = 0.55pp on n=182 and 0.45pp on n=221, so sub-1pp deltas are within a single example.",
+    "phase4f_5/v2 wall time varied (60s-122s) across checkpoints; timings are single observations, not benchmarks.",
+    "The 918-example experiments/ runner was not replayed (checkpoints absent), so its recorded numbers remain v1-and-pre-reconstruction-fix era."
+  ]
+}

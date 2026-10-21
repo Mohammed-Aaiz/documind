@@ -1,0 +1,206 @@
+{
+  "artifact": "E0_RETRIEVAL_RUN_MANIFEST.json",
+  "corrections_2026_09_27": {
+    "see": "backend/architecture/phase4f_6/decision/E0_ERRATUM_2026-09-27.md",
+    "policy": "Every pre-existing value in this file is preserved unaltered as the historical observation. This key is additive only.",
+    "corrected": [
+      "C7: backend/.env does NOT target localhost:5432/documind - it targets a managed remote PostgreSQL (pgvector) service. localhost is only the backend/config.py and backend/alembic.ini default.",
+      "C7: a PostgreSQL 16.6 distribution IS installed on this machine (C:/pgdata/pgsql, C:/pg/pg16/pgsql) with psql/pg_ctl/initdb; what is true is that no server was running at probe time."
+    ]
+  },
+  "phase": "4F.6-D",
+  "diagnostic_version": "e0-prerequisite-v1",
+  "created_utc": "2026-09-22T21:34:12.507336+00:00",
+  "run_executed": false,
+  "traces_produced": 0,
+  "fabricated_traces": false,
+  "replacement_retrieval_implemented": false,
+  "retrieval_traces_jsonl_created": false,
+  "status": "BLOCKED",
+  "retrieval_trace_status": "NOT_EXECUTED",
+  "stop_rule": "Task 7: if the production retrieval path cannot be executed safely in isolation, STOP and record the precise blocker rather than implementing a replacement retrieval system. Task 9: if any trace cannot be generated from the actual retrieval path — STOP. Invoked: no trace file was created because zero traces could be generated from the actual path.",
+  "required_artifact_not_created": {
+    "path": "backend/architecture/phase4f_6/e0_diagnostics/retrieval_traces.jsonl",
+    "reason": "Creating it would require fabricating retrieval results. Zero real traces exist. Deliberately NOT created."
+  },
+  "production_retrieval_path_inspected": {
+    "function": "backend/chat/rag.py::retrieve_chunks(db, user_id, query, top_k=5)",
+    "engine": "PostgreSQL + pgvector cosine distance (OPERATOR <=>) over table document_chunks",
+    "sql": "SELECT dc.id, dc.content, dc.document_id, d.name, dc.page, 1 - (dc.embedding <=> CAST(:embedding AS vector)) AS similarity, dc.heading_path, dc.section, dc.element_type, dc.token_count, dc.chunker_version FROM document_chunks dc JOIN documents d ON d.id = dc.document_id WHERE d.user_id = :user_id AND d.embedding_status = 'ready' AND dc.embedding IS NOT NULL ORDER BY dc.embedding <=> CAST(:embedding AS vector) LIMIT :top_k",
+    "embedding_implementation": "backend/embeddings/model.py::embed_query — sentence-transformers all-MiniLM-L6-v2, 384 dimensions",
+    "embedding_model_local_cache": "AVAILABLE (~/.cache/huggingface/hub/models--sentence-transformers--all-MiniLM-L6-v2) — embedder is executable locally",
+    "context_assembly_downstream": "chat/rag.py::build_context (legacy, 4000 chars) / build_qa_context (token-aware Brain path); rag_answer relevance_threshold = 0.15",
+    "rewritten": false,
+    "modified": false
+  },
+  "declared_retrieval_configuration_recorded": {
+    "top_k_default": 5,
+    "top_k_source": "chat/rag.py::retrieve_chunks signature default top_k: int = 5",
+    "relevance_threshold": 0.15,
+    "relevance_threshold_source": "chat/rag.py::rag_answer(relevance_threshold=0.15)",
+    "similarity": "pgvector cosine distance (1 - embedding <=> query_embedding)",
+    "database_url": "postgresql+asyncpg://documind:documind@localhost:5432/documind (backend/.env — value not exported anywhere)",
+    "scope_note": "configuration recorded for a future authorized run; no query was issued."
+  },
+  "execution_feasibility_probed": {
+    "postgres_localhost_5432": "CLOSED (TimeoutError — local TCP probe 127.0.0.1:5432)",
+    "postgres_tooling_on_path": {"psql": null, "pg_ctl": null, "initdb": null, "pg_config": null, "docker": null},
+    "program_files_postgresql_exists": false,
+    "docker_exists": false,
+    "stored_chunk_corpus_for_six_docs_preexisting": false,
+    "isolated_chunk_corpus_now_available": "backend/architecture/phase4f_6/e0_diagnostics/chunks/ (93 chunks — NOT ingested anywhere; ingestion would require a database and an embedding+write pipeline)"
+  },
+  "precise_blocker": [
+    "B-1a: no PostgreSQL server is running (localhost:5432 closed) and none is installed on this machine (no psql/pg_ctl/initdb, no Program Files/PostgreSQL, no Docker) — the pgvector SQL path cannot execute at all locally.",
+    "B-1b: executing the existing path would require standing up a new database service plus an ingestion+embedding write pipeline for the isolated corpus — infrastructure setup outside this phase's authority (scope: NO database migration in production; local filesystem preparation only).",
+    "B-1c: building any alternative in-memory or rewritten retriever is explicitly forbidden by Task 7 ('do not implement a replacement retrieval system').",
+    "B-1d: consequently RETRIEVAL_TRACES = BLOCKED: 0 of 182 benchmark examples have retrieval traces; none fabricated; Task 9 validation not applicable (no artifact to validate)."
+  ],
+  "what_would_unblock": [
+    "A locally running PostgreSQL instance with the pgvector extension available to this project (diagnostic, non-production), created with explicit authorization;",
+    "authorization to run the existing ingestion path (documents/processing.py extraction+chunking already reproduced in isolation, embeddings/model.py encoding) to load the 6-document isolated corpus into that instance;",
+    "then: retrieve_chunks-style execution over the frozen 140+42 questions with the recorded top_k=5 configuration, writing one trace record per benchmark example per the 4F.6-C E0_SCHEMA."
+  ],
+  "trace_validation_task9": {
+    "performed": false,
+    "reason": "0 traces exist — every check (182 ids, no duplicates, corpus membership, real scores, top-k consistency) is NOT_APPLICABLE until a real run happens.",
+    "placeholders_or_fake_scores": "NONE — no file written"
+  },
+  "isolation_guarantees": {
+    "production_database_accessed": false,
+    "production_database_contents_altered": false,
+    "production_documents_storage_touched": false,
+    "diagnostic_documents_inserted_into_production_corpus": false,
+    "benchmark_modified": false,
+    "network_accessed": false,
+    "github_accessed": false
+  },
+  "phase_4f_6e_runtime_update": {
+    "date": "2026-09-23",
+    "note": "preparation/runtime manifest only — contains NO 182-example retrieval traces; none were executed or fabricated",
+    "task1_environment_classification": "D_NO_LOCAL_POSTGRES",
+    "inventory_evidence": [
+      "no Windows service / no registry key for postgres",
+      "no psql/pg_ctl/postgres/initdb/pg_config on PATH (command -v and where.exe)",
+      "no install dirs (Program Files/x86, C:\\postgres, C:\\pgsql, C:\\tools, scoop, chocolatey) and no data dirs (PG14-17 defaults, APPDATA/LOCALAPPDATA)",
+      "no 5430-5439 sockets listening (netstat)",
+      "no Docker; no offline postgres/pgvector installers or archives locally",
+      "venv contains pgvector==0.5.0 client library only (Python type adapter — NOT a server extension)"
+    ],
+    "authorized_nonproduction_database": null,
+    "diagnostic_database": {"name_planned": "documind_e0_diagnostic", "status": "DEFINED_NOT_CREATED", "isolation_proof_requirements": "see E0_RETRIEVAL_RUNTIME_READINESS.md §2"},
+    "postgresql_version": null,
+    "pgvector_server_version": null,
+    "ingestion": {"documents": "0/6", "chunks": "0/93", "reason": "no server exists to ingest into; mapping prepared in readiness doc §6"},
+    "smoke_test": {"questions_run": 0, "status": "NOT_RUN", "results": []},
+    "parity": {"static_inspection": "identical function/SQL/model/384-dim/top_k=5/threshold/ranking at both call sites (chat/rag.py, embeddings/routes.py)", "runtime_verified": false, "e0_ready_claimed": false},
+    "embedding_model_offline_reverification": "PASS — 384-dim, offline load success, deterministic, snapshot sha256s recorded in e0_diagnostics/diagnostics/embedding_offline_verification.json",
+    "corpus_fingerprints": {"source_corpus_files_sha256": "3ec81cc5868f29a047409358943127509b4700cf2ddae1b877030059e4687ab1", "source_doc_hash_mismatches": 0, "chunk_corpus_files_sha256": "e6965cdad6684c65b739a316e01cff9e020e96a1588ec4aa37b19cfe98b135ea", "chunk_rows": 93},
+    "gate_result": "E0_RETRIEVAL_RUNTIME_BLOCKED — conditions 1,2,4,6,7,8,9 FAIL; 3 UNVERIFIABLE; 5 and 10 PASS; E0 not executed",
+    "readiness_doc": "decision/E0_RETRIEVAL_RUNTIME_READINESS.md",
+    "schema_requirements": "e0_diagnostics/retrieval_schema_requirements.json",
+    "operator_setup_requirements": "E0_RETRIEVAL_RUNTIME_READINESS.md §10 (offline PostgreSQL 16/17 + matching pgvector media, dedicated documind_e0_diagnostic DB, Base.metadata.create_all pattern, resume order)",
+    "fabricated_traces": false,
+    "e0_executed": false,
+    "network_accessed": false
+  },
+  "phase_4f_6f_resume_check": {
+    "date": "2026-09-23",
+    "task1_classification": "D_NO_POSTGRES",
+    "runtime_detected": false,
+    "detection_evidence": [
+      "no postgres service and no registry key",
+      "no psql/pg_ctl/postgres/initdb/pg_config on PATH (command -v) nor via where.exe",
+      "no 5430-5439 sockets listening (netstat)",
+      "no install or data directories (Program Files, C:\\postgres, C:\\pgsql, scoop, ProgramData, APPDATA, D:\\postgres)",
+      "no docker; no offline postgres/pgvector archives",
+      "0 services matching pgsql/edbsql/enterprisedb"
+    ],
+    "delta_vs_phase_4f_6e": "none — operator runtime not yet provided",
+    "connection_attempted": false,
+    "production_target_contacted": false,
+    "env_file_modified": false,
+    "ddl_executed": 0,
+    "ingestion": {"documents": "0/6", "chunks": "0/93", "status": "NOT_REACHED"},
+    "smoke_test": {"answerable_questions_run": 0, "unanswerable_questions_run": 0, "status": "NOT_RUN"},
+    "smoke_trace_file_created": false,
+    "retrieval_trace_status_unchanged": "NOT_EXECUTED",
+    "full_e0_execution": false,
+    "tasks_2_to_14": "GATED_NOT_REACHED",
+    "gate": "E0_RETRIEVAL_RUNTIME_BLOCKED — conditions 1 and 2 FAIL (no PostgreSQL, no server-side pgvector); 5, 11, 12 PASS; rest NOT REACHED",
+    "baseline_revalidated": {
+      "benchmark_sha256_unchanged": true,
+      "dataset_sha256_unchanged": true,
+      "production_model_sha256_unchanged": true,
+      "source_fingerprint_match": true,
+      "chunk_fingerprint_match": true,
+      "chunk_rows": 93,
+      "source_doc_hash_mismatches": 0
+    },
+    "resume_doc": "decision/E0_RETRIEVAL_RUNTIME_RESUME.md",
+    "resume_condition": "re-run Task 1 detection; classify A. READY_PGVECTOR_RUNTIME before resuming Tasks 2-14"
+  },
+  "phase_4f_6g_provisioning": {
+    "date": "2026-09-23",
+    "runtime_media_status": "NO_MEDIA",
+    "postgres_status": "NOT_AVAILABLE",
+    "pgvector_server_status": "NOT_AVAILABLE — Python client pgvector==0.5.0 only; not a server extension",
+    "diagnostic_db_status": "BLOCKED_NOT_CREATED",
+    "media_search": {
+      "locations": ["~/Downloads", "~/Desktop", "~/Documents (maxdepth 3, venv excluded)", "/c/Downloads", "/d/Downloads", "/d/setup", "/c/setup", "scoop/chocolatey/winget package caches", "drives /d /e /f"],
+      "patterns": ["*postgres*", "*pgsql*", "*pgvector*", "vector.control", "vector--*.sql", "vector.dll"],
+      "hits": 0,
+      "missing": "PostgreSQL server installation media + matching pgvector server extension media"
+    },
+    "installation_performed": false,
+    "network_accessed": false,
+    "sql_executed": 0,
+    "e0_executed": false,
+    "retrieval_trace_status": "NOT_EXECUTED",
+    "smoke_traces_created": false,
+    "secrets_created": false,
+    "corpus_readiness_reverified": {
+      "recipe": "files sorted by name; sha256 over interleaved filename_bytes||file_bytes",
+      "source_fingerprint_match": true,
+      "chunk_fingerprint_match": true,
+      "source_docs": "6/6",
+      "per_document_hash_mismatches": 0,
+      "chunk_rows": "93/93"
+    },
+    "frozen_hashes_reverified": {
+      "benchmark_sha256_prefix": "1166bf4ff38265c2",
+      "dataset_sha256_prefix": "a517530354fc9bca",
+      "model_sha256_prefix": "cb9f1dde94fca0e1"
+    },
+    "resume_document": "decision/E0_OFFLINE_RUNTIME_PROVISIONING.md",
+    "checklist_path": "e0_diagnostics/offline_runtime_checklist.json",
+    "final_status": "E0_OFFLINE_RUNTIME_BLOCKED"
+  },
+  "phase_4f_6h_handoff": {
+    "date": "2026-09-23",
+    "state": "WAITING_FOR_MEDIA",
+    "postgres_required": true,
+    "pgvector_server_required": true,
+    "media_detected": false,
+    "installation_performed": false,
+    "database_connection_attempted": false,
+    "retrieval_trace_status": "NOT_EXECUTED",
+    "full_e0_execution": false,
+    "handoff_manifest_path": "decision/E0_RUNTIME_HANDOFF_MANIFEST.json",
+    "runtime_validation_schema_path": "e0_diagnostics/diagnostics/runtime_validation_schema.json",
+    "resume_document_path": "decision/E0_RETRIEVAL_RUNTIME_RESUME.md",
+    "immutable_baseline_reverified": {
+      "benchmark_sha256_match": true,
+      "dataset_sha256_match": true,
+      "production_model_sha256_match": true,
+      "source_fingerprint_match": true,
+      "chunk_fingerprint_match": true,
+      "f2_best_checkpoint": "checkpoints/F2/checkpoint_epoch2 — dir-scope sha256 416b63642ba80a1c4f11257df9d21f9e36427393533465d0ad3b2a15a0b5fc39 reproduces recorded prefix 416b63642ba80a1c; file-scope model.safetensors 717463178eeb37ee3a6424063e8666b6586dd15ee50d745c1ab3d16bb4b164b0",
+      "production_code_changes": "NONE",
+      "historical_experiment_changes": "NONE"
+    },
+    "final_status": "E0_OFFLINE_RUNTIME_BLOCKED",
+    "next_external_dependency": "PostgreSQL Windows x64 media + matching pgvector server extension media"
+  },
+  "e0_status_impact": "E0 remains NOT READY: gate condition 4 ('actual retrieval traces exist') fails. See E0_PREREQUISITE_STATUS.md; runtime gate per E0_RETRIEVAL_RUNTIME_READINESS.md (E0_RETRIEVAL_RUNTIME_BLOCKED)."
+}

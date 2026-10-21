@@ -1,0 +1,230 @@
+{
+  "artifact": "E0_RUNTIME_HANDOFF_MANIFEST",
+  "phase": "4F.6-H",
+  "date": "2026-09-23",
+  "purpose": "Deterministic handoff so Phase 4F.6-F resumes immediately when the operator supplies local PostgreSQL + pgvector media, without rediscovering configuration, schema, corpus, or safety requirements. No installation, no download, no SQL, no E0 execution is performed or automated by this file.",
+  "state": "MEDIA_DETECTED",
+  "final_status": "E0_MEDIA_DETECTED",
+  "next_external_dependency": "Operator: designate the authoritative PG16 tree (C:/pgdata/pgsql vs C:/pg/pg16/pgsql) and start the local PostgreSQL 16 server; then resume Phase 4F.6-F (runtime capability verification, isolation proof, schema, ingestion, smoke test). Detection is NOT runtime readiness.",
+
+  "media_detection": {
+    "phase": "runtime media detection gate (post-4F.6-H resume point)",
+    "detected_on": "2026-09-23",
+    "gate_case": "C - acceptable media fully detected and fingerprinted",
+    "record": "backend/architecture/phase4f_6/decision/E0_MEDIA_DETECTION_RECORD.json",
+    "detector": "backend/architecture/phase4f_6/e0_diagnostics/tools/detect_runtime_media.py (read-only; writes only the detection record)",
+    "locations": {
+      "media_archive_postgresql": "C:/pg/pg16.zip (304112325 bytes, sha256 6a1bfb6435b13d9563ae481445c70ac2a19846bd8a430b12903b408eec300f9b)",
+      "media_archive_pgvector": "C:/pg/pgvector.zip (169595 bytes, sha256 faeaecb100488397ce5d38424b8c931be0f29e1668be7d4e75c26fe2eb056522)",
+      "extracted_postgresql": "C:/pg/pg16/pgsql",
+      "installed_postgresql": "C:/pgdata/pgsql",
+      "extracted_pgvector": "C:/pg/pgvector_tmp",
+      "initialised_clusters": ["C:/pg/data (PG_VERSION 16)", "C:/pgdata/data (PG_VERSION 16)"]
+    },
+    "postgresql": {
+      "version": "16.6 (include/pg_config.h: PG_VERSION 16.6, PG_VERSION_NUM 160006; PG_VERSION data files = 16)",
+      "architecture": "x64_AMD64 (PE header of postgres.exe / pg_ctl.exe / psql.exe / pg_config.exe / initdb.exe; read, not executed)",
+      "required_executables": {"postgres.exe": "present", "pg_ctl.exe": "present", "psql.exe": "present", "pg_config.exe": "present", "initdb.exe": "present"},
+      "asyncpg_constraint": "major 16 lies inside the locally evidenced asyncpg 0.30.0 supported range 9.5-17"
+    },
+    "pgvector": {
+      "version": "0.8.6 (vector.control default_version 0.8.6; vector--0.8.6.sql present)",
+      "components_present": ["vector.control", "vector--*.sql (full upgrade chain)", "vector.dll (279040 bytes, PE x64_AMD64)"],
+      "vector_dll_sha256": "64157853678df00a82c0b7bd1cfc311ddac4f8a53d27b9f101c1327b963ccf50 (all three copies byte-identical)",
+      "major_abi_evidence": ["media readme.txt: 'ONLY for PostgreSQL v16 - Windows x64'", "vector.dll build path strings: pgvector\\0.8.6\\16\\src", "installed into the PostgreSQL 16 lib/ and share/extension/ trees", "PE machine x64_AMD64"],
+      "provenance_note": "the media readme points to a third-party Windows pgvector build distribution; recorded as provenance, not a judgement"
+    },
+    "capability_checks": "PENDING - CREATE EXTENSION vector / vector(384) / cosine <=> require a running server and SQL, which this gate forbids; verify at resume (4F.6-F Tasks 3-4)",
+    "server_running_at_detection": "NO (no postgres image, no 5432 listener)",
+    "prior_classification_correction": "4F.6-E/F/G classified D. NO_LOCAL_POSTGRES / C. NO_MEDIA because their probes enumerated services, registry, PATH, Program Files, 543x sockets and user-profile folders but never scanned C:\\ drive roots; C:\\pg and C:\\pgdata were therefore never inspected. The earlier classification was incomplete, not fabricated.",
+    "detection_is_not_readiness": "Detecting media does not satisfy any E0 gate condition that requires a running, verified server; full E0 remains a separate future phase"
+  },
+
+  "media_requirements": {
+    "postgresql": {
+      "platform": "Windows x64 (AMD64) — PROCESSOR_ARCHITECTURE=AMD64",
+      "form": "operator-supplied OFFLINE installer (.exe) or portable archive (.zip); never downloaded by this project",
+      "exact_server_major": "TBD_AT_MEDIA_DETECTION — fixed constraint: within asyncpg 0.30.0 supported range 9.5-17 (locally evidenced from installed package metadata); the chosen major must be recorded in runtime_validation.json at detection and is NOT asserted while media is absent",
+      "required_executables": ["postgres", "pg_ctl", "psql", "pg_config"],
+      "fingerprint_required": true
+    },
+    "pgvector_server": {
+      "exact_pgvector_version": "TBD_AT_MEDIA_DETECTION — capability-based acceptance; no specific minor version is required because no compatibility evidence currently demands one (Task 2)",
+      "compatibility_rule": "build must match the selected PostgreSQL major and AMD64 ABI",
+      "required_files": ["vector.control", "vector--*.sql (versioned extension scripts)", "vector.dll (plus import library if the server build requires it)"],
+      "capability_checks": ["vector extension loads (CREATE EXTENSION vector from already-local files)", "vector(384) works", "cosine <=> works"],
+      "explicitly_not_sufficient": ["Python pgvector==0.5.0 client (type adapter, not the server extension)", "Docker image (no Docker on this machine)", "any remote/cloud database (forbidden by scope)"],
+      "fingerprint_required": true
+    }
+  },
+
+  "media_acceptance_rules": {
+    "postgresql_media_accepted_iff": [
+      "file(s) are present on the local filesystem (M1 rule)",
+      "sha256 fingerprint recorded for the installer/archive before any use (Task 3)",
+      "unpacking/inspection shows x64 Windows server binaries",
+      "executables postgres, pg_ctl, psql, pg_config all present",
+      "pg_config reports a major within 9.5-17 (asyncpg 0.30.0 constraint)",
+      "server starts locally and SELECT version() matches the fingerprinted media"
+    ],
+    "pgvector_media_accepted_iff": [
+      "sha256 recorded for vector.dll, vector.control, and every vector--*.sql before any use (Task 3)",
+      "files target the selected PostgreSQL major + AMD64 ABI",
+      "capability checks pass in the diagnostic database: vector extension loads, vector(384) works, cosine <=> works",
+      "no particular minor version required unless compatibility evidence later demands one"
+    ],
+    "rejection_rules": ["media requires network to install/enable", "media targets a remote host", "only the Python client is supplied", "fingerprint cannot be recorded"]
+  },
+
+  "media_fingerprint_procedure": {
+    "when": "BEFORE installation, unpacking into the server tree, or any CREATE EXTENSION — media is never marked accepted without a hash",
+    "method": "SHA-256 over raw file bytes (sha256sum or equivalent), recorded as {filename, bytes, sha256} entries",
+    "targets": ["PostgreSQL installer/archive", "pgvector server binary (vector.dll)", "pgvector extension control file (vector.control)", "extension SQL files (vector--*.sql)"],
+    "destination": "media_fingerprints array below + runtime_validation.json when populated",
+    "media_fingerprints": "POPULATED - 139 entries; full set in decision/E0_MEDIA_DETECTION_RECORD.json (media_fingerprints[])",
+    "hashes_asserted_now": true,
+    "hashes_present_note": "media was detected and fingerprinted at the runtime media detection gate: archives, PostgreSQL runtime binaries and every pgvector server component (control file, upgrade SQL chain, vector.dll) carry a recorded sha256"
+  },
+
+  "pre_install_safety_gate": {
+    "rule": "All 12 items must be satisfied and recorded before any installation step; installation itself remains operator-controlled and outside this project (Task 9).",
+    "items": [
+      {"id": 1, "requirement": "Media is local", "status": "NOT_RUN"},
+      {"id": 2, "requirement": "Media hashes recorded", "status": "NOT_RUN"},
+      {"id": 3, "requirement": "PostgreSQL version identified", "status": "NOT_RUN"},
+      {"id": 4, "requirement": "pgvector version identified", "status": "NOT_RUN"},
+      {"id": 5, "requirement": "PostgreSQL/pgvector compatibility established (major match, ABI match)", "status": "NOT_RUN"},
+      {"id": 6, "requirement": "Installation target is local-only", "status": "NOT_RUN"},
+      {"id": 7, "requirement": "Production DocuMind database (documind) is not targeted", "status": "NOT_RUN"},
+      {"id": 8, "requirement": "Production .env remains untouched (sha256+mtime recorded before and after)", "status": "NOT_RUN"},
+      {"id": 9, "requirement": "Diagnostic DB name is documind_e0_diagnostic", "status": "NOT_RUN"},
+      {"id": 10, "requirement": "Diagnostic role is separate where feasible (else justification recorded)", "status": "NOT_RUN"},
+      {"id": 11, "requirement": "No remote host involved", "status": "NOT_RUN"},
+      {"id": 12, "requirement": "No cloud database involved", "status": "NOT_RUN"}
+    ]
+  },
+
+  "resume_state_machine": {
+    "current_state": "MEDIA_DETECTED",
+    "states": [
+      "WAITING_FOR_MEDIA", "MEDIA_DETECTED", "MEDIA_VALIDATED", "POSTGRES_RUNTIME_READY",
+      "PGVECTOR_READY", "DIAGNOSTIC_DB_ISOLATED", "SCHEMA_READY", "CORPUS_INGESTED",
+      "RETRIEVAL_SMOKE_READY", "E0_RUNTIME_READY", "BLOCKED"
+    ],
+    "transitions": [
+      {"from": "WAITING_FOR_MEDIA", "to": "MEDIA_DETECTED", "condition": "operator media present locally AND fingerprints recorded per media_fingerprint_procedure"},
+      {"from": "MEDIA_DETECTED", "to": "MEDIA_VALIDATED", "condition": "media_acceptance_rules pass AND pre_install_safety_gate items 1-12 all satisfied"},
+      {"from": "MEDIA_VALIDATED", "to": "POSTGRES_RUNTIME_READY", "condition": "operator performs installation; server starts locally; version() major within 9.5-17"},
+      {"from": "POSTGRES_RUNTIME_READY", "to": "PGVECTOR_READY", "condition": "CREATE EXTENSION vector succeeds from local files; vector(384) and cosine <=> checks pass"},
+      {"from": "PGVECTOR_READY", "to": "DIAGNOSTIC_DB_ISOLATED", "condition": "5-step pre-SQL isolation proof passes; documind_e0_diagnostic created; production documind never contacted"},
+      {"from": "DIAGNOSTIC_DB_ISOLATED", "to": "SCHEMA_READY", "condition": "schema created via existing Base.metadata.create_all pattern; inventory matches retrieval_schema_requirements.json"},
+      {"from": "SCHEMA_READY", "to": "CORPUS_INGESTED", "condition": "6/6 documents and 93/93 chunks inserted with count/hash validation (fingerprints unchanged)"},
+      {"from": "CORPUS_INGESTED", "to": "RETRIEVAL_SMOKE_READY", "condition": "3-5 answerable smoke questions + 1 unanswerable smoke run through the unmodified existing retrieval path with genuine scores"},
+      {"from": "RETRIEVAL_SMOKE_READY", "to": "E0_RUNTIME_READY", "condition": "runtime retrieval parity verified AND context assembly observed/reconstructed AND twelve-condition gate (4F.6-F Task 15) re-evaluated — still WITHOUT executing full E0"},
+      {"from": "*", "to": "BLOCKED", "condition": "any failure condition (4F.6-G Task 10 / 4F.6-F Task 16) triggers: non-local PostgreSQL, missing server extension, isolation unprovable, production-only target, network required, retrieval code must change, corpus hash drift, dimension != 384, no cosine operator, scores cannot be genuine"},
+      {"from": "BLOCKED", "to": "WAITING_FOR_MEDIA", "condition": "new evidence or runtime availability changes the state (explicit re-entry only)"},
+      {"from": "E0_RUNTIME_READY", "to": "OUT_OF_SCOPE", "condition": "full 182-example E0 execution belongs to a SEPARATE future phase and is never reached by this sequence"}
+    ],
+    "forbidden": ["skipping a state", "entering E0_RUNTIME_READY without every prior transition satisfied", "executing full E0 from any state in this machine"]
+  },
+
+  "resume_order": [
+    "1. Detect media",
+    "2. Fingerprint media",
+    "3. Validate PostgreSQL runtime",
+    "4. Validate pgvector",
+    "5. Prove diagnostic isolation",
+    "6. Create diagnostic database (documind_e0_diagnostic)",
+    "7. Create diagnostic schema",
+    "8. Verify schema",
+    "9. Verify offline embedding model",
+    "10. Ingest 6 documents / 93 chunks",
+    "11. Validate counts and hashes",
+    "12. Run 3-5 retrieval smoke questions",
+    "13. Run 1 unanswerable smoke question",
+    "14. Verify runtime retrieval parity",
+    "15. Verify context assembly",
+    "16. Stop"
+  ],
+  "resume_order_note": "The full 182-example E0 benchmark is explicitly NOT part of this sequence (step 16 is Stop). No step in this sequence modifies retrieval code, the benchmark, the dataset, or production state.",
+
+  "resume_artifacts": [
+    {"path": "backend/architecture/phase4f_6/decision/E0_RETRIEVAL_RUNTIME_RESUME.md", "rule": "rewritten on resume with actual runtime results; current file is the 4F.6-F blocked record"},
+    {"path": "backend/architecture/phase4f_6/decision/E0_RETRIEVAL_RUN_MANIFEST.json", "rule": "updated per resume step; retrieval_trace_status remains != COMPLETED until a dedicated full-E0 phase evaluates all 182 examples"},
+    {"path": "backend/architecture/phase4f_6/e0_diagnostics/retrieval_traces_smoke.jsonl", "rule": "contains ONLY the actual smoke-test questions (3-5 answerable + 1 unanswerable); a synthetic 182-row trace is never permitted"},
+    {"path": "backend/architecture/phase4f_6/e0_diagnostics/diagnostics/runtime_validation.json", "rule": "populated from e0_diagnostics/diagnostics/runtime_validation_schema.json with real values only; every field carries PASS/FAIL/UNVERIFIED/NOT_RUN"}
+  ],
+
+  "local_documind_artifacts": {
+    "source_corpus_path": "backend/architecture/phase4f_6/e0_diagnostics/source_corpus/ (6 JSON files, one per P3 document)",
+    "chunk_corpus_path": "backend/architecture/phase4f_6/e0_diagnostics/chunks/ (6 JSONL files, 93 chunk rows)",
+    "schema_requirements_path": "backend/architecture/phase4f_6/e0_diagnostics/retrieval_schema_requirements.json",
+    "retrieval_implementation_paths": ["backend/chat/rag.py::retrieve_chunks (SQL + top_k=5 + thresholds)", "backend/embeddings/routes.py (/search — identical SQL, verified identical by inspection)", "backend/embeddings/model.py (embed_query/embed_texts, _DIMENSIONS=384)"],
+    "embedding_verification_path": "backend/architecture/phase4f_6/e0_diagnostics/diagnostics/embedding_offline_verification.json",
+    "runtime_readiness_documents": ["backend/architecture/phase4f_6/decision/E0_RETRIEVAL_RUNTIME_READINESS.md", "backend/architecture/phase4f_6/decision/E0_RETRIEVAL_RUNTIME_RESUME.md", "backend/architecture/phase4f_6/decision/E0_OFFLINE_RUNTIME_PROVISIONING.md", "backend/architecture/phase4f_6/decision/E0_PREREQUISITE_STATUS.md"],
+    "retrieval_run_manifest_path": "backend/architecture/phase4f_6/decision/E0_RETRIEVAL_RUN_MANIFEST.json",
+    "corpus_and_provenance_manifests": ["backend/architecture/phase4f_6/decision/E0_CORPUS_MANIFEST.json", "backend/architecture/phase4f_6/decision/E0_CHUNK_MANIFEST.json", "backend/architecture/phase4f_6/decision/E0_SOURCE_PROVENANCE.md"],
+    "media_checklist_path": "backend/architecture/phase4f_6/e0_diagnostics/offline_runtime_checklist.json",
+    "isolation_contract": "E0_OFFLINE_RUNTIME_PROVISIONING.md section 4 (5-step pre-SQL proof)",
+    "connection_contract": "E0_OFFLINE_RUNTIME_PROVISIONING.md section 7 (placeholders only, no secrets)",
+    "model_input_configuration": "E0_READINESS_CHECK.md / 4F.6-D L4 pinning (max_length=384 truncation; max_answer_length=100 production A0 scope, =50 F2/threshold run scope)"
+  },
+
+  "frozen_artifacts": {
+    "benchmark_sha256": "1166bf4ff38265c209614ac20261417b7eeb43653f4482dfdf94721fd50a41d0 (qa_benchmark_v1.jsonl — 182 lines / 140 answerable / 42 unanswerable)",
+    "dataset_sha256": "a517530354fc9bcaeef6f1aa16c3fb9ce92f1967668386bc66781e6e6bbf2e97 (training_data_v3_1.jsonl)",
+    "production_model_sha256": "cb9f1dde94fca0e1f82c440bdc184ff54ba02efb6ea432e37a8c6ff8a8f69deb (models/documind-qa/model.safetensors)",
+    "source_fingerprint": "3ec81cc5868f29a047409358943127509b4700cf2ddae1b877030059e4687ab1",
+    "chunk_fingerprint": "e6965cdad6684c65b739a316e01cff9e020e96a1588ec4aa37b19cfe98b135ea",
+    "fingerprint_recipe": "files sorted by name; sha256 over interleaved filename_bytes || file_bytes",
+    "f2_checkpoint": {
+      "best_checkpoint": "backend/phase4f/phase4f_5f/f2/checkpoints/F2/checkpoint_epoch2 (recorded best in manifests/f2_manifest.json)",
+      "dir_scope_sha256": "416b63642ba80a1c4f11257df9d21f9e36427393533465d0ad3b2a15a0b5fc39 (recipe: os.walk over checkpoint dir, sorted files, sha256 of concatenated bytes; historical checkpoint_hash = this truncated to 16 chars = 416b63642ba80a1c — REPRODUCED this phase)",
+      "epoch2_model_safetensors_sha256": "717463178eeb37ee3a6424063e8666b6586dd15ee50d745c1ab3d16bb4b164b0",
+      "epoch1_model_safetensors_sha256": "1c793b1f77a69c2a64d987f46ba8665afe2b1b8e024d08bfe7e965e1701ff988",
+      "epoch3_model_safetensors_sha256": "01acc662a283385150e38866060208ae3e3772a650f4f5950b440c551326603c"
+    },
+    "embedding_model_snapshot": "sentence-transformers/all-MiniLM-L6-v2 snapshot 1110a243fdf4706b3f48f1d95db1a4f5529b4d41 (model.safetensors 53aa51172d142c89d9012cce15ae4d6cc0ca6895895114379cacb4fab128d9db)",
+    "reverification_rule": "all hashes/fingerprints reconfirmed on this phase date; must be reconfirmed at every resume step; any drift triggers the BLOCKED transition"
+  },
+
+  "prohibited_automation": [
+    "scripts that download PostgreSQL", "scripts that install PostgreSQL", "scripts that modify Windows services",
+    "scripts that install pgvector", "scripts that modify PATH", "scripts that modify .env",
+    "scripts that create production databases", "scripts that modify production configuration"
+  ],
+  "automation_note": "Handoff remains operator-controlled; this package contains only documentation and a read-only validation schema.",
+
+  "research_boundary": {
+    "must_not_claim": ["retrieval quality", "retrieval bottleneck", "representation bottleneck", "extraction bottleneck", "model superiority", "H-A proven/disproven", "H-B2 proven", "H-C proven", "hybrid architecture superiority"],
+    "statement": "Only runtime readiness is being prepared. No hypothesis evidence, no metric interpretation, and no architecture conclusion is produced by this phase."
+  },
+
+  "immutable_baseline_reverification": {
+    "verified_on": "2026-09-23",
+    "benchmark_hash": "MATCH", "dataset_hash": "MATCH", "production_model_hash": "MATCH",
+    "source_fingerprint": "MATCH", "chunk_fingerprint": "MATCH",
+    "f2_checkpoint_hash": "MATCH (dir-scope prefix reproduced)",
+    "reverified_at_media_detection": "ALL MATCH (benchmark 1166bf4f..., dataset a5175303..., production model cb9f1dde..., source fingerprint 3ec81cc5..., chunk fingerprint e6965cda..., F2 checkpoint dir-scope 416b6364...)",
+    "production_code_changes": "NONE (git status: only untracked documentation directories)",
+    "historical_experiment_changes": "NONE"
+  },
+
+  "declarations": {
+    "installation_performed": "NO",
+    "downloads": "NO",
+    "sql_executed": "0",
+    "database_connection_attempted": "NO",
+    "network_accessed": "NO",
+    "github_accessed": "NO",
+    "training_run": "NO",
+    "e0_executed": "NO",
+    "retrieval_traces_created": "NONE",
+    "benchmark_modified": "NO",
+    "dataset_modified": "NO",
+    "production_modified": "NO",
+    "secrets_created": "NO",
+    "commit": "NO",
+    "push": "NO"
+  }
+}

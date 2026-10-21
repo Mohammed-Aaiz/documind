@@ -1,0 +1,121 @@
+{
+  "artifact": "E0_CHUNK_MANIFEST.json",
+  "phase": "4F.6-D",
+  "diagnostic_version": "e0-prerequisite-v1",
+  "created_utc": "2026-09-22T21:34:12.507336+00:00",
+  "isolated": true,
+  "location": "backend/architecture/phase4f_6/e0_diagnostics/chunks/",
+  "chunker": {
+    "version_recorded_before_execution": "chunk-v1-legacy-chars-1000-200",
+    "production_default": "config.py chunker_version=\"legacy\" (structure-v2 is the candidate, NOT production)",
+    "implementation": "documents/processing.py::chunk_text (EXISTING, unmodified)",
+    "chunk_size_chars": 1000,
+    "chunk_overlap_chars": 200,
+    "chunk_size_source": "documents/processing.py:607-608",
+    "enrichment": "_prepend_heading_context: \"Section > Subsection\\n\\nContent\" (not applied to heading elements)",
+    "configuration_changed": false
+  },
+  "element_decomposition": "reconstructed documents decomposed to ExtractedElement (heading/paragraph/table/list) mirroring DOCUMENTS key order; table content = CANON-v1 block; list content = _list_str — both byte-identical to canonical spans",
+  "per_document": {
+    "unanswerable_corpus": {
+      "chunk_count": 42,
+      "offsets_resolved": 42,
+      "offset_resolution_rate": 1.0,
+      "structure_coverage": {
+        "paragraph_ids": 42
+      },
+      "virtual": true
+    },
+    "company_history_eta": {
+      "chunk_count": 14,
+      "offsets_resolved": 14,
+      "offset_resolution_rate": 1.0,
+      "structure_coverage": {
+        "section_ids": 14,
+        "paragraph_ids": 8,
+        "table_ids": 1,
+        "row_ids": 1,
+        "cell_ids": 1,
+        "list_ids": 1,
+        "list_item_ids": 1
+      },
+      "virtual": false
+    },
+    "financial_report_q3": {
+      "chunk_count": 10,
+      "offsets_resolved": 10,
+      "offset_resolution_rate": 1.0,
+      "structure_coverage": {
+        "section_ids": 10,
+        "paragraph_ids": 4,
+        "table_ids": 1,
+        "row_ids": 1,
+        "cell_ids": 1,
+        "list_ids": 1,
+        "list_item_ids": 1
+      },
+      "virtual": false
+    },
+    "api_docs_lambda": {
+      "chunk_count": 9,
+      "offsets_resolved": 9,
+      "offset_resolution_rate": 1.0,
+      "structure_coverage": {
+        "section_ids": 9,
+        "paragraph_ids": 3,
+        "list_ids": 1,
+        "list_item_ids": 1,
+        "table_ids": 2,
+        "row_ids": 2,
+        "cell_ids": 2
+      },
+      "virtual": false
+    },
+    "dataset_desc_mu": {
+      "chunk_count": 8,
+      "offsets_resolved": 8,
+      "offset_resolution_rate": 1.0,
+      "structure_coverage": {
+        "section_ids": 8,
+        "paragraph_ids": 3,
+        "table_ids": 1,
+        "row_ids": 1,
+        "cell_ids": 1,
+        "list_ids": 1,
+        "list_item_ids": 1
+      },
+      "virtual": false
+    },
+    "legal_contract_epsilon": {
+      "chunk_count": 10,
+      "offsets_resolved": 10,
+      "offset_resolution_rate": 1.0,
+      "structure_coverage": {
+        "section_ids": 10,
+        "paragraph_ids": 4,
+        "list_ids": 1,
+        "list_item_ids": 1,
+        "table_ids": 1,
+        "row_ids": 1,
+        "cell_ids": 1
+      },
+      "virtual": false
+    }
+  },
+  "totals": {
+    "chunks": 93,
+    "offsets_resolved": 93
+  },
+  "structure_metadata_note": "legacy chunker stores no structure columns; structure ids (section/table/row/cell/list/item) were computed post-hoc by span intersection and are recorded per chunk — diagnostic provenance only, not a production schema change",
+  "production_isolation": {
+    "production_database_accessed": false,
+    "production_uploads_touched": false,
+    "production_chunker_unmodified": true
+  },
+  "checks": {
+    "frozen_integrity": true,
+    "source_reconstruction": true,
+    "chunk_corpus": true,
+    "retrieval_blocker_confirmed": true
+  }
+}

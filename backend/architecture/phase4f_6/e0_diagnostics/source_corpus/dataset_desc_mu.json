@@ -1,0 +1,38 @@
+{
+  "document_id": "dataset_desc_mu",
+  "source_type": "GENERATOR_DEFINED_SYNTHETIC_DOCUMENT",
+  "classification": "B_DETERMINISTIC_SOURCE_RECONSTRUCTIBLE",
+  "generator_provenance": {
+    "path": "backend/phase4f/dataset/expand_and_audit.py",
+    "symbols": [
+      "DOCUMENTS",
+      "_add_doc"
+    ],
+    "doc_definition_in_source": true,
+    "example_seed": 42,
+    "seed_scope": "seed affects example sampling only; document text is static data (no RNG)",
+    "required_inputs": "module import only (no external data, no network)",
+    "reconstruction_method": "CANON-v1 serialization of the static section tree"
+  },
+  "document_text": "Dataset Overview\n\nThe GeoClimate-2024 dataset contains meteorological observations from 847 weather stations across the continental United States for the period January 1, 2024 to December 31, 2024. The dataset includes 14 atmospheric variables recorded at hourly intervals, resulting in approximately 7.4 million data points. The dataset is released under the Creative Commons Attribution 4.0 International license (CC BY 4.0).\n\nVariable | Unit | Min | Max | Mean | Missing %\nTemperature | degrees Celsius | -42.3 | 48.7 | 12.4 | 0.3%\nHumidity | % | 2.1 | 100.0 | 67.8 | 0.5%\nPressure | hPa | 954.2 | 1083.8 | 1013.2 | 0.1%\nWind Speed | m/s | 0.0 | 58.4 | 4.2 | 0.2%\nPrecipitation | mm | 0.0 | 127.3 | 0.8 | 1.2%\nSolar Radiation | W/m2 | 0.0 | 1,361.0 | 198.4 | 2.1%\nVisibility | km | 0.1 | 50.0 | 14.7 | 0.8%\n\nStation Distribution\n\nThe 847 stations are distributed across 48 states (excluding Alaska and Hawaii). States with the highest station density include California (94 stations), Texas (78 stations), and New York (52 stations). Stations are categorized into three types: urban (412 stations, 48.6%), rural (301 stations, 35.5%), and remote (134 stations, 15.8%). The mean elevation of stations is 342 meters above sea level, with a range from 2 meters (Key West, FL) to 3,214 meters (Mauna Loa Observatory, HI proxy station).\n\nData Quality\n\nOverall data completeness is 99.1 percent. The most complete variable is atmospheric pressure (99.9%), while solar radiation has the highest missing data rate (2.1%). Quality control procedures include range checks, consistency checks, and spatial outlier detection. Approximately 0.4 percent of observations were flagged as suspicious and removed during the quality assurance process. The dataset was last updated on January 15, 2025.\n\nCitation\nSmith, J.A., Johnson, M.K., and Williams, R.T. (2025).\nGeoClimate-2024: A Comprehensive Meteorological Dataset for the Continental United States.\nJournal of Climate Data, 12(3), 45-67. DOI: 10.1234/jcd.2025.0123",
+  "document_sha256": "97ae7a648bafcc06dda856fa36ea474b4d621b13b01a651710c3a5d47d51a6c4",
+  "document_bytes": 2008,
+  "structure": {
+    "doc_type": "scientific",
+    "doc_structure": "data_description",
+    "sections": 3,
+    "paragraphs": 3,
+    "tables": 1,
+    "lists": 1
+  },
+  "benchmark_document_id_mapping": {
+    "benchmark_version": "v1",
+    "answerable_examples": 22,
+    "unanswerable_examples": 0,
+    "total": 22,
+    "expected_from_manifest": 22,
+    "matches_manifest": true
+  },
+  "isolated_artifact": true,
+  "production_storage_touched": false
+}

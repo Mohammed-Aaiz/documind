@@ -1,0 +1,261 @@
+{
+  "artifact": "answerability_signal_bootstrap",
+  "seed": 20260923,
+  "iterations": 10000,
+  "sampling": "stratified with replacement (140 answerable, 42 unanswerable)",
+  "interval": "percentile 2.5 / 97.5",
+  "rows": [
+    {
+      "model": "F2",
+      "statistic": "null_score",
+      "seed": 20260923,
+      "iterations": 10000,
+      "stratified": {
+        "answerable": 140,
+        "unanswerable": 42
+      },
+      "roc_auc_point": 0.4303,
+      "roc_auc_ci95": [
+        0.3378,
+        0.5257
+      ],
+      "pr_auc_point": 0.1974,
+      "pr_auc_ci95": [
+        0.1715,
+        0.2353
+      ],
+      "analysis_direction_used": "HIGHER=UNANSWERABLE"
+    },
+    {
+      "model": "F2",
+      "statistic": "best_answer_score",
+      "seed": 20260923,
+      "iterations": 10000,
+      "stratified": {
+        "answerable": 140,
+        "unanswerable": 42
+      },
+      "roc_auc_point": 0.725,
+      "roc_auc_ci95": [
+        0.627,
+        0.8167
+      ],
+      "pr_auc_point": 0.4853,
+      "pr_auc_ci95": [
+        0.3658,
+        0.6241
+      ],
+      "analysis_direction_used": "REVERSED_FOR_ANALYSIS (LOWER=UNANSWERABLE)"
+    },
+    {
+      "model": "F2",
+      "statistic": "cls_start_logit",
+      "seed": 20260923,
+      "iterations": 10000,
+      "stratified": {
+        "answerable": 140,
+        "unanswerable": 42
+      },
+      "roc_auc_point": 0.4303,
+      "roc_auc_ci95": [
+        0.3474,
+        0.5148
+      ],
+      "pr_auc_point": 0.1921,
+      "pr_auc_ci95": [
+        0.1719,
+        0.2211
+      ],
+      "analysis_direction_used": "HIGHER=UNANSWERABLE"
+    },
+    {
+      "model": "F2",
+      "statistic": "cls_end_logit",
+      "seed": 20260923,
+      "iterations": 10000,
+      "stratified": {
+        "answerable": 140,
+        "unanswerable": 42
+      },
+      "roc_auc_point": 0.4391,
+      "roc_auc_ci95": [
+        0.3517,
+        0.5262
+      ],
+      "pr_auc_point": 0.1959,
+      "pr_auc_ci95": [
+        0.1737,
+        0.2328
+      ],
+      "analysis_direction_used": "HIGHER=UNANSWERABLE"
+    },
+    {
+      "model": "F2",
+      "statistic": "margin",
+      "seed": 20260923,
+      "iterations": 10000,
+      "stratified": {
+        "answerable": 140,
+        "unanswerable": 42
+      },
+      "roc_auc_point": 0.7338,
+      "roc_auc_ci95": [
+        0.6398,
+        0.8202
+      ],
+      "pr_auc_point": 0.5492,
+      "pr_auc_ci95": [
+        0.4195,
+        0.6797
+      ],
+      "analysis_direction_used": "HIGHER=UNANSWERABLE"
+    },
+    {
+      "model": "F2",
+      "statistic": "confidence",
+      "seed": 20260923,
+      "iterations": 10000,
+      "stratified": {
+        "answerable": 140,
+        "unanswerable": 42
+      },
+      "roc_auc_point": 0.5224,
+      "roc_auc_ci95": [
+        0.4267,
+        0.616
+      ],
+      "pr_auc_point": 0.2998,
+      "pr_auc_ci95": [
+        0.2144,
+        0.4054
+      ],
+      "analysis_direction_used": "HIGHER=UNANSWERABLE"
+    },
+    {
+      "model": "A0",
+      "statistic": "null_score",
+      "seed": 20260923,
+      "iterations": 10000,
+      "stratified": {
+        "answerable": 140,
+        "unanswerable": 42
+      },
+      "roc_auc_point": 0.5257,
+      "roc_auc_ci95": [
+        0.44,
+        0.6088
+      ],
+      "pr_auc_point": 0.2495,
+      "pr_auc_ci95": [
+        0.2001,
+        0.3277
+      ],
+      "analysis_direction_used": "HIGHER=UNANSWERABLE"
+    },
+    {
+      "model": "A0",
+      "statistic": "best_answer_score",
+      "seed": 20260923,
+      "iterations": 10000,
+      "stratified": {
+        "answerable": 140,
+        "unanswerable": 42
+      },
+      "roc_auc_point": 0.5054,
+      "roc_auc_ci95": [
+        0.4078,
+        0.6043
+      ],
+      "pr_auc_point": 0.2557,
+      "pr_auc_ci95": [
+        0.1958,
+        0.3477
+      ],
+      "analysis_direction_used": "REVERSED_FOR_ANALYSIS (LOWER=UNANSWERABLE)"
+    },
+    {
+      "model": "A0",
+      "statistic": "cls_start_logit",
+      "seed": 20260923,
+      "iterations": 10000,
+      "stratified": {
+        "answerable": 140,
+        "unanswerable": 42
+      },
+      "roc_auc_point": 0.5189,
+      "roc_auc_ci95": [
+        0.4332,
+        0.6037
+      ],
+      "pr_auc_point": 0.2479,
+      "pr_auc_ci95": [
+        0.198,
+        0.3272
+      ],
+      "analysis_direction_used": "HIGHER=UNANSWERABLE"
+    },
+    {
+      "model": "A0",
+      "statistic": "cls_end_logit",
+      "seed": 20260923,
+      "iterations": 10000,
+      "stratified": {
+        "answerable": 140,
+        "unanswerable": 42
+      },
+      "roc_auc_point": 0.5257,
+      "roc_auc_ci95": [
+        0.4403,
+        0.6087
+      ],
+      "pr_auc_point": 0.2372,
+      "pr_auc_ci95": [
+        0.1991,
+        0.3152
+      ],
+      "analysis_direction_used": "HIGHER=UNANSWERABLE"
+    },
+    {
+      "model": "A0",
+      "statistic": "margin",
+      "seed": 20260923,
+      "iterations": 10000,
+      "stratified": {
+        "answerable": 140,
+        "unanswerable": 42
+      },
+      "roc_auc_point": 0.5432,
+      "roc_auc_ci95": [
+        0.4508,
+        0.6388
+      ],
+      "pr_auc_point": 0.2599,
+      "pr_auc_ci95": [
+        0.2064,
+        0.3418
+      ],
+      "analysis_direction_used": "HIGHER=UNANSWERABLE"
+    },
+    {
+      "model": "A0",
+      "statistic": "confidence",
+      "seed": 20260923,
+      "iterations": 10000,
+      "stratified": {
+        "answerable": 140,
+        "unanswerable": 42
+      },
+      "roc_auc_point": 0.5009,
+      "roc_auc_ci95": [
+        0.4039,
+        0.5995
+      ],
+      "pr_auc_point": 0.2458,
+      "pr_auc_ci95": [
+        0.1936,
+        0.3266
+      ],
+      "analysis_direction_used": "LOWER=UNANSWERABLE"
+    }
+  ]
+}

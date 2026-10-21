@@ -1,0 +1,256 @@
+{
+  "artifact": "E0_CORPUS_MANIFEST.json",
+  "phase": "4F.6-D",
+  "diagnostic_version": "e0-prerequisite-v1",
+  "created_utc": "2026-09-22T21:34:12.507336+00:00",
+  "isolated": true,
+  "location": "backend/architecture/phase4f_6/e0_diagnostics/source_corpus/",
+  "production_storage_used": false,
+  "canonical_serialization_rule": {
+    "id": "CANON-v1",
+    "section_block": "join([heading?] + paragraphs + [table blocks] + [list blocks], \"\\n\\n\")  (DOCUMENTS key order)",
+    "table_block": "join over [headers]+rows of \" | \".join(row), lines joined \"\\n\"",
+    "list_block": "expand_and_audit._list_str (heading + items, newline-joined)",
+    "document_text": "join(section blocks, \"\\n\\n\")",
+    "validation": "empirically validated by Task 4 provenance results (see E0_SOURCE_PROVENANCE.md)"
+  },
+  "frozen_benchmark": {
+    "path": "backend\\phase4f\\phase4f_5d\\benchmark\\qa_benchmark_v1.jsonl",
+    "sha256": "1166bf4ff38265c209614ac20261417b7eeb43653f4482dfdf94721fd50a41d0",
+    "hash_unchanged": true,
+    "counts": {
+      "total": 182,
+      "answerable": 140,
+      "unanswerable": 42,
+      "documents": 6
+    }
+  },
+  "documents": [
+    {
+      "document_id": "company_history_eta",
+      "source_type": "GENERATOR_DEFINED_SYNTHETIC_DOCUMENT",
+      "classification": "B_DETERMINISTIC_SOURCE_RECONSTRUCTIBLE",
+      "generator_provenance": {
+        "path": "backend/phase4f/dataset/expand_and_audit.py",
+        "symbols": [
+          "DOCUMENTS",
+          "_add_doc"
+        ],
+        "doc_definition_in_source": true,
+        "example_seed": 42,
+        "seed_scope": "seed affects example sampling only; document text is static data (no RNG)",
+        "required_inputs": "module import only (no external data, no network)",
+        "reconstruction_method": "CANON-v1 serialization of the static section tree"
+      },
+      "document_sha256": "c8425307f982eadce5340c4a666ad794e6afa0a64576f09d77b9d74ca9466f97",
+      "document_bytes": 3148,
+      "structure": {
+        "doc_type": "historical_narrative",
+        "doc_structure": "chronological_prose",
+        "sections": 4,
+        "paragraphs": 8,
+        "tables": 1,
+        "lists": 1
+      },
+      "benchmark_document_id_mapping": {
+        "benchmark_version": "v1",
+        "answerable_examples": 44,
+        "unanswerable_examples": 0,
+        "total": 44,
+        "expected_from_manifest": 44,
+        "matches_manifest": true
+      },
+      "isolated_artifact": true,
+      "production_storage_touched": false
+    },
+    {
+      "document_id": "financial_report_q3",
+      "source_type": "GENERATOR_DEFINED_SYNTHETIC_DOCUMENT",
+      "classification": "B_DETERMINISTIC_SOURCE_RECONSTRUCTIBLE",
+      "generator_provenance": {
+        "path": "backend/phase4f/dataset/expand_and_audit.py",
+        "symbols": [
+          "DOCUMENTS",
+          "_add_doc"
+        ],
+        "doc_definition_in_source": true,
+        "example_seed": 42,
+        "seed_scope": "seed affects example sampling only; document text is static data (no RNG)",
+        "required_inputs": "module import only (no external data, no network)",
+        "reconstruction_method": "CANON-v1 serialization of the static section tree"
+      },
+      "document_sha256": "0044c58e37e49c05b55288a620ce450c594d2c640962ef11988efb4b0f818cd4",
+      "document_bytes": 2213,
+      "structure": {
+        "doc_type": "financial_report",
+        "doc_structure": "prose_with_tables",
+        "sections": 4,
+        "paragraphs": 4,
+        "tables": 1,
+        "lists": 1
+      },
+      "benchmark_document_id_mapping": {
+        "benchmark_version": "v1",
+        "answerable_examples": 38,
+        "unanswerable_examples": 0,
+        "total": 38,
+        "expected_from_manifest": 38,
+        "matches_manifest": true
+      },
+      "isolated_artifact": true,
+      "production_storage_touched": false
+    },
+    {
+      "document_id": "api_docs_lambda",
+      "source_type": "GENERATOR_DEFINED_SYNTHETIC_DOCUMENT",
+      "classification": "B_DETERMINISTIC_SOURCE_RECONSTRUCTIBLE",
+      "generator_provenance": {
+        "path": "backend/phase4f/dataset/expand_and_audit.py",
+        "symbols": [
+          "DOCUMENTS",
+          "_add_doc"
+        ],
+        "doc_definition_in_source": true,
+        "example_seed": 42,
+        "seed_scope": "seed affects example sampling only; document text is static data (no RNG)",
+        "required_inputs": "module import only (no external data, no network)",
+        "reconstruction_method": "CANON-v1 serialization of the static section tree"
+      },
+      "document_sha256": "4f209f437655d07fbe0d86d4754e966e142473dbdea726cd6bf9faa9dff64586",
+      "document_bytes": 1912,
+      "structure": {
+        "doc_type": "api_documentation",
+        "doc_structure": "technical_reference",
+        "sections": 3,
+        "paragraphs": 3,
+        "tables": 2,
+        "lists": 1
+      },
+      "benchmark_document_id_mapping": {
+        "benchmark_version": "v1",
+        "answerable_examples": 20,
+        "unanswerable_examples": 0,
+        "total": 20,
+        "expected_from_manifest": 20,
+        "matches_manifest": true
+      },
+      "isolated_artifact": true,
+      "production_storage_touched": false
+    },
+    {
+      "document_id": "dataset_desc_mu",
+      "source_type": "GENERATOR_DEFINED_SYNTHETIC_DOCUMENT",
+      "classification": "B_DETERMINISTIC_SOURCE_RECONSTRUCTIBLE",
+      "generator_provenance": {
+        "path": "backend/phase4f/dataset/expand_and_audit.py",
+        "symbols": [
+          "DOCUMENTS",
+          "_add_doc"
+        ],
+        "doc_definition_in_source": true,
+        "example_seed": 42,
+        "seed_scope": "seed affects example sampling only; document text is static data (no RNG)",
+        "required_inputs": "module import only (no external data, no network)",
+        "reconstruction_method": "CANON-v1 serialization of the static section tree"
+      },
+      "document_sha256": "97ae7a648bafcc06dda856fa36ea474b4d621b13b01a651710c3a5d47d51a6c4",
+      "document_bytes": 2008,
+      "structure": {
+        "doc_type": "scientific",
+        "doc_structure": "data_description",
+        "sections": 3,
+        "paragraphs": 3,
+        "tables": 1,
+        "lists": 1
+      },
+      "benchmark_document_id_mapping": {
+        "benchmark_version": "v1",
+        "answerable_examples": 22,
+        "unanswerable_examples": 0,
+        "total": 22,
+        "expected_from_manifest": 22,
+        "matches_manifest": true
+      },
+      "isolated_artifact": true,
+      "production_storage_touched": false
+    },
+    {
+      "document_id": "legal_contract_epsilon",
+      "source_type": "GENERATOR_DEFINED_SYNTHETIC_DOCUMENT",
+      "classification": "B_DETERMINISTIC_SOURCE_RECONSTRUCTIBLE",
+      "generator_provenance": {
+        "path": "backend/phase4f/dataset/expand_and_audit.py",
+        "symbols": [
+          "DOCUMENTS",
+          "_add_doc"
+        ],
+        "doc_definition_in_source": true,
+        "example_seed": 42,
+        "seed_scope": "seed affects example sampling only; document text is static data (no RNG)",
+        "required_inputs": "module import only (no external data, no network)",
+        "reconstruction_method": "CANON-v1 serialization of the static section tree"
+      },
+      "document_sha256": "b767a129ac560c3f800c6fe79f187c70ccbcaafc1dc1ce4d42179c708e3db567",
+      "document_bytes": 2158,
+      "structure": {
+        "doc_type": "legal_document",
+        "doc_structure": "prose_with_numbered_items",
+        "sections": 4,
+        "paragraphs": 4,
+        "tables": 1,
+        "lists": 1
+      },
+      "benchmark_document_id_mapping": {
+        "benchmark_version": "v1",
+        "answerable_examples": 16,
+        "unanswerable_examples": 0,
+        "total": 16,
+        "expected_from_manifest": 16,
+        "matches_manifest": true
+      },
+      "isolated_artifact": true,
+      "production_storage_touched": false
+    },
+    {
+      "document_id": "unanswerable_corpus",
+      "source_type": "VIRTUAL_CORPUS (not a coherent document)",
+      "classification": "B_DETERMINISTIC_SOURCE_RECONSTRUCTIBLE",
+      "generator_provenance": {
+        "path": "backend/phase4f/dataset/expand_and_audit.py",
+        "symbols": [
+          "ExampleGenerator.gen_unanswerable",
+          "unanswerable_pairs (static list)"
+        ],
+        "all_42_context_literals_present_in_generator_source": true,
+        "required_inputs": "benchmark records (authoritative carrier) + generator source (cross-check)",
+        "reconstruction_method": "document_text = the 42 benchmark distractor contexts in benchmark order; each literal verified present in the generator's static pair list"
+      },
+      "document_sha256": "ca0ef7ab95eb818636af8a217a065ec585835f07b17fca26830ee961e82821a5",
+      "document_bytes": 2892,
+      "structure": {
+        "sections": 0,
+        "paragraphs": 42,
+        "tables": 0,
+        "lists": 0,
+        "virtual": true
+      },
+      "benchmark_document_id_mapping": {
+        "benchmark_version": "v1",
+        "answerable_examples": 0,
+        "unanswerable_examples": 42,
+        "total": 42,
+        "expected_from_manifest": 42,
+        "matches_manifest": true
+      },
+      "notes": "Virtual corpus: contexts are standalone distractor sentences, not spans of one source document. Chunked as flat paragraphs for corpus completeness. No gold evidence is asserted for its (unanswerable) examples.",
+      "isolated_artifact": true,
+      "production_storage_touched": false
+    }
+  ],
+  "checks": {
+    "frozen_integrity": true,
+    "source_reconstruction": true,
+    "chunk_corpus": true,
+    "retrieval_blocker_confirmed": true
+  }
+}

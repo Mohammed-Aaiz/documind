@@ -38,8 +38,9 @@ P0
    test connectivity to the host/port embedded in `DATABASE_URL`.
 3. **Credentials valid?** If connections are refused with authentication
    errors, the credentials in `DATABASE_URL` no longer match the database.
-4. **Database exists and has the schema?** The expected tables come from
-   `backend/migrations/versions/001_add_reliability_logs.py` plus the models
+4. **Database exists and has the schema?** The expected tables come from the
+   Alembic chain `backend/migrations/versions/000_create_base_tables.py` →
+   `005_add_document_graph.py` plus the models
    declared in `backend/auth/models.py`, `backend/documents/models.py`,
    `backend/chat/models.py`, `backend/verification/models.py`,
    `backend/reliability/models.py`, `backend/user/models.py`

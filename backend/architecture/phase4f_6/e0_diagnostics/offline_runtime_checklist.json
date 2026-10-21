@@ -1,0 +1,128 @@
+{
+  "artifact": "offline_runtime_checklist",
+  "corrections_2026_09_27": {
+    "see": "backend/architecture/phase4f_6/decision/E0_ERRATUM_2026-09-27.md",
+    "policy": "Every pre-existing value in this file is preserved unaltered as the historical observation. This key is additive only.",
+    "corrected": [
+      "C8: 'no alembic environment in repo' is false - backend/alembic.ini and backend/migrations/env.py exist and are tracked; the probe globbed for a directory named 'alembic/' but this project names it 'migrations/'.",
+      "C8: the production database target is NOT postgresql+asyncpg://localhost:5432/documind; backend/.env resolves to a managed remote PostgreSQL (pgvector) service."
+    ]
+  },
+  "phase": "4F.6-G",
+  "date": "2026-09-23",
+  "allowed_values": ["NOT_AVAILABLE", "READY", "BLOCKED", "NOT_CHECKED"],
+  "evidence_principle": "No field is READY without actual local evidence; prepared instructions are not evidence (Task 14).",
+  "media_classification": "A_COMPLETE_MEDIA",
+  "missing": "none for media detection; runtime capability verification (CREATE EXTENSION vector / vector(384) / cosine <=>) remains PENDING and must be executed at resume",
+  "media_detection": {
+    "detected_on": "2026-09-23",
+    "gate_case": "C - acceptable media fully detected and fingerprinted",
+    "record": "backend/architecture/phase4f_6/decision/E0_MEDIA_DETECTION_RECORD.json",
+    "postgresql": "16.6 x64_AMD64, installed at C:/pgdata/pgsql and extracted at C:/pg/pg16/pgsql; archive C:/pg/pg16.zip (sha256 6a1bfb64...)",
+    "pgvector": "0.8.6 x64_AMD64 (vector.control + vector--*.sql chain + vector.dll sha256 64157853...), in C:/pg/pgvector_tmp, C:/pgdata/pgsql and C:/pg/pg16/pgsql; archive C:/pg/pgvector.zip (sha256 faeaecb1...)",
+    "media_major_abi_evidence": "readme.txt 'ONLY for PostgreSQL v16 - Windows x64'; vector.dll build path embeds pgvector 0.8.6 / PG16; PE machine x64_AMD64",
+    "fingerprints_recorded": 139,
+    "server_running": "NO (no postgres image, no 5432 listener)",
+    "note": "Detection is not readiness: this gate performed no installation, no server start, no SQL and no database connection. Earlier probes missed C:\\pg and C:\\pgdata because they never scanned drive roots."
+  },
+  "statuses": {
+    "runtime_media": {
+      "status": "READY",
+      "evidence": "Media detection gate: C:/pg/pg16.zip (304112325 B, sha256 6a1bfb6435b13d9563ae481445c70ac2a19846bd8a430b12903b408eec300f9b) and C:/pg/pgvector.zip (169595 B, sha256 faeaecb100488397ce5d38424b8c931be0f29e1668be7d4e75c26fe2eb056522), plus extracted/installed trees at C:/pg/pg16/pgsql, C:/pgdata/pgsql and C:/pg/pgvector_tmp; 139 sha256 fingerprints recorded (decision/E0_MEDIA_DETECTION_RECORD.json). Nothing was downloaded by this project.",
+      "required_for_ready": "Satisfied for detection: M1 = PostgreSQL 16.6 x64 media present (major inside the asyncpg 0.30.0 range 9.5-17); M2 = pgvector 0.8.6 x64 server components (vector.control, vector--*.sql chain, vector.dll) present and targeted at PG16/AMD64. Runtime capability checks remain PENDING."
+    },
+    "postgres_server": {
+      "status": "NOT_CHECKED",
+      "evidence": "DISTRIBUTION NOW DETECTED: PostgreSQL 16.6 x64_AMD64 at C:/pgdata/pgsql (installed) and C:/pg/pg16/pgsql (extracted) with postgres/pg_ctl/psql/pg_config/initdb all present and PG_VERSION = 16. NOT RUNNING: no postgres image and no 5432 listener at detection time. The earlier D NO_POSTGRES classification arose from probes covering services, registry, PATH, Program Files and 543x sockets only, which never scanned C:\\ drive roots. requirements pins unchanged: asyncpg==0.30.0 (supported PostgreSQL 9.5-17), sqlalchemy[asyncio]==2.0.36, psycopg2 not installed.",
+      "required_for_ready": "Validation checks 1-3: check 1 (binary exists) now PASSES; checks 2-3 (server starts locally, version() major within 9.5-17) need an operator-controlled start and SQL, which this gate forbids - NOT_CHECKED."
+    },
+    "pgvector_server": {
+      "status": "NOT_CHECKED",
+      "evidence": "SERVER EXTENSION MEDIA NOW DETECTED: vector.control (default_version 0.8.6), the full vector--*.sql upgrade chain and vector.dll (279040 B, PE x64_AMD64, sha256 64157853678df00a82c0b7bd1cfc311ddac4f8a53d27b9f101c1327b963ccf50) present in C:/pg/pgvector_tmp, C:/pgdata/pgsql and C:/pg/pg16/pgsql. Media readme states 'ONLY for PostgreSQL v16 - Windows x64' and the DLL build path embeds pgvector 0.8.6 / PG16. The Python client pgvector==0.5.0 remains a type adapter, not the server extension.",
+      "required_for_ready": "Validation checks 4-8 (CREATE EXTENSION vector in the diagnostic DB, vector type, cosine <=>, vector(384) constraint) require a running server and SQL - NOT_CHECKED in this gate; execute at resume."
+    },
+    "diagnostic_database": {
+      "status": "BLOCKED",
+      "evidence": "documind_e0_diagnostic defined (4F.6-E readiness, 4F.6-G Task 3 contract) but cannot be created: 0 SQL executed anywhere, no server exists.",
+      "required_for_ready": "Server + extension available, then setup order steps 6-7 (create database, create diagnostic role) with isolation proof recorded."
+    },
+    "isolation": {
+      "status": "NOT_CHECKED",
+      "evidence": "Pre-SQL isolation proof defined (document section 4, 5 steps); no connection attempted so no connection-time proof exists; backend/.env untouched (production DATABASE_URL never contacted, never modified).",
+      "required_for_ready": "Execute the 5-step pre-SQL proof against the actual intended DSN (localhost, database==documind_e0_diagnostic, != documind, .env hash/mtime identical before and after, all session DSNs recorded in the run manifest)."
+    },
+    "schema": {
+      "status": "BLOCKED",
+      "evidence": "retrieval_schema_requirements.json verified unchanged and reconciled with existing models (users/documents/document_chunks, vector(384), cosine <=>, metadata filters, ORDER BY ... LIMIT); DDL executed = 0; no alembic environment in repo, existing creation pattern = Base.metadata.create_all.",
+      "required_for_ready": "Validation check via setup order step 10-11: tables/columns/types created in diagnostic DB only, inventory matches retrieval_schema_requirements.json; provenance sidecar e0_chunk_provenance created only if offsets preservation requires it (as defined in 4F.6-E)."
+    },
+    "embedding": {
+      "status": "READY",
+      "evidence": "e0_diagnostics/diagnostics/embedding_offline_verification.json: sentence-transformers/all-MiniLM-L6-v2, snapshot 1110a243fdf4706b3f48f1d95db1a4f5529b4d41, offline load success, network_needed=false, dimension 384, deterministic across runs, probe_norm 1.0, all artifact sha256s recorded (model.safetensors 53aa5117...9db).",
+      "required_for_ready": "n/a — but must be re-verified offline as resume step F before any ingestion."
+    },
+    "corpus": {
+      "status": "READY",
+      "evidence": "Re-verified this phase with recorded recipe (files sorted by name; sha256 over interleaved filename_bytes||file_bytes): source fingerprint 3ec81cc5868f29a047409358943127509b4700cf2ddae1b877030059e4687ab1 MATCH (6 JSON), chunk fingerprint e6965cdad6684c65b739a316e01cff9e020e96a1588ec4aa37b19cfe98b135ea MATCH (6 JSONL), 6/6 docs with 0 per-document sha256 mismatches, 93/93 chunk rows, document_id+sequence ordering present, structure/offsets/chunker_version/source_document_hash present on every chunk.",
+      "required_for_ready": "n/a — must remain unchanged until ingestion (any hash change = Task 10 failure condition)."
+    },
+    "retrieval_smoke": {
+      "status": "NOT_CHECKED",
+      "evidence": "0 questions executed (4F.6-F Task 10 never reached); retrieval_traces.jsonl and retrieval_traces_smoke.jsonl both absent; manifest retrieval_trace_status=NOT_EXECUTED; no fabricated scores.",
+      "required_for_ready": "Resume steps A-K complete: runtime detection, versions, extension, isolation proof, schema, offline embedding, ingest 6/6+93/93 with count/hash validation, then 3-5 answerable smoke questions across categories + 1 unanswerable smoke via the unmodified existing retrieval implementation, then runtime parity (resume test I-K)."
+    },
+    "e0_gate": {
+      "status": "BLOCKED",
+      "evidence": "Media detected at the runtime media detection gate (gate case C): conditions 1 (PostgreSQL exists) and 2 (server-side pgvector exists) now have local media present and fingerprinted, but neither is RUNTIME-VERIFIED (no server started, no SQL, no CREATE EXTENSION check). Conditions 3-9 (isolation proof, schema, ingestion 6/6+93/93, genuine scores, smoke test, runtime parity) NOT_REACHED. Full E0 execution still requires a later dedicated execution phase.",
+      "required_for_ready": "All ten fields above READY/BLOCKED-cleared with evidence, plus the twelve-condition E0 gate (4F.6-F Task 15) re-evaluated — full E0 still not executed in a readiness phase."
+    }
+  },
+  "pending_validation_checks": [
+    {"id": 1, "check": "PostgreSQL server binary exists (bin/postgres.exe; pg_config --version)", "status": "NOT_CHECKED"},
+    {"id": 2, "check": "Server starts locally (pg_ctl -D <datadir> start; pg_isready)", "status": "NOT_CHECKED"},
+    {"id": 3, "check": "Server version compatible with asyncpg 0.30.0 (major in 9.5-17; record SELECT version())", "status": "NOT_CHECKED"},
+    {"id": 4, "check": "pgvector server extension files exist (vector.control, vector--*.sql, vector.dll for exact major+AMD64)", "status": "NOT_CHECKED"},
+    {"id": 5, "check": "CREATE EXTENSION vector succeeds in documind_e0_diagnostic from local files", "status": "NOT_CHECKED"},
+    {"id": 6, "check": "vector type available (SELECT '[1,2,3]'::vector)", "status": "NOT_CHECKED"},
+    {"id": 7, "check": "cosine operator <=> available (returns finite cosine distance)", "status": "NOT_CHECKED"},
+    {"id": 8, "check": "PostgreSQL accepts vector(384) (CREATE TEMP TABLE _t(v vector(384)))", "status": "NOT_CHECKED"},
+    {"id": 9, "check": "asyncpg connects to diagnostic DB (asyncpg.connect -> SELECT 1)", "status": "NOT_CHECKED"},
+    {"id": 10, "check": "Existing SQLAlchemy stack connects (create_async_engine postgresql+asyncpg -> SELECT 1)", "status": "NOT_CHECKED"}
+  ],
+  "version_matrix": {
+    "server_architecture": "Windows x64 AMD64 (PROCESSOR_ARCHITECTURE=AMD64)",
+    "postgresql_major": "within asyncpg 0.30.0 supported range 9.5-17; exact major recorded at setup (locally evidenced, not arbitrarily pinned)",
+    "pgvector_server": "build matching chosen major + AMD64 ABI; must provide vector type, vector(384), cosine <=>, ORDER BY distance",
+    "pgvector_python_client": "0.5.0 (installed; NOT the server extension)",
+    "asyncpg": "0.30.0 (only DB driver; psycopg2 not installed)",
+    "sqlalchemy": "2.0.36 (sqlalchemy[asyncio])",
+    "schema_creation": "Base.metadata.create_all (alembic 1.14.1 installed but no alembic environment in repo)",
+    "python": "3.11.0"
+  },
+  "isolation_target": {
+    "diagnostic_database": "documind_e0_diagnostic",
+    "production_database_never_contacted": "documind (postgresql+asyncpg://localhost:5432/documind per backend/.env)",
+    "presql_proof": "see E0_OFFLINE_RUNTIME_PROVISIONING.md section 4 (5 steps, executable before any SQL)",
+    "env_file_policy": "backend/.env never modified; diagnostic DSN never written into repo files; no secrets stored"
+  },
+  "declarations": {
+    "github_accessed": "NO",
+    "network_accessed": "NO",
+    "software_installed": "NO",
+    "downloads": "NO",
+    "sql_executed": 0,
+    "production_database_accessed": "NO",
+    "production_code_modified": "NO",
+    "benchmark_modified": "NO",
+    "dataset_modified": "NO",
+    "model_modified": "NO",
+    "training_run": "NO",
+    "e0_executed": "NO",
+    "retrieval_traces_created": "NONE",
+    "secrets_created": "NO",
+    "commit": "NO",
+    "push": "NO"
+  },
+  "final_status": "E0_MEDIA_DETECTED",
+  "scientific_boundary": "This checklist makes no claim about retrieval quality, retrieval bottleneck, model quality, representation quality, answerability quality, or hypotheses H-A through H-E. It only tracks whether the runtime required to measure them honestly exists locally."
+}

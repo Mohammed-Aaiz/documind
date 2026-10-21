@@ -1,0 +1,38 @@
+{
+  "document_id": "legal_contract_epsilon",
+  "source_type": "GENERATOR_DEFINED_SYNTHETIC_DOCUMENT",
+  "classification": "B_DETERMINISTIC_SOURCE_RECONSTRUCTIBLE",
+  "generator_provenance": {
+    "path": "backend/phase4f/dataset/expand_and_audit.py",
+    "symbols": [
+      "DOCUMENTS",
+      "_add_doc"
+    ],
+    "doc_definition_in_source": true,
+    "example_seed": 42,
+    "seed_scope": "seed affects example sampling only; document text is static data (no RNG)",
+    "required_inputs": "module import only (no external data, no network)",
+    "reconstruction_method": "CANON-v1 serialization of the static section tree"
+  },
+  "document_text": "Parties and Effective Date\n\nThis Software License Agreement (Agreement) is entered into as of January 15, 2025, by and between TechVault Inc., a Delaware corporation with principal offices at 1200 Innovation Drive, Suite 400, Austin, TX 78701 (Licensor), and Meridian Analytics Ltd., a United Kingdom limited company registered at 45 Bishopsgate, London EC2N 3DA (Licensee). This Agreement supersedes all prior agreements between the parties regarding the subject matter herein.\n\nLicense Grant\n\nSubject to the terms of this Agreement, Licensor hereby grants Licensee a non-exclusive, non-transferable, revocable license to install and use the Software on up to 50 concurrent devices for Licensee's internal business purposes only. The license term is 36 months commencing on the Effective Date and expiring on January 15, 2028, unless terminated earlier in accordance with Section 8.\n\nPermitted Uses\nInternal data analysis and reporting\nIntegration with Licensee's proprietary platforms\nUse by Licensee's employees and authorized contractors\nTesting and quality assurance in non-production environments\n\nFees and Payment\n\nLicensee shall pay Licensor an annual license fee of $245,000 USD, payable in equal quarterly installments of $61,250 USD within 30 days of invoice date. Late payments shall incur interest at a rate of 1.5 percent per month. All fees are non-refundable except as expressly provided in Section 9. The annual fee shall increase by 5 percent at each renewal term.\n\nPayment Schedule | Amount (USD) | Due Date\nQ1 2025 | $61,250 | April 15, 2025\nQ2 2025 | $61,250 | July 15, 2025\nQ3 2025 | $61,250 | October 15, 2025\nQ4 2025 | $61,250 | January 15, 2026\n\nIntellectual Property\n\nThe Software and all associated intellectual property rights remain the exclusive property of Licensor. Licensee shall not reverse engineer, decompile, or disassemble the Software. Any derivative works created by Licensee using the Software shall be owned by Licensee, provided that Licensor retains all rights in the underlying Software. Licensee grants Licensor a non-exclusive, royalty-free license to use anonymized usage data for product improvement purposes.",
+  "document_sha256": "b767a129ac560c3f800c6fe79f187c70ccbcaafc1dc1ce4d42179c708e3db567",
+  "document_bytes": 2158,
+  "structure": {
+    "doc_type": "legal_document",
+    "doc_structure": "prose_with_numbered_items",
+    "sections": 4,
+    "paragraphs": 4,
+    "tables": 1,
+    "lists": 1
+  },
+  "benchmark_document_id_mapping": {
+    "benchmark_version": "v1",
+    "answerable_examples": 16,
+    "unanswerable_examples": 0,
+    "total": 16,
+    "expected_from_manifest": 16,
+    "matches_manifest": true
+  },
+  "isolated_artifact": true,
+  "production_storage_touched": false
+}

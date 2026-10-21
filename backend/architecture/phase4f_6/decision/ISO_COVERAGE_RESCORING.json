@@ -1,0 +1,512 @@
+{
+  "provenance_2026_09_28": {
+    "status": "PRE-RECONSTRUCTION-FIX: the answer TEXT in the input predictions was produced by tokenizer.decode(), which re-inserts spaces at subword boundaries and corrupted every value the tokenizer split ('142.6 million' -> '142. 6 million', '$4,900' -> '$ 4, 900', '2011-2020' -> '2011 - 2020').",
+    "scope": "EM/F1 values and the 'original_correct' rate are affected. The null_score ranking and the abstention sets are NOT affected.",
+    "unaffected": "logit/score-derived signals (null_score, margin, cls_start_logit, start/end logits) are unchanged by the fix: score and span are bit-identical before vs after.",
+    "measured_effect": "same 182 examples, same checkpoints, same spans, only the decoder changed: F2 answerable EM 2.86% -> 14.29%, F1 16.92% -> 28.91% (re-run 2026-09-28). Leaked population; not a generalization result.",
+    "fix": "backend/answer_span.py, shared by chat/qa_model.py and all Phase 4F runners.",
+    "details": "backend/architecture/phase4f_6/decision/E0_PREDICTION_PROVENANCE_2026-09-28.md",
+    "input_not_regenerated": "model_40min_predictions.json (sha256 d7d9d65e944488ac...) was NOT regenerated: nothing in the repository produces it and the re-scoring tools pin that hash."
+  },
+  "experiment": "iso_coverage_rescoring",
+  "phase": "operating-point controlled re-scoring of existing fresh predictions (no inference)",
+  "date": "2026-09-23T20:44:04.409633+05:30",
+  "purpose": "compare F2 and A0 at the SAME abstention aggressiveness, removing the checkpoint-specific threshold-scale effect found when the single constant 1.5705 was applied to both",
+  "method": {
+    "ranking": "null_score DESC, example_id ASC (deterministic tie-break)",
+    "abstain": "exactly the top K examples per checkpoint, ranked independently",
+    "K_fixed_before_evaluation": {
+      "A": 47,
+      "B": 95
+    },
+    "K_provenance": {
+      "47": "F2 recorded G operating point: 39 answerable + 8 unanswerable abstained at null_score >= 1.5705",
+      "95": "A0 recorded G operating point: 73 answerable + 22 unanswerable abstained at null_score >= 1.5705"
+    },
+    "K_fitted_here": false,
+    "K_searched_here": false,
+    "K_optimized_here": false,
+    "no_threshold_used": true
+  },
+  "inputs": {
+    "predictions_file": "backend/architecture/phase4f_6/e0_diagnostics/diagnostics/model_40min_predictions.json",
+    "predictions_sha256": "d7d9d65e944488ac26a0e197df589fbb4955aafe635fac82f52d2c6e4a649fa9",
+    "benchmark_sha256": "1166bf4ff38265c209614ac20261417b7eeb43653f4482dfdf94721fd50a41d0",
+    "benchmark_sha256_verified": true
+  },
+  "models": {
+    "F2": {
+      "checkpoint": "backend/phase4f/phase4f_5f/f2/checkpoints/F2/checkpoint_epoch2",
+      "model_sha256": "717463178eeb37ee3a6424063e8666b6586dd15ee50d745c1ab3d16bb4b164b0",
+      "n": 182,
+      "null_score_range": [
+        0.864908,
+        2.063324
+      ],
+      "iso_levels": {
+        "K47": {
+          "EM_answerable_pct": 2.86,
+          "F1_answerable_pct": 16.92,
+          "EM_all182_pct": 2.2,
+          "F1_all182_pct": 13.02,
+          "answerable_n": 140,
+          "unanswerable_n": 42,
+          "true_abstention": "8/42",
+          "true_abstention_pct": 19.0,
+          "false_abstention": "39/140",
+          "false_abstention_pct": 27.9,
+          "spurious": 34,
+          "spurious_rate_pct": 18.7,
+          "answerable_coverage_pct": 72.14,
+          "overall_nonempty_coverage_pct": 74.18,
+          "retained_answerable": 101,
+          "correct_retained": 4,
+          "incorrect_retained": 97,
+          "abstained_correct_answers": 0,
+          "abstained_incorrect_answers": 39,
+          "total_correct_answers_in_set": 4,
+          "reconciliation": "correct_retained + abstained_correct must equal the ungated EM-correct count",
+          "conditional_EM_among_retained_answerable_pct": 3.96,
+          "conditional_F1_among_retained_answerable_pct": 23.46,
+          "by_category": {
+            "DIRECT_SPAN": {
+              "n": 24,
+              "abstained_n": 1,
+              "retained_n": 23,
+              "EM": 12.5,
+              "F1": 46.3
+            },
+            "NUMERIC": {
+              "n": 20,
+              "abstained_n": 0,
+              "retained_n": 20,
+              "EM": 5.0,
+              "F1": 39.8
+            },
+            "TABLE_CELL": {
+              "n": 24,
+              "abstained_n": 2,
+              "retained_n": 22,
+              "EM": 0.0,
+              "F1": 1.2
+            },
+            "TABLE_ROW": {
+              "n": 16,
+              "abstained_n": 0,
+              "retained_n": 16,
+              "EM": 0.0,
+              "F1": 11.1
+            },
+            "LIST_ITEM": {
+              "n": 20,
+              "abstained_n": 6,
+              "retained_n": 14,
+              "EM": 0.0,
+              "F1": 10.8
+            },
+            "SECTION_SPECIFIC": {
+              "n": 16,
+              "abstained_n": 13,
+              "retained_n": 3,
+              "EM": 0.0,
+              "F1": 0.0
+            },
+            "MULTI_CHUNK": {
+              "n": 10,
+              "abstained_n": 7,
+              "retained_n": 3,
+              "EM": 0.0,
+              "F1": 4.0
+            },
+            "LONG_CONTEXT": {
+              "n": 10,
+              "abstained_n": 10,
+              "retained_n": 0,
+              "EM": 0.0,
+              "F1": 0.0
+            }
+          },
+          "denominators": {
+            "EM/F1": "answerable only (n=140), abstained scored 0",
+            "true_abstention": "abstained / 42 unanswerable",
+            "false_abstention": "abstained answerable / 140",
+            "spurious_rate": "answered unanswerable / 182",
+            "answerable_coverage": "retained answerable / 140",
+            "overall_nonempty_coverage": "non-empty predictions / 182",
+            "conditional_EM/F1": "retained answerable only (n=140-false_abs)"
+          },
+          "K": 47,
+          "K_pct_of_182": 25.8,
+          "abstained_answerable": "39",
+          "abstained_unanswerable": "8",
+          "cut_point_null_score": 1.576547,
+          "cut_point_example_id": "tc_87f00ad1"
+        },
+        "K95": {
+          "EM_answerable_pct": 0.71,
+          "F1_answerable_pct": 12.47,
+          "EM_all182_pct": 0.55,
+          "F1_all182_pct": 9.59,
+          "answerable_n": 140,
+          "unanswerable_n": 42,
+          "true_abstention": "20/42",
+          "true_abstention_pct": 47.6,
+          "false_abstention": "75/140",
+          "false_abstention_pct": 53.6,
+          "spurious": 22,
+          "spurious_rate_pct": 12.1,
+          "answerable_coverage_pct": 46.43,
+          "overall_nonempty_coverage_pct": 47.8,
+          "retained_answerable": 65,
+          "correct_retained": 1,
+          "incorrect_retained": 64,
+          "abstained_correct_answers": 3,
+          "abstained_incorrect_answers": 72,
+          "total_correct_answers_in_set": 4,
+          "reconciliation": "correct_retained + abstained_correct must equal the ungated EM-correct count",
+          "conditional_EM_among_retained_answerable_pct": 1.54,
+          "conditional_F1_among_retained_answerable_pct": 26.86,
+          "by_category": {
+            "DIRECT_SPAN": {
+              "n": 24,
+              "abstained_n": 11,
+              "retained_n": 13,
+              "EM": 0.0,
+              "F1": 24.9
+            },
+            "NUMERIC": {
+              "n": 20,
+              "abstained_n": 0,
+              "retained_n": 20,
+              "EM": 5.0,
+              "F1": 39.8
+            },
+            "TABLE_CELL": {
+              "n": 24,
+              "abstained_n": 14,
+              "retained_n": 10,
+              "EM": 0.0,
+              "F1": 1.2
+            },
+            "TABLE_ROW": {
+              "n": 16,
+              "abstained_n": 6,
+              "retained_n": 10,
+              "EM": 0.0,
+              "F1": 8.5
+            },
+            "LIST_ITEM": {
+              "n": 20,
+              "abstained_n": 9,
+              "retained_n": 11,
+              "EM": 0.0,
+              "F1": 8.0
+            },
+            "SECTION_SPECIFIC": {
+              "n": 16,
+              "abstained_n": 16,
+              "retained_n": 0,
+              "EM": 0.0,
+              "F1": 0.0
+            },
+            "MULTI_CHUNK": {
+              "n": 10,
+              "abstained_n": 9,
+              "retained_n": 1,
+              "EM": 0.0,
+              "F1": 2.9
+            },
+            "LONG_CONTEXT": {
+              "n": 10,
+              "abstained_n": 10,
+              "retained_n": 0,
+              "EM": 0.0,
+              "F1": 0.0
+            }
+          },
+          "denominators": {
+            "EM/F1": "answerable only (n=140), abstained scored 0",
+            "true_abstention": "abstained / 42 unanswerable",
+            "false_abstention": "abstained answerable / 140",
+            "spurious_rate": "answered unanswerable / 182",
+            "answerable_coverage": "retained answerable / 140",
+            "overall_nonempty_coverage": "non-empty predictions / 182",
+            "conditional_EM/F1": "retained answerable only (n=140-false_abs)"
+          },
+          "K": 95,
+          "K_pct_of_182": 52.2,
+          "abstained_answerable": "75",
+          "abstained_unanswerable": "20",
+          "cut_point_null_score": 1.398777,
+          "cut_point_example_id": "ds_02be1eaa"
+        }
+      }
+    },
+    "A0": {
+      "checkpoint": "backend/models/documind-qa",
+      "model_sha256": "cb9f1dde94fca0e1f82c440bdc184ff54ba02efb6ea432e37a8c6ff8a8f69deb",
+      "n": 182,
+      "null_score_range": [
+        -8.858237,
+        10.771528
+      ],
+      "iso_levels": {
+        "K47": {
+          "EM_answerable_pct": 5.0,
+          "F1_answerable_pct": 18.32,
+          "EM_all182_pct": 3.85,
+          "F1_all182_pct": 14.09,
+          "answerable_n": 140,
+          "unanswerable_n": 42,
+          "true_abstention": "6/42",
+          "true_abstention_pct": 14.3,
+          "false_abstention": "41/140",
+          "false_abstention_pct": 29.3,
+          "spurious": 36,
+          "spurious_rate_pct": 19.8,
+          "answerable_coverage_pct": 70.71,
+          "overall_nonempty_coverage_pct": 74.18,
+          "retained_answerable": 99,
+          "correct_retained": 7,
+          "incorrect_retained": 92,
+          "abstained_correct_answers": 0,
+          "abstained_incorrect_answers": 41,
+          "total_correct_answers_in_set": 7,
+          "reconciliation": "correct_retained + abstained_correct must equal the ungated EM-correct count",
+          "conditional_EM_among_retained_answerable_pct": 7.07,
+          "conditional_F1_among_retained_answerable_pct": 25.9,
+          "by_category": {
+            "DIRECT_SPAN": {
+              "n": 24,
+              "abstained_n": 10,
+              "retained_n": 14,
+              "EM": 8.3,
+              "F1": 24.9
+            },
+            "NUMERIC": {
+              "n": 20,
+              "abstained_n": 5,
+              "retained_n": 15,
+              "EM": 15.0,
+              "F1": 35.0
+            },
+            "TABLE_CELL": {
+              "n": 24,
+              "abstained_n": 8,
+              "retained_n": 16,
+              "EM": 8.3,
+              "F1": 10.4
+            },
+            "TABLE_ROW": {
+              "n": 16,
+              "abstained_n": 9,
+              "retained_n": 7,
+              "EM": 0.0,
+              "F1": 15.3
+            },
+            "LIST_ITEM": {
+              "n": 20,
+              "abstained_n": 6,
+              "retained_n": 14,
+              "EM": 0.0,
+              "F1": 12.3
+            },
+            "SECTION_SPECIFIC": {
+              "n": 16,
+              "abstained_n": 0,
+              "retained_n": 16,
+              "EM": 0.0,
+              "F1": 21.9
+            },
+            "MULTI_CHUNK": {
+              "n": 10,
+              "abstained_n": 3,
+              "retained_n": 7,
+              "EM": 0.0,
+              "F1": 6.5
+            },
+            "LONG_CONTEXT": {
+              "n": 10,
+              "abstained_n": 0,
+              "retained_n": 10,
+              "EM": 0.0,
+              "F1": 11.2
+            }
+          },
+          "denominators": {
+            "EM/F1": "answerable only (n=140), abstained scored 0",
+            "true_abstention": "abstained / 42 unanswerable",
+            "false_abstention": "abstained answerable / 140",
+            "spurious_rate": "answered unanswerable / 182",
+            "answerable_coverage": "retained answerable / 140",
+            "overall_nonempty_coverage": "non-empty predictions / 182",
+            "conditional_EM/F1": "retained answerable only (n=140-false_abs)"
+          },
+          "K": 47,
+          "K_pct_of_182": 25.8,
+          "abstained_answerable": "41",
+          "abstained_unanswerable": "6",
+          "cut_point_null_score": 4.818187,
+          "cut_point_example_id": "mc_f89ad49d"
+        },
+        "K95": {
+          "EM_answerable_pct": 2.86,
+          "F1_answerable_pct": 12.16,
+          "EM_all182_pct": 2.2,
+          "F1_all182_pct": 9.35,
+          "answerable_n": 140,
+          "unanswerable_n": 42,
+          "true_abstention": "22/42",
+          "true_abstention_pct": 52.4,
+          "false_abstention": "73/140",
+          "false_abstention_pct": 52.1,
+          "spurious": 20,
+          "spurious_rate_pct": 11.0,
+          "answerable_coverage_pct": 47.86,
+          "overall_nonempty_coverage_pct": 47.8,
+          "retained_answerable": 67,
+          "correct_retained": 4,
+          "incorrect_retained": 63,
+          "abstained_correct_answers": 3,
+          "abstained_incorrect_answers": 70,
+          "total_correct_answers_in_set": 7,
+          "reconciliation": "correct_retained + abstained_correct must equal the ungated EM-correct count",
+          "conditional_EM_among_retained_answerable_pct": 5.97,
+          "conditional_F1_among_retained_answerable_pct": 25.41,
+          "by_category": {
+            "DIRECT_SPAN": {
+              "n": 24,
+              "abstained_n": 12,
+              "retained_n": 12,
+              "EM": 8.3,
+              "F1": 23.5
+            },
+            "NUMERIC": {
+              "n": 20,
+              "abstained_n": 10,
+              "retained_n": 10,
+              "EM": 10.0,
+              "F1": 23.7
+            },
+            "TABLE_CELL": {
+              "n": 24,
+              "abstained_n": 18,
+              "retained_n": 6,
+              "EM": 0.0,
+              "F1": 0.0
+            },
+            "TABLE_ROW": {
+              "n": 16,
+              "abstained_n": 16,
+              "retained_n": 0,
+              "EM": 0.0,
+              "F1": 0.0
+            },
+            "LIST_ITEM": {
+              "n": 20,
+              "abstained_n": 7,
+              "retained_n": 13,
+              "EM": 0.0,
+              "F1": 10.1
+            },
+            "SECTION_SPECIFIC": {
+              "n": 16,
+              "abstained_n": 0,
+              "retained_n": 16,
+              "EM": 0.0,
+              "F1": 21.9
+            },
+            "MULTI_CHUNK": {
+              "n": 10,
+              "abstained_n": 9,
+              "retained_n": 1,
+              "EM": 0.0,
+              "F1": 0.0
+            },
+            "LONG_CONTEXT": {
+              "n": 10,
+              "abstained_n": 1,
+              "retained_n": 9,
+              "EM": 0.0,
+              "F1": 11.2
+            }
+          },
+          "denominators": {
+            "EM/F1": "answerable only (n=140), abstained scored 0",
+            "true_abstention": "abstained / 42 unanswerable",
+            "false_abstention": "abstained answerable / 140",
+            "spurious_rate": "answered unanswerable / 182",
+            "answerable_coverage": "retained answerable / 140",
+            "overall_nonempty_coverage": "non-empty predictions / 182",
+            "conditional_EM/F1": "retained answerable only (n=140-false_abs)"
+          },
+          "K": 95,
+          "K_pct_of_182": 52.2,
+          "abstained_answerable": "73",
+          "abstained_unanswerable": "22",
+          "cut_point_null_score": 1.711039,
+          "cut_point_example_id": "tc_479dca78"
+        }
+      }
+    }
+  },
+  "comparison_with_previous_results": {
+    "label": "OPERATING_POINT_ANALYSIS (prior OFF/ON numbers are MODEL_ONLY for the OFF rows)",
+    "prior": {
+      "F2": {
+        "OFF": {
+          "EM": 2.86,
+          "F1": 19.69
+        },
+        "G_1.5705_ON": {
+          "EM": 2.86,
+          "F1": 16.92
+        }
+      },
+      "A0": {
+        "OFF": {
+          "EM": 5.0,
+          "F1": 24.44
+        },
+        "G_1.5705_ON": {
+          "EM": 2.86,
+          "F1": 12.16
+        }
+      }
+    },
+    "this_experiment": {
+      "F2": {
+        "K47": {
+          "EM": 2.86,
+          "F1": 16.92
+        },
+        "K95": {
+          "EM": 0.71,
+          "F1": 12.47
+        }
+      },
+      "A0": {
+        "K47": {
+          "EM": 5.0,
+          "F1": 18.32
+        },
+        "K95": {
+          "EM": 2.86,
+          "F1": 12.16
+        }
+      }
+    },
+    "note": "iso-coverage rows are directly comparable across checkpoints because the abstention count is identical; the 1.5705 rows are not, because the constant fires at different rates per checkpoint."
+  },
+  "comparability": {
+    "across_checkpoints_at_fixed_K": "MATCHED - identical abstention counts, identical benchmark, identical scoring code",
+    "vs_prior_gate_rows": "OPERATING_POINT_ANALYSIS - same predictions and code, different abstention policy"
+  },
+  "interpretation_boundary": [
+    "No inference, no training, no retrieval, no database was used.",
+    "K values were fixed before evaluation and were neither fitted, tuned, nor searched.",
+    "No operating point is claimed to be optimal.",
+    "No architectural claim (H-A..H-E) is made from this experiment.",
+    "Answerable and unanswerable analyses are reported with explicit separate denominators."
+  ]
+}

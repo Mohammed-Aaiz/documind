@@ -1,0 +1,516 @@
+{
+  "provenance_2026_09_28": {
+    "status": "PRE-RECONSTRUCTION-FIX: the answer TEXT in the input predictions was produced by tokenizer.decode(), which re-inserts spaces at subword boundaries and corrupted every value the tokenizer split ('142.6 million' -> '142. 6 million', '$4,900' -> '$ 4, 900', '2011-2020' -> '2011 - 2020').",
+    "scope": "ALL EM/F1 values in this artifact are affected (recomputed from predicted_answer vs gold_answer).",
+    "unaffected": "logit/score-derived signals (null_score, margin, cls_start_logit, start/end logits) are unchanged by the fix: score and span are bit-identical before vs after.",
+    "measured_effect": "same 182 examples, same checkpoints, same spans, only the decoder changed: F2 answerable EM 2.86% -> 14.29%, F1 16.92% -> 28.91% (re-run 2026-09-28). Leaked population; not a generalization result.",
+    "fix": "backend/answer_span.py, shared by chat/qa_model.py and all Phase 4F runners.",
+    "details": "backend/architecture/phase4f_6/decision/E0_PREDICTION_PROVENANCE_2026-09-28.md",
+    "input_not_regenerated": "model_40min_predictions.json (sha256 d7d9d65e944488ac...) was NOT regenerated: nothing in the repository produces it and the re-scoring tools pin that hash."
+  },
+  "artifact": "MODEL_40MIN_EVALUATION",
+  "phase": "model-only evaluation sprint (frozen P3 benchmark, no retrieval, no DB)",
+  "date": "2026-09-23T20:35:34.178530+05:30",
+  "benchmark": {
+    "path": "backend/phase4f/phase4f_5d/benchmark/qa_benchmark_v1.jsonl",
+    "sha256": "1166bf4ff38265c209614ac20261417b7eeb43653f4482dfdf94721fd50a41d0",
+    "n": 182,
+    "answerable": 140,
+    "unanswerable": 42,
+    "hash_verified": true
+  },
+  "protocol": {
+    "source": "pinned from backend/phase4f/phase4f_5f/f2/run_f2.py + threshold_experiment/run_threshold_experiment.py",
+    "max_length": 384,
+    "truncation": true,
+    "padding": "max_length",
+    "max_answer_length": 50,
+    "decode": "start=argmax(start_logits with CLS masked to -inf); end=start+argmax(end_logits[start:start+50])",
+    "null_score": "cls_start_logit + cls_end_logit",
+    "margin": "null_score - (best_start_logit + best_end_logit)",
+    "confidence": "(softmax(start)[best_start] + softmax(end)[best_end]) / 2",
+    "metrics": "EM = normalized string equality; F1 = token-SET F1; normalization = ' '.join(strip().lower().split())",
+    "thresholds_changed": false,
+    "device": "cpu",
+    "batch": 16
+  },
+  "runs": {
+    "F2_primary": {
+      "role": "PRIMARY - explicitly designated best checkpoint of the F2 research run",
+      "checkpoint_path": "backend/phase4f/phase4f_5f/f2/checkpoints/F2/checkpoint_epoch2",
+      "checkpoint_hash_dir_scope": "416b63642ba80a1c4f11257df9d21f9e36427393533465d0ad3b2a15a0b5fc39",
+      "model_sha256": "717463178eeb37ee3a6424063e8666b6586dd15ee50d745c1ab3d16bb4b164b0",
+      "model_type": "DistilBertForQuestionAnswering (distilbert-base-uncased fine-tune)",
+      "tokenizer_path": "same checkpoint dir (BertTokenizer, tokenizer.json)",
+      "inference_seconds": 25.56,
+      "reproducibility_vs_recorded_f2": {
+        "recorded_source": "backend/phase4f/phase4f_5f/f2/threshold_experiment/raw_predictions_benchmark.json",
+        "n_compared": 182,
+        "predicted_answer_string_match": 182,
+        "predicted_answer_match_pct": 100.0,
+        "null_score_within_1e-4": 182,
+        "null_score_max_abs_diff": 2e-06
+      },
+      "evaluation": {
+        "overall": {
+          "em_answerable": 2.9,
+          "f1_answerable": 19.7,
+          "em_all_182": 2.2,
+          "f1_all_182": 15.1,
+          "answerable_n": 140,
+          "unanswerable_n": 42,
+          "answerable_em_correct": 4,
+          "unanswerable_abstained": 0,
+          "abstention_rate_unanswerable_pct": 0.0,
+          "spurious": 42,
+          "spurious_rate_all_pct": 23.1,
+          "false_abstention": 0,
+          "false_abstention_rate_answerable_pct": 0.0,
+          "coverage_pct": 100.0,
+          "denominators": {
+            "em_f1": "answerable only (n=140) - matches recorded F2/G protocol",
+            "em_all_182": "all 182 examples, unanswerable scored 0",
+            "abstention_rate": "correct abstentions / 42 unanswerable",
+            "false_abstention_rate": "empty predictions / 140 answerable",
+            "spurious_rate": "spurious answers / 182 examples"
+          }
+        },
+        "by_category": {
+          "DIRECT_SPAN": {
+            "n": 24,
+            "answerable_n": 24,
+            "em": 12.5,
+            "f1": 47.4,
+            "avg_confidence": 0.039082,
+            "em_correct": 3,
+            "unanswerable_abstained": 0,
+            "unanswerable_spurious": 0
+          },
+          "LIST_ITEM": {
+            "n": 20,
+            "answerable_n": 20,
+            "em": 0.0,
+            "f1": 14.1,
+            "avg_confidence": 0.01785,
+            "em_correct": 0,
+            "unanswerable_abstained": 0,
+            "unanswerable_spurious": 0
+          },
+          "LONG_CONTEXT": {
+            "n": 10,
+            "answerable_n": 10,
+            "em": 0.0,
+            "f1": 10.0,
+            "avg_confidence": 0.014297,
+            "em_correct": 0,
+            "unanswerable_abstained": 0,
+            "unanswerable_spurious": 0
+          },
+          "MULTI_CHUNK": {
+            "n": 10,
+            "answerable_n": 10,
+            "em": 0.0,
+            "f1": 21.7,
+            "avg_confidence": 0.023608,
+            "em_correct": 0,
+            "unanswerable_abstained": 0,
+            "unanswerable_spurious": 0
+          },
+          "NUMERIC": {
+            "n": 20,
+            "answerable_n": 20,
+            "em": 5.0,
+            "f1": 39.8,
+            "avg_confidence": 0.035953,
+            "em_correct": 1,
+            "unanswerable_abstained": 0,
+            "unanswerable_spurious": 0
+          },
+          "SECTION_SPECIFIC": {
+            "n": 16,
+            "answerable_n": 16,
+            "em": 0.0,
+            "f1": 1.2,
+            "avg_confidence": 0.017968,
+            "em_correct": 0,
+            "unanswerable_abstained": 0,
+            "unanswerable_spurious": 0
+          },
+          "TABLE_CELL": {
+            "n": 24,
+            "answerable_n": 24,
+            "em": 0.0,
+            "f1": 1.2,
+            "avg_confidence": 0.040491,
+            "em_correct": 0,
+            "unanswerable_abstained": 0,
+            "unanswerable_spurious": 0
+          },
+          "TABLE_ROW": {
+            "n": 16,
+            "answerable_n": 16,
+            "em": 0.0,
+            "f1": 11.1,
+            "avg_confidence": 0.040478,
+            "em_correct": 0,
+            "unanswerable_abstained": 0,
+            "unanswerable_spurious": 0
+          },
+          "UNANSWERABLE": {
+            "n": 42,
+            "answerable_n": 0,
+            "em": null,
+            "f1": null,
+            "avg_confidence": 0.032303,
+            "em_correct": 0,
+            "unanswerable_abstained": 0,
+            "unanswerable_spurious": 42
+          }
+        },
+        "taxonomy": {
+          "TABLE_FAILURE": 38,
+          "SPAN_SELECTION": 24,
+          "SECTION_FAILURE": 16,
+          "LIST_FAILURE": 17,
+          "NUMERIC_FAILURE": 14,
+          "BOUNDARY_ERROR": 11,
+          "PARTIAL_OVERLAP": 8,
+          "MULTI_CHUNK_FAILURE": 8
+        },
+        "failure_evidence": {
+          "structural_category": 93,
+          "pred_absent_or_empty": 24,
+          "pred_contains_gold": 11,
+          "gold_contains_pred": 3,
+          "token_f1": 5
+        },
+        "confidence_analysis": {
+          "answerable_correct_mean": 0.043555,
+          "answerable_incorrect_mean": 0.030337,
+          "answerable_mean": 0.030714,
+          "unanswerable_mean": 0.032303,
+          "confidence_overlap": {
+            "correct_range": [
+              0.032861,
+              0.049039
+            ],
+            "incorrect_range": [
+              0.011619,
+              0.056286
+            ],
+            "unanswerable_range": [
+              0.014495,
+              0.070961
+            ],
+            "incorrect_above_correct_mean": 25,
+            "note": "ranges overlap; confidence does not separate at these sample sizes"
+          },
+          "null_score": {
+            "correct_answerable_mean": 1.346568,
+            "incorrect_answerable_mean": 1.44502,
+            "unanswerable_mean": 1.363494,
+            "auc_unanswerable_vs_answerable": 0.4302721088435374
+          },
+          "margin": {
+            "correct_answerable_mean": -2.342778,
+            "incorrect_answerable_mean": -2.170452,
+            "unanswerable_mean": -1.612907,
+            "auc_unanswerable_vs_answerable": 0.733843537414966,
+            "note": "margin is negative for (almost) every example in the recorded evidence"
+          },
+          "confidence_auc_answerable_correct_vs_incorrect": 0.8106617647058824
+        },
+        "margin_max_all_examples": -0.206287
+      }
+    },
+    "A0_secondary": {
+      "role": "SECONDARY - production checkpoint under the SAME pinned protocol (controlled model-only comparison)",
+      "checkpoint_path": "backend/models/documind-qa",
+      "model_sha256": "cb9f1dde94fca0e1f82c440bdc184ff54ba02efb6ea432e37a8c6ff8a8f69deb",
+      "production_inference_config": {
+        "n_best": 20,
+        "max_answer_length": 100,
+        "max_input_length": 384,
+        "model_path": "models/llm/final_model"
+      },
+      "scope_note": "run with the F2-pinned max_length=384/max_answer_length=50 protocol so the two checkpoints are decoded identically; the production inference_config records a different max_answer_length, so this pass is protocol-pinned and NOT a reproduction of the recorded A0 artifact",
+      "inference_seconds": 25.48,
+      "evaluation": {
+        "overall": {
+          "em_answerable": 5.0,
+          "f1_answerable": 24.4,
+          "em_all_182": 3.8,
+          "f1_all_182": 18.8,
+          "answerable_n": 140,
+          "unanswerable_n": 42,
+          "answerable_em_correct": 7,
+          "unanswerable_abstained": 0,
+          "abstention_rate_unanswerable_pct": 0.0,
+          "spurious": 42,
+          "spurious_rate_all_pct": 23.1,
+          "false_abstention": 0,
+          "false_abstention_rate_answerable_pct": 0.0,
+          "coverage_pct": 100.0,
+          "denominators": {
+            "em_f1": "answerable only (n=140) - matches recorded F2/G protocol",
+            "em_all_182": "all 182 examples, unanswerable scored 0",
+            "abstention_rate": "correct abstentions / 42 unanswerable",
+            "false_abstention_rate": "empty predictions / 140 answerable",
+            "spurious_rate": "spurious answers / 182 examples"
+          }
+        },
+        "by_category": {
+          "DIRECT_SPAN": {
+            "n": 24,
+            "answerable_n": 24,
+            "em": 8.3,
+            "f1": 36.8,
+            "avg_confidence": 0.250375,
+            "em_correct": 2,
+            "unanswerable_abstained": 0,
+            "unanswerable_spurious": 0
+          },
+          "LIST_ITEM": {
+            "n": 20,
+            "answerable_n": 20,
+            "em": 0.0,
+            "f1": 14.0,
+            "avg_confidence": 0.160348,
+            "em_correct": 0,
+            "unanswerable_abstained": 0,
+            "unanswerable_spurious": 0
+          },
+          "LONG_CONTEXT": {
+            "n": 10,
+            "answerable_n": 10,
+            "em": 0.0,
+            "f1": 11.2,
+            "avg_confidence": 0.215413,
+            "em_correct": 0,
+            "unanswerable_abstained": 0,
+            "unanswerable_spurious": 0
+          },
+          "MULTI_CHUNK": {
+            "n": 10,
+            "answerable_n": 10,
+            "em": 0.0,
+            "f1": 10.5,
+            "avg_confidence": 0.125973,
+            "em_correct": 0,
+            "unanswerable_abstained": 0,
+            "unanswerable_spurious": 0
+          },
+          "NUMERIC": {
+            "n": 20,
+            "answerable_n": 20,
+            "em": 15.0,
+            "f1": 42.7,
+            "avg_confidence": 0.473084,
+            "em_correct": 3,
+            "unanswerable_abstained": 0,
+            "unanswerable_spurious": 0
+          },
+          "SECTION_SPECIFIC": {
+            "n": 16,
+            "answerable_n": 16,
+            "em": 0.0,
+            "f1": 21.9,
+            "avg_confidence": 0.288133,
+            "em_correct": 0,
+            "unanswerable_abstained": 0,
+            "unanswerable_spurious": 0
+          },
+          "TABLE_CELL": {
+            "n": 24,
+            "answerable_n": 24,
+            "em": 8.3,
+            "f1": 12.0,
+            "avg_confidence": 0.180711,
+            "em_correct": 2,
+            "unanswerable_abstained": 0,
+            "unanswerable_spurious": 0
+          },
+          "TABLE_ROW": {
+            "n": 16,
+            "answerable_n": 16,
+            "em": 0.0,
+            "f1": 34.3,
+            "avg_confidence": 0.033099,
+            "em_correct": 0,
+            "unanswerable_abstained": 0,
+            "unanswerable_spurious": 0
+          },
+          "UNANSWERABLE": {
+            "n": 42,
+            "answerable_n": 0,
+            "em": null,
+            "f1": null,
+            "avg_confidence": 0.21586,
+            "em_correct": 0,
+            "unanswerable_abstained": 0,
+            "unanswerable_spurious": 42
+          }
+        },
+        "taxonomy": {
+          "SPAN_SELECTION": 20,
+          "SECTION_FAILURE": 10,
+          "LIST_FAILURE": 18,
+          "NUMERIC_FAILURE": 14,
+          "BOUNDARY_ERROR": 16,
+          "TABLE_FAILURE": 28,
+          "PARTIAL_OVERLAP": 12,
+          "WRONG_REGION": 5,
+          "MULTI_CHUNK_FAILURE": 10
+        },
+        "failure_evidence": {
+          "pred_absent_or_empty": 20,
+          "structural_category": 80,
+          "pred_contains_gold": 16,
+          "gold_contains_pred": 11,
+          "pred_is_context_span": 5,
+          "token_f1": 1
+        },
+        "confidence_analysis": {
+          "answerable_correct_mean": 0.325024,
+          "answerable_incorrect_mean": 0.220249,
+          "answerable_mean": 0.225488,
+          "unanswerable_mean": 0.21586,
+          "confidence_overlap": {
+            "correct_range": [
+              0.019501,
+              0.916812
+            ],
+            "incorrect_range": [
+              0.000148,
+              0.846902
+            ],
+            "unanswerable_range": [
+              1.5e-05,
+              0.966367
+            ],
+            "incorrect_above_correct_mean": 33,
+            "note": "ranges overlap; confidence does not separate at these sample sizes"
+          },
+          "null_score": {
+            "correct_answerable_mean": 0.369949,
+            "incorrect_answerable_mean": 1.674666,
+            "unanswerable_mean": 2.170897,
+            "auc_unanswerable_vs_answerable": 0.5256802721088435
+          },
+          "margin": {
+            "correct_answerable_mean": 1.591207,
+            "incorrect_answerable_mean": 2.082043,
+            "unanswerable_mean": 2.747675,
+            "auc_unanswerable_vs_answerable": 0.5431972789115647,
+            "note": "margin is negative for (almost) every example in the recorded evidence"
+          },
+          "confidence_auc_answerable_correct_vs_incorrect": 0.6036519871106337
+        },
+        "margin_max_all_examples": 22.27168
+      }
+    }
+  },
+  "time_budget": {
+    "total_seconds": 52.3,
+    "f2_inference_seconds": 25.6,
+    "a0_inference_seconds": 25.5
+  },
+  "baseline_comparison": {
+    "fresh_F2_vs_recorded_F2": {
+      "fresh_checkpoint": "F2 checkpoint_epoch2 (this run)",
+      "baseline_checkpoint": "F2 checkpoint_epoch2 (recorded f2_benchmark.json)",
+      "protocol_match": "EXACT (same checkpoint, same tokenizer, same pinned decode)",
+      "population_match": "EXACT (P3 benchmark, 182 examples / 140 answerable / 42 unanswerable)",
+      "recorded": {
+        "em": 2.9,
+        "f1": 19.7,
+        "abstention_accuracy": 0.0,
+        "false_abstention": 0.0,
+        "spurious_rate": 23.1
+      },
+      "fresh": {
+        "em": 2.9,
+        "f1": 19.7,
+        "abstention_rate": 0.0,
+        "false_abstention_rate": 0.0,
+        "spurious_rate": 23.1
+      },
+      "metric_delta": {
+        "em": 0.0,
+        "f1": 0.0,
+        "abstention_rate": 0.0,
+        "spurious_rate": 0.0
+      },
+      "comparability": "MATCHED"
+    },
+    "fresh_A0_vs_recorded_A0_P3": {
+      "fresh_checkpoint": "backend/models/documind-qa (this run, F2-pinned protocol)",
+      "baseline_checkpoint": "recorded a0_benchmark_v1.json (harness provenance UNVERIFIED)",
+      "protocol_match": "UNVERIFIED (recorded A0 harness script absent; decode/generation parameters unknown)",
+      "population_match": "EXACT (P3 benchmark, 182 examples)",
+      "recorded": {
+        "em_answerable": 2.1,
+        "f1_answerable": 12.0,
+        "abstention_rate": 64.3,
+        "spurious": 15,
+        "false_abstention_rate": 55.7
+      },
+      "comparability": "DESCRIPTIVE_ONLY",
+      "operating_point_note": "THE RECORDED A0 ARTIFACT IS A *GATED* OPERATING POINT, NOT A MODEL-QUALITY MEASUREMENT. Recorded A0 abstained on 27/42 unanswerable (64.3%) at the cost of 78/140 answerable false abstentions (55.7%), which suppresses its answerable EM/F1 by construction. The fresh A0 pass uses the identical pinned decode with NO abstention gate and measures EM 5.0 / F1 24.4. The two numbers therefore describe different operating points of the same checkpoint; neither alone is 'the' A0 performance. Notably the fresh ungated A0 (5.0/24.4) exceeds the fresh F2 (2.9/19.7) on this population, so the recorded-artifact impression that F2 > A0 is an operating-point artifact, not a verified model ranking."
+    },
+    "recorded_A1_A2_P3_reference": {
+      "protocol_match": "UNVERIFIED (configs/checkpoints not recorded; 4F.6-C-R rated this comparison comparability-limited)",
+      "population_match": "EXACT (P3 benchmark)",
+      "recorded": {
+        "A1": {
+          "em_answerable": 3.6,
+          "f1_answerable": 21.3
+        },
+        "A2": {
+          "em_answerable": 3.6,
+          "f1_answerable": 19.4
+        }
+      },
+      "comparability": "DESCRIPTIVE_ONLY",
+      "note": "recorded A1/A2 per-category values are numerically close to recorded F2 in several categories; they are therefore not treated as independent measurements of a different model in this evaluation"
+    }
+  },
+  "dominant_observed_failure": {
+    "primary_family": "TABLE_FAILURE",
+    "count": 38,
+    "all_families": {
+      "TABLE_FAILURE": 38,
+      "SPAN_SELECTION": 24,
+      "LIST_FAILURE": 17,
+      "SECTION_FAILURE": 16,
+      "NUMERIC_FAILURE": 14,
+      "BOUNDARY_ERROR": 11,
+      "PARTIAL_OVERLAP": 8,
+      "MULTI_CHUNK_FAILURE": 8
+    },
+    "scope": "answerable incorrect examples only (n=136); unanswerable handled separately",
+    "interpretation_guard": "This is a model-evaluation finding about this checkpoint on this population. It does not prove or disprove any architecture hypothesis (H-A..H-E)."
+  },
+  "key_findings": {
+    "1_protocol_reproduced_exactly": "Fresh F2 pass reproduced the recorded F2 predictions on 182/182 examples (predicted-answer string match 100%; null_score within 1e-4 on 182/182, max abs diff 2e-06). The recorded F2/G numbers are reproducible under the pinned protocol.",
+    "2_dominant_model_only_failure": "Structural/table handling dominates: TABLE_FAILURE 38 of 136 incorrect answerable examples, followed by SPAN_SELECTION 24 and LIST_FAILURE 17. Every table-cell, table-row, list-item, section-specific and multi-chunk example fails EM (0.0%); only DIRECT_SPAN (12.5% EM, 47.4% F1) and NUMERIC (5.0% EM, 39.8% F1) produce EM-correct answers.",
+    "3_production_operating_point": "Under an identical abstention-free decode, production A0 extracts better than F2 on P3 (EM 5.0 / F1 24.4 vs 2.9 / 19.7). The recorded A0 artifact (EM 2.1 / F1 12.0) reflects a gated operating point with 55.7% false abstention, so the dominant *system-level* loss for production is the abstention policy discarding 78/140 answerable questions - not the extraction itself.",
+    "4_no_abstention_behaviour": "Neither checkpoint abstained on any unanswerable example under sparse decode: F2 0/42 and A0 0/42 abstentions; both answered all 42 (spurious 42 = 23.1% of 182).",
+    "5_confidence_separation": "Confidence separates correct vs incorrect answerable predictions (AUC 0.811; correct mean 0.0436 vs incorrect 0.0303, 25 of 136 incorrect above the correct mean) but does NOT separate answerable vs unanswerable (null_score AUC 0.430).",
+    "6_margin_ranking_vs_scale": "Margin (null_score - best_answer_score) is CHECKPOINT-SPECIFIC in scale: F2 margins are negative for all 182 examples (max -0.2063, range (-3.1379, -0.2063)), so any 'abstain if margin >= t >= 0' rule abstains on nothing for F2 - consistent with the recorded G sweep reporting 0% abstention for every margin threshold. Production A0 differs: its margins reach +22.2717 (range (-10.653, 22.2717)) with 109/182 examples at margin >= 0, so a margin rule CAN fire for A0 even though it cannot for F2. Direction of separation is the same for both (unanswerable rank above answerable; F2 margin AUC 0.734), but the absolute scale - not the ranking - gates whether a margin policy can abstain at all.",
+    "scope_guard": "These are model-evaluation findings for these two checkpoints on the frozen P3 population. They do not prove or disprove any architecture hypothesis (H-A..H-E) and no threshold was tuned, fitted or selected in this evaluation.",
+    "7_margin_scale_comparison": {
+      "F2_margin_range_all_182": [
+        -3.1379,
+        -0.2063
+      ],
+      "F2_examples_margin_ge_0": 0,
+      "A0_margin_range_all_182": [
+        -10.653,
+        22.2717
+      ],
+      "A0_examples_margin_ge_0": 109,
+      "note": "Recorded fact only; no threshold was selected or tuned. This is presented as a measured difference between the two checkpoints' score scales on this population."
+    }
+  }
+}

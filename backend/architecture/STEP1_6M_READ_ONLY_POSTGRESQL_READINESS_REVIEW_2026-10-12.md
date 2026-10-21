@@ -1,0 +1,2475 @@
+# Step 1.6M — Read-Only PostgreSQL Readiness Review
+
+Date: 2026-10-12
+Verdict: **BLOCKED BY MISSING ARCHITECTURE OR OPERATIONAL AUTHORIZATION**.
+
+**PostgreSQL verification remains NO-GO. This document authorizes no database execution.**
+
+## 1. Participation, scope and evidence standard
+
+Only Coordinator performed this review. The runtime exposes no specialist dispatch. DATABASE_AGENT, SECURITY_AGENT, EVALUATION_AGENT, TEST_AGENT and VERIFIER were not independently executed; all independent reviews remain outstanding. Coordinator owns this new append-only evidence record. The Step 1.6L ownership exception ended with that task and is not used for implementation here.
+
+Reviewed current central authorization, integration fixture, E2E connection configuration, storage engine/configuration, nine directly gated experiment sources, two shared-guard structure runners, cleanup/alternate execution boundaries, E2E validation, relevant tests, operational cleanup scripts, Compose and migration connection code. Sources were read or parsed, never imported for execution. No implementation changes were made.
+
+Classification meanings used below:
+
+- **VERIFIED BY DATABASE-FREE TESTS**: limited refusal/configuration properties covered by previously executed, inspected unit tests. Not a connected-database result.
+- **SOURCE-REVIEWED ONLY**: executable source inspected; runtime semantics not exercised here.
+- **UNVERIFIED**: necessary operational facts cannot be established from source.
+- **BLOCKED**: required mechanism is absent or deliberately refuses; not ready to enable.
+
+Passing tests do not imply safe PostgreSQL provisioning, permissions, pgvector, migrations, models or cleanup.
+
+## 2. Baseline and preservation
+
+Initial HEAD: `6baaa2a0773df66e5fb26814afbe67647fb43435`.
+Initial ordinary Git status: 384 entries; expanded `git status --short --untracked-files=all`: 1138 paths. Complete initial/final expanded listings and comparison are appended. Existing tracked modifications, deletions and untracked content were not reset, staged or discarded.
+
+Before authoring this report, SHA-256 snapshots were taken for 44 reviewed implementation/test sources: authorization, both fixtures, storage database/config, E2E validation, experiment run_*.py and evaluation unit-test Python files. Final comparison is recorded in section 10. Status labels/counts alone cannot prove unchanged content, especially for untracked paths. No `.env` was read to snapshot or review sources.
+
+## 3. Readiness criteria
+
+| # | Required readiness criterion | Classification | Current evidence and limitation | Responsible owner |
+| --- | --- | --- | --- | --- |
+| 1 | Defensible authorization for creation | **BLOCKED** | `assert_creation_authorized` always raises after URL/application checks. A claimed absent name is not authority. No external/restricted-role authority exists in inspected implementation | Coordinator architecture; EVALUATION_AGENT contract; DATABASE_AGENT roles |
+| 2 | Reliable provision → cleanup → delete lifecycle | **BLOCKED** | `record_created_database`, release and disposal refuse; `DisposalProof` is inert compatibility data. Retained fixture create/migrate/yield/drop sequence is unreachable and not a demonstrated lifecycle | EVALUATION_AGENT + TEST_AGENT; DATABASE_AGENT |
+| 3 | Direct calls to eight cleanup helpers/four alternate paths | **VERIFIED BY DATABASE-FREE TESTS** (refusal only) | Step 1.6L tests cover exact AST boundary expressions and poison resources; current source retains first-statement refusal. Tests do not invoke full cleanup bodies. Generic SQL/migration helpers are not covered by this narrow claim (F-M4) | EVALUATION_AGENT + TEST_AGENT; SECURITY_AGENT review |
+| 4 | Consistent application-database isolation | **SOURCE-REVIEWED ONLY** overall | Central/fixture name-rejection behavior is also verified by database-free tests, including aliases/case/encoding. Different resolver precedence and maintenance-target selection prevent a global operational identity guarantee (F-M2) | DATABASE_AGENT + TEST_AGENT + EVALUATION_AGENT |
+| 5 | Actual connection corresponds to authorized target | **UNVERIFIED** | Engine checks inspect only configured URL; no connection/server identity is verified. There is no accepted positive authorization | DATABASE_AGENT + SECURITY_AGENT |
+| 6 | Database permissions/operational controls | **UNVERIFIED** | No live role/grant, authentication, network, TLS, ownership or maintenance credential audit is possible without separate authorization. Compose reuses POSTGRES_USER for the app and bootstrap, not demonstrated role separation | DATABASE_AGENT + Coordinator |
+| 7 | Safe filesystem cleanup boundaries | **BLOCKED** | Current orphan-sweep symlink-root check is ineffective; operational smoke/file deletion is not lifecycle-gated; race-safe filesystem identity/disposal not established (F-M5) | DATABASE_AGENT scripts; BACKEND_AGENT file_store; SECURITY_AGENT |
+| 8 | Adequate DB-free refusal/authorization tests | **VERIFIED BY DATABASE-FREE TESTS** (negative cases only) | Step 1.6L: 299 passed, 1 warning, exit 0; 29 new boundary-decision tests. Source reviewed again; no positive lifecycle/actual connection/permissions evidence. Whole suite not approved | TEST_AGENT + VERIFIER |
+| 9 | Documented separately authorized disposable-environment procedure | **SOURCE-REVIEWED ONLY** (proposed checklist) | Section 8 supplies approval stages/prerequisites. No executable, approved operational procedure or allocated disposable environment is established | Coordinator + DATABASE_AGENT + SECURITY_AGENT |
+
+No criterion classified test-verified should be read as an overall readiness pass.
+
+## 4. Runner and boundary inventory verified from current source
+
+Nine directly gated sources under `backend/evaluation/experiments/`:
+
+| Runner | Main entry refusal | Function-local/alternate refusal |
+| --- | --- | --- |
+| `run_phase3d_upload_integration.py` | `assert_disposal_authorized` in main, before engine/session | cleanup_harness_rows calls cleanup-execution guard |
+| `run_phase3d_evaluation.py` | same | cleanup_harness_rows guarded |
+| `run_phase3e_integration.py` | same | cleanup_harness_rows guarded |
+| `run_phase3e_validation.py` | same | cleanup_harness_rows guarded |
+| `run_phase3f_evaluation.py` | same | cleanup_harness_rows guarded |
+| `run_phase4b_evaluation.py` | same | cleanup_harness_rows guarded |
+| `run_dual_path_ablation.py` | same | _delete_user_data guarded |
+| `run_table_evidence_measurement.py` | amain resolves configuration then _authorize_disposal before explicit new engine | teardown and run_once(engine, ...) guarded before resource access/session creation |
+| `run_structure_element_measurement.py` | shared guard_evaluation_target → disposal refusal before runtime binding | run_once guarded at entry |
+
+`run_structure_rrf_calibration.py` and `run_structure_confirmation.py` bind through the shared structure guard and also have first-statement run_once refusal. This is nine directly gated runners plus two shared-guard consumers, not a claim that only nine experiment files exist. `run_phase4c_diagnostics.py` is a separate recorded-data diagnostic, not part of the nine destructive-runner inventory.
+
+`assert_cleanup_execution_authorized(resource, operation=..., proof=None)` unconditionally raises without inspecting resource properties or environment/settings. No target substitution or stale/caller-constructed proof can make this contract permit work. It is universal refusal, not proof of actual engine binding, successful creation or revocation. All original retained SQL remains unreachable through the intact inspected boundaries; Python code is not a sandbox against arbitrary caller code, monkeypatching or other ungated functions.
+
+The table `_resolve_database_url` does NOT itself perform disposal authorization: it exports DATABASE_URL, clears settings, checks effective configuration and imports storage before amain's disposal gate. That import constructs an application engine object from settings (normally lazy, not evidence of a connection), so an unqualified claim of authorization before *all* engine construction would be inaccurate. Its run_once(engine, ...) remains independently blocked.
+
+## 5. Fixture, E2E and connection findings
+
+### F-M1 — No operational authority/lifecycle (BLOCKER)
+
+`backend/evaluation/isolation.py`:
+
+- create and disposal authorization always raise;
+- evidence issuance always raises; _proof_is_live always false;
+- row-cleanup delegates to refusing disposal;
+- cleanup-execution is an unconditional refusal;
+- release always raises: no successfully closed lifecycle exists.
+
+`integration_db.provisioned_integration_database` and isolated_database place create refusal before reachability/existence/provisioning. `_create_database` and `_drop_database` have their own gates. `run_full_validation` authorizes before engine imports/creation, then has configured-engine/proof check before sessions. Its pytest and both __main__ branches remain blocked through these gates. No function was invoked to establish this source finding.
+
+Retained provision/cleanup code is not safe to enable just by making a guard return. For example proof issuance precedes the fixture try/finally; a future issuance failure after actual creation could leave a database behind. Successful-create receipt, cleanup failure, crashes, close/revocation and database-name replacement need a coherent authority transaction model.
+
+### F-M2 — Configuration versus maintenance-target divergence (BLOCKER before enablement)
+
+`integration_db.psql_value(dsn, sql)` selects database name from its dsn but host/port/user/password from `e2e_config.postgres()`; that resolver uses DOCUMIND_E2E_DATABASE_URL ahead of backend/.env/ambient. Fixture wrappers re-resolve application_database_url at later stages. Same literal host/port checks at initial target validation do not bind later maintenance execution to the originally validated target. `_drop_database` gates the passed dsn but sends DROP through a freshly resolved application maintenance connection. No immutable actual connection identity or lifecycle target binding exists.
+
+Central `application_database_url` prioritizes backend/.env then application settings. Fixture resolver uses e2e_config including its explicit E2E override. Production pydantic Settings prioritizes environment over its cwd-relative `.env`; storage.database initializes once from cached settings. Thus central, E2E and actual application configurations can differ. Existing checks conservatively reject same database names but do not establish a single live application identity across these precedence rules.
+
+Required remediation: explicit immutable maintenance and target identities/credentials, consistent resolution, no hidden redirect/fallback, reviewed same-connection verification at use. Do not resolve this by reading current secrets in a review task.
+
+### F-M3 — SQL/client/migration execution assumptions (BLOCKER before enablement)
+
+`database_exists` formats a database name into a quoted SQL string; `_create_database`/`_drop_database` interpolate quoted identifiers without identifier escaping. These paths are presently blocked upstream, but must be parameterized/identifier-quoted correctly before enabling. The generic SQL helpers inherit ambient environment and do not pass psql `-X` (ignore startup scripts) or `ON_ERROR_STOP=1`. Host/port/user/database flags alone do not sanitize all libpq/startup behavior; process success alone is insufficient SQL-success/lifecycle evidence. Raw stderr/stdout fragments are included in fixture errors and need secret-safe review.
+
+`migrations/env.py` creates an async connection when online; it catches settings/URL-translation exceptions and retains the Alembic configuration URL. Even if some import-time configuration failures occur earlier, that fallback branch exists and is inappropriate evidence of fail-closed target selection. No Alembic command, including heads/offline mode, was executed here. Migration target, extension permissions, role identity, schema/head compatibility and rollback/recovery all require separate approval/review.
+
+### F-M4 — Generic direct database execution remains outside the lifecycle boundary (HIGH)
+
+`integration_db.psql_value(dsn, sql)` and `e2e_config.psql(sql)` accept arbitrary SQL without lifecycle authorization. `migrate_to_head(dsn)` runs Alembic directly without a create/disposal gate of its own. Their intended callers may be guarded, but an alternate ordinary caller can bypass that caller boundary. `e2e_config.purge_documents` also issues real API DELETE calls and is not governed by the evaluation lifecycle contract. These are broader direct execution surfaces, distinct from the eight helpers repaired in 1.6L.
+
+Attack/precondition: code/operator invokes these callable helpers with SQL/target access and credentials. No attack or function invocation occurred. Current main/create/drop/cleanup refusals were not bypassed for this review. **Explicit remediation requested:** TEST_AGENT owns fixtures/E2E helpers; DATABASE_AGENT owns migration operational boundary; SECURITY_AGENT reviews scope. Define restricted SQL/read-only inspection versus destructive execution capabilities and gate any destructive-capable caller boundary. No implementation is authorized by this report.
+
+## 6. Filesystem findings and remediation request
+
+### F-M5 — Filesystem safety unestablished (HIGH, SOURCE-REVIEWED ONLY)
+
+`backend/scripts/cleanup_path.py:forbid_symlink_roots` compares root.resolve(strict=False) with the root_real value computed by the same operation. In a stable filesystem this does not distinguish a symlinked root from a real directory. `filesystem_supports_relative_symlinks` returns True without a check. This is not verified support.
+
+`cleanup_orphan_uploads` has useful dry-run default, DB-reference-read abort, optional archive verification and resolved containment tests for individual files. However it lacks a demonstrated race-safe root/symlink/junction boundary. Empty-directory pruning uses a separate rglob/rmdir loop without the same per-file containment check. A database reference snapshot is not a lock against concurrent upload/reference changes. The current source also uses async_session/Document/VerificationResult without bindings visible in that module; actual execution was not attempted and cannot be assumed working. Failure to run is not a security control.
+
+`cleanup_smoke.cleanup` deliberately uses application settings, deletes files/rows and offers --yes without a disposal boundary. `_resolve_stored_path` accepts absolute/existing paths, and `storage.file_store.delete_upload` performs unlink without a containment check in that function. User scoping of database rows is not proof of safe stored paths. File-first/database-second operations are not atomic.
+
+Evaluation phase3e integration and validation contain temp-file os.unlink operations; other runners use temporary-directory cleanup. Their main entries are currently blocked, but no dedicated filesystem lifecycle audit is established. Do not infer filesystem safety from database refusal.
+
+HELP REQUEST:
+
+- Task: separate explicit remediation for operational filesystem deletion and generic database-helper bypasses (F-M4/F-M5).
+- Owners: DATABASE_AGENT for scripts/cleanup_path, cleanup_orphan_uploads and cleanup_smoke; BACKEND_AGENT for storage/file_store; TEST_AGENT for fixture helpers; SECURITY_AGENT for independent review.
+- Expected: default-safe capability boundary, correct symlink/junction/root containment, race-aware deletion, immutable authorized target, secret-safe failures and database-free adversarial tests.
+- Risk: unintended application data/file deletion if invoked outside inspected evaluation gates.
+- Validation still needed: owning-agent changes and independent source/no-I/O evidence; any filesystem deletion or DB execution requires separate permission.
+
+No narrow implementation edit was made: these scripts are outside Coordinator ownership and the task explicitly requires a separate remediation request for discovered bypasses.
+
+## 7. Test evidence and limits
+
+No pytest tests were executed during Step 1.6M: relevant source is unchanged after the passing Step 1.6L checks, and a rerun adds no actual database identity/permission/lifecycle evidence. This report does not count source inspection as a new pass.
+
+Previously observed Step 1.6L command (backend cwd):
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 ./venv/Scripts/python.exe -B -m pytest -q tests/unit/evaluation/test_function_cleanup_authorization.py tests/unit/evaluation/test_lifecycle_authorization.py tests/unit/evaluation/test_disposable_database_authorization.py tests/unit/evaluation/test_disposal_authorization_contract.py tests/unit/evaluation/test_phase3_runner_target_order.py tests/unit/evaluation/test_isolation_guard_identity.py tests/unit/evaluation/test_metrics.py tests/unit/evaluation/test_unsupported_answer_denominator.py tests/unit/evaluation/test_structure_runner_guard_order.py -p no:cacheprovider
+```
+
+Observed previously: **299 passed, 1 warning in 1.92s, exit 0**; 29 new boundary tests; 13 changed Python files compiled. These were same-agent evidence, not independent verification. Step 1.6M reread the boundary test, relevant isolation/order/lifecycle source and source gate locations. AST-extracted authorization expression tests do not execute helper bodies. Configured fake-engine mismatch and poison-resource tests cannot verify actual server/connection identity.
+
+Safe candidate checks for future no-I/O review: test_function_cleanup_authorization, test_lifecycle_authorization, test_isolation_guard_identity and inspected contract/order tests. Always inspect the current parent fixtures and imports again before execution. Poison sockets/subprocess/settings and avoid requesting db_session/client/app/isolated_database.
+
+Do not run the whole evaluation directory: six cleanup-scope files invoke SQLite/session and cleanup; legacy tests invoke main; some isolation tests can read real settings; temporary corpus/report tests create/overwrite/remove scratch files. Integration table-row migration tests invoke Alembic and SQLite; real E2E provisions/deletes and uses real models. Their existence is not readiness proof; they were read, not run. Positive cleanup expectations are incompatible with current default refusal and must not be weakened to pretend the suite passes.
+
+Historical evidence progression: H/I operator-named authorization did not prove disposability; J private-sentinel proofs did not establish trusted creation; K replaced positive claims with default refusal and later found direct helper gaps; L blocked the eight helpers/four alternate paths. Earlier AUTHORIZED/COMPLETE statements are historical, superseded by current refusing source and explicit limitations. New findings F-M2–F-M5 remain readiness blockers beyond the narrow L repair.
+
+## 8. Minimum prerequisites and separately authorized verification procedure
+
+This is a proposed approval checklist, **not an executable authorized runbook**. Do not run database commands from it now.
+
+1. **Architecture gate:** Coordinator approves a specific lifecycle authority design with Security/Database review. Separate create permission, successful-create evidence, row cleanup, database drop and closure. No freely constructible object/name/environment declaration can issue capability.
+2. **Boundary remediation:** owning agents address F-M2–F-M5 and all destructive-capable helper surfaces, remove ambiguous target fallback, quote SQL identifiers safely and sanitize client environment/startup behavior. Preserve current refuses until explicit reviewed enablement; no blanket monkeypatch/disable.
+3. **Disposable allocation:** separately approved dedicated throwaway PostgreSQL environment, ideally isolated cluster/container/network/storage with no application uploads/database access or shared production credentials. Fixture currently requires application's host/port, so using a truly separate cluster needs a reviewed contract change, not an override workaround. Document owner, lifetime, data classification, volumes, network endpoint and teardown responsibility without secrets.
+4. **Least privilege:** administrator-reviewed role/grant plan: separate restricted provisioner/migrator/runtime identities; runtime cannot create/drop databases, bypass isolation or access application data; extension installation confined to the approved admin step. Review CONNECT/ownership/role inheritance and authentication/network/TLS controls. Compose wiring is not grant evidence.
+5. **Authority/identity binding:** bind immutable run/lifecycle and target identity to actual connection/transaction used for cleanup; verify approved cluster/server, database identity, authenticated role and connection configuration on that connection under separate permission. URL strings, DNS names or current_database alone are insufficient proof of trusted cluster identity. Handle pools, redirects, reconnects and target replacement; reauthorize final destructive use.
+6. **Lifecycle reliability:** atomic existing-target refusal with no adoption, trusted successful-create receipt, stale/cross-run denial, failure-safe migration setup, cleanup scope, close/revocation, crashes/leftovers, concurrency and audited teardown. Drop only the lifecycle-created database; avoid force-dropping unrelated connections.
+7. **Filesystem separation:** independent owned scratch root, containment/junction/symlink and race safeguards, no application upload mount, conservative archive/deletion policy and separately approved teardown. Resolve F-M5 before operational cleanup reuse.
+8. **Offline gate:** TEST_AGENT adds no-I/O tests for all capabilities/target sources including maintenance override divergence, SQL quoting/client environment, proof state, all call boundaries and operation ordering. VERIFIER independently reviews source and logs. Record exact code/content baseline and model/benchmark preservation.
+9. **Explicit operational authorization:** user/Coordinator approves an execution ticket naming environment, connection/read-only identification, allowed create/migrate/data-write/delete operations separately, exact commands/tests, roles, limits/timeouts, stop conditions, permitted filesystem paths, evidence redaction, recovery and teardown. Readiness does not authorize execution; authorization to connect does not authorize cleanup.
+10. **Staged future run:** only after approval, identity/read-only checks first; migration/creation only under their own permission, then minimal data validation, then authorized cleanup/drop. Halt on identity mismatch, stale lifecycle, uncertain ownership or incomplete evidence. Record actual output/exit status, residual resources, failed/blocked checks and independent verdict. Do not reuse application cleanup tools implicitly.
+
+Until those gates are satisfied, no existing command/fixture is approved as a safe positive PostgreSQL verification route.
+
+## 9. Execution record
+
+This task executed only Git status/rev-parse, file reads/listing/search, and Python standard-library AST/hash/report verification. No source modules were imported by the AST scanner. No database (PostgreSQL, SQLite or other) was contacted; no migration/provisioning/runner/integration/E2E/cleanup function ran; no destructive filesystem operation or .env-secret read occurred. No reset/clean/stash/revert/stage/commit/push occurred.
+
+One targeted catalog search under docker returned zero role/grant-related matches (search exit 1 for no matches). That absence is not proof about live DB permissions. No build/typecheck was needed for a new documentation-only artifact. Report and preservation checks are recorded below, not presented as DB tests.
+
+## 10. Final preservation and report verification
+
+Only this new report is intentionally created. Final HEAD/status/path comparison and bounded source hash verification follow. A status count does not prove unchanged content. The appendices preserve complete path listings, not secret file contents.
+
+Final HEAD: `6baaa2a0773df66e5fb26814afbe67647fb43435`. Expanded paths: **1138 initial → 1139 final**. Ordinary status remains 384 collapsed entries. Only the new Step 1.6M report is added to the expanded path listing. **44 reviewed source hashes unchanged**; this is bounded content evidence, not a claim about every unrelated untracked file.
+
+Report validation: read back the exact path, all nine classifications/prerequisite sections, balanced Markdown fences and complete embedded status listings. Standard-library assertion check exit 0. No pytest or database checks run in this task.
+
+### 10.1 Complete initial Git status/path listing
+
+```text
+ M .gitignore
+ M DOCUMIND_PROJECT_CONTEXT.md
+ M backend/brain/__init__.py
+ M backend/brain/adapters.py
+ M backend/brain/response.py
+ M backend/brain/types.py
+ M backend/chat/qa_model.py
+ M backend/chat/rag.py
+ M backend/chat/routes.py
+ M backend/documents/models.py
+ M backend/documents/processing.py
+ M backend/documents/routes.py
+ M backend/documents/schemas.py
+ M backend/embeddings/model.py
+ M backend/embeddings/routes.py
+ M backend/evaluation/harness/corpus.py
+ D backend/evaluation/harness/evaluator.py
+ M backend/main.py
+ M backend/migrations/env.py
+ D backend/phase3d_evaluation_report.json
+ D backend/phase3f_evaluation_report.json
+ D backend/phase3f_validation_report.txt
+ D backend/phase3g_pipeline_audit.txt
+ D backend/phase4a_qa_failure_audit.txt
+ D backend/phase4b_evaluation_report.json
+ D backend/phase4b_qa_evaluation_report.txt
+ D backend/phase4c_failure_matrix.json
+ D backend/phase4c_qa_failure_isolation_report.txt
+ D backend/phase4d/__init__.py
+ D backend/phase4d/__main__.py
+ D backend/phase4d/evaluate_candidates.py
+ D backend/phase4d/generate_report.py
+ D backend/phase4d/oracle_eval.py
+ D backend/phase4d/reconciliation.py
+ D backend/phase4d/train.py
+ D backend/phase4d/training_data.py
+ D backend/phase4d_1_reconciliation.json
+ D backend/phase4d_1_reconciliation_report.txt
+ D backend/phase4d_experiment_results.json
+ D backend/phase4d_oracle_baseline_results.json
+ D backend/phase4d_qa_model_improvement_report.txt
+ D backend/phase4e/__init__.py
+ D backend/phase4e/capability_analysis.py
+ D backend/phase4e/generate_report.py
+ D backend/phase4e_capability_matrix.json
+ D backend/phase4e_diagnostic_results.json
+ D backend/phase4e_qa_architecture_analysis.txt
+ D backend/phase4f/__init__.py
+ D backend/phase4f/balance_gate.py
+ D backend/phase4f/dataset/__init__.py
+ D backend/phase4f/dataset/dataset_manifest.json
+ D backend/phase4f/dataset/dataset_manifest_v3.json
+ D backend/phase4f/dataset/dataset_manifest_v3_1.json
+ D backend/phase4f/dataset/dataset_metadata.json
+ D backend/phase4f/dataset/dataset_quality_report.json
+ D backend/phase4f/dataset/dataset_quality_report_v3.json
+ D backend/phase4f/dataset/dataset_quality_report_v3_1.json
+ D backend/phase4f/dataset/expand_and_audit.py
+ D backend/phase4f/dataset/generator.py
+ D backend/phase4f/dataset/training_data.jsonl
+ D backend/phase4f/dataset/training_data_v3.jsonl
+ D backend/phase4f/dataset/training_data_v3_1.jsonl
+ D backend/phase4f/experiments/evaluate.py
+ D backend/phase4f/experiments/experiment_manifest.json
+ D backend/phase4f/experiments/final_gpu_package/README_GPU_EXECUTION.md
+ D backend/phase4f/experiments/final_gpu_package/dataset/training_data_v3_1.jsonl
+ D backend/phase4f/experiments/final_gpu_package/dataset_checksum.txt
+ D backend/phase4f/experiments/final_gpu_package/evaluation/evaluate.py
+ D backend/phase4f/experiments/final_gpu_package/expected_output_structure.txt
+ D backend/phase4f/experiments/final_gpu_package/final_gpu_package_manifest.json
+ D backend/phase4f/experiments/final_gpu_package/production_model_checksum.txt
+ D backend/phase4f/experiments/final_gpu_package/requirements.txt
+ D backend/phase4f/experiments/final_gpu_package/training/experiment_config.json
+ D backend/phase4f/experiments/final_gpu_package/training/train.py
+ D backend/phase4f/experiments/phase4f_3_results.json
+ D backend/phase4f/experiments/phase4f_3_training_report.txt
+ D backend/phase4f/experiments/phase4f_3r_freeze_report.txt
+ D backend/phase4f/experiments/phase4f_4_controlled_gpu_experiment_report.txt
+ D backend/phase4f/experiments/phase4f_4_experiment_manifest.json
+ D backend/phase4f/experiments/phase4f_4_results.json
+ D backend/phase4f/experiments/phase4f_4e_cuda_environment.json
+ D backend/phase4f/experiments/phase4f_4e_cuda_environment_report.txt
+ D backend/phase4f/experiments/requirements.txt
+ D backend/phase4f/experiments/results/A0/evaluation_results.json
+ D backend/phase4f/experiments/results/A0/metadata.json
+ D backend/phase4f/experiments/results/A1/checkpoint_best/config.json
+ D backend/phase4f/experiments/results/A1/checkpoint_best/tokenizer.json
+ D backend/phase4f/experiments/results/A1/checkpoint_best/tokenizer_config.json
+ D backend/phase4f/experiments/results/A1/evaluation_results.json
+ D backend/phase4f/experiments/results/A1/training_metadata.json
+ D backend/phase4f/experiments/results/A2/checkpoint_best/config.json
+ D backend/phase4f/experiments/results/A2/checkpoint_best/tokenizer.json
+ D backend/phase4f/experiments/results/A2/checkpoint_best/tokenizer_config.json
+ D backend/phase4f/experiments/results/A2/evaluation_results.json
+ D backend/phase4f/experiments/results/A2/training_metadata.json
+ D backend/phase4f/experiments/results/A3/checkpoint_best/config.json
+ D backend/phase4f/experiments/results/A3/checkpoint_best/tokenizer.json
+ D backend/phase4f/experiments/results/A3/checkpoint_best/tokenizer_config.json
+ D backend/phase4f/experiments/results/A3/evaluation_results.json
+ D backend/phase4f/experiments/results/A3/training_metadata.json
+ D backend/phase4f/experiments/results/all_results.json
+ D backend/phase4f/experiments/run_experiment.py
+ D backend/phase4f/experiments/train.py
+ D backend/phase4f/freeze_gate.py
+ D backend/phase4f/phase4f_1_dataset_audit_report.txt
+ D backend/phase4f/phase4f_2_dataset_quality_gate_report.txt
+ D backend/phase4f/phase4f_2r_dataset_balance_report.txt
+ D backend/phase4f/phase4f_4r_manifest.json
+ D backend/phase4f/phase4f_5/configs/a1_config.json
+ D backend/phase4f/phase4f_5/configs/a2_config.json
+ D backend/phase4f/phase4f_5/dataset/data_quality_gate.json
+ D backend/phase4f/phase4f_5/dataset/derived_dataset.jsonl
+ D backend/phase4f/phase4f_5/dataset/span_alignment_audit.json
+ D backend/phase4f/phase4f_5/dataset/truncation_audit.json
+ D backend/phase4f/phase4f_5/diagnostics/a0_forensics.json
+ D backend/phase4f/phase4f_5/diagnostics/a1_forensics.json
+ D backend/phase4f/phase4f_5/diagnostics/a2_forensics.json
+ D backend/phase4f/phase4f_5/diagnostics/all_inference_results.json
+ D backend/phase4f/phase4f_5/diagnostics/failure_taxonomy.json
+ D backend/phase4f/phase4f_5/evaluation/evaluate.py
+ D backend/phase4f/phase4f_5/evaluation/evaluation_protocol.json
+ D backend/phase4f/phase4f_5/logs/a1_training.json
+ D backend/phase4f/phase4f_5/logs/a2_training.json
+ D backend/phase4f/phase4f_5/manifests/experiment_manifest.json
+ D backend/phase4f/phase4f_5/manifests/final_experiment_manifest.json
+ D backend/phase4f/phase4f_5/manifests/source_integrity.json
+ D backend/phase4f/phase4f_5/manifests/split_manifest.json
+ D backend/phase4f/phase4f_5/prepare_experiment.py
+ D backend/phase4f/phase4f_5/reports/phase4f_5a_preparation_report.txt
+ D backend/phase4f/phase4f_5/reports/phase4f_5b_training_report.txt
+ D backend/phase4f/phase4f_5/results/a0_test.json
+ D backend/phase4f/phase4f_5/results/a1_test.json
+ D backend/phase4f/phase4f_5/results/a2_test.json
+ D backend/phase4f/phase4f_5/results/comparison.json
+ D backend/phase4f/phase4f_5/run_experiment.py
+ D backend/phase4f/phase4f_5c/em_f1_gap_analysis.json
+ D backend/phase4f/phase4f_5c/failure_matrix.json
+ D backend/phase4f/phase4f_5c/generate_analysis.py
+ D backend/phase4f/phase4f_5c/list_audit.json
+ D backend/phase4f/phase4f_5c/long_context_audit.json
+ D backend/phase4f/phase4f_5c/normalization_diagnostic.json
+ D backend/phase4f/phase4f_5c/numeric_audit.json
+ D backend/phase4f/phase4f_5c/per_category_comparison.json
+ D backend/phase4f/phase4f_5c/phase4f_5c_manifest.json
+ D backend/phase4f/phase4f_5c/production_strengths.json
+ D backend/phase4f/phase4f_5c/reports/phase4f_5c_qa_analysis_report.txt
+ D backend/phase4f/phase4f_5c/root_cause_analysis.json
+ D backend/phase4f/phase4f_5c/table_audit.json
+ D backend/phase4f/phase4f_5c/test_composition.json
+ D backend/phase4f/phase4f_5c/training_curve_analysis.json
+ D backend/phase4f/phase4f_5d/analysis/a0_benchmark_v1.json
+ D backend/phase4f/phase4f_5d/analysis/a1_benchmark_v1.json
+ D backend/phase4f/phase4f_5d/analysis/a2_benchmark_v1.json
+ D backend/phase4f/phase4f_5d/analysis/benchmark_comparison.json
+ D backend/phase4f/phase4f_5d/analysis/category_balance.json
+ D backend/phase4f/phase4f_5d/analysis/duplicate_audit.json
+ D backend/phase4f/phase4f_5d/analysis/gold_span_validation.json
+ D backend/phase4f/phase4f_5d/analysis/leakage_audit.json
+ D backend/phase4f/phase4f_5d/analysis/test_composition.json
+ D backend/phase4f/phase4f_5d/analysis/unanswerable_audit.json
+ D backend/phase4f/phase4f_5d/benchmark/benchmark_checksum.txt
+ D backend/phase4f/phase4f_5d/benchmark/benchmark_manifest.json
+ D backend/phase4f/phase4f_5d/benchmark/qa_benchmark_v1.jsonl
+ D backend/phase4f/phase4f_5d/build_benchmark.py
+ D backend/phase4f/phase4f_5d/phase4f_5d_manifest.json
+ D backend/phase4f/phase4f_5d/reports/phase4f_5d_benchmark_hardening_report.txt
+ D backend/phase4f/phase4f_5e/analysis/capability_matrix.json
+ D backend/phase4f/phase4f_5e/analysis/confidence_distribution.json
+ D backend/phase4f/phase4f_5e/analysis/f1_gain_analysis.json
+ D backend/phase4f/phase4f_5e/analysis/next_experiment_matrix.json
+ D backend/phase4f/phase4f_5e/analysis/production_vs_experiment.json
+ D backend/phase4f/phase4f_5e/analysis/root_cause_matrix.json
+ D backend/phase4f/phase4f_5e/analysis/split_category_matrix.json
+ D backend/phase4f/phase4f_5e/analysis/threshold_sweep.json
+ D backend/phase4f/phase4f_5e/analysis/training_data_audit.json
+ D backend/phase4f/phase4f_5e/analysis/unanswerable_audit.json
+ D backend/phase4f/phase4f_5e/phase4f_5e_manifest.json
+ D backend/phase4f/phase4f_5e/reports/phase4f_5e_qa_capability_audit.txt
+ D backend/phase4f/phase4f_5e/run_analysis.py
+ D backend/phase4f/phase4f_5f/dataset/experiment_f1_manifest.json
+ D backend/phase4f/phase4f_5f/dataset/experiment_f1_quality_report.json
+ D backend/phase4f/phase4f_5f/dataset/experiment_f1_split.json
+ D backend/phase4f/phase4f_5f/f2/config/f2_config.json
+ D backend/phase4f/phase4f_5f/f2/evaluation/f2_benchmark.json
+ D backend/phase4f/phase4f_5f/f2/evaluation/f2_holdout.json
+ D backend/phase4f/phase4f_5f/f2/evaluation/f2_validation.json
+ D backend/phase4f/phase4f_5f/f2/logs/f2_training.json
+ D backend/phase4f/phase4f_5f/f2/manifests/f2_dataset_ids.json
+ D backend/phase4f/phase4f_5f/f2/manifests/f2_manifest.json
+ D backend/phase4f/phase4f_5f/f2/reconciliation/f2_baseline_comparison.json
+ D backend/phase4f/phase4f_5f/f2/reconciliation/f2_data_balance_audit.json
+ D backend/phase4f/phase4f_5f/f2/reconciliation/f2_label_audit.json
+ D backend/phase4f/phase4f_5f/f2/reconciliation/f2_no_answer_logic_audit.json
+ D backend/phase4f/phase4f_5f/f2/reconciliation/f2_prediction_audit.json
+ D backend/phase4f/phase4f_5f/f2/reconciliation/f2_root_cause_analysis.json
+ D backend/phase4f/phase4f_5f/f2/reports/phase4f_5f_f2_final_report.txt
+ D backend/phase4f/phase4f_5f/f2/reports/phase4f_5f_f2_reconciliation_report.txt
+ D backend/phase4f/phase4f_5f/f2/reports/phase4f_5f_g_threshold_report.txt
+ D backend/phase4f/phase4f_5f/f2/run_f2.py
+ D backend/phase4f/phase4f_5f/f2/threshold_experiment/benchmark_result.json
+ D backend/phase4f/phase4f_5f/f2/threshold_experiment/holdout_result.json
+ D backend/phase4f/phase4f_5f/f2/threshold_experiment/margin_sweep.json
+ D backend/phase4f/phase4f_5f/f2/threshold_experiment/raw_prediction_audit.json
+ D backend/phase4f/phase4f_5f/f2/threshold_experiment/raw_predictions_benchmark.json
+ D backend/phase4f/phase4f_5f/f2/threshold_experiment/raw_predictions_holdout.json
+ D backend/phase4f/phase4f_5f/f2/threshold_experiment/raw_predictions_validation.json
+ D backend/phase4f/phase4f_5f/f2/threshold_experiment/run_threshold_experiment.py
+ D backend/phase4f/phase4f_5f/f2/threshold_experiment/stability_analysis.json
+ D backend/phase4f/phase4f_5f/f2/threshold_experiment/threshold_experiment_manifest.json
+ D backend/phase4f/phase4f_5f/f2/threshold_experiment/threshold_sweep.json
+ D backend/phase4f/phase4f_5f/f2/threshold_experiment/validation_calibration.json
+ D backend/phase4f/phase4f_5f/h/audits/duplicate_audit.json
+ D backend/phase4f/phase4f_5f/h/audits/leakage_audit.json
+ D backend/phase4f/phase4f_5f/h/audits/quality_gate_failures.json
+ D backend/phase4f/phase4f_5f/h/audits/semantic_audit.json
+ D backend/phase4f/phase4f_5f/h/candidates/all_candidates.jsonl
+ D backend/phase4f/phase4f_5f/h/generate_h_candidates.py
+ D backend/phase4f/phase4f_5f/h/manifests/h_manifest.json
+ D backend/phase4f/phase4f_5f/h/pools/h10.jsonl
+ D backend/phase4f/phase4f_5f/h/pools/h20.jsonl
+ D backend/phase4f/phase4f_5f/h/pools/h30.jsonl
+ D backend/phase4f/phase4f_5f/h/reports/phase4f_5f_h_dataset_design_report.txt
+ D backend/phase4f/phase4f_5f/h1/config/f1_reconciled_ids.json
+ D backend/phase4f/phase4f_5f/h1/config/h1_config.json
+ D backend/phase4f/phase4f_5f/h1/evaluation/h1_benchmark.json
+ D backend/phase4f/phase4f_5f/h1/evaluation/h1_holdout.json
+ D backend/phase4f/phase4f_5f/h1/evaluation/h1_null_analysis.json
+ D backend/phase4f/phase4f_5f/h1/evaluation/h1_validation.json
+ D backend/phase4f/phase4f_5f/h1/logs/h1_training.json
+ D backend/phase4f/phase4f_5f/h1/manifests/h1_manifest.json
+ D backend/phase4f/phase4f_5f/h1/reports/phase4f_5f_h1_final_report.txt
+ D backend/phase4f/phase4f_5f/h1/run_h1.py
+ D backend/phase4f/phase4f_5f/h1_reconciliation/H1_RECONCILIATION_REPORT.md
+ D backend/phase4f/phase4f_5f/h1_reconciliation/README.md
+ D backend/phase4f/phase4f_5f/h1_reconciliation/checksums.txt
+ D backend/phase4f/phase4f_5f/h1_reconciliation/h1_count_reconciliation.json
+ D backend/phase4f/phase4f_5f/h1_reconciliation/h1_label_integrity.json
+ D backend/phase4f/phase4f_5f/h1_reconciliation/h1_metric_recalculation.json
+ D backend/phase4f/phase4f_5f/h1_reconciliation/h1_no_answer_analysis.json
+ D backend/phase4f/phase4f_5f/h1_reconciliation/h1_null_score_analysis.json
+ D backend/phase4f/phase4f_5f/h1_reconciliation/h1_overlap_report.json
+ D backend/phase4f/phase4f_5f/h1_reconciliation/h1_protocol_audit.json
+ D backend/phase4f/phase4f_5f/h1_reconciliation/h1_reconciled_comparison.json
+ D backend/phase4f/phase4f_5f/phase4f_5f_f1_reconciliation_manifest.json
+ D backend/phase4f/phase4f_5f/reconciliation/dataset_reconciliation.json
+ D backend/phase4f/phase4f_5f/reconciliation/final_holdout_ids.json
+ D backend/phase4f/phase4f_5f/reconciliation/final_training_ids.json
+ D backend/phase4f/phase4f_5f/reconciliation/final_validation_ids.json
+ D backend/phase4f/phase4f_5f/reconciliation/invalid_span_audit.json
+ D backend/phase4f/phase4f_5f/reconciliation/training_protocol_audit.json
+ D backend/phase4f/phase4f_5f/recovery/artifact_inventory.json
+ D backend/phase4f/phase4f_5f/recovery/gpu_environment_report.json
+ D backend/phase4f/phase4f_5f/recovery/gpu_environment_report.txt
+ D backend/phase4f/phase4f_5f/recovery/phase4f_5f_recovery_report.txt
+ D backend/phase4f/phase4f_5f/recovery/recovery_manifest.json
+ D backend/phase4f/phase4f_5f/reports/phase4f_5f_f1_preparation_report.txt
+ D backend/phase4f/phase4f_5f/reports/phase4f_5f_f1_reconciliation_report.txt
+ D backend/phase4f/phase4f_5f/run_experiment.py
+ D backend/phase4f/quality_gate.py
+ D backend/phase4f/reconciliation/a0_reproduction.json
+ D backend/phase4f/reconciliation/checkpoint_audit.json
+ D backend/phase4f/reconciliation/cross_phase_evaluation_compatibility.json
+ D backend/phase4f/reconciliation/dataset_label_audit.json
+ D backend/phase4f/reconciliation/evaluation_parity_matrix.json
+ D backend/phase4f/reconciliation/experiment_artifact_inventory.json
+ D backend/phase4f/reconciliation/failure_taxonomy_reconciliation.json
+ D backend/phase4f/reconciliation/manual_forensic_traces.json
+ D backend/phase4f/reconciliation/model_initialization_audit.json
+ D backend/phase4f/reconciliation/phase4f_4r_reconciliation_report.txt
+ D backend/phase4f/reconciliation/token_span_audit.json
+ D backend/phase4f/reconciliation/training_configuration_audit.json
+ D backend/phase4f/training/__init__.py
+ D backend/phase4f/training/configs.py
+ D backend/phase4f/training/environment.json
+ D backend/phase4f/training/train.py
+ D backend/phase4f_qa_architecture_experiment_report.txt
+ M backend/pytest.ini
+ M backend/reliability/routes.py
+ M backend/requirements.txt
+ D backend/start_server.py
+ D backend/test_browser_flow.py
+ D backend/test_document_flow.py
+ D backend/test_embedding_flow.py
+ D backend/test_phase3d_evaluation.py
+ D backend/test_phase3d_upload_integration.py
+ D backend/test_phase3e_integration.py
+ D backend/test_phase3e_validation.py
+ D backend/test_phase3f_evaluation.py
+ D backend/test_phase4b_evaluation.py
+ D backend/test_phase4c_diagnostics.py
+ D backend/test_phase6_reliability.py
+ D backend/test_rag_flow.py
+ D backend/test_real_browser.py
+ M backend/tests/conftest.py
+ D backend/tests/integration_http.py
+ D backend/tests/phase3d_corpus.py
+ D backend/tests/phase4b_corpus.py
+ D backend/tests/test_answer_span.py
+ D backend/tests/test_auth.py
+ D backend/tests/test_brain_orchestration.py
+ D backend/tests/test_brain_types.py
+ D backend/tests/test_chat_unit.py
+ D backend/tests/test_config_security.py
+ D backend/tests/test_cors.py
+ D backend/tests/test_database_url.py
+ D backend/tests/test_file_validation.py
+ D backend/tests/test_outcomes.py
+ D backend/tests/test_phase3d_chunking.py
+ D backend/tests/test_phase3d_context.py
+ D backend/tests/test_phase3d_reconciliation.py
+ D backend/tests/test_phase3e_processing.py
+ D backend/tests/test_qa_answer_reconstruction.py
+ D backend/tests/test_real_e2e_validation.py
+ D backend/tests/test_settings.py
+ D backend/tests/test_sql_safety.py
+ D backend/tests/test_structured_extraction.py
+ D backend/tests/test_verification_integrity.py
+ M backend/verification/routes.py
+ M package-lock.json
+ M package.json
+ M runbooks/README.md
+ M runbooks/database-failure.md
+ M runbooks/migration-failure.md
+ M src/lib/api.ts
+ M src/pages/ReliabilityPage.tsx
+ M src/pages/VerificationPage.tsx
+ M src/pages/WorkspacePage.tsx
+ M src/types/index.ts
+ M vite.config.ts
+?? .dockerignore
+?? .env.example
+?? AGENTS.md
+?? ARCHITECTURE.md
+?? CONTEXT.md
+?? DESIGN.md
+?? Dockerfile.frontend
+?? Field_Robotics_Deployment_and_Maintenance_Report.pdf
+?? PRD.md
+?? README.md
+?? agents/README.md
+?? agents/agentic-coding-agents/01-product-strategist-agent.md
+?? agents/agentic-coding-agents/02-product-research-agent.md
+?? agents/agentic-coding-agents/03-competitive-intelligence-agent.md
+?? agents/agentic-coding-agents/04-requirements-agent.md
+?? agents/agentic-coding-agents/05-ux-research-agent.md
+?? agents/agentic-coding-agents/06-ux-ui-designer-agent.md
+?? agents/agentic-coding-agents/07-accessibility-agent.md
+?? agents/agentic-coding-agents/08-software-architect-agent.md
+?? agents/agentic-coding-agents/09-frontend-architect-agent.md
+?? agents/agentic-coding-agents/10-backend-architect-agent.md
+?? agents/agentic-coding-agents/11-database-architect-agent.md
+?? agents/agentic-coding-agents/12-api-architect-agent.md
+?? agents/agentic-coding-agents/13-distributed-systems-agent.md
+?? agents/agentic-coding-agents/14-security-architect-agent.md
+?? agents/agentic-coding-agents/15-infrastructure-architect-agent.md
+?? agents/agentic-coding-agents/16-frontend-coding-agent.md
+?? agents/agentic-coding-agents/17-backend-coding-agent.md
+?? agents/agentic-coding-agents/18-full-stack-agent.md
+?? agents/agentic-coding-agents/19-database-engineer-agent.md
+?? agents/agentic-coding-agents/20-api-integration-agent.md
+?? agents/agentic-coding-agents/21-sdk-library-agent.md
+?? agents/agentic-coding-agents/22-cli-agent.md
+?? agents/agentic-coding-agents/23-desktop-agent.md
+?? agents/agentic-coding-agents/24-mobile-agent.md
+?? agents/agentic-coding-agents/25-ai-ml-architect-agent.md
+?? agents/agentic-coding-agents/26-ml-fundamentals-agent.md
+?? agents/agentic-coding-agents/27-data-science-agent.md
+?? agents/agentic-coding-agents/28-data-engineering-agent.md
+?? agents/agentic-coding-agents/29-feature-engineering-agent.md
+?? agents/agentic-coding-agents/30-classical-ml-agent.md
+?? agents/agentic-coding-agents/31-deep-learning-agent.md
+?? agents/agentic-coding-agents/32-computer-vision-agent.md
+?? agents/agentic-coding-agents/33-nlp-agent.md
+?? agents/agentic-coding-agents/34-multimodal-ai-agent.md
+?? agents/agentic-coding-agents/35-llm-engineer-agent.md
+?? agents/agentic-coding-agents/36-rag-engineer-agent.md
+?? agents/agentic-coding-agents/37-agentic-ai-engineer-agent.md
+?? agents/agentic-coding-agents/38-fine-tuning-agent.md
+?? agents/agentic-coding-agents/39-model-evaluation-agent.md
+?? agents/agentic-coding-agents/40-prompt-engineering-agent.md
+?? agents/agentic-coding-agents/41-embeddings-vector-search-agent.md
+?? agents/agentic-coding-agents/42-knowledge-graph-agent.md
+?? agents/agentic-coding-agents/43-ai-safety-guardrails-agent.md
+?? agents/agentic-coding-agents/44-ml-pipeline-agent.md
+?? agents/agentic-coding-agents/45-mlops-agent.md
+?? agents/agentic-coding-agents/46-model-serving-agent.md
+?? agents/agentic-coding-agents/47-gpu-compute-optimization-agent.md
+?? agents/agentic-coding-agents/48-model-compression-agent.md
+?? agents/agentic-coding-agents/49-data-model-versioning-agent.md
+?? agents/agentic-coding-agents/50-ai-cost-optimization-agent.md
+?? agents/agentic-coding-agents/51-test-architect-agent.md
+?? agents/agentic-coding-agents/52-unit-testing-agent.md
+?? agents/agentic-coding-agents/53-integration-testing-agent.md
+?? agents/agentic-coding-agents/54-e2e-testing-agent.md
+?? agents/agentic-coding-agents/55-api-testing-agent.md
+?? agents/agentic-coding-agents/56-performance-testing-agent.md
+?? agents/agentic-coding-agents/57-ai-evaluation-agent.md
+?? agents/agentic-coding-agents/58-security-testing-agent.md
+?? agents/agentic-coding-agents/59-code-review-agent.md
+?? agents/agentic-coding-agents/60-debugging-agent.md
+?? agents/agentic-coding-agents/61-reliability-agent.md
+?? agents/agentic-coding-agents/62-devops-agent.md
+?? agents/agentic-coding-agents/63-cloud-engineer-agent.md
+?? agents/agentic-coding-agents/64-docker-container-agent.md
+?? agents/agentic-coding-agents/65-kubernetes-agent.md
+?? agents/agentic-coding-agents/66-infrastructure-as-code-agent.md
+?? agents/agentic-coding-agents/67-deployment-agent.md
+?? agents/agentic-coding-agents/68-observability-agent.md
+?? agents/agentic-coding-agents/69-incident-response-agent.md
+?? agents/agentic-coding-agents/70-sre-agent.md
+?? agents/agentic-coding-agents/71-cost-finops-agent.md
+?? agents/agentic-coding-agents/72-application-security-agent.md
+?? agents/agentic-coding-agents/73-dependency-security-agent.md
+?? agents/agentic-coding-agents/74-secrets-security-agent.md
+?? agents/agentic-coding-agents/75-identity-auth-agent.md
+?? agents/agentic-coding-agents/76-privacy-agent.md
+?? agents/agentic-coding-agents/77-threat-modeling-agent.md
+?? agents/agentic-coding-agents/78-ai-security-agent.md
+?? agents/agentic-coding-agents/79-documentation-agent.md
+?? agents/agentic-coding-agents/80-api-documentation-agent.md
+?? agents/agentic-coding-agents/81-architecture-documentation-agent.md
+?? agents/agentic-coding-agents/82-codebase-knowledge-agent.md
+?? agents/agentic-coding-agents/83-changelog-release-agent.md
+?? agents/agentic-coding-agents/84-git-agent.md
+?? agents/agentic-coding-agents/85-dependency-management-agent.md
+?? agents/agentic-coding-agents/86-refactoring-agent.md
+?? agents/agentic-coding-agents/87-legacy-migration-agent.md
+?? agents/agentic-coding-agents/88-performance-optimization-agent.md
+?? agents/agentic-coding-agents/89-database-optimization-agent.md
+?? agents/agentic-coding-agents/90-accessibility-ui-qa-agent.md
+?? agents/agentic-coding-agents/AGENT-CONTRACT.md
+?? agents/agentic-coding-agents/README.md
+?? agents/ai-agent.md
+?? agents/backend-agent.md
+?? agents/coordinator.md
+?? agents/database-agent.md
+?? agents/evaluation-agent.md
+?? agents/frontend-agent.md
+?? agents/security-agent.md
+?? agents/test-agent.md
+?? agents/verifier.md
+?? backend/.dockerignore
+?? backend/Dockerfile
+?? backend/architecture/EVALUATION_SAFETY_MASTER_REGISTER.md
+?? backend/architecture/IMPLEMENTATION_REPORT_2026-09-30.md
+?? backend/architecture/PATH_MIGRATION.md
+?? backend/architecture/PHASE0_CLOSURE_2026-10-09.md
+?? backend/architecture/PHASE0_FAILURE_AUDIT_2026-10-09.md
+?? backend/architecture/PHASE1_GROUNDED_ANSWERING_PLAN_2026-10-09.md
+?? backend/architecture/REPOSITORY_AUDIT_2026-09-30.md
+?? backend/architecture/STEP0_5_EVALUATION_RUNNER_SAFETY_AUDIT_2026-10-09.md
+?? backend/architecture/STEP0_7_PHASE3D_DESTRUCTIVE_CLEANUP_REMEDIATION_2026-10-09.md
+?? backend/architecture/STEP0_8_PHASE3D_EVALUATION_CLEANUP_REMEDIATION_2026-10-09.md
+?? backend/architecture/STEP0_9_PHASE3E_INTEGRATION_CLEANUP_REMEDIATION_2026-10-09.md
+?? backend/architecture/STEP0_EVALUATION_INFRASTRUCTURE_HARDENING_2026-10-09.md
+?? backend/architecture/STEP1_0_PHASE3E_VALIDATION_CLEANUP_REMEDIATION_2026-10-09.md
+?? backend/architecture/STEP1_1_PHASE3F_EVALUATION_CLEANUP_REMEDIATION_2026-10-09.md
+?? backend/architecture/STEP1_2_PHASE4B_EVALUATION_CLEANUP_REMEDIATION_2026-10-09.md
+?? backend/architecture/STEP1_4_POSTGRESQL_VERIFICATION_READINESS_ASSESSMENT_2026-10-09.md
+?? backend/architecture/STEP1_5_EVALUATION_SAFETY_P0_REMEDIATION_PLAN_2026-10-09.md
+?? backend/architecture/STEP1_6A_GUARD_FIRST_REMEDIATION_2026-10-10.md
+?? backend/architecture/STEP1_6B_ISOLATION_GUARD_REMEDIATION_2026-10-10.md
+?? backend/architecture/STEP1_6C_GUARD_FIRST_STRUCTURE_RUNNERS_2026-10-10.md
+?? backend/architecture/STEP1_6D_PRE_ENGINE_TARGET_VALIDATION_2026-10-10.md
+?? backend/architecture/STEP1_6E_REMAINING_RUNNER_INITIALIZATION_AUDIT_2026-10-10.md
+?? backend/architecture/STEP1_6F_LEGACY_RUNNER_AND_CLEANUP_SAFETY_2026-10-11.md
+?? backend/architecture/STEP1_6G_RUNNER_AND_FIXTURE_TARGET_SAFETY_2026-10-11.md
+?? backend/architecture/STEP1_6H_DISPOSABLE_DATABASE_AUTHORIZATION_2026-10-11.md
+?? backend/architecture/STEP1_6I_UNIFIED_DESTRUCTIVE_TARGET_AUTHORIZATION_2026-10-11.md
+?? backend/architecture/STEP1_6J_FAIL_CLOSED_DESTRUCTIVE_EXECUTION_2026-10-12.md
+?? backend/architecture/STEP1_6K_LIFECYCLE_AUTHORIZATION_HARDENING_2026-10-12.md
+?? backend/architecture/STEP1_6L_FUNCTION_LEVEL_CLEANUP_AUTHORIZATION_2026-10-12.md
+?? backend/architecture/phase4f_6/ARCHITECTURE_DECISION_RECORD.md
+?? backend/architecture/phase4f_6/CURRENT_ARCHITECTURE.md
+?? backend/architecture/phase4f_6/DOMAIN_MODEL.md
+?? backend/architecture/phase4f_6/MODULE_SEAMS.md
+?? backend/architecture/phase4f_6/NEXT_STAGE_RAG_EXECUTION_PLAN.md
+?? backend/architecture/phase4f_6/PHASE4F6_ARCHITECTURE_AUDIT.md
+?? backend/architecture/phase4f_6/QUESTION_WORKFLOW_MATRIX.md
+?? backend/architecture/phase4f_6/TARGET_ARCHITECTURE.md
+?? backend/architecture/phase4f_6/decision/ABSTENTION_GATE_RESCORING.json
+?? backend/architecture/phase4f_6/decision/ABSTENTION_GATE_RESCORING.md
+?? backend/architecture/phase4f_6/decision/ANSWERABILITY_SIGNAL_FORENSICS.json
+?? backend/architecture/phase4f_6/decision/ANSWERABILITY_SIGNAL_FORENSICS.md
+?? backend/architecture/phase4f_6/decision/ARCHITECTURE_MIGRATION_GATE.md
+?? backend/architecture/phase4f_6/decision/AUC_INFLUENCE_JACKKNIFE_FORENSICS.json
+?? backend/architecture/phase4f_6/decision/AUC_INFLUENCE_JACKKNIFE_FORENSICS.md
+?? backend/architecture/phase4f_6/decision/CLS_DIRECTION_REVERSAL_FORENSICS.json
+?? backend/architecture/phase4f_6/decision/CLS_DIRECTION_REVERSAL_FORENSICS.md
+?? backend/architecture/phase4f_6/decision/DECISION_SAFETY_CHECK.json
+?? backend/architecture/phase4f_6/decision/E0_CHUNK_MANIFEST.json
+?? backend/architecture/phase4f_6/decision/E0_CORPUS_MANIFEST.json
+?? backend/architecture/phase4f_6/decision/E0_ERRATUM_2026-09-27.md
+?? backend/architecture/phase4f_6/decision/E0_MEDIA_DETECTION_RECORD.json
+?? backend/architecture/phase4f_6/decision/E0_OFFLINE_RUNTIME_PROVISIONING.md
+?? backend/architecture/phase4f_6/decision/E0_PREDICTION_PROVENANCE_2026-09-28.md
+?? backend/architecture/phase4f_6/decision/E0_PREREQUISITE_STATUS.md
+?? backend/architecture/phase4f_6/decision/E0_PROTOCOL.md
+?? backend/architecture/phase4f_6/decision/E0_READINESS_CHECK.md
+?? backend/architecture/phase4f_6/decision/E0_RETRIEVAL_RUNTIME_READINESS.md
+?? backend/architecture/phase4f_6/decision/E0_RETRIEVAL_RUNTIME_RESUME.md
+?? backend/architecture/phase4f_6/decision/E0_RETRIEVAL_RUN_MANIFEST.json
+?? backend/architecture/phase4f_6/decision/E0_RUNTIME_HANDOFF_MANIFEST.json
+?? backend/architecture/phase4f_6/decision/E0_SCHEMA.json
+?? backend/architecture/phase4f_6/decision/E0_SOURCE_PROVENANCE.md
+?? backend/architecture/phase4f_6/decision/EXPERIMENT_CANDIDATE_MATRIX.md
+?? backend/architecture/phase4f_6/decision/EXPERIMENT_CONTROL_MATRIX.md
+?? backend/architecture/phase4f_6/decision/ISO_COVERAGE_RESCORING.json
+?? backend/architecture/phase4f_6/decision/ISO_COVERAGE_RESCORING.md
+?? backend/architecture/phase4f_6/decision/MODEL_40MIN_EVALUATION.json
+?? backend/architecture/phase4f_6/decision/MODEL_40MIN_EVALUATION.md
+?? backend/architecture/phase4f_6/decision/NEXT_EXPERIMENT_DECISION.md
+?? backend/architecture/phase4f_6/decision/PHASE4F6B_RECONCILIATION.md
+?? backend/architecture/phase4f_6/decision/PHASE4F6C_RECONCILIATION.md
+?? backend/architecture/phase4f_6/decision/PROTOCOL_V2_SPAN_SELECTION_ROLLOUT.json
+?? backend/architecture/phase4f_6/decision/PROTOCOL_V2_SPAN_SELECTION_ROLLOUT.md
+?? backend/architecture/phase4f_6/decision/QA_HYPOTHESIS_MATRIX.md
+?? backend/architecture/phase4f_6/decision/RECONSTRUCTION_BOUND.json
+?? backend/architecture/phase4f_6/decision/RECONSTRUCTION_BOUND.md
+?? backend/architecture/phase4f_6/decision/SCORE_STATISTIC_ISO_K47.json
+?? backend/architecture/phase4f_6/decision/SCORE_STATISTIC_ISO_K47.md
+?? backend/architecture/phase4f_6/decision/SCORE_STATISTIC_ISO_K95.json
+?? backend/architecture/phase4f_6/decision/SCORE_STATISTIC_ISO_K95.md
+?? backend/architecture/phase4f_6/decision/SPAN_BOUNDARY_FORENSICS.json
+?? backend/architecture/phase4f_6/decision/SPAN_BOUNDARY_FORENSICS.md
+?? backend/architecture/phase4f_6/decision/SPAN_SELECTION_PROTOCOL_EXPERIMENT.json
+?? backend/architecture/phase4f_6/decision/SPAN_SELECTION_PROTOCOL_EXPERIMENT.md
+?? backend/architecture/phase4f_6/e0_diagnostics/chunks/api_docs_lambda.jsonl
+?? backend/architecture/phase4f_6/e0_diagnostics/chunks/company_history_eta.jsonl
+?? backend/architecture/phase4f_6/e0_diagnostics/chunks/dataset_desc_mu.jsonl
+?? backend/architecture/phase4f_6/e0_diagnostics/chunks/financial_report_q3.jsonl
+?? backend/architecture/phase4f_6/e0_diagnostics/chunks/legal_contract_epsilon.jsonl
+?? backend/architecture/phase4f_6/e0_diagnostics/chunks/unanswerable_corpus.jsonl
+?? backend/architecture/phase4f_6/e0_diagnostics/diagnostics/answerability_signal_bootstrap.json
+?? backend/architecture/phase4f_6/e0_diagnostics/diagnostics/auc_influence_jackknife.json
+?? backend/architecture/phase4f_6/e0_diagnostics/diagnostics/chunk_evidence_results.jsonl
+?? backend/architecture/phase4f_6/e0_diagnostics/diagnostics/cls_direction_reversal_bootstrap.json
+?? backend/architecture/phase4f_6/e0_diagnostics/diagnostics/embedding_offline_verification.json
+?? backend/architecture/phase4f_6/e0_diagnostics/diagnostics/model_40min_predictions.json
+?? backend/architecture/phase4f_6/e0_diagnostics/diagnostics/provenance_results.jsonl
+?? backend/architecture/phase4f_6/e0_diagnostics/diagnostics/runtime_validation_schema.json
+?? backend/architecture/phase4f_6/e0_diagnostics/diagnostics/summary.json
+?? backend/architecture/phase4f_6/e0_diagnostics/offline_runtime_checklist.json
+?? backend/architecture/phase4f_6/e0_diagnostics/retrieval_schema_requirements.json
+?? backend/architecture/phase4f_6/e0_diagnostics/source_corpus/api_docs_lambda.json
+?? backend/architecture/phase4f_6/e0_diagnostics/source_corpus/company_history_eta.json
+?? backend/architecture/phase4f_6/e0_diagnostics/source_corpus/dataset_desc_mu.json
+?? backend/architecture/phase4f_6/e0_diagnostics/source_corpus/financial_report_q3.json
+?? backend/architecture/phase4f_6/e0_diagnostics/source_corpus/legal_contract_epsilon.json
+?? backend/architecture/phase4f_6/e0_diagnostics/source_corpus/unanswerable_corpus.json
+?? backend/architecture/phase4f_6/e0_diagnostics/tools/answerability_signal_forensics.py
+?? backend/architecture/phase4f_6/e0_diagnostics/tools/auc_influence_jackknife_forensics.py
+?? backend/architecture/phase4f_6/e0_diagnostics/tools/build_e0_prereqs.py
+?? backend/architecture/phase4f_6/e0_diagnostics/tools/cls_direction_reversal_forensics.py
+?? backend/architecture/phase4f_6/e0_diagnostics/tools/detect_runtime_media.py
+?? backend/architecture/phase4f_6/e0_diagnostics/tools/reconstruction_bound.py
+?? backend/architecture/phase4f_6/e0_diagnostics/tools/rescore_abstention_gate.py
+?? backend/architecture/phase4f_6/e0_diagnostics/tools/rescore_iso_coverage.py
+?? backend/architecture/phase4f_6/e0_diagnostics/tools/rescore_score_statistics_k47.py
+?? backend/architecture/phase4f_6/e0_diagnostics/tools/rescore_score_statistics_k95.py
+?? backend/architecture/phase4f_6/e0_diagnostics/tools/run_model_40min_eval.py
+?? backend/architecture/phase4f_6/e0_diagnostics/tools/span_boundary_forensics.py
+?? backend/architecture/phase4f_6/e0_diagnostics/tools/span_selection_protocol_experiment.py
+?? backend/docker-entrypoint.sh
+?? backend/documents/insights.py
+?? backend/documents/parser.py
+?? backend/documents/structure.py
+?? backend/documents/tables.py
+?? backend/evaluation/README.md
+?? backend/evaluation/artifacts.py
+?? backend/evaluation/baselines/__init__.py
+?? backend/evaluation/baselines/dual_path/__init__.py
+?? backend/evaluation/baselines/structure_only/__init__.py
+?? backend/evaluation/baselines/vector_only/__init__.py
+?? backend/evaluation/datasets/__init__.py
+?? backend/evaluation/datasets/heading_corpus.py
+?? backend/evaluation/datasets/phase3d_corpus.py
+?? backend/evaluation/datasets/phase4b_corpus.py
+?? backend/evaluation/datasets/structure_discriminating_v1.py
+?? backend/evaluation/datasets/structure_eval_corpus.py
+?? backend/evaluation/denominator_sensitivity.py
+?? backend/evaluation/experiments/__init__.py
+?? backend/evaluation/experiments/run_dual_path_ablation.py
+?? backend/evaluation/experiments/run_phase3d_evaluation.py
+?? backend/evaluation/experiments/run_phase3d_upload_integration.py
+?? backend/evaluation/experiments/run_phase3e_integration.py
+?? backend/evaluation/experiments/run_phase3e_validation.py
+?? backend/evaluation/experiments/run_phase3f_evaluation.py
+?? backend/evaluation/experiments/run_phase4b_evaluation.py
+?? backend/evaluation/experiments/run_phase4c_diagnostics.py
+?? backend/evaluation/experiments/run_structure_confirmation.py
+?? backend/evaluation/experiments/run_structure_element_measurement.py
+?? backend/evaluation/experiments/run_structure_rrf_calibration.py
+?? backend/evaluation/experiments/run_table_evidence_measurement.py
+?? backend/evaluation/experiments/synthesize_structure_discriminating.py
+?? backend/evaluation/isolation.py
+?? backend/evaluation/metrics/__init__.py
+?? backend/evaluation/qa_metrics.py
+?? backend/evaluation/reports/__init__.py
+?? backend/evaluation/reports/ablation_A.json
+?? backend/evaluation/reports/ablation_A.md
+?? backend/evaluation/reports/ablation_B.json
+?? backend/evaluation/reports/ablation_B.md
+?? backend/evaluation/reports/ablation_C.json
+?? backend/evaluation/reports/ablation_C.md
+?? backend/evaluation/reports/ablation_D.json
+?? backend/evaluation/reports/ablation_D.md
+?? backend/evaluation/reports/ablation_config.json
+?? backend/evaluation/reports/ablation_heading_A.json
+?? backend/evaluation/reports/ablation_heading_A.md
+?? backend/evaluation/reports/ablation_heading_B.json
+?? backend/evaluation/reports/ablation_heading_B.md
+?? backend/evaluation/reports/ablation_heading_C.json
+?? backend/evaluation/reports/ablation_heading_C.md
+?? backend/evaluation/reports/ablation_heading_D.json
+?? backend/evaluation/reports/ablation_heading_D.md
+?? backend/evaluation/reports/ablation_heading_config.json
+?? backend/evaluation/reports/ablation_structure_discriminating_A.json
+?? backend/evaluation/reports/ablation_structure_discriminating_A.md
+?? backend/evaluation/reports/ablation_structure_discriminating_B.json
+?? backend/evaluation/reports/ablation_structure_discriminating_B.md
+?? backend/evaluation/reports/ablation_structure_discriminating_C.json
+?? backend/evaluation/reports/ablation_structure_discriminating_C.md
+?? backend/evaluation/reports/ablation_structure_discriminating_D.json
+?? backend/evaluation/reports/ablation_structure_discriminating_D.md
+?? backend/evaluation/reports/ablation_structure_discriminating_config.json
+?? backend/evaluation/reports/denominator_sensitivity.json
+?? backend/evaluation/reports/denominator_sensitivity.md
+?? backend/evaluation/reports/structural_retrieval_fix_report.md
+?? backend/evaluation/reports/structural_retrieval_reachability_audit.md
+?? backend/evaluation/reports/structure_confirmation.json
+?? backend/evaluation/reports/structure_confirmation_report.md
+?? backend/evaluation/reports/structure_discriminating_ablation_report.md
+?? backend/evaluation/reports/structure_discriminating_analysis.json
+?? backend/evaluation/reports/structure_discriminating_v1_audit.md
+?? backend/evaluation/reports/structure_element_measurement_analysis.json
+?? backend/evaluation/reports/structure_element_measurement_control.json
+?? backend/evaluation/reports/structure_element_measurement_report.md
+?? backend/evaluation/reports/structure_element_measurement_treatment.json
+?? backend/evaluation/reports/structure_eval.json
+?? backend/evaluation/reports/structure_eval.md
+?? backend/evaluation/reports/structure_rrf_calibration.json
+?? backend/evaluation/reports/structure_rrf_calibration_report.md
+?? backend/evaluation/reports/table_evidence_architecture.md
+?? backend/evaluation/reports/table_evidence_measurement_analysis.json
+?? backend/evaluation/reports/table_evidence_measurement_control.json
+?? backend/evaluation/reports/table_evidence_measurement_report.md
+?? backend/evaluation/reports/table_evidence_measurement_treatment.json
+?? backend/evaluation/retrieval_metrics.py
+?? backend/evaluation/runner.py
+?? backend/evaluation/schemas.py
+?? backend/evaluation/structure_eval.py
+?? backend/graph/__init__.py
+?? backend/graph/evidence.py
+?? backend/graph/models.py
+?? backend/graph/service.py
+?? backend/migrations/versions/005_add_document_graph.py
+?? backend/migrations/versions/006_add_structure_elements.py
+?? backend/migrations/versions/007_add_table_rows.py
+?? backend/models/media-verification/MANIFEST.json
+?? backend/models/media-verification/config.json
+?? backend/models/media-verification/preprocessor_config.json
+?? backend/models/whisper/small/config.json
+?? backend/models/whisper/small/model.bin
+?? backend/models/whisper/small/tokenizer.json
+?? backend/models/whisper/small/vocabulary.txt
+?? backend/phases/phase3d_evaluation_report.json
+?? backend/phases/phase3f_evaluation_report.json
+?? backend/phases/phase3f_validation_report.txt
+?? backend/phases/phase3g_pipeline_audit.txt
+?? backend/phases/phase4a_qa_failure_audit.txt
+?? backend/phases/phase4b_evaluation_report.json
+?? backend/phases/phase4b_qa_evaluation_report.txt
+?? backend/phases/phase4c_failure_matrix.json
+?? backend/phases/phase4c_qa_failure_isolation_report.txt
+?? backend/phases/phase4d/__init__.py
+?? backend/phases/phase4d/__main__.py
+?? backend/phases/phase4d/evaluate_candidates.py
+?? backend/phases/phase4d/generate_report.py
+?? backend/phases/phase4d/oracle_eval.py
+?? backend/phases/phase4d/reconciliation.py
+?? backend/phases/phase4d/train.py
+?? backend/phases/phase4d/training_data.py
+?? backend/phases/phase4d_1_reconciliation.json
+?? backend/phases/phase4d_1_reconciliation_report.txt
+?? backend/phases/phase4d_experiment_results.json
+?? backend/phases/phase4d_oracle_baseline_results.json
+?? backend/phases/phase4d_qa_model_improvement_report.txt
+?? backend/phases/phase4e/__init__.py
+?? backend/phases/phase4e/capability_analysis.py
+?? backend/phases/phase4e/generate_report.py
+?? backend/phases/phase4e_capability_matrix.json
+?? backend/phases/phase4e_diagnostic_results.json
+?? backend/phases/phase4e_qa_architecture_analysis.txt
+?? backend/phases/phase4f/__init__.py
+?? backend/phases/phase4f/balance_gate.py
+?? backend/phases/phase4f/dataset/__init__.py
+?? backend/phases/phase4f/dataset/dataset_manifest.json
+?? backend/phases/phase4f/dataset/dataset_manifest_v3.json
+?? backend/phases/phase4f/dataset/dataset_manifest_v3_1.json
+?? backend/phases/phase4f/dataset/dataset_metadata.json
+?? backend/phases/phase4f/dataset/dataset_quality_report.json
+?? backend/phases/phase4f/dataset/dataset_quality_report_v3.json
+?? backend/phases/phase4f/dataset/dataset_quality_report_v3_1.json
+?? backend/phases/phase4f/dataset/expand_and_audit.py
+?? backend/phases/phase4f/dataset/generator.py
+?? backend/phases/phase4f/dataset/training_data.jsonl
+?? backend/phases/phase4f/dataset/training_data_v3.jsonl
+?? backend/phases/phase4f/dataset/training_data_v3_1.jsonl
+?? backend/phases/phase4f/experiments/evaluate.py
+?? backend/phases/phase4f/experiments/experiment_manifest.json
+?? backend/phases/phase4f/experiments/final_gpu_package/README_GPU_EXECUTION.md
+?? backend/phases/phase4f/experiments/final_gpu_package/dataset/training_data_v3_1.jsonl
+?? backend/phases/phase4f/experiments/final_gpu_package/dataset_checksum.txt
+?? backend/phases/phase4f/experiments/final_gpu_package/evaluation/evaluate.py
+?? backend/phases/phase4f/experiments/final_gpu_package/expected_output_structure.txt
+?? backend/phases/phase4f/experiments/final_gpu_package/final_gpu_package_manifest.json
+?? backend/phases/phase4f/experiments/final_gpu_package/production_model_checksum.txt
+?? backend/phases/phase4f/experiments/final_gpu_package/requirements.txt
+?? backend/phases/phase4f/experiments/final_gpu_package/training/experiment_config.json
+?? backend/phases/phase4f/experiments/final_gpu_package/training/train.py
+?? backend/phases/phase4f/experiments/phase4f_3_results.json
+?? backend/phases/phase4f/experiments/phase4f_3_training_report.txt
+?? backend/phases/phase4f/experiments/phase4f_3r_freeze_report.txt
+?? backend/phases/phase4f/experiments/phase4f_4_controlled_gpu_experiment_report.txt
+?? backend/phases/phase4f/experiments/phase4f_4_experiment_manifest.json
+?? backend/phases/phase4f/experiments/phase4f_4_results.json
+?? backend/phases/phase4f/experiments/phase4f_4e_cuda_environment.json
+?? backend/phases/phase4f/experiments/phase4f_4e_cuda_environment_report.txt
+?? backend/phases/phase4f/experiments/requirements.txt
+?? backend/phases/phase4f/experiments/results.pre_joint_selection_v1/all_results.json
+?? backend/phases/phase4f/experiments/results/A0/evaluation_results.json
+?? backend/phases/phase4f/experiments/results/A0/metadata.json
+?? backend/phases/phase4f/experiments/results/A1/checkpoint_best/config.json
+?? backend/phases/phase4f/experiments/results/A1/checkpoint_best/tokenizer.json
+?? backend/phases/phase4f/experiments/results/A1/checkpoint_best/tokenizer_config.json
+?? backend/phases/phase4f/experiments/results/A1/evaluation_results.json
+?? backend/phases/phase4f/experiments/results/A1/training_metadata.json
+?? backend/phases/phase4f/experiments/results/A2/checkpoint_best/config.json
+?? backend/phases/phase4f/experiments/results/A2/checkpoint_best/tokenizer.json
+?? backend/phases/phase4f/experiments/results/A2/checkpoint_best/tokenizer_config.json
+?? backend/phases/phase4f/experiments/results/A2/evaluation_results.json
+?? backend/phases/phase4f/experiments/results/A2/training_metadata.json
+?? backend/phases/phase4f/experiments/results/A3/checkpoint_best/config.json
+?? backend/phases/phase4f/experiments/results/A3/checkpoint_best/tokenizer.json
+?? backend/phases/phase4f/experiments/results/A3/checkpoint_best/tokenizer_config.json
+?? backend/phases/phase4f/experiments/results/A3/evaluation_results.json
+?? backend/phases/phase4f/experiments/results/A3/training_metadata.json
+?? backend/phases/phase4f/experiments/results/all_results.json
+?? backend/phases/phase4f/experiments/results_reconstruction_fix/A0/evaluation_results.json
+?? backend/phases/phase4f/experiments/results_reconstruction_fix/A0_gpu_package/evaluation_results.json
+?? backend/phases/phase4f/experiments/run_experiment.py
+?? backend/phases/phase4f/experiments/train.py
+?? backend/phases/phase4f/freeze_gate.py
+?? backend/phases/phase4f/gate_common.py
+?? backend/phases/phase4f/phase4f_1_dataset_audit_report.txt
+?? backend/phases/phase4f/phase4f_2_dataset_quality_gate_report.txt
+?? backend/phases/phase4f/phase4f_2r_dataset_balance_report.txt
+?? backend/phases/phase4f/phase4f_4r_manifest.json
+?? backend/phases/phase4f/phase4f_5/configs/a1_config.json
+?? backend/phases/phase4f/phase4f_5/configs/a2_config.json
+?? backend/phases/phase4f/phase4f_5/dataset/data_quality_gate.json
+?? backend/phases/phase4f/phase4f_5/dataset/derived_dataset.jsonl
+?? backend/phases/phase4f/phase4f_5/dataset/span_alignment_audit.json
+?? backend/phases/phase4f/phase4f_5/dataset/truncation_audit.json
+?? backend/phases/phase4f/phase4f_5/diagnostics/a0_forensics.json
+?? backend/phases/phase4f/phase4f_5/diagnostics/a1_forensics.json
+?? backend/phases/phase4f/phase4f_5/diagnostics/a2_forensics.json
+?? backend/phases/phase4f/phase4f_5/diagnostics/all_inference_results.json
+?? backend/phases/phase4f/phase4f_5/diagnostics/failure_taxonomy.json
+?? backend/phases/phase4f/phase4f_5/evaluation/A0_test_results.json
+?? backend/phases/phase4f/phase4f_5/evaluation/A1_test_results.json
+?? backend/phases/phase4f/phase4f_5/evaluation/A2_test_results.json
+?? backend/phases/phase4f/phase4f_5/evaluation/evaluate.py
+?? backend/phases/phase4f/phase4f_5/evaluation/evaluation_protocol.json
+?? backend/phases/phase4f/phase4f_5/logs/a1_training.json
+?? backend/phases/phase4f/phase4f_5/logs/a2_training.json
+?? backend/phases/phase4f/phase4f_5/manifests/experiment_manifest.json
+?? backend/phases/phase4f/phase4f_5/manifests/final_experiment_manifest.json
+?? backend/phases/phase4f/phase4f_5/manifests/source_integrity.json
+?? backend/phases/phase4f/phase4f_5/manifests/split_manifest.json
+?? backend/phases/phase4f/phase4f_5/prepare_experiment.py
+?? backend/phases/phase4f/phase4f_5/reports/phase4f_5a_preparation_report.txt
+?? backend/phases/phase4f/phase4f_5/reports/phase4f_5b_training_report.txt
+?? backend/phases/phase4f/phase4f_5/results.pre_joint_selection_v1/a0_test.json
+?? backend/phases/phase4f/phase4f_5/results.pre_joint_selection_v1/a1_test.json
+?? backend/phases/phase4f/phase4f_5/results.pre_joint_selection_v1/a2_test.json
+?? backend/phases/phase4f/phase4f_5/results.pre_joint_selection_v1/comparison.json
+?? backend/phases/phase4f/phase4f_5/results.pre_reconstruction_fix/a0_test.json
+?? backend/phases/phase4f/phase4f_5/results.pre_reconstruction_fix/a1_test.json
+?? backend/phases/phase4f/phase4f_5/results.pre_reconstruction_fix/a2_test.json
+?? backend/phases/phase4f/phase4f_5/results.pre_reconstruction_fix/comparison.json
+?? backend/phases/phase4f/phase4f_5/results/a0_test.json
+?? backend/phases/phase4f/phase4f_5/results/a0_test.protocol_v1_argmaxchain.json
+?? backend/phases/phase4f/phase4f_5/results/a0_test.protocol_v2_joint.json
+?? backend/phases/phase4f/phase4f_5/results/a1_test.json
+?? backend/phases/phase4f/phase4f_5/results/a1_test.protocol_v1_argmaxchain.json
+?? backend/phases/phase4f/phase4f_5/results/a1_test.protocol_v2_joint.json
+?? backend/phases/phase4f/phase4f_5/results/a2_test.json
+?? backend/phases/phase4f/phase4f_5/results/a2_test.protocol_v1_argmaxchain.json
+?? backend/phases/phase4f/phase4f_5/results/a2_test.protocol_v2_joint.json
+?? backend/phases/phase4f/phase4f_5/results/comparison.json
+?? backend/phases/phase4f/phase4f_5/run_experiment.py
+?? backend/phases/phase4f/phase4f_5c/em_f1_gap_analysis.json
+?? backend/phases/phase4f/phase4f_5c/failure_matrix.json
+?? backend/phases/phase4f/phase4f_5c/generate_analysis.py
+?? backend/phases/phase4f/phase4f_5c/list_audit.json
+?? backend/phases/phase4f/phase4f_5c/long_context_audit.json
+?? backend/phases/phase4f/phase4f_5c/normalization_diagnostic.json
+?? backend/phases/phase4f/phase4f_5c/numeric_audit.json
+?? backend/phases/phase4f/phase4f_5c/per_category_comparison.json
+?? backend/phases/phase4f/phase4f_5c/phase4f_5c_manifest.json
+?? backend/phases/phase4f/phase4f_5c/production_strengths.json
+?? backend/phases/phase4f/phase4f_5c/reports/phase4f_5c_qa_analysis_report.txt
+?? backend/phases/phase4f/phase4f_5c/root_cause_analysis.json
+?? backend/phases/phase4f/phase4f_5c/table_audit.json
+?? backend/phases/phase4f/phase4f_5c/test_composition.json
+?? backend/phases/phase4f/phase4f_5c/training_curve_analysis.json
+?? backend/phases/phase4f/phase4f_5d/analysis.pre_joint_selection_v1/a0_benchmark_v1.json
+?? backend/phases/phase4f/phase4f_5d/analysis.pre_joint_selection_v1/a1_benchmark_v1.json
+?? backend/phases/phase4f/phase4f_5d/analysis.pre_joint_selection_v1/a2_benchmark_v1.json
+?? backend/phases/phase4f/phase4f_5d/analysis.pre_joint_selection_v1/benchmark_comparison.json
+?? backend/phases/phase4f/phase4f_5d/analysis.pre_joint_selection_v1/category_balance.json
+?? backend/phases/phase4f/phase4f_5d/analysis.pre_joint_selection_v1/duplicate_audit.json
+?? backend/phases/phase4f/phase4f_5d/analysis.pre_joint_selection_v1/gold_span_validation.json
+?? backend/phases/phase4f/phase4f_5d/analysis.pre_joint_selection_v1/leakage_audit.json
+?? backend/phases/phase4f/phase4f_5d/analysis.pre_joint_selection_v1/test_composition.json
+?? backend/phases/phase4f/phase4f_5d/analysis.pre_joint_selection_v1/unanswerable_audit.json
+?? backend/phases/phase4f/phase4f_5d/analysis/a0_benchmark_v1.json
+?? backend/phases/phase4f/phase4f_5d/analysis/a1_benchmark_v1.json
+?? backend/phases/phase4f/phase4f_5d/analysis/a2_benchmark_v1.json
+?? backend/phases/phase4f/phase4f_5d/analysis/benchmark_comparison.json
+?? backend/phases/phase4f/phase4f_5d/analysis/category_balance.json
+?? backend/phases/phase4f/phase4f_5d/analysis/duplicate_audit.json
+?? backend/phases/phase4f/phase4f_5d/analysis/gold_span_validation.json
+?? backend/phases/phase4f/phase4f_5d/analysis/leakage_audit.json
+?? backend/phases/phase4f/phase4f_5d/analysis/test_composition.json
+?? backend/phases/phase4f/phase4f_5d/analysis/unanswerable_audit.json
+?? backend/phases/phase4f/phase4f_5d/benchmark/benchmark_checksum.txt
+?? backend/phases/phase4f/phase4f_5d/benchmark/benchmark_manifest.json
+?? backend/phases/phase4f/phase4f_5d/benchmark/qa_benchmark_v1.jsonl
+?? backend/phases/phase4f/phase4f_5d/build_benchmark.py
+?? backend/phases/phase4f/phase4f_5d/phase4f_5d_manifest.json
+?? backend/phases/phase4f/phase4f_5d/reports/phase4f_5d_benchmark_hardening_report.txt
+?? backend/phases/phase4f/phase4f_5e/analysis.pre_joint_selection_v1/capability_matrix.json
+?? backend/phases/phase4f/phase4f_5e/analysis.pre_joint_selection_v1/confidence_distribution.json
+?? backend/phases/phase4f/phase4f_5e/analysis.pre_joint_selection_v1/f1_gain_analysis.json
+?? backend/phases/phase4f/phase4f_5e/analysis.pre_joint_selection_v1/next_experiment_matrix.json
+?? backend/phases/phase4f/phase4f_5e/analysis.pre_joint_selection_v1/production_vs_experiment.json
+?? backend/phases/phase4f/phase4f_5e/analysis.pre_joint_selection_v1/root_cause_matrix.json
+?? backend/phases/phase4f/phase4f_5e/analysis.pre_joint_selection_v1/split_category_matrix.json
+?? backend/phases/phase4f/phase4f_5e/analysis.pre_joint_selection_v1/threshold_sweep.json
+?? backend/phases/phase4f/phase4f_5e/analysis.pre_joint_selection_v1/training_data_audit.json
+?? backend/phases/phase4f/phase4f_5e/analysis.pre_joint_selection_v1/unanswerable_audit.json
+?? backend/phases/phase4f/phase4f_5e/analysis.pre_reconstruction_fix/capability_matrix.json
+?? backend/phases/phase4f/phase4f_5e/analysis.pre_reconstruction_fix/confidence_distribution.json
+?? backend/phases/phase4f/phase4f_5e/analysis.pre_reconstruction_fix/f1_gain_analysis.json
+?? backend/phases/phase4f/phase4f_5e/analysis.pre_reconstruction_fix/next_experiment_matrix.json
+?? backend/phases/phase4f/phase4f_5e/analysis.pre_reconstruction_fix/production_vs_experiment.json
+?? backend/phases/phase4f/phase4f_5e/analysis.pre_reconstruction_fix/root_cause_matrix.json
+?? backend/phases/phase4f/phase4f_5e/analysis.pre_reconstruction_fix/split_category_matrix.json
+?? backend/phases/phase4f/phase4f_5e/analysis.pre_reconstruction_fix/threshold_sweep.json
+?? backend/phases/phase4f/phase4f_5e/analysis.pre_reconstruction_fix/training_data_audit.json
+?? backend/phases/phase4f/phase4f_5e/analysis.pre_reconstruction_fix/unanswerable_audit.json
+?? backend/phases/phase4f/phase4f_5e/analysis/capability_matrix.json
+?? backend/phases/phase4f/phase4f_5e/analysis/confidence_distribution.json
+?? backend/phases/phase4f/phase4f_5e/analysis/f1_gain_analysis.json
+?? backend/phases/phase4f/phase4f_5e/analysis/next_experiment_matrix.json
+?? backend/phases/phase4f/phase4f_5e/analysis/production_vs_experiment.json
+?? backend/phases/phase4f/phase4f_5e/analysis/root_cause_matrix.json
+?? backend/phases/phase4f/phase4f_5e/analysis/split_category_matrix.json
+?? backend/phases/phase4f/phase4f_5e/analysis/threshold_sweep.json
+?? backend/phases/phase4f/phase4f_5e/analysis/training_data_audit.json
+?? backend/phases/phase4f/phase4f_5e/analysis/unanswerable_audit.json
+?? backend/phases/phase4f/phase4f_5e/phase4f_5e_manifest.json
+?? backend/phases/phase4f/phase4f_5e/reports/phase4f_5e_qa_capability_audit.txt
+?? backend/phases/phase4f/phase4f_5e/run_analysis.py
+?? backend/phases/phase4f/phase4f_5f/dataset/experiment_f1_manifest.json
+?? backend/phases/phase4f/phase4f_5f/dataset/experiment_f1_quality_report.json
+?? backend/phases/phase4f/phase4f_5f/dataset/experiment_f1_split.json
+?? backend/phases/phase4f/phase4f_5f/f2/config/f2_config.json
+?? backend/phases/phase4f/phase4f_5f/f2/evaluation/f2_benchmark.json
+?? backend/phases/phase4f/phase4f_5f/f2/evaluation/f2_holdout.json
+?? backend/phases/phase4f/phase4f_5f/f2/evaluation/f2_validation.json
+?? backend/phases/phase4f/phase4f_5f/f2/logs/f2_training.json
+?? backend/phases/phase4f/phase4f_5f/f2/manifests/f2_dataset_ids.json
+?? backend/phases/phase4f/phase4f_5f/f2/manifests/f2_manifest.json
+?? backend/phases/phase4f/phase4f_5f/f2/reconciliation/f2_baseline_comparison.json
+?? backend/phases/phase4f/phase4f_5f/f2/reconciliation/f2_data_balance_audit.json
+?? backend/phases/phase4f/phase4f_5f/f2/reconciliation/f2_label_audit.json
+?? backend/phases/phase4f/phase4f_5f/f2/reconciliation/f2_no_answer_logic_audit.json
+?? backend/phases/phase4f/phase4f_5f/f2/reconciliation/f2_prediction_audit.json
+?? backend/phases/phase4f/phase4f_5f/f2/reconciliation/f2_root_cause_analysis.json
+?? backend/phases/phase4f/phase4f_5f/f2/reports/phase4f_5f_f2_final_report.txt
+?? backend/phases/phase4f/phase4f_5f/f2/reports/phase4f_5f_f2_reconciliation_report.txt
+?? backend/phases/phase4f/phase4f_5f/f2/reports/phase4f_5f_g_threshold_report.txt
+?? backend/phases/phase4f/phase4f_5f/f2/run_f2.py
+?? backend/phases/phase4f/phase4f_5f/f2/threshold_experiment.pre_joint_selection_v1/benchmark_result.json
+?? backend/phases/phase4f/phase4f_5f/f2/threshold_experiment.pre_joint_selection_v1/holdout_result.json
+?? backend/phases/phase4f/phase4f_5f/f2/threshold_experiment.pre_joint_selection_v1/margin_sweep.json
+?? backend/phases/phase4f/phase4f_5f/f2/threshold_experiment.pre_joint_selection_v1/raw_prediction_audit.json
+?? backend/phases/phase4f/phase4f_5f/f2/threshold_experiment.pre_joint_selection_v1/raw_predictions_benchmark.json
+?? backend/phases/phase4f/phase4f_5f/f2/threshold_experiment.pre_joint_selection_v1/raw_predictions_holdout.json
+?? backend/phases/phase4f/phase4f_5f/f2/threshold_experiment.pre_joint_selection_v1/raw_predictions_validation.json
+?? backend/phases/phase4f/phase4f_5f/f2/threshold_experiment.pre_joint_selection_v1/run_threshold_experiment.py
+?? backend/phases/phase4f/phase4f_5f/f2/threshold_experiment.pre_joint_selection_v1/stability_analysis.json
+?? backend/phases/phase4f/phase4f_5f/f2/threshold_experiment.pre_joint_selection_v1/threshold_experiment_manifest.json
+?? backend/phases/phase4f/phase4f_5f/f2/threshold_experiment.pre_joint_selection_v1/threshold_sweep.json
+?? backend/phases/phase4f/phase4f_5f/f2/threshold_experiment.pre_joint_selection_v1/validation_calibration.json
+?? backend/phases/phase4f/phase4f_5f/f2/threshold_experiment.pre_reconstruction_fix/benchmark_result.json
+?? backend/phases/phase4f/phase4f_5f/f2/threshold_experiment.pre_reconstruction_fix/holdout_result.json
+?? backend/phases/phase4f/phase4f_5f/f2/threshold_experiment.pre_reconstruction_fix/margin_sweep.json
+?? backend/phases/phase4f/phase4f_5f/f2/threshold_experiment.pre_reconstruction_fix/raw_prediction_audit.json
+?? backend/phases/phase4f/phase4f_5f/f2/threshold_experiment.pre_reconstruction_fix/raw_predictions_benchmark.json
+?? backend/phases/phase4f/phase4f_5f/f2/threshold_experiment.pre_reconstruction_fix/raw_predictions_holdout.json
+?? backend/phases/phase4f/phase4f_5f/f2/threshold_experiment.pre_reconstruction_fix/raw_predictions_validation.json
+?? backend/phases/phase4f/phase4f_5f/f2/threshold_experiment.pre_reconstruction_fix/run_threshold_experiment.py
+?? backend/phases/phase4f/phase4f_5f/f2/threshold_experiment.pre_reconstruction_fix/stability_analysis.json
+?? backend/phases/phase4f/phase4f_5f/f2/threshold_experiment.pre_reconstruction_fix/threshold_experiment_manifest.json
+?? backend/phases/phase4f/phase4f_5f/f2/threshold_experiment.pre_reconstruction_fix/threshold_sweep.json
+?? backend/phases/phase4f/phase4f_5f/f2/threshold_experiment.pre_reconstruction_fix/validation_calibration.json
+?? backend/phases/phase4f/phase4f_5f/f2/threshold_experiment/benchmark_result.json
+?? backend/phases/phase4f/phase4f_5f/f2/threshold_experiment/holdout_result.json
+?? backend/phases/phase4f/phase4f_5f/f2/threshold_experiment/margin_sweep.json
+?? backend/phases/phase4f/phase4f_5f/f2/threshold_experiment/raw_prediction_audit.json
+?? backend/phases/phase4f/phase4f_5f/f2/threshold_experiment/raw_predictions_benchmark.json
+?? backend/phases/phase4f/phase4f_5f/f2/threshold_experiment/raw_predictions_holdout.json
+?? backend/phases/phase4f/phase4f_5f/f2/threshold_experiment/raw_predictions_validation.json
+?? backend/phases/phase4f/phase4f_5f/f2/threshold_experiment/run_threshold_experiment.py
+?? backend/phases/phase4f/phase4f_5f/f2/threshold_experiment/stability_analysis.json
+?? backend/phases/phase4f/phase4f_5f/f2/threshold_experiment/threshold_experiment_manifest.json
+?? backend/phases/phase4f/phase4f_5f/f2/threshold_experiment/threshold_sweep.json
+?? backend/phases/phase4f/phase4f_5f/f2/threshold_experiment/validation_calibration.json
+?? backend/phases/phase4f/phase4f_5f/h/audits/duplicate_audit.json
+?? backend/phases/phase4f/phase4f_5f/h/audits/leakage_audit.json
+?? backend/phases/phase4f/phase4f_5f/h/audits/quality_gate_failures.json
+?? backend/phases/phase4f/phase4f_5f/h/audits/semantic_audit.json
+?? backend/phases/phase4f/phase4f_5f/h/candidates/all_candidates.jsonl
+?? backend/phases/phase4f/phase4f_5f/h/generate_h_candidates.py
+?? backend/phases/phase4f/phase4f_5f/h/manifests/h_manifest.json
+?? backend/phases/phase4f/phase4f_5f/h/pools/h10.jsonl
+?? backend/phases/phase4f/phase4f_5f/h/pools/h20.jsonl
+?? backend/phases/phase4f/phase4f_5f/h/pools/h30.jsonl
+?? backend/phases/phase4f/phase4f_5f/h/reports/phase4f_5f_h_dataset_design_report.txt
+?? backend/phases/phase4f/phase4f_5f/h1/config/f1_reconciled_ids.json
+?? backend/phases/phase4f/phase4f_5f/h1/config/h1_config.json
+?? backend/phases/phase4f/phase4f_5f/h1/evaluation/h1_benchmark.json
+?? backend/phases/phase4f/phase4f_5f/h1/evaluation/h1_holdout.json
+?? backend/phases/phase4f/phase4f_5f/h1/evaluation/h1_null_analysis.json
+?? backend/phases/phase4f/phase4f_5f/h1/evaluation/h1_validation.json
+?? backend/phases/phase4f/phase4f_5f/h1/logs/h1_training.json
+?? backend/phases/phase4f/phase4f_5f/h1/manifests/h1_manifest.json
+?? backend/phases/phase4f/phase4f_5f/h1/reports/phase4f_5f_h1_final_report.txt
+?? backend/phases/phase4f/phase4f_5f/h1/run_h1.py
+?? backend/phases/phase4f/phase4f_5f/h1_reconciliation/H1_RECONCILIATION_REPORT.md
+?? backend/phases/phase4f/phase4f_5f/h1_reconciliation/README.md
+?? backend/phases/phase4f/phase4f_5f/h1_reconciliation/checksums.txt
+?? backend/phases/phase4f/phase4f_5f/h1_reconciliation/h1_count_reconciliation.json
+?? backend/phases/phase4f/phase4f_5f/h1_reconciliation/h1_label_integrity.json
+?? backend/phases/phase4f/phase4f_5f/h1_reconciliation/h1_metric_recalculation.json
+?? backend/phases/phase4f/phase4f_5f/h1_reconciliation/h1_no_answer_analysis.json
+?? backend/phases/phase4f/phase4f_5f/h1_reconciliation/h1_null_score_analysis.json
+?? backend/phases/phase4f/phase4f_5f/h1_reconciliation/h1_overlap_report.json
+?? backend/phases/phase4f/phase4f_5f/h1_reconciliation/h1_protocol_audit.json
+?? backend/phases/phase4f/phase4f_5f/h1_reconciliation/h1_reconciled_comparison.json
+?? backend/phases/phase4f/phase4f_5f/phase4f_5f_f1_reconciliation_manifest.json
+?? backend/phases/phase4f/phase4f_5f/reconciliation/dataset_reconciliation.json
+?? backend/phases/phase4f/phase4f_5f/reconciliation/final_holdout_ids.json
+?? backend/phases/phase4f/phase4f_5f/reconciliation/final_training_ids.json
+?? backend/phases/phase4f/phase4f_5f/reconciliation/final_validation_ids.json
+?? backend/phases/phase4f/phase4f_5f/reconciliation/invalid_span_audit.json
+?? backend/phases/phase4f/phase4f_5f/reconciliation/training_protocol_audit.json
+?? backend/phases/phase4f/phase4f_5f/recovery/artifact_inventory.json
+?? backend/phases/phase4f/phase4f_5f/recovery/gpu_environment_report.json
+?? backend/phases/phase4f/phase4f_5f/recovery/gpu_environment_report.txt
+?? backend/phases/phase4f/phase4f_5f/recovery/phase4f_5f_recovery_report.txt
+?? backend/phases/phase4f/phase4f_5f/recovery/recovery_manifest.json
+?? backend/phases/phase4f/phase4f_5f/reports/phase4f_5f_f1_preparation_report.txt
+?? backend/phases/phase4f/phase4f_5f/reports/phase4f_5f_f1_reconciliation_report.txt
+?? backend/phases/phase4f/phase4f_5f/research_ledger/RESEARCH_LEDGER.md
+?? backend/phases/phase4f/phase4f_5f/research_ledger/checksums.txt
+?? backend/phases/phase4f/phase4f_5f/research_ledger/research_ledger.json
+?? backend/phases/phase4f/phase4f_5f/run_experiment.py
+?? backend/phases/phase4f/quality_gate.py
+?? backend/phases/phase4f/reconciliation/a0_reproduction.json
+?? backend/phases/phase4f/reconciliation/checkpoint_audit.json
+?? backend/phases/phase4f/reconciliation/cross_phase_evaluation_compatibility.json
+?? backend/phases/phase4f/reconciliation/dataset_label_audit.json
+?? backend/phases/phase4f/reconciliation/evaluation_parity_matrix.json
+?? backend/phases/phase4f/reconciliation/experiment_artifact_inventory.json
+?? backend/phases/phase4f/reconciliation/failure_taxonomy_reconciliation.json
+?? backend/phases/phase4f/reconciliation/manual_forensic_traces.json
+?? backend/phases/phase4f/reconciliation/model_initialization_audit.json
+?? backend/phases/phase4f/reconciliation/phase4f_4r_reconciliation_report.txt
+?? backend/phases/phase4f/reconciliation/token_span_audit.json
+?? backend/phases/phase4f/reconciliation/training_configuration_audit.json
+?? backend/phases/phase4f/training/__init__.py
+?? backend/phases/phase4f/training/configs.py
+?? backend/phases/phase4f/training/environment.json
+?? backend/phases/phase4f/training/train.py
+?? backend/phases/phase4f_qa_architecture_experiment_report.txt
+?? backend/scripts/cleanup_orphan_uploads.py
+?? backend/scripts/cleanup_path.py
+?? backend/scripts/cleanup_smoke.py
+?? backend/scripts/create_test_user.py
+?? backend/scripts/db_check.py
+?? backend/scripts/setup_db.py
+?? backend/scripts/start_server.py
+?? backend/tests/README.md
+?? backend/tests/e2e/__init__.py
+?? backend/tests/e2e/browser/__init__.py
+?? backend/tests/e2e/browser/test_browser_flow.py
+?? backend/tests/e2e/browser/test_document_flow.py
+?? backend/tests/e2e/browser/test_embedding_flow.py
+?? backend/tests/e2e/browser/test_phase6_reliability.py
+?? backend/tests/e2e/browser/test_rag_flow.py
+?? backend/tests/e2e/browser/test_real_browser.py
+?? backend/tests/fixtures/__init__.py
+?? backend/tests/fixtures/darwin_proper.pdf
+?? backend/tests/fixtures/e2e_config.py
+?? backend/tests/fixtures/graph_data.py
+?? backend/tests/fixtures/integration_db.py
+?? backend/tests/fixtures/integration_http.py
+?? backend/tests/fixtures/live_server.py
+?? backend/tests/fixtures/paths.py
+?? backend/tests/fixtures/pdf_layout.py
+?? backend/tests/integration/__init__.py
+?? backend/tests/integration/auth/__init__.py
+?? backend/tests/integration/auth/test_auth.py
+?? backend/tests/integration/documents/__init__.py
+?? backend/tests/integration/documents/test_document_detail_pagination.py
+?? backend/tests/integration/documents/test_document_insights.py
+?? backend/tests/integration/documents/test_document_mutation_id_validation.py
+?? backend/tests/integration/documents/test_file_validation.py
+?? backend/tests/integration/documents/test_table_row_migration.py
+?? backend/tests/integration/documents/test_table_row_persistence.py
+?? backend/tests/integration/embeddings/__init__.py
+?? backend/tests/integration/embeddings/test_generate_error_handling.py
+?? backend/tests/integration/graph/__init__.py
+?? backend/tests/integration/graph/test_graph_ingestion.py
+?? backend/tests/integration/graph/test_graph_rag_flow.py
+?? backend/tests/integration/graph/test_graph_security.py
+?? backend/tests/integration/graph/test_structure_augmentation.py
+?? backend/tests/integration/graph/test_structure_reachability.py
+?? backend/tests/integration/graph/test_table_evidence_api.py
+?? backend/tests/integration/graph/test_table_evidence_bands.py
+?? backend/tests/integration/rag/__init__.py
+?? backend/tests/integration/rag/test_real_e2e_validation.py
+?? backend/tests/integration/reliability/__init__.py
+?? backend/tests/integration/reliability/test_table_row_reliability_api.py
+?? backend/tests/integration/security/__init__.py
+?? backend/tests/integration/security/test_cors.py
+?? backend/tests/integration/settings/__init__.py
+?? backend/tests/integration/settings/test_settings.py
+?? backend/tests/integration/verification/__init__.py
+?? backend/tests/integration/verification/test_image_verification.py
+?? backend/tests/integration/verification/test_verification_integrity.py
+?? backend/tests/integration/voice/__init__.py
+?? backend/tests/integration/voice/test_voice_synthesize.py
+?? backend/tests/integration/voice/test_voice_transcribe.py
+?? backend/tests/unit/__init__.py
+?? backend/tests/unit/auth/__init__.py
+?? backend/tests/unit/auth/test_config_security.py
+?? backend/tests/unit/brain/__init__.py
+?? backend/tests/unit/brain/test_brain_orchestration.py
+?? backend/tests/unit/brain/test_brain_types.py
+?? backend/tests/unit/brain/test_outcomes.py
+?? backend/tests/unit/chat/__init__.py
+?? backend/tests/unit/chat/test_answer_span.py
+?? backend/tests/unit/chat/test_chat_unit.py
+?? backend/tests/unit/chat/test_phase3d_context.py
+?? backend/tests/unit/chat/test_phase3d_reconciliation.py
+?? backend/tests/unit/chat/test_qa_answer_reconstruction.py
+?? backend/tests/unit/chat/test_table_evidence_gate.py
+?? backend/tests/unit/documents/__init__.py
+?? backend/tests/unit/documents/test_pdf_read_order.py
+?? backend/tests/unit/documents/test_phase3d_chunking.py
+?? backend/tests/unit/documents/test_phase3e_processing.py
+?? backend/tests/unit/documents/test_structured_extraction.py
+?? backend/tests/unit/documents/test_table_rows.py
+?? backend/tests/unit/embeddings/__init__.py
+?? backend/tests/unit/evaluation/__init__.py
+?? backend/tests/unit/evaluation/conftest.py
+?? backend/tests/unit/evaluation/test_denominator_sensitivity.py
+?? backend/tests/unit/evaluation/test_disposable_database_authorization.py
+?? backend/tests/unit/evaluation/test_disposal_authorization_contract.py
+?? backend/tests/unit/evaluation/test_evaluation_isolation.py
+?? backend/tests/unit/evaluation/test_function_cleanup_authorization.py
+?? backend/tests/unit/evaluation/test_heading_corpus.py
+?? backend/tests/unit/evaluation/test_isolation_guard_identity.py
+?? backend/tests/unit/evaluation/test_legacy_runner_isolation.py
+?? backend/tests/unit/evaluation/test_lifecycle_authorization.py
+?? backend/tests/unit/evaluation/test_metrics.py
+?? backend/tests/unit/evaluation/test_phase3_runner_target_order.py
+?? backend/tests/unit/evaluation/test_phase3d_cleanup_scope.py
+?? backend/tests/unit/evaluation/test_phase3d_evaluation_cleanup_scope.py
+?? backend/tests/unit/evaluation/test_phase3e_integration_cleanup_scope.py
+?? backend/tests/unit/evaluation/test_phase3e_validation_cleanup_scope.py
+?? backend/tests/unit/evaluation/test_phase3f_evaluation_cleanup_scope.py
+?? backend/tests/unit/evaluation/test_phase4b_evaluation_cleanup_scope.py
+?? backend/tests/unit/evaluation/test_run_artifacts.py
+?? backend/tests/unit/evaluation/test_runner_pre_engine_init.py
+?? backend/tests/unit/evaluation/test_runner_report_output.py
+?? backend/tests/unit/evaluation/test_structure_discriminating_corpus.py
+?? backend/tests/unit/evaluation/test_structure_eval.py
+?? backend/tests/unit/evaluation/test_structure_runner_guard_order.py
+?? backend/tests/unit/evaluation/test_unsupported_answer_denominator.py
+?? backend/tests/unit/graph/__init__.py
+?? backend/tests/unit/graph/test_fusion.py
+?? backend/tests/unit/graph/test_graph_edges.py
+?? backend/tests/unit/graph/test_structural_retrieval.py
+?? backend/tests/unit/graph/test_structure_element_retrieval.py
+?? backend/tests/unit/reliability/__init__.py
+?? backend/tests/unit/reliability/test_table_row_provenance.py
+?? backend/tests/unit/scripts/test_cleanup_orphan_uploads.py
+?? backend/tests/unit/security/__init__.py
+?? backend/tests/unit/security/test_sql_safety.py
+?? backend/tests/unit/storage/__init__.py
+?? backend/tests/unit/storage/test_database_url.py
+?? backend/tests/unit/storage/test_sqlite_type_isolation.py
+?? backend/tests/unit/verification/__init__.py
+?? backend/verification/service.py
+?? backend/voice.py
+?? compose.yaml
+?? docker/nginx.conf
+?? prompts/00_coordinator.md
+?? prompts/01_database_agent.md
+?? prompts/02_backend_agent.md
+?? prompts/03_frontend_agent.md
+?? prompts/04_ai_agent.md
+?? prompts/05_test_agent.md
+?? prompts/06_evaluation_agent.md
+?? prompts/07_security_agent.md
+?? prompts/08_verifier.md
+?? runbooks/docker-runtime.md
+?? src/components/common/DocumentInsightsPanel.tsx
+?? src/components/common/VoiceInputButton.tsx
+?? src/components/common/VoiceSpeakerButton.tsx
+```
+
+### 10.2 Complete final Git status/path listing
+
+```text
+ M .gitignore
+ M DOCUMIND_PROJECT_CONTEXT.md
+ M backend/brain/__init__.py
+ M backend/brain/adapters.py
+ M backend/brain/response.py
+ M backend/brain/types.py
+ M backend/chat/qa_model.py
+ M backend/chat/rag.py
+ M backend/chat/routes.py
+ M backend/documents/models.py
+ M backend/documents/processing.py
+ M backend/documents/routes.py
+ M backend/documents/schemas.py
+ M backend/embeddings/model.py
+ M backend/embeddings/routes.py
+ M backend/evaluation/harness/corpus.py
+ D backend/evaluation/harness/evaluator.py
+ M backend/main.py
+ M backend/migrations/env.py
+ D backend/phase3d_evaluation_report.json
+ D backend/phase3f_evaluation_report.json
+ D backend/phase3f_validation_report.txt
+ D backend/phase3g_pipeline_audit.txt
+ D backend/phase4a_qa_failure_audit.txt
+ D backend/phase4b_evaluation_report.json
+ D backend/phase4b_qa_evaluation_report.txt
+ D backend/phase4c_failure_matrix.json
+ D backend/phase4c_qa_failure_isolation_report.txt
+ D backend/phase4d/__init__.py
+ D backend/phase4d/__main__.py
+ D backend/phase4d/evaluate_candidates.py
+ D backend/phase4d/generate_report.py
+ D backend/phase4d/oracle_eval.py
+ D backend/phase4d/reconciliation.py
+ D backend/phase4d/train.py
+ D backend/phase4d/training_data.py
+ D backend/phase4d_1_reconciliation.json
+ D backend/phase4d_1_reconciliation_report.txt
+ D backend/phase4d_experiment_results.json
+ D backend/phase4d_oracle_baseline_results.json
+ D backend/phase4d_qa_model_improvement_report.txt
+ D backend/phase4e/__init__.py
+ D backend/phase4e/capability_analysis.py
+ D backend/phase4e/generate_report.py
+ D backend/phase4e_capability_matrix.json
+ D backend/phase4e_diagnostic_results.json
+ D backend/phase4e_qa_architecture_analysis.txt
+ D backend/phase4f/__init__.py
+ D backend/phase4f/balance_gate.py
+ D backend/phase4f/dataset/__init__.py
+ D backend/phase4f/dataset/dataset_manifest.json
+ D backend/phase4f/dataset/dataset_manifest_v3.json
+ D backend/phase4f/dataset/dataset_manifest_v3_1.json
+ D backend/phase4f/dataset/dataset_metadata.json
+ D backend/phase4f/dataset/dataset_quality_report.json
+ D backend/phase4f/dataset/dataset_quality_report_v3.json
+ D backend/phase4f/dataset/dataset_quality_report_v3_1.json
+ D backend/phase4f/dataset/expand_and_audit.py
+ D backend/phase4f/dataset/generator.py
+ D backend/phase4f/dataset/training_data.jsonl
+ D backend/phase4f/dataset/training_data_v3.jsonl
+ D backend/phase4f/dataset/training_data_v3_1.jsonl
+ D backend/phase4f/experiments/evaluate.py
+ D backend/phase4f/experiments/experiment_manifest.json
+ D backend/phase4f/experiments/final_gpu_package/README_GPU_EXECUTION.md
+ D backend/phase4f/experiments/final_gpu_package/dataset/training_data_v3_1.jsonl
+ D backend/phase4f/experiments/final_gpu_package/dataset_checksum.txt
+ D backend/phase4f/experiments/final_gpu_package/evaluation/evaluate.py
+ D backend/phase4f/experiments/final_gpu_package/expected_output_structure.txt
+ D backend/phase4f/experiments/final_gpu_package/final_gpu_package_manifest.json
+ D backend/phase4f/experiments/final_gpu_package/production_model_checksum.txt
+ D backend/phase4f/experiments/final_gpu_package/requirements.txt
+ D backend/phase4f/experiments/final_gpu_package/training/experiment_config.json
+ D backend/phase4f/experiments/final_gpu_package/training/train.py
+ D backend/phase4f/experiments/phase4f_3_results.json
+ D backend/phase4f/experiments/phase4f_3_training_report.txt
+ D backend/phase4f/experiments/phase4f_3r_freeze_report.txt
+ D backend/phase4f/experiments/phase4f_4_controlled_gpu_experiment_report.txt
+ D backend/phase4f/experiments/phase4f_4_experiment_manifest.json
+ D backend/phase4f/experiments/phase4f_4_results.json
+ D backend/phase4f/experiments/phase4f_4e_cuda_environment.json
+ D backend/phase4f/experiments/phase4f_4e_cuda_environment_report.txt
+ D backend/phase4f/experiments/requirements.txt
+ D backend/phase4f/experiments/results/A0/evaluation_results.json
+ D backend/phase4f/experiments/results/A0/metadata.json
+ D backend/phase4f/experiments/results/A1/checkpoint_best/config.json
+ D backend/phase4f/experiments/results/A1/checkpoint_best/tokenizer.json
+ D backend/phase4f/experiments/results/A1/checkpoint_best/tokenizer_config.json
+ D backend/phase4f/experiments/results/A1/evaluation_results.json
+ D backend/phase4f/experiments/results/A1/training_metadata.json
+ D backend/phase4f/experiments/results/A2/checkpoint_best/config.json
+ D backend/phase4f/experiments/results/A2/checkpoint_best/tokenizer.json
+ D backend/phase4f/experiments/results/A2/checkpoint_best/tokenizer_config.json
+ D backend/phase4f/experiments/results/A2/evaluation_results.json
+ D backend/phase4f/experiments/results/A2/training_metadata.json
+ D backend/phase4f/experiments/results/A3/checkpoint_best/config.json
+ D backend/phase4f/experiments/results/A3/checkpoint_best/tokenizer.json
+ D backend/phase4f/experiments/results/A3/checkpoint_best/tokenizer_config.json
+ D backend/phase4f/experiments/results/A3/evaluation_results.json
+ D backend/phase4f/experiments/results/A3/training_metadata.json
+ D backend/phase4f/experiments/results/all_results.json
+ D backend/phase4f/experiments/run_experiment.py
+ D backend/phase4f/experiments/train.py
+ D backend/phase4f/freeze_gate.py
+ D backend/phase4f/phase4f_1_dataset_audit_report.txt
+ D backend/phase4f/phase4f_2_dataset_quality_gate_report.txt
+ D backend/phase4f/phase4f_2r_dataset_balance_report.txt
+ D backend/phase4f/phase4f_4r_manifest.json
+ D backend/phase4f/phase4f_5/configs/a1_config.json
+ D backend/phase4f/phase4f_5/configs/a2_config.json
+ D backend/phase4f/phase4f_5/dataset/data_quality_gate.json
+ D backend/phase4f/phase4f_5/dataset/derived_dataset.jsonl
+ D backend/phase4f/phase4f_5/dataset/span_alignment_audit.json
+ D backend/phase4f/phase4f_5/dataset/truncation_audit.json
+ D backend/phase4f/phase4f_5/diagnostics/a0_forensics.json
+ D backend/phase4f/phase4f_5/diagnostics/a1_forensics.json
+ D backend/phase4f/phase4f_5/diagnostics/a2_forensics.json
+ D backend/phase4f/phase4f_5/diagnostics/all_inference_results.json
+ D backend/phase4f/phase4f_5/diagnostics/failure_taxonomy.json
+ D backend/phase4f/phase4f_5/evaluation/evaluate.py
+ D backend/phase4f/phase4f_5/evaluation/evaluation_protocol.json
+ D backend/phase4f/phase4f_5/logs/a1_training.json
+ D backend/phase4f/phase4f_5/logs/a2_training.json
+ D backend/phase4f/phase4f_5/manifests/experiment_manifest.json
+ D backend/phase4f/phase4f_5/manifests/final_experiment_manifest.json
+ D backend/phase4f/phase4f_5/manifests/source_integrity.json
+ D backend/phase4f/phase4f_5/manifests/split_manifest.json
+ D backend/phase4f/phase4f_5/prepare_experiment.py
+ D backend/phase4f/phase4f_5/reports/phase4f_5a_preparation_report.txt
+ D backend/phase4f/phase4f_5/reports/phase4f_5b_training_report.txt
+ D backend/phase4f/phase4f_5/results/a0_test.json
+ D backend/phase4f/phase4f_5/results/a1_test.json
+ D backend/phase4f/phase4f_5/results/a2_test.json
+ D backend/phase4f/phase4f_5/results/comparison.json
+ D backend/phase4f/phase4f_5/run_experiment.py
+ D backend/phase4f/phase4f_5c/em_f1_gap_analysis.json
+ D backend/phase4f/phase4f_5c/failure_matrix.json
+ D backend/phase4f/phase4f_5c/generate_analysis.py
+ D backend/phase4f/phase4f_5c/list_audit.json
+ D backend/phase4f/phase4f_5c/long_context_audit.json
+ D backend/phase4f/phase4f_5c/normalization_diagnostic.json
+ D backend/phase4f/phase4f_5c/numeric_audit.json
+ D backend/phase4f/phase4f_5c/per_category_comparison.json
+ D backend/phase4f/phase4f_5c/phase4f_5c_manifest.json
+ D backend/phase4f/phase4f_5c/production_strengths.json
+ D backend/phase4f/phase4f_5c/reports/phase4f_5c_qa_analysis_report.txt
+ D backend/phase4f/phase4f_5c/root_cause_analysis.json
+ D backend/phase4f/phase4f_5c/table_audit.json
+ D backend/phase4f/phase4f_5c/test_composition.json
+ D backend/phase4f/phase4f_5c/training_curve_analysis.json
+ D backend/phase4f/phase4f_5d/analysis/a0_benchmark_v1.json
+ D backend/phase4f/phase4f_5d/analysis/a1_benchmark_v1.json
+ D backend/phase4f/phase4f_5d/analysis/a2_benchmark_v1.json
+ D backend/phase4f/phase4f_5d/analysis/benchmark_comparison.json
+ D backend/phase4f/phase4f_5d/analysis/category_balance.json
+ D backend/phase4f/phase4f_5d/analysis/duplicate_audit.json
+ D backend/phase4f/phase4f_5d/analysis/gold_span_validation.json
+ D backend/phase4f/phase4f_5d/analysis/leakage_audit.json
+ D backend/phase4f/phase4f_5d/analysis/test_composition.json
+ D backend/phase4f/phase4f_5d/analysis/unanswerable_audit.json
+ D backend/phase4f/phase4f_5d/benchmark/benchmark_checksum.txt
+ D backend/phase4f/phase4f_5d/benchmark/benchmark_manifest.json
+ D backend/phase4f/phase4f_5d/benchmark/qa_benchmark_v1.jsonl
+ D backend/phase4f/phase4f_5d/build_benchmark.py
+ D backend/phase4f/phase4f_5d/phase4f_5d_manifest.json
+ D backend/phase4f/phase4f_5d/reports/phase4f_5d_benchmark_hardening_report.txt
+ D backend/phase4f/phase4f_5e/analysis/capability_matrix.json
+ D backend/phase4f/phase4f_5e/analysis/confidence_distribution.json
+ D backend/phase4f/phase4f_5e/analysis/f1_gain_analysis.json
+ D backend/phase4f/phase4f_5e/analysis/next_experiment_matrix.json
+ D backend/phase4f/phase4f_5e/analysis/production_vs_experiment.json
+ D backend/phase4f/phase4f_5e/analysis/root_cause_matrix.json
+ D backend/phase4f/phase4f_5e/analysis/split_category_matrix.json
+ D backend/phase4f/phase4f_5e/analysis/threshold_sweep.json
+ D backend/phase4f/phase4f_5e/analysis/training_data_audit.json
+ D backend/phase4f/phase4f_5e/analysis/unanswerable_audit.json
+ D backend/phase4f/phase4f_5e/phase4f_5e_manifest.json
+ D backend/phase4f/phase4f_5e/reports/phase4f_5e_qa_capability_audit.txt
+ D backend/phase4f/phase4f_5e/run_analysis.py
+ D backend/phase4f/phase4f_5f/dataset/experiment_f1_manifest.json
+ D backend/phase4f/phase4f_5f/dataset/experiment_f1_quality_report.json
+ D backend/phase4f/phase4f_5f/dataset/experiment_f1_split.json
+ D backend/phase4f/phase4f_5f/f2/config/f2_config.json
+ D backend/phase4f/phase4f_5f/f2/evaluation/f2_benchmark.json
+ D backend/phase4f/phase4f_5f/f2/evaluation/f2_holdout.json
+ D backend/phase4f/phase4f_5f/f2/evaluation/f2_validation.json
+ D backend/phase4f/phase4f_5f/f2/logs/f2_training.json
+ D backend/phase4f/phase4f_5f/f2/manifests/f2_dataset_ids.json
+ D backend/phase4f/phase4f_5f/f2/manifests/f2_manifest.json
+ D backend/phase4f/phase4f_5f/f2/reconciliation/f2_baseline_comparison.json
+ D backend/phase4f/phase4f_5f/f2/reconciliation/f2_data_balance_audit.json
+ D backend/phase4f/phase4f_5f/f2/reconciliation/f2_label_audit.json
+ D backend/phase4f/phase4f_5f/f2/reconciliation/f2_no_answer_logic_audit.json
+ D backend/phase4f/phase4f_5f/f2/reconciliation/f2_prediction_audit.json
+ D backend/phase4f/phase4f_5f/f2/reconciliation/f2_root_cause_analysis.json
+ D backend/phase4f/phase4f_5f/f2/reports/phase4f_5f_f2_final_report.txt
+ D backend/phase4f/phase4f_5f/f2/reports/phase4f_5f_f2_reconciliation_report.txt
+ D backend/phase4f/phase4f_5f/f2/reports/phase4f_5f_g_threshold_report.txt
+ D backend/phase4f/phase4f_5f/f2/run_f2.py
+ D backend/phase4f/phase4f_5f/f2/threshold_experiment/benchmark_result.json
+ D backend/phase4f/phase4f_5f/f2/threshold_experiment/holdout_result.json
+ D backend/phase4f/phase4f_5f/f2/threshold_experiment/margin_sweep.json
+ D backend/phase4f/phase4f_5f/f2/threshold_experiment/raw_prediction_audit.json
+ D backend/phase4f/phase4f_5f/f2/threshold_experiment/raw_predictions_benchmark.json
+ D backend/phase4f/phase4f_5f/f2/threshold_experiment/raw_predictions_holdout.json
+ D backend/phase4f/phase4f_5f/f2/threshold_experiment/raw_predictions_validation.json
+ D backend/phase4f/phase4f_5f/f2/threshold_experiment/run_threshold_experiment.py
+ D backend/phase4f/phase4f_5f/f2/threshold_experiment/stability_analysis.json
+ D backend/phase4f/phase4f_5f/f2/threshold_experiment/threshold_experiment_manifest.json
+ D backend/phase4f/phase4f_5f/f2/threshold_experiment/threshold_sweep.json
+ D backend/phase4f/phase4f_5f/f2/threshold_experiment/validation_calibration.json
+ D backend/phase4f/phase4f_5f/h/audits/duplicate_audit.json
+ D backend/phase4f/phase4f_5f/h/audits/leakage_audit.json
+ D backend/phase4f/phase4f_5f/h/audits/quality_gate_failures.json
+ D backend/phase4f/phase4f_5f/h/audits/semantic_audit.json
+ D backend/phase4f/phase4f_5f/h/candidates/all_candidates.jsonl
+ D backend/phase4f/phase4f_5f/h/generate_h_candidates.py
+ D backend/phase4f/phase4f_5f/h/manifests/h_manifest.json
+ D backend/phase4f/phase4f_5f/h/pools/h10.jsonl
+ D backend/phase4f/phase4f_5f/h/pools/h20.jsonl
+ D backend/phase4f/phase4f_5f/h/pools/h30.jsonl
+ D backend/phase4f/phase4f_5f/h/reports/phase4f_5f_h_dataset_design_report.txt
+ D backend/phase4f/phase4f_5f/h1/config/f1_reconciled_ids.json
+ D backend/phase4f/phase4f_5f/h1/config/h1_config.json
+ D backend/phase4f/phase4f_5f/h1/evaluation/h1_benchmark.json
+ D backend/phase4f/phase4f_5f/h1/evaluation/h1_holdout.json
+ D backend/phase4f/phase4f_5f/h1/evaluation/h1_null_analysis.json
+ D backend/phase4f/phase4f_5f/h1/evaluation/h1_validation.json
+ D backend/phase4f/phase4f_5f/h1/logs/h1_training.json
+ D backend/phase4f/phase4f_5f/h1/manifests/h1_manifest.json
+ D backend/phase4f/phase4f_5f/h1/reports/phase4f_5f_h1_final_report.txt
+ D backend/phase4f/phase4f_5f/h1/run_h1.py
+ D backend/phase4f/phase4f_5f/h1_reconciliation/H1_RECONCILIATION_REPORT.md
+ D backend/phase4f/phase4f_5f/h1_reconciliation/README.md
+ D backend/phase4f/phase4f_5f/h1_reconciliation/checksums.txt
+ D backend/phase4f/phase4f_5f/h1_reconciliation/h1_count_reconciliation.json
+ D backend/phase4f/phase4f_5f/h1_reconciliation/h1_label_integrity.json
+ D backend/phase4f/phase4f_5f/h1_reconciliation/h1_metric_recalculation.json
+ D backend/phase4f/phase4f_5f/h1_reconciliation/h1_no_answer_analysis.json
+ D backend/phase4f/phase4f_5f/h1_reconciliation/h1_null_score_analysis.json
+ D backend/phase4f/phase4f_5f/h1_reconciliation/h1_overlap_report.json
+ D backend/phase4f/phase4f_5f/h1_reconciliation/h1_protocol_audit.json
+ D backend/phase4f/phase4f_5f/h1_reconciliation/h1_reconciled_comparison.json
+ D backend/phase4f/phase4f_5f/phase4f_5f_f1_reconciliation_manifest.json
+ D backend/phase4f/phase4f_5f/reconciliation/dataset_reconciliation.json
+ D backend/phase4f/phase4f_5f/reconciliation/final_holdout_ids.json
+ D backend/phase4f/phase4f_5f/reconciliation/final_training_ids.json
+ D backend/phase4f/phase4f_5f/reconciliation/final_validation_ids.json
+ D backend/phase4f/phase4f_5f/reconciliation/invalid_span_audit.json
+ D backend/phase4f/phase4f_5f/reconciliation/training_protocol_audit.json
+ D backend/phase4f/phase4f_5f/recovery/artifact_inventory.json
+ D backend/phase4f/phase4f_5f/recovery/gpu_environment_report.json
+ D backend/phase4f/phase4f_5f/recovery/gpu_environment_report.txt
+ D backend/phase4f/phase4f_5f/recovery/phase4f_5f_recovery_report.txt
+ D backend/phase4f/phase4f_5f/recovery/recovery_manifest.json
+ D backend/phase4f/phase4f_5f/reports/phase4f_5f_f1_preparation_report.txt
+ D backend/phase4f/phase4f_5f/reports/phase4f_5f_f1_reconciliation_report.txt
+ D backend/phase4f/phase4f_5f/run_experiment.py
+ D backend/phase4f/quality_gate.py
+ D backend/phase4f/reconciliation/a0_reproduction.json
+ D backend/phase4f/reconciliation/checkpoint_audit.json
+ D backend/phase4f/reconciliation/cross_phase_evaluation_compatibility.json
+ D backend/phase4f/reconciliation/dataset_label_audit.json
+ D backend/phase4f/reconciliation/evaluation_parity_matrix.json
+ D backend/phase4f/reconciliation/experiment_artifact_inventory.json
+ D backend/phase4f/reconciliation/failure_taxonomy_reconciliation.json
+ D backend/phase4f/reconciliation/manual_forensic_traces.json
+ D backend/phase4f/reconciliation/model_initialization_audit.json
+ D backend/phase4f/reconciliation/phase4f_4r_reconciliation_report.txt
+ D backend/phase4f/reconciliation/token_span_audit.json
+ D backend/phase4f/reconciliation/training_configuration_audit.json
+ D backend/phase4f/training/__init__.py
+ D backend/phase4f/training/configs.py
+ D backend/phase4f/training/environment.json
+ D backend/phase4f/training/train.py
+ D backend/phase4f_qa_architecture_experiment_report.txt
+ M backend/pytest.ini
+ M backend/reliability/routes.py
+ M backend/requirements.txt
+ D backend/start_server.py
+ D backend/test_browser_flow.py
+ D backend/test_document_flow.py
+ D backend/test_embedding_flow.py
+ D backend/test_phase3d_evaluation.py
+ D backend/test_phase3d_upload_integration.py
+ D backend/test_phase3e_integration.py
+ D backend/test_phase3e_validation.py
+ D backend/test_phase3f_evaluation.py
+ D backend/test_phase4b_evaluation.py
+ D backend/test_phase4c_diagnostics.py
+ D backend/test_phase6_reliability.py
+ D backend/test_rag_flow.py
+ D backend/test_real_browser.py
+ M backend/tests/conftest.py
+ D backend/tests/integration_http.py
+ D backend/tests/phase3d_corpus.py
+ D backend/tests/phase4b_corpus.py
+ D backend/tests/test_answer_span.py
+ D backend/tests/test_auth.py
+ D backend/tests/test_brain_orchestration.py
+ D backend/tests/test_brain_types.py
+ D backend/tests/test_chat_unit.py
+ D backend/tests/test_config_security.py
+ D backend/tests/test_cors.py
+ D backend/tests/test_database_url.py
+ D backend/tests/test_file_validation.py
+ D backend/tests/test_outcomes.py
+ D backend/tests/test_phase3d_chunking.py
+ D backend/tests/test_phase3d_context.py
+ D backend/tests/test_phase3d_reconciliation.py
+ D backend/tests/test_phase3e_processing.py
+ D backend/tests/test_qa_answer_reconstruction.py
+ D backend/tests/test_real_e2e_validation.py
+ D backend/tests/test_settings.py
+ D backend/tests/test_sql_safety.py
+ D backend/tests/test_structured_extraction.py
+ D backend/tests/test_verification_integrity.py
+ M backend/verification/routes.py
+ M package-lock.json
+ M package.json
+ M runbooks/README.md
+ M runbooks/database-failure.md
+ M runbooks/migration-failure.md
+ M src/lib/api.ts
+ M src/pages/ReliabilityPage.tsx
+ M src/pages/VerificationPage.tsx
+ M src/pages/WorkspacePage.tsx
+ M src/types/index.ts
+ M vite.config.ts
+?? .dockerignore
+?? .env.example
+?? AGENTS.md
+?? ARCHITECTURE.md
+?? CONTEXT.md
+?? DESIGN.md
+?? Dockerfile.frontend
+?? Field_Robotics_Deployment_and_Maintenance_Report.pdf
+?? PRD.md
+?? README.md
+?? agents/README.md
+?? agents/agentic-coding-agents/01-product-strategist-agent.md
+?? agents/agentic-coding-agents/02-product-research-agent.md
+?? agents/agentic-coding-agents/03-competitive-intelligence-agent.md
+?? agents/agentic-coding-agents/04-requirements-agent.md
+?? agents/agentic-coding-agents/05-ux-research-agent.md
+?? agents/agentic-coding-agents/06-ux-ui-designer-agent.md
+?? agents/agentic-coding-agents/07-accessibility-agent.md
+?? agents/agentic-coding-agents/08-software-architect-agent.md
+?? agents/agentic-coding-agents/09-frontend-architect-agent.md
+?? agents/agentic-coding-agents/10-backend-architect-agent.md
+?? agents/agentic-coding-agents/11-database-architect-agent.md
+?? agents/agentic-coding-agents/12-api-architect-agent.md
+?? agents/agentic-coding-agents/13-distributed-systems-agent.md
+?? agents/agentic-coding-agents/14-security-architect-agent.md
+?? agents/agentic-coding-agents/15-infrastructure-architect-agent.md
+?? agents/agentic-coding-agents/16-frontend-coding-agent.md
+?? agents/agentic-coding-agents/17-backend-coding-agent.md
+?? agents/agentic-coding-agents/18-full-stack-agent.md
+?? agents/agentic-coding-agents/19-database-engineer-agent.md
+?? agents/agentic-coding-agents/20-api-integration-agent.md
+?? agents/agentic-coding-agents/21-sdk-library-agent.md
+?? agents/agentic-coding-agents/22-cli-agent.md
+?? agents/agentic-coding-agents/23-desktop-agent.md
+?? agents/agentic-coding-agents/24-mobile-agent.md
+?? agents/agentic-coding-agents/25-ai-ml-architect-agent.md
+?? agents/agentic-coding-agents/26-ml-fundamentals-agent.md
+?? agents/agentic-coding-agents/27-data-science-agent.md
+?? agents/agentic-coding-agents/28-data-engineering-agent.md
+?? agents/agentic-coding-agents/29-feature-engineering-agent.md
+?? agents/agentic-coding-agents/30-classical-ml-agent.md
+?? agents/agentic-coding-agents/31-deep-learning-agent.md
+?? agents/agentic-coding-agents/32-computer-vision-agent.md
+?? agents/agentic-coding-agents/33-nlp-agent.md
+?? agents/agentic-coding-agents/34-multimodal-ai-agent.md
+?? agents/agentic-coding-agents/35-llm-engineer-agent.md
+?? agents/agentic-coding-agents/36-rag-engineer-agent.md
+?? agents/agentic-coding-agents/37-agentic-ai-engineer-agent.md
+?? agents/agentic-coding-agents/38-fine-tuning-agent.md
+?? agents/agentic-coding-agents/39-model-evaluation-agent.md
+?? agents/agentic-coding-agents/40-prompt-engineering-agent.md
+?? agents/agentic-coding-agents/41-embeddings-vector-search-agent.md
+?? agents/agentic-coding-agents/42-knowledge-graph-agent.md
+?? agents/agentic-coding-agents/43-ai-safety-guardrails-agent.md
+?? agents/agentic-coding-agents/44-ml-pipeline-agent.md
+?? agents/agentic-coding-agents/45-mlops-agent.md
+?? agents/agentic-coding-agents/46-model-serving-agent.md
+?? agents/agentic-coding-agents/47-gpu-compute-optimization-agent.md
+?? agents/agentic-coding-agents/48-model-compression-agent.md
+?? agents/agentic-coding-agents/49-data-model-versioning-agent.md
+?? agents/agentic-coding-agents/50-ai-cost-optimization-agent.md
+?? agents/agentic-coding-agents/51-test-architect-agent.md
+?? agents/agentic-coding-agents/52-unit-testing-agent.md
+?? agents/agentic-coding-agents/53-integration-testing-agent.md
+?? agents/agentic-coding-agents/54-e2e-testing-agent.md
+?? agents/agentic-coding-agents/55-api-testing-agent.md
+?? agents/agentic-coding-agents/56-performance-testing-agent.md
+?? agents/agentic-coding-agents/57-ai-evaluation-agent.md
+?? agents/agentic-coding-agents/58-security-testing-agent.md
+?? agents/agentic-coding-agents/59-code-review-agent.md
+?? agents/agentic-coding-agents/60-debugging-agent.md
+?? agents/agentic-coding-agents/61-reliability-agent.md
+?? agents/agentic-coding-agents/62-devops-agent.md
+?? agents/agentic-coding-agents/63-cloud-engineer-agent.md
+?? agents/agentic-coding-agents/64-docker-container-agent.md
+?? agents/agentic-coding-agents/65-kubernetes-agent.md
+?? agents/agentic-coding-agents/66-infrastructure-as-code-agent.md
+?? agents/agentic-coding-agents/67-deployment-agent.md
+?? agents/agentic-coding-agents/68-observability-agent.md
+?? agents/agentic-coding-agents/69-incident-response-agent.md
+?? agents/agentic-coding-agents/70-sre-agent.md
+?? agents/agentic-coding-agents/71-cost-finops-agent.md
+?? agents/agentic-coding-agents/72-application-security-agent.md
+?? agents/agentic-coding-agents/73-dependency-security-agent.md
+?? agents/agentic-coding-agents/74-secrets-security-agent.md
+?? agents/agentic-coding-agents/75-identity-auth-agent.md
+?? agents/agentic-coding-agents/76-privacy-agent.md
+?? agents/agentic-coding-agents/77-threat-modeling-agent.md
+?? agents/agentic-coding-agents/78-ai-security-agent.md
+?? agents/agentic-coding-agents/79-documentation-agent.md
+?? agents/agentic-coding-agents/80-api-documentation-agent.md
+?? agents/agentic-coding-agents/81-architecture-documentation-agent.md
+?? agents/agentic-coding-agents/82-codebase-knowledge-agent.md
+?? agents/agentic-coding-agents/83-changelog-release-agent.md
+?? agents/agentic-coding-agents/84-git-agent.md
+?? agents/agentic-coding-agents/85-dependency-management-agent.md
+?? agents/agentic-coding-agents/86-refactoring-agent.md
+?? agents/agentic-coding-agents/87-legacy-migration-agent.md
+?? agents/agentic-coding-agents/88-performance-optimization-agent.md
+?? agents/agentic-coding-agents/89-database-optimization-agent.md
+?? agents/agentic-coding-agents/90-accessibility-ui-qa-agent.md
+?? agents/agentic-coding-agents/AGENT-CONTRACT.md
+?? agents/agentic-coding-agents/README.md
+?? agents/ai-agent.md
+?? agents/backend-agent.md
+?? agents/coordinator.md
+?? agents/database-agent.md
+?? agents/evaluation-agent.md
+?? agents/frontend-agent.md
+?? agents/security-agent.md
+?? agents/test-agent.md
+?? agents/verifier.md
+?? backend/.dockerignore
+?? backend/Dockerfile
+?? backend/architecture/EVALUATION_SAFETY_MASTER_REGISTER.md
+?? backend/architecture/IMPLEMENTATION_REPORT_2026-09-30.md
+?? backend/architecture/PATH_MIGRATION.md
+?? backend/architecture/PHASE0_CLOSURE_2026-10-09.md
+?? backend/architecture/PHASE0_FAILURE_AUDIT_2026-10-09.md
+?? backend/architecture/PHASE1_GROUNDED_ANSWERING_PLAN_2026-10-09.md
+?? backend/architecture/REPOSITORY_AUDIT_2026-09-30.md
+?? backend/architecture/STEP0_5_EVALUATION_RUNNER_SAFETY_AUDIT_2026-10-09.md
+?? backend/architecture/STEP0_7_PHASE3D_DESTRUCTIVE_CLEANUP_REMEDIATION_2026-10-09.md
+?? backend/architecture/STEP0_8_PHASE3D_EVALUATION_CLEANUP_REMEDIATION_2026-10-09.md
+?? backend/architecture/STEP0_9_PHASE3E_INTEGRATION_CLEANUP_REMEDIATION_2026-10-09.md
+?? backend/architecture/STEP0_EVALUATION_INFRASTRUCTURE_HARDENING_2026-10-09.md
+?? backend/architecture/STEP1_0_PHASE3E_VALIDATION_CLEANUP_REMEDIATION_2026-10-09.md
+?? backend/architecture/STEP1_1_PHASE3F_EVALUATION_CLEANUP_REMEDIATION_2026-10-09.md
+?? backend/architecture/STEP1_2_PHASE4B_EVALUATION_CLEANUP_REMEDIATION_2026-10-09.md
+?? backend/architecture/STEP1_4_POSTGRESQL_VERIFICATION_READINESS_ASSESSMENT_2026-10-09.md
+?? backend/architecture/STEP1_5_EVALUATION_SAFETY_P0_REMEDIATION_PLAN_2026-10-09.md
+?? backend/architecture/STEP1_6A_GUARD_FIRST_REMEDIATION_2026-10-10.md
+?? backend/architecture/STEP1_6B_ISOLATION_GUARD_REMEDIATION_2026-10-10.md
+?? backend/architecture/STEP1_6C_GUARD_FIRST_STRUCTURE_RUNNERS_2026-10-10.md
+?? backend/architecture/STEP1_6D_PRE_ENGINE_TARGET_VALIDATION_2026-10-10.md
+?? backend/architecture/STEP1_6E_REMAINING_RUNNER_INITIALIZATION_AUDIT_2026-10-10.md
+?? backend/architecture/STEP1_6F_LEGACY_RUNNER_AND_CLEANUP_SAFETY_2026-10-11.md
+?? backend/architecture/STEP1_6G_RUNNER_AND_FIXTURE_TARGET_SAFETY_2026-10-11.md
+?? backend/architecture/STEP1_6H_DISPOSABLE_DATABASE_AUTHORIZATION_2026-10-11.md
+?? backend/architecture/STEP1_6I_UNIFIED_DESTRUCTIVE_TARGET_AUTHORIZATION_2026-10-11.md
+?? backend/architecture/STEP1_6J_FAIL_CLOSED_DESTRUCTIVE_EXECUTION_2026-10-12.md
+?? backend/architecture/STEP1_6K_LIFECYCLE_AUTHORIZATION_HARDENING_2026-10-12.md
+?? backend/architecture/STEP1_6L_FUNCTION_LEVEL_CLEANUP_AUTHORIZATION_2026-10-12.md
+?? backend/architecture/STEP1_6M_READ_ONLY_POSTGRESQL_READINESS_REVIEW_2026-10-12.md
+?? backend/architecture/phase4f_6/ARCHITECTURE_DECISION_RECORD.md
+?? backend/architecture/phase4f_6/CURRENT_ARCHITECTURE.md
+?? backend/architecture/phase4f_6/DOMAIN_MODEL.md
+?? backend/architecture/phase4f_6/MODULE_SEAMS.md
+?? backend/architecture/phase4f_6/NEXT_STAGE_RAG_EXECUTION_PLAN.md
+?? backend/architecture/phase4f_6/PHASE4F6_ARCHITECTURE_AUDIT.md
+?? backend/architecture/phase4f_6/QUESTION_WORKFLOW_MATRIX.md
+?? backend/architecture/phase4f_6/TARGET_ARCHITECTURE.md
+?? backend/architecture/phase4f_6/decision/ABSTENTION_GATE_RESCORING.json
+?? backend/architecture/phase4f_6/decision/ABSTENTION_GATE_RESCORING.md
+?? backend/architecture/phase4f_6/decision/ANSWERABILITY_SIGNAL_FORENSICS.json
+?? backend/architecture/phase4f_6/decision/ANSWERABILITY_SIGNAL_FORENSICS.md
+?? backend/architecture/phase4f_6/decision/ARCHITECTURE_MIGRATION_GATE.md
+?? backend/architecture/phase4f_6/decision/AUC_INFLUENCE_JACKKNIFE_FORENSICS.json
+?? backend/architecture/phase4f_6/decision/AUC_INFLUENCE_JACKKNIFE_FORENSICS.md
+?? backend/architecture/phase4f_6/decision/CLS_DIRECTION_REVERSAL_FORENSICS.json
+?? backend/architecture/phase4f_6/decision/CLS_DIRECTION_REVERSAL_FORENSICS.md
+?? backend/architecture/phase4f_6/decision/DECISION_SAFETY_CHECK.json
+?? backend/architecture/phase4f_6/decision/E0_CHUNK_MANIFEST.json
+?? backend/architecture/phase4f_6/decision/E0_CORPUS_MANIFEST.json
+?? backend/architecture/phase4f_6/decision/E0_ERRATUM_2026-09-27.md
+?? backend/architecture/phase4f_6/decision/E0_MEDIA_DETECTION_RECORD.json
+?? backend/architecture/phase4f_6/decision/E0_OFFLINE_RUNTIME_PROVISIONING.md
+?? backend/architecture/phase4f_6/decision/E0_PREDICTION_PROVENANCE_2026-09-28.md
+?? backend/architecture/phase4f_6/decision/E0_PREREQUISITE_STATUS.md
+?? backend/architecture/phase4f_6/decision/E0_PROTOCOL.md
+?? backend/architecture/phase4f_6/decision/E0_READINESS_CHECK.md
+?? backend/architecture/phase4f_6/decision/E0_RETRIEVAL_RUNTIME_READINESS.md
+?? backend/architecture/phase4f_6/decision/E0_RETRIEVAL_RUNTIME_RESUME.md
+?? backend/architecture/phase4f_6/decision/E0_RETRIEVAL_RUN_MANIFEST.json
+?? backend/architecture/phase4f_6/decision/E0_RUNTIME_HANDOFF_MANIFEST.json
+?? backend/architecture/phase4f_6/decision/E0_SCHEMA.json
+?? backend/architecture/phase4f_6/decision/E0_SOURCE_PROVENANCE.md
+?? backend/architecture/phase4f_6/decision/EXPERIMENT_CANDIDATE_MATRIX.md
+?? backend/architecture/phase4f_6/decision/EXPERIMENT_CONTROL_MATRIX.md
+?? backend/architecture/phase4f_6/decision/ISO_COVERAGE_RESCORING.json
+?? backend/architecture/phase4f_6/decision/ISO_COVERAGE_RESCORING.md
+?? backend/architecture/phase4f_6/decision/MODEL_40MIN_EVALUATION.json
+?? backend/architecture/phase4f_6/decision/MODEL_40MIN_EVALUATION.md
+?? backend/architecture/phase4f_6/decision/NEXT_EXPERIMENT_DECISION.md
+?? backend/architecture/phase4f_6/decision/PHASE4F6B_RECONCILIATION.md
+?? backend/architecture/phase4f_6/decision/PHASE4F6C_RECONCILIATION.md
+?? backend/architecture/phase4f_6/decision/PROTOCOL_V2_SPAN_SELECTION_ROLLOUT.json
+?? backend/architecture/phase4f_6/decision/PROTOCOL_V2_SPAN_SELECTION_ROLLOUT.md
+?? backend/architecture/phase4f_6/decision/QA_HYPOTHESIS_MATRIX.md
+?? backend/architecture/phase4f_6/decision/RECONSTRUCTION_BOUND.json
+?? backend/architecture/phase4f_6/decision/RECONSTRUCTION_BOUND.md
+?? backend/architecture/phase4f_6/decision/SCORE_STATISTIC_ISO_K47.json
+?? backend/architecture/phase4f_6/decision/SCORE_STATISTIC_ISO_K47.md
+?? backend/architecture/phase4f_6/decision/SCORE_STATISTIC_ISO_K95.json
+?? backend/architecture/phase4f_6/decision/SCORE_STATISTIC_ISO_K95.md
+?? backend/architecture/phase4f_6/decision/SPAN_BOUNDARY_FORENSICS.json
+?? backend/architecture/phase4f_6/decision/SPAN_BOUNDARY_FORENSICS.md
+?? backend/architecture/phase4f_6/decision/SPAN_SELECTION_PROTOCOL_EXPERIMENT.json
+?? backend/architecture/phase4f_6/decision/SPAN_SELECTION_PROTOCOL_EXPERIMENT.md
+?? backend/architecture/phase4f_6/e0_diagnostics/chunks/api_docs_lambda.jsonl
+?? backend/architecture/phase4f_6/e0_diagnostics/chunks/company_history_eta.jsonl
+?? backend/architecture/phase4f_6/e0_diagnostics/chunks/dataset_desc_mu.jsonl
+?? backend/architecture/phase4f_6/e0_diagnostics/chunks/financial_report_q3.jsonl
+?? backend/architecture/phase4f_6/e0_diagnostics/chunks/legal_contract_epsilon.jsonl
+?? backend/architecture/phase4f_6/e0_diagnostics/chunks/unanswerable_corpus.jsonl
+?? backend/architecture/phase4f_6/e0_diagnostics/diagnostics/answerability_signal_bootstrap.json
+?? backend/architecture/phase4f_6/e0_diagnostics/diagnostics/auc_influence_jackknife.json
+?? backend/architecture/phase4f_6/e0_diagnostics/diagnostics/chunk_evidence_results.jsonl
+?? backend/architecture/phase4f_6/e0_diagnostics/diagnostics/cls_direction_reversal_bootstrap.json
+?? backend/architecture/phase4f_6/e0_diagnostics/diagnostics/embedding_offline_verification.json
+?? backend/architecture/phase4f_6/e0_diagnostics/diagnostics/model_40min_predictions.json
+?? backend/architecture/phase4f_6/e0_diagnostics/diagnostics/provenance_results.jsonl
+?? backend/architecture/phase4f_6/e0_diagnostics/diagnostics/runtime_validation_schema.json
+?? backend/architecture/phase4f_6/e0_diagnostics/diagnostics/summary.json
+?? backend/architecture/phase4f_6/e0_diagnostics/offline_runtime_checklist.json
+?? backend/architecture/phase4f_6/e0_diagnostics/retrieval_schema_requirements.json
+?? backend/architecture/phase4f_6/e0_diagnostics/source_corpus/api_docs_lambda.json
+?? backend/architecture/phase4f_6/e0_diagnostics/source_corpus/company_history_eta.json
+?? backend/architecture/phase4f_6/e0_diagnostics/source_corpus/dataset_desc_mu.json
+?? backend/architecture/phase4f_6/e0_diagnostics/source_corpus/financial_report_q3.json
+?? backend/architecture/phase4f_6/e0_diagnostics/source_corpus/legal_contract_epsilon.json
+?? backend/architecture/phase4f_6/e0_diagnostics/source_corpus/unanswerable_corpus.json
+?? backend/architecture/phase4f_6/e0_diagnostics/tools/answerability_signal_forensics.py
+?? backend/architecture/phase4f_6/e0_diagnostics/tools/auc_influence_jackknife_forensics.py
+?? backend/architecture/phase4f_6/e0_diagnostics/tools/build_e0_prereqs.py
+?? backend/architecture/phase4f_6/e0_diagnostics/tools/cls_direction_reversal_forensics.py
+?? backend/architecture/phase4f_6/e0_diagnostics/tools/detect_runtime_media.py
+?? backend/architecture/phase4f_6/e0_diagnostics/tools/reconstruction_bound.py
+?? backend/architecture/phase4f_6/e0_diagnostics/tools/rescore_abstention_gate.py
+?? backend/architecture/phase4f_6/e0_diagnostics/tools/rescore_iso_coverage.py
+?? backend/architecture/phase4f_6/e0_diagnostics/tools/rescore_score_statistics_k47.py
+?? backend/architecture/phase4f_6/e0_diagnostics/tools/rescore_score_statistics_k95.py
+?? backend/architecture/phase4f_6/e0_diagnostics/tools/run_model_40min_eval.py
+?? backend/architecture/phase4f_6/e0_diagnostics/tools/span_boundary_forensics.py
+?? backend/architecture/phase4f_6/e0_diagnostics/tools/span_selection_protocol_experiment.py
+?? backend/docker-entrypoint.sh
+?? backend/documents/insights.py
+?? backend/documents/parser.py
+?? backend/documents/structure.py
+?? backend/documents/tables.py
+?? backend/evaluation/README.md
+?? backend/evaluation/artifacts.py
+?? backend/evaluation/baselines/__init__.py
+?? backend/evaluation/baselines/dual_path/__init__.py
+?? backend/evaluation/baselines/structure_only/__init__.py
+?? backend/evaluation/baselines/vector_only/__init__.py
+?? backend/evaluation/datasets/__init__.py
+?? backend/evaluation/datasets/heading_corpus.py
+?? backend/evaluation/datasets/phase3d_corpus.py
+?? backend/evaluation/datasets/phase4b_corpus.py
+?? backend/evaluation/datasets/structure_discriminating_v1.py
+?? backend/evaluation/datasets/structure_eval_corpus.py
+?? backend/evaluation/denominator_sensitivity.py
+?? backend/evaluation/experiments/__init__.py
+?? backend/evaluation/experiments/run_dual_path_ablation.py
+?? backend/evaluation/experiments/run_phase3d_evaluation.py
+?? backend/evaluation/experiments/run_phase3d_upload_integration.py
+?? backend/evaluation/experiments/run_phase3e_integration.py
+?? backend/evaluation/experiments/run_phase3e_validation.py
+?? backend/evaluation/experiments/run_phase3f_evaluation.py
+?? backend/evaluation/experiments/run_phase4b_evaluation.py
+?? backend/evaluation/experiments/run_phase4c_diagnostics.py
+?? backend/evaluation/experiments/run_structure_confirmation.py
+?? backend/evaluation/experiments/run_structure_element_measurement.py
+?? backend/evaluation/experiments/run_structure_rrf_calibration.py
+?? backend/evaluation/experiments/run_table_evidence_measurement.py
+?? backend/evaluation/experiments/synthesize_structure_discriminating.py
+?? backend/evaluation/isolation.py
+?? backend/evaluation/metrics/__init__.py
+?? backend/evaluation/qa_metrics.py
+?? backend/evaluation/reports/__init__.py
+?? backend/evaluation/reports/ablation_A.json
+?? backend/evaluation/reports/ablation_A.md
+?? backend/evaluation/reports/ablation_B.json
+?? backend/evaluation/reports/ablation_B.md
+?? backend/evaluation/reports/ablation_C.json
+?? backend/evaluation/reports/ablation_C.md
+?? backend/evaluation/reports/ablation_D.json
+?? backend/evaluation/reports/ablation_D.md
+?? backend/evaluation/reports/ablation_config.json
+?? backend/evaluation/reports/ablation_heading_A.json
+?? backend/evaluation/reports/ablation_heading_A.md
+?? backend/evaluation/reports/ablation_heading_B.json
+?? backend/evaluation/reports/ablation_heading_B.md
+?? backend/evaluation/reports/ablation_heading_C.json
+?? backend/evaluation/reports/ablation_heading_C.md
+?? backend/evaluation/reports/ablation_heading_D.json
+?? backend/evaluation/reports/ablation_heading_D.md
+?? backend/evaluation/reports/ablation_heading_config.json
+?? backend/evaluation/reports/ablation_structure_discriminating_A.json
+?? backend/evaluation/reports/ablation_structure_discriminating_A.md
+?? backend/evaluation/reports/ablation_structure_discriminating_B.json
+?? backend/evaluation/reports/ablation_structure_discriminating_B.md
+?? backend/evaluation/reports/ablation_structure_discriminating_C.json
+?? backend/evaluation/reports/ablation_structure_discriminating_C.md
+?? backend/evaluation/reports/ablation_structure_discriminating_D.json
+?? backend/evaluation/reports/ablation_structure_discriminating_D.md
+?? backend/evaluation/reports/ablation_structure_discriminating_config.json
+?? backend/evaluation/reports/denominator_sensitivity.json
+?? backend/evaluation/reports/denominator_sensitivity.md
+?? backend/evaluation/reports/structural_retrieval_fix_report.md
+?? backend/evaluation/reports/structural_retrieval_reachability_audit.md
+?? backend/evaluation/reports/structure_confirmation.json
+?? backend/evaluation/reports/structure_confirmation_report.md
+?? backend/evaluation/reports/structure_discriminating_ablation_report.md
+?? backend/evaluation/reports/structure_discriminating_analysis.json
+?? backend/evaluation/reports/structure_discriminating_v1_audit.md
+?? backend/evaluation/reports/structure_element_measurement_analysis.json
+?? backend/evaluation/reports/structure_element_measurement_control.json
+?? backend/evaluation/reports/structure_element_measurement_report.md
+?? backend/evaluation/reports/structure_element_measurement_treatment.json
+?? backend/evaluation/reports/structure_eval.json
+?? backend/evaluation/reports/structure_eval.md
+?? backend/evaluation/reports/structure_rrf_calibration.json
+?? backend/evaluation/reports/structure_rrf_calibration_report.md
+?? backend/evaluation/reports/table_evidence_architecture.md
+?? backend/evaluation/reports/table_evidence_measurement_analysis.json
+?? backend/evaluation/reports/table_evidence_measurement_control.json
+?? backend/evaluation/reports/table_evidence_measurement_report.md
+?? backend/evaluation/reports/table_evidence_measurement_treatment.json
+?? backend/evaluation/retrieval_metrics.py
+?? backend/evaluation/runner.py
+?? backend/evaluation/schemas.py
+?? backend/evaluation/structure_eval.py
+?? backend/graph/__init__.py
+?? backend/graph/evidence.py
+?? backend/graph/models.py
+?? backend/graph/service.py
+?? backend/migrations/versions/005_add_document_graph.py
+?? backend/migrations/versions/006_add_structure_elements.py
+?? backend/migrations/versions/007_add_table_rows.py
+?? backend/models/media-verification/MANIFEST.json
+?? backend/models/media-verification/config.json
+?? backend/models/media-verification/preprocessor_config.json
+?? backend/models/whisper/small/config.json
+?? backend/models/whisper/small/model.bin
+?? backend/models/whisper/small/tokenizer.json
+?? backend/models/whisper/small/vocabulary.txt
+?? backend/phases/phase3d_evaluation_report.json
+?? backend/phases/phase3f_evaluation_report.json
+?? backend/phases/phase3f_validation_report.txt
+?? backend/phases/phase3g_pipeline_audit.txt
+?? backend/phases/phase4a_qa_failure_audit.txt
+?? backend/phases/phase4b_evaluation_report.json
+?? backend/phases/phase4b_qa_evaluation_report.txt
+?? backend/phases/phase4c_failure_matrix.json
+?? backend/phases/phase4c_qa_failure_isolation_report.txt
+?? backend/phases/phase4d/__init__.py
+?? backend/phases/phase4d/__main__.py
+?? backend/phases/phase4d/evaluate_candidates.py
+?? backend/phases/phase4d/generate_report.py
+?? backend/phases/phase4d/oracle_eval.py
+?? backend/phases/phase4d/reconciliation.py
+?? backend/phases/phase4d/train.py
+?? backend/phases/phase4d/training_data.py
+?? backend/phases/phase4d_1_reconciliation.json
+?? backend/phases/phase4d_1_reconciliation_report.txt
+?? backend/phases/phase4d_experiment_results.json
+?? backend/phases/phase4d_oracle_baseline_results.json
+?? backend/phases/phase4d_qa_model_improvement_report.txt
+?? backend/phases/phase4e/__init__.py
+?? backend/phases/phase4e/capability_analysis.py
+?? backend/phases/phase4e/generate_report.py
+?? backend/phases/phase4e_capability_matrix.json
+?? backend/phases/phase4e_diagnostic_results.json
+?? backend/phases/phase4e_qa_architecture_analysis.txt
+?? backend/phases/phase4f/__init__.py
+?? backend/phases/phase4f/balance_gate.py
+?? backend/phases/phase4f/dataset/__init__.py
+?? backend/phases/phase4f/dataset/dataset_manifest.json
+?? backend/phases/phase4f/dataset/dataset_manifest_v3.json
+?? backend/phases/phase4f/dataset/dataset_manifest_v3_1.json
+?? backend/phases/phase4f/dataset/dataset_metadata.json
+?? backend/phases/phase4f/dataset/dataset_quality_report.json
+?? backend/phases/phase4f/dataset/dataset_quality_report_v3.json
+?? backend/phases/phase4f/dataset/dataset_quality_report_v3_1.json
+?? backend/phases/phase4f/dataset/expand_and_audit.py
+?? backend/phases/phase4f/dataset/generator.py
+?? backend/phases/phase4f/dataset/training_data.jsonl
+?? backend/phases/phase4f/dataset/training_data_v3.jsonl
+?? backend/phases/phase4f/dataset/training_data_v3_1.jsonl
+?? backend/phases/phase4f/experiments/evaluate.py
+?? backend/phases/phase4f/experiments/experiment_manifest.json
+?? backend/phases/phase4f/experiments/final_gpu_package/README_GPU_EXECUTION.md
+?? backend/phases/phase4f/experiments/final_gpu_package/dataset/training_data_v3_1.jsonl
+?? backend/phases/phase4f/experiments/final_gpu_package/dataset_checksum.txt
+?? backend/phases/phase4f/experiments/final_gpu_package/evaluation/evaluate.py
+?? backend/phases/phase4f/experiments/final_gpu_package/expected_output_structure.txt
+?? backend/phases/phase4f/experiments/final_gpu_package/final_gpu_package_manifest.json
+?? backend/phases/phase4f/experiments/final_gpu_package/production_model_checksum.txt
+?? backend/phases/phase4f/experiments/final_gpu_package/requirements.txt
+?? backend/phases/phase4f/experiments/final_gpu_package/training/experiment_config.json
+?? backend/phases/phase4f/experiments/final_gpu_package/training/train.py
+?? backend/phases/phase4f/experiments/phase4f_3_results.json
+?? backend/phases/phase4f/experiments/phase4f_3_training_report.txt
+?? backend/phases/phase4f/experiments/phase4f_3r_freeze_report.txt
+?? backend/phases/phase4f/experiments/phase4f_4_controlled_gpu_experiment_report.txt
+?? backend/phases/phase4f/experiments/phase4f_4_experiment_manifest.json
+?? backend/phases/phase4f/experiments/phase4f_4_results.json
+?? backend/phases/phase4f/experiments/phase4f_4e_cuda_environment.json
+?? backend/phases/phase4f/experiments/phase4f_4e_cuda_environment_report.txt
+?? backend/phases/phase4f/experiments/requirements.txt
+?? backend/phases/phase4f/experiments/results.pre_joint_selection_v1/all_results.json
+?? backend/phases/phase4f/experiments/results/A0/evaluation_results.json
+?? backend/phases/phase4f/experiments/results/A0/metadata.json
+?? backend/phases/phase4f/experiments/results/A1/checkpoint_best/config.json
+?? backend/phases/phase4f/experiments/results/A1/checkpoint_best/tokenizer.json
+?? backend/phases/phase4f/experiments/results/A1/checkpoint_best/tokenizer_config.json
+?? backend/phases/phase4f/experiments/results/A1/evaluation_results.json
+?? backend/phases/phase4f/experiments/results/A1/training_metadata.json
+?? backend/phases/phase4f/experiments/results/A2/checkpoint_best/config.json
+?? backend/phases/phase4f/experiments/results/A2/checkpoint_best/tokenizer.json
+?? backend/phases/phase4f/experiments/results/A2/checkpoint_best/tokenizer_config.json
+?? backend/phases/phase4f/experiments/results/A2/evaluation_results.json
+?? backend/phases/phase4f/experiments/results/A2/training_metadata.json
+?? backend/phases/phase4f/experiments/results/A3/checkpoint_best/config.json
+?? backend/phases/phase4f/experiments/results/A3/checkpoint_best/tokenizer.json
+?? backend/phases/phase4f/experiments/results/A3/checkpoint_best/tokenizer_config.json
+?? backend/phases/phase4f/experiments/results/A3/evaluation_results.json
+?? backend/phases/phase4f/experiments/results/A3/training_metadata.json
+?? backend/phases/phase4f/experiments/results/all_results.json
+?? backend/phases/phase4f/experiments/results_reconstruction_fix/A0/evaluation_results.json
+?? backend/phases/phase4f/experiments/results_reconstruction_fix/A0_gpu_package/evaluation_results.json
+?? backend/phases/phase4f/experiments/run_experiment.py
+?? backend/phases/phase4f/experiments/train.py
+?? backend/phases/phase4f/freeze_gate.py
+?? backend/phases/phase4f/gate_common.py
+?? backend/phases/phase4f/phase4f_1_dataset_audit_report.txt
+?? backend/phases/phase4f/phase4f_2_dataset_quality_gate_report.txt
+?? backend/phases/phase4f/phase4f_2r_dataset_balance_report.txt
+?? backend/phases/phase4f/phase4f_4r_manifest.json
+?? backend/phases/phase4f/phase4f_5/configs/a1_config.json
+?? backend/phases/phase4f/phase4f_5/configs/a2_config.json
+?? backend/phases/phase4f/phase4f_5/dataset/data_quality_gate.json
+?? backend/phases/phase4f/phase4f_5/dataset/derived_dataset.jsonl
+?? backend/phases/phase4f/phase4f_5/dataset/span_alignment_audit.json
+?? backend/phases/phase4f/phase4f_5/dataset/truncation_audit.json
+?? backend/phases/phase4f/phase4f_5/diagnostics/a0_forensics.json
+?? backend/phases/phase4f/phase4f_5/diagnostics/a1_forensics.json
+?? backend/phases/phase4f/phase4f_5/diagnostics/a2_forensics.json
+?? backend/phases/phase4f/phase4f_5/diagnostics/all_inference_results.json
+?? backend/phases/phase4f/phase4f_5/diagnostics/failure_taxonomy.json
+?? backend/phases/phase4f/phase4f_5/evaluation/A0_test_results.json
+?? backend/phases/phase4f/phase4f_5/evaluation/A1_test_results.json
+?? backend/phases/phase4f/phase4f_5/evaluation/A2_test_results.json
+?? backend/phases/phase4f/phase4f_5/evaluation/evaluate.py
+?? backend/phases/phase4f/phase4f_5/evaluation/evaluation_protocol.json
+?? backend/phases/phase4f/phase4f_5/logs/a1_training.json
+?? backend/phases/phase4f/phase4f_5/logs/a2_training.json
+?? backend/phases/phase4f/phase4f_5/manifests/experiment_manifest.json
+?? backend/phases/phase4f/phase4f_5/manifests/final_experiment_manifest.json
+?? backend/phases/phase4f/phase4f_5/manifests/source_integrity.json
+?? backend/phases/phase4f/phase4f_5/manifests/split_manifest.json
+?? backend/phases/phase4f/phase4f_5/prepare_experiment.py
+?? backend/phases/phase4f/phase4f_5/reports/phase4f_5a_preparation_report.txt
+?? backend/phases/phase4f/phase4f_5/reports/phase4f_5b_training_report.txt
+?? backend/phases/phase4f/phase4f_5/results.pre_joint_selection_v1/a0_test.json
+?? backend/phases/phase4f/phase4f_5/results.pre_joint_selection_v1/a1_test.json
+?? backend/phases/phase4f/phase4f_5/results.pre_joint_selection_v1/a2_test.json
+?? backend/phases/phase4f/phase4f_5/results.pre_joint_selection_v1/comparison.json
+?? backend/phases/phase4f/phase4f_5/results.pre_reconstruction_fix/a0_test.json
+?? backend/phases/phase4f/phase4f_5/results.pre_reconstruction_fix/a1_test.json
+?? backend/phases/phase4f/phase4f_5/results.pre_reconstruction_fix/a2_test.json
+?? backend/phases/phase4f/phase4f_5/results.pre_reconstruction_fix/comparison.json
+?? backend/phases/phase4f/phase4f_5/results/a0_test.json
+?? backend/phases/phase4f/phase4f_5/results/a0_test.protocol_v1_argmaxchain.json
+?? backend/phases/phase4f/phase4f_5/results/a0_test.protocol_v2_joint.json
+?? backend/phases/phase4f/phase4f_5/results/a1_test.json
+?? backend/phases/phase4f/phase4f_5/results/a1_test.protocol_v1_argmaxchain.json
+?? backend/phases/phase4f/phase4f_5/results/a1_test.protocol_v2_joint.json
+?? backend/phases/phase4f/phase4f_5/results/a2_test.json
+?? backend/phases/phase4f/phase4f_5/results/a2_test.protocol_v1_argmaxchain.json
+?? backend/phases/phase4f/phase4f_5/results/a2_test.protocol_v2_joint.json
+?? backend/phases/phase4f/phase4f_5/results/comparison.json
+?? backend/phases/phase4f/phase4f_5/run_experiment.py
+?? backend/phases/phase4f/phase4f_5c/em_f1_gap_analysis.json
+?? backend/phases/phase4f/phase4f_5c/failure_matrix.json
+?? backend/phases/phase4f/phase4f_5c/generate_analysis.py
+?? backend/phases/phase4f/phase4f_5c/list_audit.json
+?? backend/phases/phase4f/phase4f_5c/long_context_audit.json
+?? backend/phases/phase4f/phase4f_5c/normalization_diagnostic.json
+?? backend/phases/phase4f/phase4f_5c/numeric_audit.json
+?? backend/phases/phase4f/phase4f_5c/per_category_comparison.json
+?? backend/phases/phase4f/phase4f_5c/phase4f_5c_manifest.json
+?? backend/phases/phase4f/phase4f_5c/production_strengths.json
+?? backend/phases/phase4f/phase4f_5c/reports/phase4f_5c_qa_analysis_report.txt
+?? backend/phases/phase4f/phase4f_5c/root_cause_analysis.json
+?? backend/phases/phase4f/phase4f_5c/table_audit.json
+?? backend/phases/phase4f/phase4f_5c/test_composition.json
+?? backend/phases/phase4f/phase4f_5c/training_curve_analysis.json
+?? backend/phases/phase4f/phase4f_5d/analysis.pre_joint_selection_v1/a0_benchmark_v1.json
+?? backend/phases/phase4f/phase4f_5d/analysis.pre_joint_selection_v1/a1_benchmark_v1.json
+?? backend/phases/phase4f/phase4f_5d/analysis.pre_joint_selection_v1/a2_benchmark_v1.json
+?? backend/phases/phase4f/phase4f_5d/analysis.pre_joint_selection_v1/benchmark_comparison.json
+?? backend/phases/phase4f/phase4f_5d/analysis.pre_joint_selection_v1/category_balance.json
+?? backend/phases/phase4f/phase4f_5d/analysis.pre_joint_selection_v1/duplicate_audit.json
+?? backend/phases/phase4f/phase4f_5d/analysis.pre_joint_selection_v1/gold_span_validation.json
+?? backend/phases/phase4f/phase4f_5d/analysis.pre_joint_selection_v1/leakage_audit.json
+?? backend/phases/phase4f/phase4f_5d/analysis.pre_joint_selection_v1/test_composition.json
+?? backend/phases/phase4f/phase4f_5d/analysis.pre_joint_selection_v1/unanswerable_audit.json
+?? backend/phases/phase4f/phase4f_5d/analysis/a0_benchmark_v1.json
+?? backend/phases/phase4f/phase4f_5d/analysis/a1_benchmark_v1.json
+?? backend/phases/phase4f/phase4f_5d/analysis/a2_benchmark_v1.json
+?? backend/phases/phase4f/phase4f_5d/analysis/benchmark_comparison.json
+?? backend/phases/phase4f/phase4f_5d/analysis/category_balance.json
+?? backend/phases/phase4f/phase4f_5d/analysis/duplicate_audit.json
+?? backend/phases/phase4f/phase4f_5d/analysis/gold_span_validation.json
+?? backend/phases/phase4f/phase4f_5d/analysis/leakage_audit.json
+?? backend/phases/phase4f/phase4f_5d/analysis/test_composition.json
+?? backend/phases/phase4f/phase4f_5d/analysis/unanswerable_audit.json
+?? backend/phases/phase4f/phase4f_5d/benchmark/benchmark_checksum.txt
+?? backend/phases/phase4f/phase4f_5d/benchmark/benchmark_manifest.json
+?? backend/phases/phase4f/phase4f_5d/benchmark/qa_benchmark_v1.jsonl
+?? backend/phases/phase4f/phase4f_5d/build_benchmark.py
+?? backend/phases/phase4f/phase4f_5d/phase4f_5d_manifest.json
+?? backend/phases/phase4f/phase4f_5d/reports/phase4f_5d_benchmark_hardening_report.txt
+?? backend/phases/phase4f/phase4f_5e/analysis.pre_joint_selection_v1/capability_matrix.json
+?? backend/phases/phase4f/phase4f_5e/analysis.pre_joint_selection_v1/confidence_distribution.json
+?? backend/phases/phase4f/phase4f_5e/analysis.pre_joint_selection_v1/f1_gain_analysis.json
+?? backend/phases/phase4f/phase4f_5e/analysis.pre_joint_selection_v1/next_experiment_matrix.json
+?? backend/phases/phase4f/phase4f_5e/analysis.pre_joint_selection_v1/production_vs_experiment.json
+?? backend/phases/phase4f/phase4f_5e/analysis.pre_joint_selection_v1/root_cause_matrix.json
+?? backend/phases/phase4f/phase4f_5e/analysis.pre_joint_selection_v1/split_category_matrix.json
+?? backend/phases/phase4f/phase4f_5e/analysis.pre_joint_selection_v1/threshold_sweep.json
+?? backend/phases/phase4f/phase4f_5e/analysis.pre_joint_selection_v1/training_data_audit.json
+?? backend/phases/phase4f/phase4f_5e/analysis.pre_joint_selection_v1/unanswerable_audit.json
+?? backend/phases/phase4f/phase4f_5e/analysis.pre_reconstruction_fix/capability_matrix.json
+?? backend/phases/phase4f/phase4f_5e/analysis.pre_reconstruction_fix/confidence_distribution.json
+?? backend/phases/phase4f/phase4f_5e/analysis.pre_reconstruction_fix/f1_gain_analysis.json
+?? backend/phases/phase4f/phase4f_5e/analysis.pre_reconstruction_fix/next_experiment_matrix.json
+?? backend/phases/phase4f/phase4f_5e/analysis.pre_reconstruction_fix/production_vs_experiment.json
+?? backend/phases/phase4f/phase4f_5e/analysis.pre_reconstruction_fix/root_cause_matrix.json
+?? backend/phases/phase4f/phase4f_5e/analysis.pre_reconstruction_fix/split_category_matrix.json
+?? backend/phases/phase4f/phase4f_5e/analysis.pre_reconstruction_fix/threshold_sweep.json
+?? backend/phases/phase4f/phase4f_5e/analysis.pre_reconstruction_fix/training_data_audit.json
+?? backend/phases/phase4f/phase4f_5e/analysis.pre_reconstruction_fix/unanswerable_audit.json
+?? backend/phases/phase4f/phase4f_5e/analysis/capability_matrix.json
+?? backend/phases/phase4f/phase4f_5e/analysis/confidence_distribution.json
+?? backend/phases/phase4f/phase4f_5e/analysis/f1_gain_analysis.json
+?? backend/phases/phase4f/phase4f_5e/analysis/next_experiment_matrix.json
+?? backend/phases/phase4f/phase4f_5e/analysis/production_vs_experiment.json
+?? backend/phases/phase4f/phase4f_5e/analysis/root_cause_matrix.json
+?? backend/phases/phase4f/phase4f_5e/analysis/split_category_matrix.json
+?? backend/phases/phase4f/phase4f_5e/analysis/threshold_sweep.json
+?? backend/phases/phase4f/phase4f_5e/analysis/training_data_audit.json
+?? backend/phases/phase4f/phase4f_5e/analysis/unanswerable_audit.json
+?? backend/phases/phase4f/phase4f_5e/phase4f_5e_manifest.json
+?? backend/phases/phase4f/phase4f_5e/reports/phase4f_5e_qa_capability_audit.txt
+?? backend/phases/phase4f/phase4f_5e/run_analysis.py
+?? backend/phases/phase4f/phase4f_5f/dataset/experiment_f1_manifest.json
+?? backend/phases/phase4f/phase4f_5f/dataset/experiment_f1_quality_report.json
+?? backend/phases/phase4f/phase4f_5f/dataset/experiment_f1_split.json
+?? backend/phases/phase4f/phase4f_5f/f2/config/f2_config.json
+?? backend/phases/phase4f/phase4f_5f/f2/evaluation/f2_benchmark.json
+?? backend/phases/phase4f/phase4f_5f/f2/evaluation/f2_holdout.json
+?? backend/phases/phase4f/phase4f_5f/f2/evaluation/f2_validation.json
+?? backend/phases/phase4f/phase4f_5f/f2/logs/f2_training.json
+?? backend/phases/phase4f/phase4f_5f/f2/manifests/f2_dataset_ids.json
+?? backend/phases/phase4f/phase4f_5f/f2/manifests/f2_manifest.json
+?? backend/phases/phase4f/phase4f_5f/f2/reconciliation/f2_baseline_comparison.json
+?? backend/phases/phase4f/phase4f_5f/f2/reconciliation/f2_data_balance_audit.json
+?? backend/phases/phase4f/phase4f_5f/f2/reconciliation/f2_label_audit.json
+?? backend/phases/phase4f/phase4f_5f/f2/reconciliation/f2_no_answer_logic_audit.json
+?? backend/phases/phase4f/phase4f_5f/f2/reconciliation/f2_prediction_audit.json
+?? backend/phases/phase4f/phase4f_5f/f2/reconciliation/f2_root_cause_analysis.json
+?? backend/phases/phase4f/phase4f_5f/f2/reports/phase4f_5f_f2_final_report.txt
+?? backend/phases/phase4f/phase4f_5f/f2/reports/phase4f_5f_f2_reconciliation_report.txt
+?? backend/phases/phase4f/phase4f_5f/f2/reports/phase4f_5f_g_threshold_report.txt
+?? backend/phases/phase4f/phase4f_5f/f2/run_f2.py
+?? backend/phases/phase4f/phase4f_5f/f2/threshold_experiment.pre_joint_selection_v1/benchmark_result.json
+?? backend/phases/phase4f/phase4f_5f/f2/threshold_experiment.pre_joint_selection_v1/holdout_result.json
+?? backend/phases/phase4f/phase4f_5f/f2/threshold_experiment.pre_joint_selection_v1/margin_sweep.json
+?? backend/phases/phase4f/phase4f_5f/f2/threshold_experiment.pre_joint_selection_v1/raw_prediction_audit.json
+?? backend/phases/phase4f/phase4f_5f/f2/threshold_experiment.pre_joint_selection_v1/raw_predictions_benchmark.json
+?? backend/phases/phase4f/phase4f_5f/f2/threshold_experiment.pre_joint_selection_v1/raw_predictions_holdout.json
+?? backend/phases/phase4f/phase4f_5f/f2/threshold_experiment.pre_joint_selection_v1/raw_predictions_validation.json
+?? backend/phases/phase4f/phase4f_5f/f2/threshold_experiment.pre_joint_selection_v1/run_threshold_experiment.py
+?? backend/phases/phase4f/phase4f_5f/f2/threshold_experiment.pre_joint_selection_v1/stability_analysis.json
+?? backend/phases/phase4f/phase4f_5f/f2/threshold_experiment.pre_joint_selection_v1/threshold_experiment_manifest.json
+?? backend/phases/phase4f/phase4f_5f/f2/threshold_experiment.pre_joint_selection_v1/threshold_sweep.json
+?? backend/phases/phase4f/phase4f_5f/f2/threshold_experiment.pre_joint_selection_v1/validation_calibration.json
+?? backend/phases/phase4f/phase4f_5f/f2/threshold_experiment.pre_reconstruction_fix/benchmark_result.json
+?? backend/phases/phase4f/phase4f_5f/f2/threshold_experiment.pre_reconstruction_fix/holdout_result.json
+?? backend/phases/phase4f/phase4f_5f/f2/threshold_experiment.pre_reconstruction_fix/margin_sweep.json
+?? backend/phases/phase4f/phase4f_5f/f2/threshold_experiment.pre_reconstruction_fix/raw_prediction_audit.json
+?? backend/phases/phase4f/phase4f_5f/f2/threshold_experiment.pre_reconstruction_fix/raw_predictions_benchmark.json
+?? backend/phases/phase4f/phase4f_5f/f2/threshold_experiment.pre_reconstruction_fix/raw_predictions_holdout.json
+?? backend/phases/phase4f/phase4f_5f/f2/threshold_experiment.pre_reconstruction_fix/raw_predictions_validation.json
+?? backend/phases/phase4f/phase4f_5f/f2/threshold_experiment.pre_reconstruction_fix/run_threshold_experiment.py
+?? backend/phases/phase4f/phase4f_5f/f2/threshold_experiment.pre_reconstruction_fix/stability_analysis.json
+?? backend/phases/phase4f/phase4f_5f/f2/threshold_experiment.pre_reconstruction_fix/threshold_experiment_manifest.json
+?? backend/phases/phase4f/phase4f_5f/f2/threshold_experiment.pre_reconstruction_fix/threshold_sweep.json
+?? backend/phases/phase4f/phase4f_5f/f2/threshold_experiment.pre_reconstruction_fix/validation_calibration.json
+?? backend/phases/phase4f/phase4f_5f/f2/threshold_experiment/benchmark_result.json
+?? backend/phases/phase4f/phase4f_5f/f2/threshold_experiment/holdout_result.json
+?? backend/phases/phase4f/phase4f_5f/f2/threshold_experiment/margin_sweep.json
+?? backend/phases/phase4f/phase4f_5f/f2/threshold_experiment/raw_prediction_audit.json
+?? backend/phases/phase4f/phase4f_5f/f2/threshold_experiment/raw_predictions_benchmark.json
+?? backend/phases/phase4f/phase4f_5f/f2/threshold_experiment/raw_predictions_holdout.json
+?? backend/phases/phase4f/phase4f_5f/f2/threshold_experiment/raw_predictions_validation.json
+?? backend/phases/phase4f/phase4f_5f/f2/threshold_experiment/run_threshold_experiment.py
+?? backend/phases/phase4f/phase4f_5f/f2/threshold_experiment/stability_analysis.json
+?? backend/phases/phase4f/phase4f_5f/f2/threshold_experiment/threshold_experiment_manifest.json
+?? backend/phases/phase4f/phase4f_5f/f2/threshold_experiment/threshold_sweep.json
+?? backend/phases/phase4f/phase4f_5f/f2/threshold_experiment/validation_calibration.json
+?? backend/phases/phase4f/phase4f_5f/h/audits/duplicate_audit.json
+?? backend/phases/phase4f/phase4f_5f/h/audits/leakage_audit.json
+?? backend/phases/phase4f/phase4f_5f/h/audits/quality_gate_failures.json
+?? backend/phases/phase4f/phase4f_5f/h/audits/semantic_audit.json
+?? backend/phases/phase4f/phase4f_5f/h/candidates/all_candidates.jsonl
+?? backend/phases/phase4f/phase4f_5f/h/generate_h_candidates.py
+?? backend/phases/phase4f/phase4f_5f/h/manifests/h_manifest.json
+?? backend/phases/phase4f/phase4f_5f/h/pools/h10.jsonl
+?? backend/phases/phase4f/phase4f_5f/h/pools/h20.jsonl
+?? backend/phases/phase4f/phase4f_5f/h/pools/h30.jsonl
+?? backend/phases/phase4f/phase4f_5f/h/reports/phase4f_5f_h_dataset_design_report.txt
+?? backend/phases/phase4f/phase4f_5f/h1/config/f1_reconciled_ids.json
+?? backend/phases/phase4f/phase4f_5f/h1/config/h1_config.json
+?? backend/phases/phase4f/phase4f_5f/h1/evaluation/h1_benchmark.json
+?? backend/phases/phase4f/phase4f_5f/h1/evaluation/h1_holdout.json
+?? backend/phases/phase4f/phase4f_5f/h1/evaluation/h1_null_analysis.json
+?? backend/phases/phase4f/phase4f_5f/h1/evaluation/h1_validation.json
+?? backend/phases/phase4f/phase4f_5f/h1/logs/h1_training.json
+?? backend/phases/phase4f/phase4f_5f/h1/manifests/h1_manifest.json
+?? backend/phases/phase4f/phase4f_5f/h1/reports/phase4f_5f_h1_final_report.txt
+?? backend/phases/phase4f/phase4f_5f/h1/run_h1.py
+?? backend/phases/phase4f/phase4f_5f/h1_reconciliation/H1_RECONCILIATION_REPORT.md
+?? backend/phases/phase4f/phase4f_5f/h1_reconciliation/README.md
+?? backend/phases/phase4f/phase4f_5f/h1_reconciliation/checksums.txt
+?? backend/phases/phase4f/phase4f_5f/h1_reconciliation/h1_count_reconciliation.json
+?? backend/phases/phase4f/phase4f_5f/h1_reconciliation/h1_label_integrity.json
+?? backend/phases/phase4f/phase4f_5f/h1_reconciliation/h1_metric_recalculation.json
+?? backend/phases/phase4f/phase4f_5f/h1_reconciliation/h1_no_answer_analysis.json
+?? backend/phases/phase4f/phase4f_5f/h1_reconciliation/h1_null_score_analysis.json
+?? backend/phases/phase4f/phase4f_5f/h1_reconciliation/h1_overlap_report.json
+?? backend/phases/phase4f/phase4f_5f/h1_reconciliation/h1_protocol_audit.json
+?? backend/phases/phase4f/phase4f_5f/h1_reconciliation/h1_reconciled_comparison.json
+?? backend/phases/phase4f/phase4f_5f/phase4f_5f_f1_reconciliation_manifest.json
+?? backend/phases/phase4f/phase4f_5f/reconciliation/dataset_reconciliation.json
+?? backend/phases/phase4f/phase4f_5f/reconciliation/final_holdout_ids.json
+?? backend/phases/phase4f/phase4f_5f/reconciliation/final_training_ids.json
+?? backend/phases/phase4f/phase4f_5f/reconciliation/final_validation_ids.json
+?? backend/phases/phase4f/phase4f_5f/reconciliation/invalid_span_audit.json
+?? backend/phases/phase4f/phase4f_5f/reconciliation/training_protocol_audit.json
+?? backend/phases/phase4f/phase4f_5f/recovery/artifact_inventory.json
+?? backend/phases/phase4f/phase4f_5f/recovery/gpu_environment_report.json
+?? backend/phases/phase4f/phase4f_5f/recovery/gpu_environment_report.txt
+?? backend/phases/phase4f/phase4f_5f/recovery/phase4f_5f_recovery_report.txt
+?? backend/phases/phase4f/phase4f_5f/recovery/recovery_manifest.json
+?? backend/phases/phase4f/phase4f_5f/reports/phase4f_5f_f1_preparation_report.txt
+?? backend/phases/phase4f/phase4f_5f/reports/phase4f_5f_f1_reconciliation_report.txt
+?? backend/phases/phase4f/phase4f_5f/research_ledger/RESEARCH_LEDGER.md
+?? backend/phases/phase4f/phase4f_5f/research_ledger/checksums.txt
+?? backend/phases/phase4f/phase4f_5f/research_ledger/research_ledger.json
+?? backend/phases/phase4f/phase4f_5f/run_experiment.py
+?? backend/phases/phase4f/quality_gate.py
+?? backend/phases/phase4f/reconciliation/a0_reproduction.json
+?? backend/phases/phase4f/reconciliation/checkpoint_audit.json
+?? backend/phases/phase4f/reconciliation/cross_phase_evaluation_compatibility.json
+?? backend/phases/phase4f/reconciliation/dataset_label_audit.json
+?? backend/phases/phase4f/reconciliation/evaluation_parity_matrix.json
+?? backend/phases/phase4f/reconciliation/experiment_artifact_inventory.json
+?? backend/phases/phase4f/reconciliation/failure_taxonomy_reconciliation.json
+?? backend/phases/phase4f/reconciliation/manual_forensic_traces.json
+?? backend/phases/phase4f/reconciliation/model_initialization_audit.json
+?? backend/phases/phase4f/reconciliation/phase4f_4r_reconciliation_report.txt
+?? backend/phases/phase4f/reconciliation/token_span_audit.json
+?? backend/phases/phase4f/reconciliation/training_configuration_audit.json
+?? backend/phases/phase4f/training/__init__.py
+?? backend/phases/phase4f/training/configs.py
+?? backend/phases/phase4f/training/environment.json
+?? backend/phases/phase4f/training/train.py
+?? backend/phases/phase4f_qa_architecture_experiment_report.txt
+?? backend/scripts/cleanup_orphan_uploads.py
+?? backend/scripts/cleanup_path.py
+?? backend/scripts/cleanup_smoke.py
+?? backend/scripts/create_test_user.py
+?? backend/scripts/db_check.py
+?? backend/scripts/setup_db.py
+?? backend/scripts/start_server.py
+?? backend/tests/README.md
+?? backend/tests/e2e/__init__.py
+?? backend/tests/e2e/browser/__init__.py
+?? backend/tests/e2e/browser/test_browser_flow.py
+?? backend/tests/e2e/browser/test_document_flow.py
+?? backend/tests/e2e/browser/test_embedding_flow.py
+?? backend/tests/e2e/browser/test_phase6_reliability.py
+?? backend/tests/e2e/browser/test_rag_flow.py
+?? backend/tests/e2e/browser/test_real_browser.py
+?? backend/tests/fixtures/__init__.py
+?? backend/tests/fixtures/darwin_proper.pdf
+?? backend/tests/fixtures/e2e_config.py
+?? backend/tests/fixtures/graph_data.py
+?? backend/tests/fixtures/integration_db.py
+?? backend/tests/fixtures/integration_http.py
+?? backend/tests/fixtures/live_server.py
+?? backend/tests/fixtures/paths.py
+?? backend/tests/fixtures/pdf_layout.py
+?? backend/tests/integration/__init__.py
+?? backend/tests/integration/auth/__init__.py
+?? backend/tests/integration/auth/test_auth.py
+?? backend/tests/integration/documents/__init__.py
+?? backend/tests/integration/documents/test_document_detail_pagination.py
+?? backend/tests/integration/documents/test_document_insights.py
+?? backend/tests/integration/documents/test_document_mutation_id_validation.py
+?? backend/tests/integration/documents/test_file_validation.py
+?? backend/tests/integration/documents/test_table_row_migration.py
+?? backend/tests/integration/documents/test_table_row_persistence.py
+?? backend/tests/integration/embeddings/__init__.py
+?? backend/tests/integration/embeddings/test_generate_error_handling.py
+?? backend/tests/integration/graph/__init__.py
+?? backend/tests/integration/graph/test_graph_ingestion.py
+?? backend/tests/integration/graph/test_graph_rag_flow.py
+?? backend/tests/integration/graph/test_graph_security.py
+?? backend/tests/integration/graph/test_structure_augmentation.py
+?? backend/tests/integration/graph/test_structure_reachability.py
+?? backend/tests/integration/graph/test_table_evidence_api.py
+?? backend/tests/integration/graph/test_table_evidence_bands.py
+?? backend/tests/integration/rag/__init__.py
+?? backend/tests/integration/rag/test_real_e2e_validation.py
+?? backend/tests/integration/reliability/__init__.py
+?? backend/tests/integration/reliability/test_table_row_reliability_api.py
+?? backend/tests/integration/security/__init__.py
+?? backend/tests/integration/security/test_cors.py
+?? backend/tests/integration/settings/__init__.py
+?? backend/tests/integration/settings/test_settings.py
+?? backend/tests/integration/verification/__init__.py
+?? backend/tests/integration/verification/test_image_verification.py
+?? backend/tests/integration/verification/test_verification_integrity.py
+?? backend/tests/integration/voice/__init__.py
+?? backend/tests/integration/voice/test_voice_synthesize.py
+?? backend/tests/integration/voice/test_voice_transcribe.py
+?? backend/tests/unit/__init__.py
+?? backend/tests/unit/auth/__init__.py
+?? backend/tests/unit/auth/test_config_security.py
+?? backend/tests/unit/brain/__init__.py
+?? backend/tests/unit/brain/test_brain_orchestration.py
+?? backend/tests/unit/brain/test_brain_types.py
+?? backend/tests/unit/brain/test_outcomes.py
+?? backend/tests/unit/chat/__init__.py
+?? backend/tests/unit/chat/test_answer_span.py
+?? backend/tests/unit/chat/test_chat_unit.py
+?? backend/tests/unit/chat/test_phase3d_context.py
+?? backend/tests/unit/chat/test_phase3d_reconciliation.py
+?? backend/tests/unit/chat/test_qa_answer_reconstruction.py
+?? backend/tests/unit/chat/test_table_evidence_gate.py
+?? backend/tests/unit/documents/__init__.py
+?? backend/tests/unit/documents/test_pdf_read_order.py
+?? backend/tests/unit/documents/test_phase3d_chunking.py
+?? backend/tests/unit/documents/test_phase3e_processing.py
+?? backend/tests/unit/documents/test_structured_extraction.py
+?? backend/tests/unit/documents/test_table_rows.py
+?? backend/tests/unit/embeddings/__init__.py
+?? backend/tests/unit/evaluation/__init__.py
+?? backend/tests/unit/evaluation/conftest.py
+?? backend/tests/unit/evaluation/test_denominator_sensitivity.py
+?? backend/tests/unit/evaluation/test_disposable_database_authorization.py
+?? backend/tests/unit/evaluation/test_disposal_authorization_contract.py
+?? backend/tests/unit/evaluation/test_evaluation_isolation.py
+?? backend/tests/unit/evaluation/test_function_cleanup_authorization.py
+?? backend/tests/unit/evaluation/test_heading_corpus.py
+?? backend/tests/unit/evaluation/test_isolation_guard_identity.py
+?? backend/tests/unit/evaluation/test_legacy_runner_isolation.py
+?? backend/tests/unit/evaluation/test_lifecycle_authorization.py
+?? backend/tests/unit/evaluation/test_metrics.py
+?? backend/tests/unit/evaluation/test_phase3_runner_target_order.py
+?? backend/tests/unit/evaluation/test_phase3d_cleanup_scope.py
+?? backend/tests/unit/evaluation/test_phase3d_evaluation_cleanup_scope.py
+?? backend/tests/unit/evaluation/test_phase3e_integration_cleanup_scope.py
+?? backend/tests/unit/evaluation/test_phase3e_validation_cleanup_scope.py
+?? backend/tests/unit/evaluation/test_phase3f_evaluation_cleanup_scope.py
+?? backend/tests/unit/evaluation/test_phase4b_evaluation_cleanup_scope.py
+?? backend/tests/unit/evaluation/test_run_artifacts.py
+?? backend/tests/unit/evaluation/test_runner_pre_engine_init.py
+?? backend/tests/unit/evaluation/test_runner_report_output.py
+?? backend/tests/unit/evaluation/test_structure_discriminating_corpus.py
+?? backend/tests/unit/evaluation/test_structure_eval.py
+?? backend/tests/unit/evaluation/test_structure_runner_guard_order.py
+?? backend/tests/unit/evaluation/test_unsupported_answer_denominator.py
+?? backend/tests/unit/graph/__init__.py
+?? backend/tests/unit/graph/test_fusion.py
+?? backend/tests/unit/graph/test_graph_edges.py
+?? backend/tests/unit/graph/test_structural_retrieval.py
+?? backend/tests/unit/graph/test_structure_element_retrieval.py
+?? backend/tests/unit/reliability/__init__.py
+?? backend/tests/unit/reliability/test_table_row_provenance.py
+?? backend/tests/unit/scripts/test_cleanup_orphan_uploads.py
+?? backend/tests/unit/security/__init__.py
+?? backend/tests/unit/security/test_sql_safety.py
+?? backend/tests/unit/storage/__init__.py
+?? backend/tests/unit/storage/test_database_url.py
+?? backend/tests/unit/storage/test_sqlite_type_isolation.py
+?? backend/tests/unit/verification/__init__.py
+?? backend/verification/service.py
+?? backend/voice.py
+?? compose.yaml
+?? docker/nginx.conf
+?? prompts/00_coordinator.md
+?? prompts/01_database_agent.md
+?? prompts/02_backend_agent.md
+?? prompts/03_frontend_agent.md
+?? prompts/04_ai_agent.md
+?? prompts/05_test_agent.md
+?? prompts/06_evaluation_agent.md
+?? prompts/07_security_agent.md
+?? prompts/08_verifier.md
+?? runbooks/docker-runtime.md
+?? src/components/common/DocumentInsightsPanel.tsx
+?? src/components/common/VoiceInputButton.tsx
+?? src/components/common/VoiceSpeakerButton.tsx
+```
+
+### 10.3 Path-level comparison
+
+```text
+--- initial status
++++ final status
+@@ -470,6 +470,7 @@
+ ?? backend/architecture/STEP1_6J_FAIL_CLOSED_DESTRUCTIVE_EXECUTION_2026-10-12.md
+ ?? backend/architecture/STEP1_6K_LIFECYCLE_AUTHORIZATION_HARDENING_2026-10-12.md
+ ?? backend/architecture/STEP1_6L_FUNCTION_LEVEL_CLEANUP_AUTHORIZATION_2026-10-12.md
++?? backend/architecture/STEP1_6M_READ_ONLY_POSTGRESQL_READINESS_REVIEW_2026-10-12.md
+ ?? backend/architecture/phase4f_6/ARCHITECTURE_DECISION_RECORD.md
+ ?? backend/architecture/phase4f_6/CURRENT_ARCHITECTURE.md
+ ?? backend/architecture/phase4f_6/DOMAIN_MODEL.md
+```

@@ -1,0 +1,643 @@
+{
+  "diagnostic_version": "e0-prerequisite-v1",
+  "corrections_2026_09_27": {"see": "backend/architecture/phase4f_6/decision/E0_ERRATUM_2026-09-27.md", "policy": "Every pre-existing value in this file is preserved unaltered as the historical observation. This key is additive only.", "corrected": ["C10: the blocker text states the retrieval path requires an instance at 'localhost:5432 per backend/.env'. That misattributes the backend/config.py + backend/alembic.ini default; backend/.env resolves to a managed remote PostgreSQL (pgvector) service."]},
+  "phase": "4F.6-D",
+  "created_utc": "2026-09-22T21:34:12.507336+00:00",
+  "boundary": {
+    "e0_executed": false,
+    "retrieval_run": false,
+    "inference_run": false,
+    "training_run": false,
+    "benchmark_modified": false,
+    "dataset_modified": false,
+    "production_modified": false,
+    "network_accessed": false,
+    "github_accessed": false,
+    "stage_attribution_computed": false
+  },
+  "frozen_verification": {
+    "benchmark_sha256": "1166bf4ff38265c209614ac20261417b7eeb43653f4482dfdf94721fd50a41d0",
+    "benchmark_hash_matches_frozen": true,
+    "benchmark_lines": 182,
+    "benchmark_unanswerable": 42,
+    "benchmark_answerable": 140,
+    "document_counts": {
+      "unanswerable_corpus": 42,
+      "company_history_eta": 44,
+      "financial_report_q3": 38,
+      "api_docs_lambda": 20,
+      "dataset_desc_mu": 22,
+      "legal_contract_epsilon": 16
+    },
+    "document_counts_match_manifest": true,
+    "six_identities_verified": true,
+    "counts_match_expected": true,
+    "dataset_sha256": "a517530354fc9bcaeef6f1aa16c3fb9ce92f1967668386bc66781e6e6bbf2e97",
+    "dataset_hash_matches_manifest": true,
+    "production_model_sha256": "cb9f1dde94fca0e1f82c440bdc184ff54ba02efb6ea432e37a8c6ff8a8f69deb",
+    "production_model_hash_unchanged": true,
+    "manifest_sha256_field_matches": true,
+    "manifest_source_dataset_hash_matches": true
+  },
+  "source_corpus": {
+    "documents": [
+      {
+        "document_id": "company_history_eta",
+        "source_type": "GENERATOR_DEFINED_SYNTHETIC_DOCUMENT",
+        "classification": "B_DETERMINISTIC_SOURCE_RECONSTRUCTIBLE",
+        "generator_provenance": {
+          "path": "backend/phase4f/dataset/expand_and_audit.py",
+          "symbols": [
+            "DOCUMENTS",
+            "_add_doc"
+          ],
+          "doc_definition_in_source": true,
+          "example_seed": 42,
+          "seed_scope": "seed affects example sampling only; document text is static data (no RNG)",
+          "required_inputs": "module import only (no external data, no network)",
+          "reconstruction_method": "CANON-v1 serialization of the static section tree"
+        },
+        "document_sha256": "c8425307f982eadce5340c4a666ad794e6afa0a64576f09d77b9d74ca9466f97",
+        "document_bytes": 3148,
+        "structure": {
+          "doc_type": "historical_narrative",
+          "doc_structure": "chronological_prose",
+          "sections": 4,
+          "paragraphs": 8,
+          "tables": 1,
+          "lists": 1
+        },
+        "benchmark_document_id_mapping": {
+          "benchmark_version": "v1",
+          "answerable_examples": 44,
+          "unanswerable_examples": 0,
+          "total": 44,
+          "expected_from_manifest": 44,
+          "matches_manifest": true
+        },
+        "isolated_artifact": true,
+        "production_storage_touched": false
+      },
+      {
+        "document_id": "financial_report_q3",
+        "source_type": "GENERATOR_DEFINED_SYNTHETIC_DOCUMENT",
+        "classification": "B_DETERMINISTIC_SOURCE_RECONSTRUCTIBLE",
+        "generator_provenance": {
+          "path": "backend/phase4f/dataset/expand_and_audit.py",
+          "symbols": [
+            "DOCUMENTS",
+            "_add_doc"
+          ],
+          "doc_definition_in_source": true,
+          "example_seed": 42,
+          "seed_scope": "seed affects example sampling only; document text is static data (no RNG)",
+          "required_inputs": "module import only (no external data, no network)",
+          "reconstruction_method": "CANON-v1 serialization of the static section tree"
+        },
+        "document_sha256": "0044c58e37e49c05b55288a620ce450c594d2c640962ef11988efb4b0f818cd4",
+        "document_bytes": 2213,
+        "structure": {
+          "doc_type": "financial_report",
+          "doc_structure": "prose_with_tables",
+          "sections": 4,
+          "paragraphs": 4,
+          "tables": 1,
+          "lists": 1
+        },
+        "benchmark_document_id_mapping": {
+          "benchmark_version": "v1",
+          "answerable_examples": 38,
+          "unanswerable_examples": 0,
+          "total": 38,
+          "expected_from_manifest": 38,
+          "matches_manifest": true
+        },
+        "isolated_artifact": true,
+        "production_storage_touched": false
+      },
+      {
+        "document_id": "api_docs_lambda",
+        "source_type": "GENERATOR_DEFINED_SYNTHETIC_DOCUMENT",
+        "classification": "B_DETERMINISTIC_SOURCE_RECONSTRUCTIBLE",
+        "generator_provenance": {
+          "path": "backend/phase4f/dataset/expand_and_audit.py",
+          "symbols": [
+            "DOCUMENTS",
+            "_add_doc"
+          ],
+          "doc_definition_in_source": true,
+          "example_seed": 42,
+          "seed_scope": "seed affects example sampling only; document text is static data (no RNG)",
+          "required_inputs": "module import only (no external data, no network)",
+          "reconstruction_method": "CANON-v1 serialization of the static section tree"
+        },
+        "document_sha256": "4f209f437655d07fbe0d86d4754e966e142473dbdea726cd6bf9faa9dff64586",
+        "document_bytes": 1912,
+        "structure": {
+          "doc_type": "api_documentation",
+          "doc_structure": "technical_reference",
+          "sections": 3,
+          "paragraphs": 3,
+          "tables": 2,
+          "lists": 1
+        },
+        "benchmark_document_id_mapping": {
+          "benchmark_version": "v1",
+          "answerable_examples": 20,
+          "unanswerable_examples": 0,
+          "total": 20,
+          "expected_from_manifest": 20,
+          "matches_manifest": true
+        },
+        "isolated_artifact": true,
+        "production_storage_touched": false
+      },
+      {
+        "document_id": "dataset_desc_mu",
+        "source_type": "GENERATOR_DEFINED_SYNTHETIC_DOCUMENT",
+        "classification": "B_DETERMINISTIC_SOURCE_RECONSTRUCTIBLE",
+        "generator_provenance": {
+          "path": "backend/phase4f/dataset/expand_and_audit.py",
+          "symbols": [
+            "DOCUMENTS",
+            "_add_doc"
+          ],
+          "doc_definition_in_source": true,
+          "example_seed": 42,
+          "seed_scope": "seed affects example sampling only; document text is static data (no RNG)",
+          "required_inputs": "module import only (no external data, no network)",
+          "reconstruction_method": "CANON-v1 serialization of the static section tree"
+        },
+        "document_sha256": "97ae7a648bafcc06dda856fa36ea474b4d621b13b01a651710c3a5d47d51a6c4",
+        "document_bytes": 2008,
+        "structure": {
+          "doc_type": "scientific",
+          "doc_structure": "data_description",
+          "sections": 3,
+          "paragraphs": 3,
+          "tables": 1,
+          "lists": 1
+        },
+        "benchmark_document_id_mapping": {
+          "benchmark_version": "v1",
+          "answerable_examples": 22,
+          "unanswerable_examples": 0,
+          "total": 22,
+          "expected_from_manifest": 22,
+          "matches_manifest": true
+        },
+        "isolated_artifact": true,
+        "production_storage_touched": false
+      },
+      {
+        "document_id": "legal_contract_epsilon",
+        "source_type": "GENERATOR_DEFINED_SYNTHETIC_DOCUMENT",
+        "classification": "B_DETERMINISTIC_SOURCE_RECONSTRUCTIBLE",
+        "generator_provenance": {
+          "path": "backend/phase4f/dataset/expand_and_audit.py",
+          "symbols": [
+            "DOCUMENTS",
+            "_add_doc"
+          ],
+          "doc_definition_in_source": true,
+          "example_seed": 42,
+          "seed_scope": "seed affects example sampling only; document text is static data (no RNG)",
+          "required_inputs": "module import only (no external data, no network)",
+          "reconstruction_method": "CANON-v1 serialization of the static section tree"
+        },
+        "document_sha256": "b767a129ac560c3f800c6fe79f187c70ccbcaafc1dc1ce4d42179c708e3db567",
+        "document_bytes": 2158,
+        "structure": {
+          "doc_type": "legal_document",
+          "doc_structure": "prose_with_numbered_items",
+          "sections": 4,
+          "paragraphs": 4,
+          "tables": 1,
+          "lists": 1
+        },
+        "benchmark_document_id_mapping": {
+          "benchmark_version": "v1",
+          "answerable_examples": 16,
+          "unanswerable_examples": 0,
+          "total": 16,
+          "expected_from_manifest": 16,
+          "matches_manifest": true
+        },
+        "isolated_artifact": true,
+        "production_storage_touched": false
+      },
+      {
+        "document_id": "unanswerable_corpus",
+        "source_type": "VIRTUAL_CORPUS (not a coherent document)",
+        "classification": "B_DETERMINISTIC_SOURCE_RECONSTRUCTIBLE",
+        "generator_provenance": {
+          "path": "backend/phase4f/dataset/expand_and_audit.py",
+          "symbols": [
+            "ExampleGenerator.gen_unanswerable",
+            "unanswerable_pairs (static list)"
+          ],
+          "all_42_context_literals_present_in_generator_source": true,
+          "required_inputs": "benchmark records (authoritative carrier) + generator source (cross-check)",
+          "reconstruction_method": "document_text = the 42 benchmark distractor contexts in benchmark order; each literal verified present in the generator's static pair list"
+        },
+        "document_sha256": "ca0ef7ab95eb818636af8a217a065ec585835f07b17fca26830ee961e82821a5",
+        "document_bytes": 2892,
+        "structure": {
+          "sections": 0,
+          "paragraphs": 42,
+          "tables": 0,
+          "lists": 0,
+          "virtual": true
+        },
+        "benchmark_document_id_mapping": {
+          "benchmark_version": "v1",
+          "answerable_examples": 0,
+          "unanswerable_examples": 42,
+          "total": 42,
+          "expected_from_manifest": 42,
+          "matches_manifest": true
+        },
+        "notes": "Virtual corpus: contexts are standalone distractor sentences, not spans of one source document. Chunked as flat paragraphs for corpus completeness. No gold evidence is asserted for its (unanswerable) examples.",
+        "isolated_artifact": true,
+        "production_storage_touched": false
+      }
+    ],
+    "classifications": {
+      "B_DETERMINISTIC_SOURCE_RECONSTRUCTIBLE": 6
+    },
+    "canonical_rule": "CANON-v1"
+  },
+  "task4_provenance": {
+    "denominator_answerable_examples": 140,
+    "provenance_class_counts": {
+      "SOURCE_SPAN_NOT_FOUND": 54,
+      "SOURCE_SPAN_VERIFIED": 86
+    },
+    "provenance_rate": 0.6143,
+    "per_category_class_counts": {
+      "DIRECT_SPAN": {
+        "SOURCE_SPAN_VERIFIED": 24
+      },
+      "LIST_ITEM": {
+        "SOURCE_SPAN_VERIFIED": 20
+      },
+      "LONG_CONTEXT": {
+        "SOURCE_SPAN_VERIFIED": 10
+      },
+      "MULTI_CHUNK": {
+        "SOURCE_SPAN_NOT_FOUND": 4,
+        "SOURCE_SPAN_VERIFIED": 6
+      },
+      "NUMERIC": {
+        "SOURCE_SPAN_NOT_FOUND": 17,
+        "SOURCE_SPAN_VERIFIED": 3
+      },
+      "SECTION_SPECIFIC": {
+        "SOURCE_SPAN_VERIFIED": 16
+      },
+      "TABLE_CELL": {
+        "SOURCE_SPAN_NOT_FOUND": 20,
+        "SOURCE_SPAN_VERIFIED": 4
+      },
+      "TABLE_ROW": {
+        "SOURCE_SPAN_NOT_FOUND": 13,
+        "SOURCE_SPAN_VERIFIED": 3
+      }
+    },
+    "multi_chunk_nature_counts": {
+      "synthetic_concatenation": 4,
+      "one_source_span": 6
+    },
+    "multi_chunk_denominator": 10,
+    "table_structural_provenance_verified": 40,
+    "table_denominator": 40,
+    "list_structural_provenance_verified": 20,
+    "list_denominator": 20,
+    "cross_document_context_ambiguity": 0,
+    "context_nature_counts": {
+      "synthetic_header_row_pair": 33,
+      "one_source_span": 86,
+      "static_fact_fragment": 17,
+      "synthetic_section_body_concatenation": 4
+    }
+  },
+  "task5_chunk_corpus": {
+    "per_document": {
+      "unanswerable_corpus": {
+        "chunk_count": 42,
+        "offsets_resolved": 42,
+        "offset_resolution_rate": 1.0,
+        "structure_coverage": {
+          "paragraph_ids": 42
+        },
+        "virtual": true
+      },
+      "company_history_eta": {
+        "chunk_count": 14,
+        "offsets_resolved": 14,
+        "offset_resolution_rate": 1.0,
+        "structure_coverage": {
+          "section_ids": 14,
+          "paragraph_ids": 8,
+          "table_ids": 1,
+          "row_ids": 1,
+          "cell_ids": 1,
+          "list_ids": 1,
+          "list_item_ids": 1
+        },
+        "virtual": false
+      },
+      "financial_report_q3": {
+        "chunk_count": 10,
+        "offsets_resolved": 10,
+        "offset_resolution_rate": 1.0,
+        "structure_coverage": {
+          "section_ids": 10,
+          "paragraph_ids": 4,
+          "table_ids": 1,
+          "row_ids": 1,
+          "cell_ids": 1,
+          "list_ids": 1,
+          "list_item_ids": 1
+        },
+        "virtual": false
+      },
+      "api_docs_lambda": {
+        "chunk_count": 9,
+        "offsets_resolved": 9,
+        "offset_resolution_rate": 1.0,
+        "structure_coverage": {
+          "section_ids": 9,
+          "paragraph_ids": 3,
+          "list_ids": 1,
+          "list_item_ids": 1,
+          "table_ids": 2,
+          "row_ids": 2,
+          "cell_ids": 2
+        },
+        "virtual": false
+      },
+      "dataset_desc_mu": {
+        "chunk_count": 8,
+        "offsets_resolved": 8,
+        "offset_resolution_rate": 1.0,
+        "structure_coverage": {
+          "section_ids": 8,
+          "paragraph_ids": 3,
+          "table_ids": 1,
+          "row_ids": 1,
+          "cell_ids": 1,
+          "list_ids": 1,
+          "list_item_ids": 1
+        },
+        "virtual": false
+      },
+      "legal_contract_epsilon": {
+        "chunk_count": 10,
+        "offsets_resolved": 10,
+        "offset_resolution_rate": 1.0,
+        "structure_coverage": {
+          "section_ids": 10,
+          "paragraph_ids": 4,
+          "list_ids": 1,
+          "list_item_ids": 1,
+          "table_ids": 1,
+          "row_ids": 1,
+          "cell_ids": 1
+        },
+        "virtual": false
+      }
+    },
+    "total_chunks": 93,
+    "total_offsets_resolved": 93
+  },
+  "task6_chunk_evidence": {
+    "denominator_answerable_examples": 140,
+    "evidence_in_source_document": {
+      "count": 140,
+      "denominator": 140,
+      "rate": 1.0
+    },
+    "evidence_in_stored_chunks": {
+      "count": 140,
+      "denominator": 140,
+      "rate": 1.0
+    },
+    "source_offset_match": {
+      "count": 86,
+      "denominator": 140,
+      "rate": 0.6143
+    },
+    "gold_span_fully_inside_one_chunk": {
+      "count": 140,
+      "denominator": 140
+    },
+    "gold_span_crosses_chunk_boundary": {
+      "count": 0,
+      "denominator": 140
+    },
+    "per_category": {
+      "DIRECT_SPAN": {
+        "n": 24,
+        "in_source": 24,
+        "in_chunks": 24,
+        "offset_ok": 24
+      },
+      "LIST_ITEM": {
+        "n": 20,
+        "in_source": 20,
+        "in_chunks": 20,
+        "offset_ok": 20
+      },
+      "LONG_CONTEXT": {
+        "n": 10,
+        "in_source": 10,
+        "in_chunks": 10,
+        "offset_ok": 10
+      },
+      "MULTI_CHUNK": {
+        "n": 10,
+        "in_source": 10,
+        "in_chunks": 10,
+        "offset_ok": 6
+      },
+      "NUMERIC": {
+        "n": 20,
+        "in_source": 20,
+        "in_chunks": 20,
+        "offset_ok": 3
+      },
+      "SECTION_SPECIFIC": {
+        "n": 16,
+        "in_source": 16,
+        "in_chunks": 16,
+        "offset_ok": 16
+      },
+      "TABLE_CELL": {
+        "n": 24,
+        "in_source": 24,
+        "in_chunks": 24,
+        "offset_ok": 4
+      },
+      "TABLE_ROW": {
+        "n": 16,
+        "in_source": 16,
+        "in_chunks": 16,
+        "offset_ok": 3
+      }
+    },
+    "structural_context_preserved_in_covering_chunk": {
+      "table_cell": {
+        "count": 24,
+        "denominator": 24
+      },
+      "table_row": {
+        "count": 16,
+        "denominator": 16
+      },
+      "list_item": {
+        "count": 20,
+        "denominator": 20
+      }
+    },
+    "ambiguity_flagged_examples": 34,
+    "scope_note": "prerequisite evidence-chain verification counts only; NOT E0 stage attribution, no failure decomposition, no conditional EM/F1"
+  },
+  "task11_model_input": {
+    "diagnostic_target": "recorded F2 benchmark predictions (P3)",
+    "f2_recorded_predictions": {
+      "producer_scripts": {
+        "raw_predictions_benchmark.json": "phase4f_5f/f2/threshold_experiment/run_threshold_experiment.py:303",
+        "f2_benchmark.json": "phase4f_5f/f2/run_f2.py:610"
+      },
+      "checkpoint_used_by_threshold_script": "backend\\phase4f\\phase4f_5f\\f2\\checkpoints\\F2\\checkpoint_epoch2",
+      "checkpoint_files": {
+        "config.json": {
+          "sha256": "5a5a1a411af6c3e387d689241796824d7e7b059d6c77bf7d76396795c1a52a81",
+          "bytes": 614
+        },
+        "model.safetensors": {
+          "sha256": "717463178eeb37ee3a6424063e8666b6586dd15ee50d745c1ab3d16bb4b164b0",
+          "bytes": 265470032
+        },
+        "tokenizer.json": {
+          "sha256": "881fa1cae69b9dcb65a3a39328e1edde016ea17b23aab92781ab403f30d09d45",
+          "bytes": 711661
+        },
+        "tokenizer_config.json": {
+          "sha256": "71cd48543bec670f50e0c9c3556df16b1f58ea720ead6a1b4675f08870c60b17",
+          "bytes": 366
+        }
+      },
+      "tokenizer_path": "backend\\phase4f\\phase4f_5f\\f2\\checkpoints\\F2\\checkpoint_epoch2",
+      "model_path": "backend\\phase4f\\phase4f_5f\\f2\\checkpoints\\F2\\checkpoint_epoch2",
+      "max_length": 384,
+      "max_length_source": "run_threshold_experiment.py:35 and run_f2.py:47 (=384)",
+      "truncation_strategy": "truncation=True (right truncation, tokenizer default)",
+      "padding_strategy": "padding=\"max_length\" (padded to 384)",
+      "max_answer_length": 50,
+      "max_answer_length_run_f2": 50,
+      "max_answer_length_applies_to_recorded_f2": 50,
+      "max_answer_length_evidence": "run_threshold_experiment.py:36 MAX_ANSWER_LENGTH=50 used at decode (end_logits[best_start:best_start+50]); run_f2.py:48,157,373 same value",
+      "n_best": "not applicable — argmax span decode (no n_best list in F2 chain)",
+      "decode_strategy": "argmax start, argmax end within [start, start+50), CLS masked in threshold script"
+    },
+    "production_a0_scope": {
+      "component": "chat/qa_model.py answer_question (production inference)",
+      "max_answer_length": 100,
+      "n_best": 20,
+      "max_input_length": 384,
+      "model_path_field": "models/llm/final_model",
+      "config_file": "backend\\models\\documind-qa\\inference_config.json",
+      "applies_to": "production A0 serving only — NOT to recorded F2 benchmark predictions"
+    },
+    "p1_experiment_family_scope": {
+      "max_answer_length_default_50": "phase4f/experiments/evaluate.py:200 ex.get('max_answer_length', 50)",
+      "recorded_50": "phase4f/quality_gate.py:615; phase4f/experiments/train.py:55",
+      "applies_to": "P1 experiment family records — separate scope"
+    },
+    "discrepancy_resolution": "NO CONFLICT once scoped: recorded F2 benchmark predictions were decoded with max_answer_length=50 (code evidence); the value 100 is production A0's inference_config setting for qa_model.answer_question; 50 in evaluate.py is the P1-family example-field default. Both values recorded with scopes; neither silently chosen.",
+    "versions": {
+      "python": "3.11.0",
+      "transformers": "5.16.1",
+      "tokenizers": "0.23.1"
+    },
+    "l4_probe": {
+      "label": "L4_CAPABILITY_PROBE_SINGLE_EXAMPLE",
+      "aggregate_l4_measurement": false,
+      "examples_used": 1,
+      "inference": false,
+      "example_id": "tc_e7eb93d1",
+      "input_ids_length": 384,
+      "padded_to": 384,
+      "context_truncated_by_tokenizer": false,
+      "answer_token_span_found": true,
+      "answer_token_positions_present": 2,
+      "tokenizer_class": "BertTokenizer",
+      "status": "MODEL_INPUT_RECONSTRUCTIBLE"
+    }
+  },
+  "task10_context_assembly": {
+    "attempted": true,
+    "status": "DETERMINISTICALLY_RECONSTRUCTIBLE",
+    "functions_probed": [
+      "chat.rag.build_qa_context",
+      "chat.rag.build_context"
+    ],
+    "deterministic_across_repeated_runs": true,
+    "included_ids": [
+      "probe::c000",
+      "probe::c001"
+    ],
+    "omitted_ids": [],
+    "budget_tokens": 371,
+    "used_tokens": 336,
+    "model_input_window": 384,
+    "scope": "function-level assembly is executable in isolation and deterministic; the END-TO-END chain (retrieved chunks -> assembly) remains UNRESOLVED because retrieval cannot execute (see retrieval manifest)",
+    "observed_end_to_end": false
+  },
+  "tasks7_9_retrieval": {
+    "attempted_locally": true,
+    "postgres_localhost_5432": "CLOSED (TimeoutError)",
+    "postgres_tooling": {
+      "psql": null,
+      "pg_ctl": null,
+      "initdb": null,
+      "pg_config": null,
+      "docker": null
+    },
+    "program_files_postgresql": false,
+    "embedding_model_cached": true,
+    "production_retrieval_path": {
+      "function": "chat/rag.py::retrieve_chunks(db, user_id, query, top_k=5)",
+      "engine": "PostgreSQL + pgvector cosine (<=>) over document_chunks",
+      "embedding": "embeddings/model.py::embed_query (all-MiniLM-L6-v2, 384-dim) — executable locally (cached)",
+      "top_k": 5,
+      "relevance_threshold": 0.15,
+      "sql_dependency": "document_chunks JOIN documents; CAST(:embedding AS vector)"
+    },
+    "executed": false,
+    "traces_produced": 0,
+    "fabricated": false,
+    "status": "BLOCKED",
+    "blocker": "The existing production retrieval path requires a running PostgreSQL+pgvector instance (localhost:5432 per backend/.env). No Postgres server is running, no postgres tooling (psql/pg_ctl/initdb) or Docker exists on this machine, and no stored chunk corpus exists for the six isolated documents. Executing retrieval would require standing up a new database service and an ingestion+embedding pipeline — infrastructure setup outside this phase's authority, and building a replacement retrieval implementation is explicitly forbidden by Task 7. STOP invoked: zero retrieval traces produced; none fabricated."
+  },
+  "environment": {
+    "python": "3.11.0",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "torch": "2.13.0+cpu",
+    "transformers": "5.16.1",
+    "sentence_transformers": "6.0.1",
+    "offline_env": {
+      "HF_HUB_OFFLINE": "1",
+      "TRANSFORMERS_OFFLINE": "1"
+    }
+  },
+  "checks": {
+    "frozen_integrity": true,
+    "source_reconstruction": true,
+    "chunk_corpus": true,
+    "retrieval_blocker_confirmed": true
+  },
+  "all_checks_pass": true
+}

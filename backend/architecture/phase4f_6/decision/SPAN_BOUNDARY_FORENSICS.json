@@ -1,0 +1,367 @@
+{
+  "artifact": "SPAN_BOUNDARY_FORENSICS",
+  "note": "Boundary/selection experiment on the frozen 182-example benchmark. Every variant reads the same logits; only the selection rule differs. Leaked population — not a generalization result.",
+  "held_fixed": [
+    "benchmark",
+    "checkpoints",
+    "logits",
+    "answer-text decoder (fixed per Experiment 1)",
+    "metric definitions",
+    "tokenization"
+  ],
+  "changed": "span-selection rule only",
+  "limitations": [
+    "Population is fully leaked (all 182 examples appear in training_data.jsonl / training_data_v3.jsonl); no generalization claim is possible.",
+    "n = 140 answerable examples, so 1 example = 0.71pp; 1-2 example differences are noise.",
+    "Running inference on CPU with the recorded checkpoints; no training and no weights changed.",
+    "Only post-hoc selection rules are tested. Improving the model's own preference for the right span requires training, which is out of scope here."
+  ],
+  "inputs": {
+    "benchmark_path": "backend/phase4f/phase4f_5d/benchmark/qa_benchmark_v1.jsonl",
+    "benchmark_sha256": "1166bf4ff38265c209614ac20261417b7eeb43653f4482dfdf94721fd50a41d0",
+    "benchmark_sha256_expected": "1166bf4ff38265c209614ac20261417b7eeb43653f4482dfdf94721fd50a41d0"
+  },
+  "models": {
+    "A0": {
+      "checkpoint": "backend/models/documind-qa",
+      "variants": {
+        "R0_recorded_argmax50": {
+          "max_answer_length": 50,
+          "tie_break": "any",
+          "answerable_n": 140,
+          "answerable_em_count": 11,
+          "answerable_em_pct": 7.86,
+          "answerable_f1_pct": 18.6,
+          "non_empty_predictions": 75,
+          "boundary_taxonomy": {
+            "EMPTY": 79,
+            "OVERLAP": 15,
+            "TOO_LONG": 15,
+            "DISJOINT": 16,
+            "EXACT": 11,
+            "TOO_SHORT": 4
+          }
+        },
+        "R1_joint_logit50": {
+          "max_answer_length": 50,
+          "tie_break": "any",
+          "answerable_n": 140,
+          "answerable_em_count": 22,
+          "answerable_em_pct": 15.71,
+          "answerable_f1_pct": 38.71,
+          "non_empty_predictions": 182,
+          "boundary_taxonomy": {
+            "EXACT": 22,
+            "OVERLAP": 28,
+            "TOO_LONG": 28,
+            "DISJOINT": 48,
+            "TOO_SHORT": 14
+          }
+        },
+        "R2_joint_logit50_shortest": {
+          "max_answer_length": 50,
+          "tie_break": "short",
+          "answerable_n": 140,
+          "answerable_em_count": 22,
+          "answerable_em_pct": 15.71,
+          "answerable_f1_pct": 38.71,
+          "non_empty_predictions": 182,
+          "boundary_taxonomy": {
+            "EXACT": 22,
+            "OVERLAP": 28,
+            "TOO_LONG": 28,
+            "DISJOINT": 48,
+            "TOO_SHORT": 14
+          }
+        },
+        "R3_joint_logit50_longest": {
+          "max_answer_length": 50,
+          "tie_break": "long",
+          "answerable_n": 140,
+          "answerable_em_count": 22,
+          "answerable_em_pct": 15.71,
+          "answerable_f1_pct": 38.71,
+          "non_empty_predictions": 182,
+          "boundary_taxonomy": {
+            "EXACT": 22,
+            "OVERLAP": 28,
+            "TOO_LONG": 28,
+            "DISJOINT": 48,
+            "TOO_SHORT": 14
+          }
+        },
+        "P0_production_nbest100_prob": {
+          "max_answer_length": 100,
+          "tie_break": "any",
+          "answerable_n": 140,
+          "answerable_em_count": 22,
+          "answerable_em_pct": 15.71,
+          "answerable_f1_pct": 38.71,
+          "non_empty_predictions": 182,
+          "boundary_taxonomy": {
+            "EXACT": 22,
+            "OVERLAP": 28,
+            "TOO_LONG": 28,
+            "DISJOINT": 48,
+            "TOO_SHORT": 14
+          }
+        },
+        "P1_nbest100_logit": {
+          "max_answer_length": 100,
+          "tie_break": "any",
+          "answerable_n": 140,
+          "answerable_em_count": 22,
+          "answerable_em_pct": 15.71,
+          "answerable_f1_pct": 38.71,
+          "non_empty_predictions": 182,
+          "boundary_taxonomy": {
+            "EXACT": 22,
+            "OVERLAP": 28,
+            "TOO_LONG": 28,
+            "DISJOINT": 48,
+            "TOO_SHORT": 14
+          }
+        },
+        "P2_nbest100_logit_shortest": {
+          "max_answer_length": 100,
+          "tie_break": "short",
+          "answerable_n": 140,
+          "answerable_em_count": 22,
+          "answerable_em_pct": 15.71,
+          "answerable_f1_pct": 38.71,
+          "non_empty_predictions": 182,
+          "boundary_taxonomy": {
+            "EXACT": 22,
+            "OVERLAP": 28,
+            "TOO_LONG": 28,
+            "DISJOINT": 48,
+            "TOO_SHORT": 14
+          }
+        },
+        "R4_recorded_argmax50_wholeword": {
+          "max_answer_length": 50,
+          "tie_break": "any",
+          "answerable_n": 140,
+          "answerable_em_count": 11,
+          "answerable_em_pct": 7.86,
+          "answerable_f1_pct": 18.6,
+          "non_empty_predictions": 75,
+          "boundary_taxonomy": {
+            "EMPTY": 79,
+            "OVERLAP": 15,
+            "TOO_LONG": 15,
+            "DISJOINT": 16,
+            "EXACT": 11,
+            "TOO_SHORT": 4
+          },
+          "partial_word_starts_before_expansion": 0,
+          "spans_expanded": 0
+        },
+        "P4_joint100_wholeword": {
+          "max_answer_length": 100,
+          "tie_break": "any",
+          "answerable_n": 140,
+          "answerable_em_count": 22,
+          "answerable_em_pct": 15.71,
+          "answerable_f1_pct": 38.71,
+          "non_empty_predictions": 182,
+          "boundary_taxonomy": {
+            "EXACT": 22,
+            "OVERLAP": 28,
+            "TOO_LONG": 28,
+            "DISJOINT": 48,
+            "TOO_SHORT": 14
+          },
+          "partial_word_starts_before_expansion": 0,
+          "spans_expanded": 0
+        }
+      }
+    },
+    "F2": {
+      "checkpoint": "backend/phase4f/phase4f_5f/f2/checkpoints/F2/checkpoint_epoch2",
+      "variants": {
+        "R0_recorded_argmax50": {
+          "max_answer_length": 50,
+          "tie_break": "any",
+          "answerable_n": 140,
+          "answerable_em_count": 21,
+          "answerable_em_pct": 15.0,
+          "answerable_f1_pct": 32.99,
+          "non_empty_predictions": 177,
+          "boundary_taxonomy": {
+            "DISJOINT": 57,
+            "EXACT": 21,
+            "TOO_LONG": 20,
+            "OVERLAP": 35,
+            "TOO_SHORT": 7
+          }
+        },
+        "R1_joint_logit50": {
+          "max_answer_length": 50,
+          "tie_break": "any",
+          "answerable_n": 140,
+          "answerable_em_count": 22,
+          "answerable_em_pct": 15.71,
+          "answerable_f1_pct": 34.56,
+          "non_empty_predictions": 182,
+          "boundary_taxonomy": {
+            "DISJOINT": 53,
+            "EXACT": 22,
+            "TOO_LONG": 23,
+            "OVERLAP": 35,
+            "TOO_SHORT": 7
+          }
+        },
+        "R2_joint_logit50_shortest": {
+          "max_answer_length": 50,
+          "tie_break": "short",
+          "answerable_n": 140,
+          "answerable_em_count": 22,
+          "answerable_em_pct": 15.71,
+          "answerable_f1_pct": 34.56,
+          "non_empty_predictions": 182,
+          "boundary_taxonomy": {
+            "DISJOINT": 53,
+            "EXACT": 22,
+            "TOO_LONG": 23,
+            "OVERLAP": 35,
+            "TOO_SHORT": 7
+          }
+        },
+        "R3_joint_logit50_longest": {
+          "max_answer_length": 50,
+          "tie_break": "long",
+          "answerable_n": 140,
+          "answerable_em_count": 22,
+          "answerable_em_pct": 15.71,
+          "answerable_f1_pct": 34.56,
+          "non_empty_predictions": 182,
+          "boundary_taxonomy": {
+            "DISJOINT": 53,
+            "EXACT": 22,
+            "TOO_LONG": 23,
+            "OVERLAP": 35,
+            "TOO_SHORT": 7
+          }
+        },
+        "P0_production_nbest100_prob": {
+          "max_answer_length": 100,
+          "tie_break": "any",
+          "answerable_n": 140,
+          "answerable_em_count": 22,
+          "answerable_em_pct": 15.71,
+          "answerable_f1_pct": 34.41,
+          "non_empty_predictions": 182,
+          "boundary_taxonomy": {
+            "DISJOINT": 51,
+            "EXACT": 22,
+            "TOO_LONG": 26,
+            "OVERLAP": 34,
+            "TOO_SHORT": 7
+          }
+        },
+        "P1_nbest100_logit": {
+          "max_answer_length": 100,
+          "tie_break": "any",
+          "answerable_n": 140,
+          "answerable_em_count": 22,
+          "answerable_em_pct": 15.71,
+          "answerable_f1_pct": 34.41,
+          "non_empty_predictions": 182,
+          "boundary_taxonomy": {
+            "DISJOINT": 51,
+            "EXACT": 22,
+            "TOO_LONG": 26,
+            "OVERLAP": 34,
+            "TOO_SHORT": 7
+          }
+        },
+        "P2_nbest100_logit_shortest": {
+          "max_answer_length": 100,
+          "tie_break": "short",
+          "answerable_n": 140,
+          "answerable_em_count": 22,
+          "answerable_em_pct": 15.71,
+          "answerable_f1_pct": 34.41,
+          "non_empty_predictions": 182,
+          "boundary_taxonomy": {
+            "DISJOINT": 51,
+            "EXACT": 22,
+            "TOO_LONG": 26,
+            "OVERLAP": 34,
+            "TOO_SHORT": 7
+          }
+        },
+        "R4_recorded_argmax50_wholeword": {
+          "max_answer_length": 50,
+          "tie_break": "any",
+          "answerable_n": 140,
+          "answerable_em_count": 21,
+          "answerable_em_pct": 15.0,
+          "answerable_f1_pct": 32.99,
+          "non_empty_predictions": 177,
+          "boundary_taxonomy": {
+            "DISJOINT": 57,
+            "EXACT": 21,
+            "TOO_LONG": 20,
+            "OVERLAP": 35,
+            "TOO_SHORT": 7
+          },
+          "partial_word_starts_before_expansion": 0,
+          "spans_expanded": 2
+        },
+        "P4_joint100_wholeword": {
+          "max_answer_length": 100,
+          "tie_break": "any",
+          "answerable_n": 140,
+          "answerable_em_count": 22,
+          "answerable_em_pct": 15.71,
+          "answerable_f1_pct": 34.41,
+          "non_empty_predictions": 182,
+          "boundary_taxonomy": {
+            "DISJOINT": 51,
+            "EXACT": 22,
+            "TOO_LONG": 26,
+            "OVERLAP": 34,
+            "TOO_SHORT": 7
+          },
+          "partial_word_starts_before_expansion": 0,
+          "spans_expanded": 2
+        }
+      }
+    }
+  },
+  "findings": {
+    "H1_scoring_rule_headroom": {
+      "claim": "A different principled scoring rule improves span boundaries.",
+      "result": "REFUTED",
+      "evidence": "For A0, all of R1_joint_logit50, R2_joint_logit50_shortest, R3_joint_logit50_longest, P0_production_nbest100_prob, P1_nbest100_logit, P2_nbest100_logit_shortest produce the identical result (22/140 EM, F1 38.71%, identical taxonomy). The model's argmax pair already maximises every tested score."
+    },
+    "H2_tie_breaking": {
+      "claim": "Tie-breaking toward shorter/longer spans changes boundaries.",
+      "result": "REFUTED — shortest and longest tie-breaks are byte-identical to the untie-broken variant, i.e. ties essentially never occur."
+    },
+    "H3_partial_word_boundaries": {
+      "claim": "Spans are cut mid-word and can be repaired by whole-word expansion.",
+      "result": "REFUTED — 0 partial-word starts (A0) / 0 (F2); 2 spans could be extended at all, with no change in EM, F1 or taxonomy."
+    },
+    "H4_production_headroom": {
+      "claim": "The production selection rule (20x20 n-best, prob product) leaves boundary quality on the table.",
+      "result": "REFUTED — production's rule already matches the exhaustive joint-logit optimum on this benchmark, so production has no selection headroom."
+    },
+    "REAL_FINDING_recorded_protocol": {
+      "claim": "The recorded Phase 4F runner protocol is a weaker selector than the production rule, on identical logits.",
+      "result": "SUPPORTED — but it is a SELECTION fix, not a boundary fix, and it was deliberately NOT applied (see action).",
+      "evidence": "A0 recorded argmax chain 11/140 (EM 7.86%, F1 18.6%) vs joint/n-best 22/140 (EM 15.71%, F1 38.71%); F2 21/140 -> 22/140.",
+      "action": "NOT applied. Changing the runners' selection rule is a protocol change that would invalidate the comparability of every recorded Phase 4F metric; it needs its own explicit experiment. Production already uses the stronger rule."
+    },
+    "verdict": "NO_PRINCIPLED_POST_HOC_BOUNDARY_FIX. Boundary quality is set by the model's own logit preference for longer/overlapping spans (TOO_LONG + OVERLAP dominate the non-exact answerable set); no selection or post-processing change tested here moves it. Improving it requires training, which is out of scope.",
+    "FOLLOWUP_2026_09_28_span_selection_protocol": {
+      "artifact": "SPAN_SELECTION_PROTOCOL_EXPERIMENT",
+      "added": "2026-09-28",
+      "why": "This artifact's REAL_FINDING_recorded_protocol.action states that changing the runners' selection rule 'needs its own explicit experiment'. That experiment now exists and its before/after is recorded.",
+      "supersedes": "The R0 variant measured here used an UNMASKED argmax(start_logits). A later audit of all 10 runners showed 9 are unmasked -- so R0 does reproduce the majority recorded protocol (A0 11/140) -- while phase4f_5f/f2/threshold_experiment/run_threshold_experiment.py masks [CLS] and is a DIFFERENT recorded protocol (A0 22/140, F1 39.57%). This artifact's R0 label 'recorded runner rule' therefore conflates two protocols; both are measured in SPAN_SELECTION_PROTOCOL_EXPERIMENT.",
+      "unchanged": "No number in this file was changed. The R0/R1/R2/R3/P0/P1/P2/R4/P4 variant table and the NO_PRINCIPLED_POST_HOC_BOUNDARY_FIX verdict stand as recorded."
+    }
+  }
+}

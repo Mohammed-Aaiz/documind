@@ -1,0 +1,213 @@
+{
+  "artifact": "RECONSTRUCTION_BOUND",
+  "note": "Reconstruction-only ESTIMATE of the tokenizer.decode() answer-text defect, derived from recorded strings. Not model performance, not generalization; the authoritative measurement is a real re-run of the fixed decoder. See limitations.",
+  "method": {
+    "changed_variable": "answer text only (decoded span -> reconstructed source text)",
+    "held_fixed": [
+      "benchmark",
+      "checkpoints",
+      "selected spans",
+      "logits",
+      "scores",
+      "thresholds",
+      "metric definitions",
+      "normalization"
+    ],
+    "repair_rules": [
+      "(?<=\\d) (?=[.,]\\d)",
+      "(?<=[.,$]) (?=\\d)",
+      "(?<=\\d) (?=%)",
+      "(?<=\\d) (?=[-\\u2013]\\d)",
+      "(?<=[-\\u2013]) (?=\\d)"
+    ],
+    "population": "recorded 182-example benchmark predictions (training-set overlap: 100%)"
+  },
+  "limitations": [
+    "The recorded artifact stores only the post-decode string; the source context and the tokenizer offsets are absent, so the real fix cannot be re-applied here. The measured quantity is a documented string repair of the decode artefact.",
+    "The population is fully leaked (every example is present in training_data.jsonl / training_data_v3.jsonl), so this is a training-set quantity with no generalization meaning.",
+    "The repair is a heuristic approximation, not the fix, so it is not authoritative on its own. It was validated against a real re-run: this script gives F2 UNGATED answerable EM 21/140, and the fixed decoder measured directly on the same benchmark also gives 21/140 ungated (15.0%) - the estimate matches the measurement exactly. The 14.29% quoted from phase4f_5f/f2/threshold_experiment is the SAME run with the abstention gate ON, not a different quantity. The re-run remains authoritative.",
+    "No model improvements were made. Span selection, scoring and confidence are unchanged by the reconstruction fix."
+  ],
+  "inputs": {
+    "predictions_path": "backend/architecture/phase4f_6/e0_diagnostics/diagnostics/model_40min_predictions.json",
+    "predictions_sha256": "d7d9d65e944488ac26a0e197df589fbb4955aafe635fac82f52d2c6e4a649fa9",
+    "predictions_sha256_recorded_prefix": "d7d9d65e944488ac",
+    "benchmark_path": "backend/phase4f/phase4f_5d/benchmark/qa_benchmark_v1.jsonl",
+    "benchmark_sha256": "1166bf4ff38265c209614ac20261417b7eeb43653f4482dfdf94721fd50a41d0",
+    "benchmark_sha256_expected": "1166bf4ff38265c209614ac20261417b7eeb43653f4482dfdf94721fd50a41d0"
+  },
+  "branches": {
+    "F2_primary": {
+      "n": 182,
+      "answerable": 140,
+      "unanswerable": 42,
+      "answerable_em_before_pct": 2.86,
+      "answerable_em_after_pct": 15.0,
+      "answerable_em_before_count": 4,
+      "answerable_em_after_count": 21,
+      "answerable_f1_before_pct": 19.69,
+      "answerable_f1_after_pct": 31.45,
+      "predictions_changed_by_repair": 123,
+      "em_gained": 17,
+      "em_lost": 0,
+      "gold_answers_with_decimal_or_thousands": 70,
+      "gold_numeric_em_before": 0,
+      "gold_numeric_em_after": 16,
+      "unanswerable_spurious_before": 42,
+      "unanswerable_spurious_after": 42,
+      "by_category": {
+        "DIRECT_SPAN": {
+          "n": 24,
+          "answerable": 24,
+          "em_before_pct": 12.5,
+          "em_after_pct": 66.67,
+          "predictions_changed": 18
+        },
+        "NUMERIC": {
+          "n": 20,
+          "answerable": 20,
+          "em_before_pct": 5.0,
+          "em_after_pct": 15.0,
+          "predictions_changed": 13
+        },
+        "TABLE_CELL": {
+          "n": 24,
+          "answerable": 24,
+          "em_before_pct": 0.0,
+          "em_after_pct": 4.17,
+          "predictions_changed": 20
+        },
+        "TABLE_ROW": {
+          "n": 16,
+          "answerable": 16,
+          "em_before_pct": 0.0,
+          "em_after_pct": 0.0,
+          "predictions_changed": 12
+        },
+        "LIST_ITEM": {
+          "n": 20,
+          "answerable": 20,
+          "em_before_pct": 0.0,
+          "em_after_pct": 0.0,
+          "predictions_changed": 12
+        },
+        "SECTION_SPECIFIC": {
+          "n": 16,
+          "answerable": 16,
+          "em_before_pct": 0.0,
+          "em_after_pct": 0.0,
+          "predictions_changed": 11
+        },
+        "MULTI_CHUNK": {
+          "n": 10,
+          "answerable": 10,
+          "em_before_pct": 0.0,
+          "em_after_pct": 10.0,
+          "predictions_changed": 8
+        },
+        "LONG_CONTEXT": {
+          "n": 10,
+          "answerable": 10,
+          "em_before_pct": 0.0,
+          "em_after_pct": 0.0,
+          "predictions_changed": 10
+        },
+        "UNANSWERABLE": {
+          "n": 42,
+          "answerable": 0,
+          "em_before_pct": 0.0,
+          "em_after_pct": 0.0,
+          "predictions_changed": 19
+        }
+      },
+      "checkpoint": "backend/phase4f/phase4f_5f/f2/checkpoints/F2/checkpoint_epoch2",
+      "model_sha256": "717463178eeb37ee3a6424063e8666b6586dd15ee50d745c1ab3d16bb4b164b0"
+    },
+    "A0_secondary": {
+      "n": 182,
+      "answerable": 140,
+      "unanswerable": 42,
+      "answerable_em_before_pct": 5.0,
+      "answerable_em_after_pct": 15.71,
+      "answerable_em_before_count": 7,
+      "answerable_em_after_count": 22,
+      "answerable_f1_before_pct": 24.44,
+      "answerable_f1_after_pct": 38.07,
+      "predictions_changed_by_repair": 83,
+      "em_gained": 15,
+      "em_lost": 0,
+      "gold_answers_with_decimal_or_thousands": 70,
+      "gold_numeric_em_before": 0,
+      "gold_numeric_em_after": 12,
+      "unanswerable_spurious_before": 42,
+      "unanswerable_spurious_after": 42,
+      "by_category": {
+        "DIRECT_SPAN": {
+          "n": 24,
+          "answerable": 24,
+          "em_before_pct": 8.33,
+          "em_after_pct": 12.5,
+          "predictions_changed": 18
+        },
+        "NUMERIC": {
+          "n": 20,
+          "answerable": 20,
+          "em_before_pct": 15.0,
+          "em_after_pct": 70.0,
+          "predictions_changed": 14
+        },
+        "TABLE_CELL": {
+          "n": 24,
+          "answerable": 24,
+          "em_before_pct": 8.33,
+          "em_after_pct": 16.67,
+          "predictions_changed": 8
+        },
+        "TABLE_ROW": {
+          "n": 16,
+          "answerable": 16,
+          "em_before_pct": 0.0,
+          "em_after_pct": 0.0,
+          "predictions_changed": 7
+        },
+        "LIST_ITEM": {
+          "n": 20,
+          "answerable": 20,
+          "em_before_pct": 0.0,
+          "em_after_pct": 0.0,
+          "predictions_changed": 6
+        },
+        "SECTION_SPECIFIC": {
+          "n": 16,
+          "answerable": 16,
+          "em_before_pct": 0.0,
+          "em_after_pct": 0.0,
+          "predictions_changed": 4
+        },
+        "MULTI_CHUNK": {
+          "n": 10,
+          "answerable": 10,
+          "em_before_pct": 0.0,
+          "em_after_pct": 10.0,
+          "predictions_changed": 6
+        },
+        "LONG_CONTEXT": {
+          "n": 10,
+          "answerable": 10,
+          "em_before_pct": 0.0,
+          "em_after_pct": 0.0,
+          "predictions_changed": 5
+        },
+        "UNANSWERABLE": {
+          "n": 42,
+          "answerable": 0,
+          "em_before_pct": 0.0,
+          "em_after_pct": 0.0,
+          "predictions_changed": 15
+        }
+      },
+      "checkpoint": "backend/models/documind-qa",
+      "model_sha256": "cb9f1dde94fca0e1f82c440bdc184ff54ba02efb6ea432e37a8c6ff8a8f69deb"
+    }
+  }
+}

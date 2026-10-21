@@ -1,0 +1,357 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "documind/e0-diagnostic-v1",
+  "title": "E0 Diagnostic Trace Record (Phase 4F.6-C)",
+  "description": "Measurement-study record for one P3 benchmark example. External diagnostic artifact: keyed to benchmark example_id, stored under backend/architecture/phase4f_6/decision/diagnostics/. NEVER modifies the frozen benchmark. Missing artifacts are recorded as NOT_EXECUTABLE_MISSING_ARTIFACT and are never substituted or inferred.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "example_id",
+    "analysis_track",
+    "benchmark",
+    "provenance",
+    "applicability",
+    "reproducibility_ref",
+    "created_utc"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "const": "e0-diagnostic-v1" },
+    "diagnostic_version": { "type": "string", "description": "Semantic version of this diagnostic run (e.g. e0-run-0.1.0)." },
+    "example_id": { "type": "string", "minLength": 1, "description": "Benchmark example_id — the unit of analysis. Must exist in qa_benchmark_v1.jsonl." },
+    "analysis_track": {
+      "enum": ["stage", "answerability"],
+      "description": "stage = answerable examples (L0-L5 + stage attribution, denominator 140). answerability = unanswerable examples (outcome/score/plausibility-proxy only, denominator 42). Tracks are never mixed in any rate."
+    },
+    "created_utc": { "type": "string", "format": "date-time" },
+
+    "benchmark": {
+      "type": "object",
+      "required": ["sha256", "version", "question_kind"],
+      "additionalProperties": false,
+      "properties": {
+        "sha256": { "const": "1166bf4ff38265c209614ac20261417b7eeb43653f4482dfdf94721fd50a41d0" },
+        "version": { "const": "v1" },
+        "question_kind": {
+          "enum": ["TABLE_CELL", "TABLE_ROW", "LIST_ITEM", "SECTION_SPECIFIC", "NUMERIC", "DIRECT_SPAN", "MULTI_CHUNK", "LONG_CONTEXT", "UNANSWERABLE"]
+        },
+        "tier": { "enum": ["TIER_1_CORE", "TIER_2_STRUCTURED", "TIER_3_HARD"] },
+        "document_id": {
+          "enum": ["company_history_eta", "financial_report_q3", "api_docs_lambda", "dataset_desc_mu", "legal_contract_epsilon", "unanswerable_corpus"]
+        },
+        "category_metadata": {
+          "type": "object",
+          "description": "Category-specific benchmark metadata copied by reference (table_headers/anchor/column/row_anchor; heading/item_index/list_length; boundary_sections; attr; doc_type/attr_type; numeric_format; unanswerable_reason/subcategory). Copied values are recorded, not altered."
+        }
+      }
+    },
+
+    "provenance": {
+      "type": "object",
+      "required": ["source_dataset", "source_span", "element", "stored_chunk", "retrieved_chunk"],
+      "additionalProperties": false,
+      "properties": {
+        "source_dataset": {
+          "type": "object",
+          "required": ["path", "sha256", "example_found"],
+          "properties": {
+            "path": { "const": "backend/phase4f/dataset/training_data_v3_1.jsonl" },
+            "sha256": { "const": "a517530354fc9bcaeef6f1aa16c3fb9ce92f1967668386bc66781e6e6bbf2e97" },
+            "example_found": { "type": "boolean" }
+          }
+        },
+        "source_document": {
+          "type": "object",
+          "description": "L0 input. A standalone source-document artifact is REQUIRED for verification_level 'INDEPENDENT'. Without it only 'BENCHMARK_INTERNAL' verification is possible and must be labeled as such.",
+          "required": ["artifact_path", "verification_level"],
+          "properties": {
+            "artifact_path": { "type": ["string", "null"] },
+            "artifact_sha256": { "type": ["string", "null"] },
+            "verification_level": { "enum": ["INDEPENDENT", "BENCHMARK_INTERNAL", "NOT_EXECUTABLE_MISSING_ARTIFACT"] },
+            "context_hash_matches_document": { "type": ["boolean", "null"] }
+          }
+        },
+        "source_span": {
+          "type": "object",
+          "required": ["context_sha256", "answer_char_start", "answer_char_end", "gold_span_validation"],
+          "properties": {
+            "context_sha256": { "type": "string" },
+            "answer_char_start": { "type": "integer", "minimum": 0 },
+            "answer_char_end": { "type": "integer", "minimum": 0 },
+            "answer_text_raw": { "type": "string" },
+            "gold_span_validation": { "enum": ["VALID", "INVALID"] }
+          }
+        },
+        "element": {
+          "type": "object",
+          "required": ["element_id", "element_kind", "derived"],
+          "properties": {
+            "element_id": { "type": "string", "description": "DERIVED: document_id + question_kind + stable hash of category metadata. Flagged derived=true; never presented as an observed element key." },
+            "element_kind": { "enum": ["table_cell", "table_row", "list_item", "section", "span", "numeric", "multichunk", "long_context", "none"] },
+            "derived": { "const": true },
+            "stored_element_present": { "type": ["boolean", "null"], "description": "L2 against stored representation; null when chunk corpus missing." }
+          }
+        },
+        "stored_chunk": {
+          "type": "object",
+          "required": ["status"],
+          "properties": {
+            "status": { "enum": ["OBSERVED", "NOT_EXECUTABLE_MISSING_ARTIFACT"] },
+            "chunk_ids": { "type": "array", "items": { "type": "string" } },
+            "chunker_version": { "type": ["string", "null"], "description": "e.g. legacy (1000/200) or structure-v2; recorded but NOT exercised for the 6 holdout documents." },
+            "char_offsets": { "type": "array", "items": { "type": "array", "items": { "type": "integer" }, "minItems": 2, "maxItems": 2 } }
+          }
+        },
+        "retrieved_chunk": {
+          "type": "object",
+          "required": ["status"],
+          "properties": {
+            "status": { "enum": ["NOT_APPLICABLE_STRUCTURAL", "NOT_EXECUTABLE_MISSING_ARTIFACT", "OBSERVED"] },
+            "note": { "const": "The recorded P3 pipeline has no retrieval stage: model input was built from the benchmark gold context. Status NOT_APPLICABLE_STRUCTURAL for recorded runs; OBSERVED only for a declared future retrieval instrumentation." },
+            "ranked_chunks": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["rank", "chunk_id", "document_id"],
+                "properties": {
+                  "rank": { "type": "integer", "minimum": 1 },
+                  "chunk_id": { "type": "string" },
+                  "document_id": { "type": "string" },
+                  "contains_evidence": { "type": ["boolean", "null"] }
+                }
+              }
+            },
+            "retrieval_config_id": { "type": ["string", "null"], "description": "e.g. prod-default top_k=5." }
+          }
+        }
+      }
+    },
+
+    "applicability": {
+      "type": "object",
+      "description": "Which stages are structurally applicable for this record's pipeline variant. Prevents any report from reading a structurally absent stage as 'passed'.",
+      "required": ["pipeline_variant", "stage_A", "stage_B"],
+      "properties": {
+        "pipeline_variant": { "enum": ["recorded_gold_context", "corpus_path_instrumented"] },
+        "stage_A": { "enum": ["APPLICABLE", "NOT_APPLICABLE_STRUCTURAL"] },
+        "stage_B": { "enum": ["APPLICABLE", "NOT_APPLICABLE_STRUCTURAL"] },
+        "stage_C": { "const": "APPLICABLE" },
+        "stage_D": { "const": "APPLICABLE" }
+      }
+    },
+
+    "normalization": {
+      "type": "object",
+      "required": ["version"],
+      "properties": {
+        "version": { "const": "NORM-v1" },
+        "textual": {
+          "type": "object",
+          "properties": {
+            "raw_strings_recorded": { "type": "boolean", "const": true },
+            "textual_match": { "type": ["boolean", "null"] },
+            "match_start": { "type": ["integer", "null"] },
+            "match_end": { "type": ["integer", "null"] },
+            "match_occurrences": { "type": ["integer", "null"], "minimum": 0 }
+          }
+        },
+        "numeric": {
+          "type": "object",
+          "properties": {
+            "applicable": { "type": "boolean" },
+            "numeric_match": { "type": ["boolean", "null"] },
+            "gold_value_normalized": { "type": ["string", "null"], "description": "Exact decimal/rational string after NORM-v1 rules 1-6; never rounded." },
+            "candidate_value_normalized": { "type": ["string", "null"] },
+            "rules_applied": { "type": "array", "items": { "type": "string" }, "description": "Rule ids applied (e.g. currency_strip, group_separator, trailing_zero, percent_word, suffix_expand_M)." },
+            "numeric_suffix_expansion": { "type": "boolean", "default": false },
+            "materially_different": { "type": ["boolean", "null"], "description": "true when values differ after normalization — answers are then DIFFERENT; no silent repair, no rounding, no unit conversion." }
+          }
+        },
+        "structural": {
+          "type": "object",
+          "properties": {
+            "applicable": { "type": "boolean" },
+            "dialect": { "enum": ["pipe_row", "newline_list", "heading_section", "free_text", "not_applicable", "unknown"] },
+            "structural_match": { "type": ["boolean", "null"] },
+            "subchecks": {
+              "type": "object",
+              "description": "Per §4.3: header_row_found, anchor_row_found, value_in_anchor_row, row_anchor_intact, list_boundaries_intact, item_at_index, order_preserved, section_heading_present, section_body_contiguous, boundary_sections_present, attr_cue_nearby (informational).",
+              "additionalProperties": { "type": ["boolean", "null"] }
+            },
+            "span_split": { "type": "boolean", "default": false, "description": "Multi-chunk split-span rule: both fragments present, contiguity not required." }
+          }
+        },
+        "ambiguous": { "type": "boolean", "default": false, "description": "match_occurrences > 1 — reported as a separate rate; never silently passed or failed." },
+        "manual_review": { "type": "boolean", "default": false },
+        "manual_review_reasons": { "type": "array", "items": { "enum": ["suffix_expansion_only", "all_classes_failed", "decimal_comma_ambiguity", "gold_not_verbatim", "ambiguous_match"] } }
+      }
+    },
+
+    "levels": {
+      "type": "object",
+      "required": ["L3", "L4", "L5"],
+      "description": "L0 is the provenance/integrity gate (NOT one of the five evidence levels); L1-L5 are the five evidence levels. Each entry: status + rule_id + evidence values. Unanswerable track: L3/L4/L5 must be NOT_APPLICABLE.",
+      "properties": {
+        "L0": { "$ref": "#/definitions/levelResult", "description": "Provenance/integrity gate — not one of the five evidence levels L1-L5." },
+        "L1": { "$ref": "#/definitions/levelResult" },
+        "L2": { "$ref": "#/definitions/levelResult" },
+        "L3": { "$ref": "#/definitions/levelResult" },
+        "L4": { "$ref": "#/definitions/levelResult" },
+        "L5": { "$ref": "#/definitions/levelResult" }
+      }
+    },
+
+    "model_input": {
+      "type": "object",
+      "description": "L4 evidence. Inputs are deterministic reconstructions (tokenizer + recorded params) and MUST be labeled RECONSTRUCTED, never OBSERVED.",
+      "properties": {
+        "reconstruction_label": { "enum": ["RECONSTRUCTED", "OBSERVED"] },
+        "tokenizer_path": { "type": "string" },
+        "tokenizer_sha256": { "type": ["string", "null"], "description": "Pinned at execution; must match the tokenizer used by the recorded prediction run." },
+        "max_length": { "const": 384 },
+        "truncation": { "const": true },
+        "padding": { "const": "max_length" },
+        "question_token_count": { "type": "integer" },
+        "context_token_count": { "type": "integer" },
+        "sequence_length_after_truncation": { "type": "integer" },
+        "context_truncated": { "type": "boolean" },
+        "gold_token_start": { "type": ["integer", "null"] },
+        "gold_token_end": { "type": ["integer", "null"] },
+        "gold_span_truncated": { "type": ["boolean", "null"] },
+        "prediction_char_start": { "type": ["integer", "null"] },
+        "prediction_char_end": { "type": ["integer", "null"] }
+      }
+    },
+
+    "prediction": {
+      "type": "object",
+      "description": "OBSERVED from raw_predictions_benchmark.json (182/182 available) for the F2/G pipeline; other models require their own per-example artifact.",
+      "properties": {
+        "source_artifact": { "type": "string" },
+        "observed": { "type": "boolean" },
+        "predicted_answer": { "type": "string" },
+        "predicted_start_idx": { "type": ["integer", "null"] },
+        "predicted_end_idx": { "type": ["integer", "null"] },
+        "start_logit": { "type": ["number", "null"] },
+        "end_logit": { "type": ["number", "null"] },
+        "cls_start_logit": { "type": ["number", "null"] },
+        "cls_end_logit": { "type": ["number", "null"] },
+        "null_score": { "type": ["number", "null"] },
+        "best_answer_score": { "type": ["number", "null"] },
+        "null_margin": { "type": ["number", "null"] },
+        "confidence": { "type": ["number", "null"] }
+      }
+    },
+
+    "outcome": {
+      "type": "object",
+      "required": ["scoring_definitions"],
+      "properties": {
+        "em": { "type": ["boolean", "null"], "description": "Protocol scoring (strip/lower/whitespace-collapse). Evaluation logic is NOT changed by E0." },
+        "f1": { "type": ["number", "null"], "minimum": 0, "maximum": 1 },
+        "scoring_normalizable_match": { "type": ["boolean", "null"], "description": "NORM-v1 match between prediction and gold — reported as a reclassification rate only." },
+        "scoring_definitions": { "const": "phase4f-protocol-em-f1" },
+        "abstained": { "type": ["boolean", "null"] },
+        "spurious": { "type": ["boolean", "null"] },
+        "threshold_rule_id": { "type": ["string", "null"] },
+        "threshold_value": { "type": ["number", "null"] }
+      }
+    },
+
+    "stage_attribution": {
+      "type": "object",
+      "description": "Stage track only (answerable). Exactly one primary_stage; downstream gates after the primary failure are NOT_EVALUATED (flags unset).",
+      "required": ["primary_stage", "precedence_rule_id", "flags"],
+      "properties": {
+        "primary_stage": { "enum": ["A", "B", "C", "D", "SUCCESS", "QUARANTINE_BENCHMARK_INTEGRITY", "NOT_APPLICABLE_STRUCTURAL"] },
+        "precedence_rule_id": { "const": "e0-precedence-v1" },
+        "flags": {
+          "type": "object",
+          "required": ["A", "B", "C", "D"],
+          "properties": {
+            "A": { "enum": ["FAIL", "PASS", "NOT_APPLICABLE_STRUCTURAL", "NOT_EVALUATED"] },
+            "B": { "enum": ["FAIL", "PASS", "NOT_APPLICABLE_STRUCTURAL", "NOT_EVALUATED"] },
+            "C": { "enum": ["FAIL", "PASS", "NOT_APPLICABLE_STRUCTURAL", "NOT_EVALUATED"] },
+            "D": { "enum": ["FAIL", "PASS", "NOT_APPLICABLE_STRUCTURAL", "NOT_EVALUATED"] }
+          }
+        },
+        "not_evaluated": { "type": "array", "items": { "enum": ["A", "B", "C", "D"] } }
+      }
+    },
+
+    "answerability": {
+      "type": "object",
+      "description": "Answerability track only (unanswerable examples). No gold span, no L3-L5 as though an answer exists, never merged into the stage matrix.",
+      "properties": {
+        "unanswerable_reason": { "type": ["string", "null"] },
+        "subcategory": { "type": ["string", "null"] },
+        "outcome": { "enum": ["ABSTAIN", "SPURIOUS"] },
+        "score_information": {
+          "type": "object",
+          "description": "Recorded null-score/confidence fields as-is; distributions summarized over the 42 denominator.",
+          "properties": {
+            "null_score": { "type": ["number", "null"] },
+            "null_margin": { "type": ["number", "null"] },
+            "confidence": { "type": ["number", "null"] }
+          }
+        },
+        "context_plausibility_proxy": {
+          "type": "object",
+          "description": "Always labeled PROXY: the recorded pipeline has no retrieval, so plausibility is computed over the SUPPLIED benchmark context, not retrieved context.",
+          "properties": {
+            "label": { "const": "PROXY_supplied_context" },
+            "predicted_answer_in_context": { "type": ["boolean", "null"] },
+            "match_occurrences": { "type": ["integer", "null"], "minimum": 0 },
+            "question_context_term_overlap": { "type": ["number", "null"], "minimum": 0, "maximum": 1 },
+            "retrieved_context_plausibility": { "const": "NOT_EXECUTABLE_MISSING_ARTIFACT" }
+          }
+        },
+        "levels_L3_L5": { "const": "NOT_APPLICABLE_NO_GOLD_SPAN" }
+      }
+    },
+
+    "flags": {
+      "type": "object",
+      "properties": {
+        "gold_not_verbatim": { "type": "boolean", "default": false },
+        "evaluation_limitation": { "type": "array", "items": { "type": "string" }, "description": "e.g. 'stored_chunk_missing', 'retrieval_trace_missing', 'source_document_missing', 'tokenizer_pinned_by_reconstruction'." }
+      }
+    },
+
+    "reproducibility_ref": {
+      "type": "string",
+      "description": "Key into the run-header reproducibility block (E0_PROTOCOL §12): benchmark hash, source-dataset hash, both production-model hashes, checkpoint id, retrieval config, chunking config, model-input config, top_k, NORM-v1, schema version, threshold rule id, timestamp, software/env ids, seed."
+    }
+  },
+
+  "definitions": {
+    "levelResult": {
+      "type": "object",
+      "required": ["status", "rule_id"],
+      "properties": {
+        "status": { "enum": ["PASS", "FAIL", "NOT_APPLICABLE", "NOT_APPLICABLE_STRUCTURAL", "NOT_EVALUABLE", "NOT_EXECUTABLE_MISSING_ARTIFACT", "NOT_EVALUATED"] },
+        "rule_id": { "type": "string" },
+        "evidence": { "type": "object", "description": "Level-specific evidence values (match offsets, token spans, ranks, predicate booleans)." },
+        "missing_artifact": { "type": ["string", "null"], "description": "Required artifact name when status is NOT_EXECUTABLE_MISSING_ARTIFACT. Never substituted." }
+      }
+    },
+    "metricDictionary": {
+      "description": "Every published metric carries an explicit denominator; answerable (140 / category n) and unanswerable (42) tracks never share a denominator.",
+      "type": "object",
+      "properties": {
+        "document_retrieval_recall": { "numerator": "gold document in top-k", "denominator": 140, "status_recorded_pipeline": "NOT_EXECUTABLE_MISSING_ARTIFACT" },
+        "evidence_retrieval_recall": { "numerator": "evidence-bearing chunk in top-k", "denominator": 140, "status_recorded_pipeline": "NOT_EXECUTABLE_MISSING_ARTIFACT" },
+        "context_presence_rate": { "numerator": "L3 PASS in supplied text layer", "denominator": 140 },
+        "representation_preservation_rate": { "numerator": "representation predicate PASS", "denominator": "category_n" },
+        "model_input_evidence_presence_rate": { "numerator": "L4 PASS", "denominator": 140 },
+        "conditional_extraction_em": { "numerator": "EM=1 within L4-PASS subset", "denominator": "|L4 PASS| (of 140)" },
+        "conditional_extraction_f1": { "numerator": "sum F1 within L4-PASS subset", "denominator": "|L4 PASS| (of 140)" },
+        "p_retrieved_given_document": { "numerator": "L1 PASS and retrieval-L3 PASS", "denominator": "|L1 PASS|", "status_recorded_pipeline": "NOT_EXECUTABLE_MISSING_ARTIFACT" },
+        "scoring_normalization_reclassification_rate": { "numerator": "em=0 and scoring_normalizable_match=1", "denominator": 140 },
+        "unanswerable_abstain_rate": { "numerator": "ABSTAIN", "denominator": 42 },
+        "unanswerable_spurious_rate": { "numerator": "SPURIOUS", "denominator": 42 },
+        "context_plausibility_proxy_rate": { "numerator": "predicted answer occurs in supplied context", "denominator": 42, "label": "PROXY" }
+      }
+    }
+  }
+}

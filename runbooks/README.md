@@ -7,15 +7,17 @@ implementation (backend/, src/, config files) — not from plans or design docs.
 
 - **Backend:** Python / FastAPI (`backend/main.py`), run with
   `uvicorn main:app --host 0.0.0.0 --port 8000` from `backend/` (see
-  `backend/start_server.py`).
+  `backend/scripts/start_server.py`).
 - **Frontend:** React 18 + TypeScript + Vite (`npm run dev`, port 3000; proxy
   `/api` → `http://localhost:8000` in `vite.config.ts`; production build via
   `npm run build`).
 - **Database:** PostgreSQL + pgvector via SQLAlchemy async (`asyncpg`),
   configured by `DATABASE_URL` in `backend/config.py`; engine in
   `backend/storage/database.py` (pool_pre_ping enabled).
-- **Migrations:** Alembic (`backend/alembic.ini`, `backend/migrations/`,
-  single revision `001_add_reliability_logs.py`).
+- **Migrations:** Alembic (`backend/alembic.ini`, `backend/migrations/`), a
+  linear chain `000_create_base_tables` → `008_add_generation_verification`
+  (head `008`; `007_add_table_rows` adds persisted table rows and `008` adds the
+  nullable `generation_json` column).
 - **Auth:** email/password (bcrypt) + JWT HS256 (`python-jose`). Secrets via
   `JWT_SECRET_KEY` / `JWT_ALGORITHM` / `JWT_EXPIRE_MINUTES` in `backend/config.py`.
 - **QA model:** local trained DistilBERT model at
@@ -29,9 +31,12 @@ implementation (backend/, src/, config files) — not from plans or design docs.
 
 ## Not present in this project (do not assume elsewhere)
 
-No Docker, Kubernetes, CI/CD pipelines, queues, cron jobs, external LLM APIs,
-payments, email, object storage, feature flags, or cloud infrastructure exist
-in the repository. Deployment/rollback mechanisms: **NOT VERIFIED** (none found).
+No Kubernetes, CI/CD pipelines, queues, cron jobs, external LLM APIs, payments,
+email, object storage, feature flags, or cloud infrastructure exist in the
+repository. A local Docker Compose runtime **does** exist (`compose.yaml`,
+`backend/Dockerfile`, `Dockerfile.frontend`, `docker/nginx.conf`) — see
+[docker-runtime.md](docker-runtime.md); it is production-style local execution,
+not a cloud deployment. Deployment/rollback mechanisms: **NOT VERIFIED** (none found).
 
 ## Environment variables (names only — values live in backend/.env, gitignored)
 
@@ -45,6 +50,9 @@ in the repository. Deployment/rollback mechanisms: **NOT VERIFIED** (none found)
 | `UPLOAD_DIR` | `backend/config.py` |
 | `MAX_UPLOAD_SIZE_MB` | `backend/config.py` |
 | `QA_MODEL_NAME` | `backend/chat/qa_model.py` (local model path) |
+| `WHISPER_MODEL_NAME` | `backend/voice.py` (local Whisper path) |
+| `EMBEDDING_MODEL` | `backend/embeddings/model.py` (local/Hub embedding source) |
+| `POSTGRES_USER` / `POSTGRES_DB` / `POSTGRES_PASSWORD` | `compose.yaml` (PostgreSQL service) |
 | `VITE_API_BASE_URL` | `src/lib/api.ts` (frontend API base) |
 
 ## Runbooks
@@ -58,6 +66,7 @@ in the repository. Deployment/rollback mechanisms: **NOT VERIFIED** (none found)
 | [embedding-failure.md](embedding-failure.md) | Embedding model or pgvector retrieval failure | P1 |
 | [upload-storage-failure.md](upload-storage-failure.md) | Upload directory / file storage failure | P2 |
 | [migration-failure.md](migration-failure.md) | Alembic migration failure or drift | P2 |
+| [docker-runtime.md](docker-runtime.md) | Docker/Compose runtime bring-up, health, model provisioning | P2 |
 
 ## Severity definitions
 

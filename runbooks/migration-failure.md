@@ -6,9 +6,9 @@ causing SQL errors on specific endpoints (e.g. missing `reliability_logs`).
 
 ## Impact
 Endpoints touching missing/changed tables return 500 while others work.
-The repo currently has one migration (`001_add_reliability_logs.py`), so a
-failure classically presents as reliability endpoints failing while
-auth/documents still work.
+The repo has a linear migration chain (`000_create_base_tables` →
+`005_add_document_graph`; head `005`), so a failure classically presents as
+endpoints touching the affected revision failing while others still work.
 
 ## Symptoms
 - 500s with `relation "reliability_logs" does not exist` (or similar
@@ -30,21 +30,25 @@ P2
 ## Diagnosis
 1. **Check current revision.** From `backend/`, inspect the alembic version
    table in the database targeted by `sqlalchemy.url` (from
-   `backend/alembic.ini` / env). Compare with
-   `backend/migrations/versions/001_add_reliability_logs.py`.
+   `backend/alembic.ini` / env). Compare with the migration files in
+   `backend/migrations/versions/` (`000` … `005`, head `005`).
 2. **Alembic runs async?** Yes — `backend/migrations/env.py` uses
    `async_engine_from_config` with asyncpg; it requires a reachable
    PostgreSQL (SQLite will not work for migrations because of
    PostgreSQL-specific types like `JSONB`/`UUID` and `ON CONFLICT` usage).
-3. **Partial application?** `001` creates `reliability_logs` + index in one
-   transaction. A failure mid-way typically rolls back cleanly; verify whether
-   the table exists before assuming drift.
+3. **Partial application?** Each revision applies in one transaction (e.g. `001`
+   creates `reliability_logs` + its index). A failure mid-way typically rolls
+   back cleanly; verify whether the table exists before assuming drift.
 4. **Drift vs models?** The declarative models in `auth/models.py`,
    `documents/models.py`, `chat/models.py`, `verification/models.py`,
-   `reliability/models.py`, `user/models.py` are the source of truth. Note
-   that only `reliability_logs` has a migration file; the remaining tables'
-   creation method is **NOT VERIFIED** in this repo (no `Base.metadata.create_all`
-   in production code paths — tests create tables via SQLite conftest).
+   `reliability/models.py`, `user/models.py` are the source of truth. The full
+   schema is now covered by migrations: `000_create_base_tables.py` (revision
+   root, `down_revision = None`; creates the base tables and runs
+   `CREATE EXTENSION IF NOT EXISTS vector`), followed by `001`–`004`. Alembic is
+   the only sanctioned schema-creation path, and the application applies
+   migrations to `head` at startup (`backend/main.py`, `_ensure_database_schema`).
+   `Base.metadata.create_all` is not used for application schema — the test suite
+   creates tables via the SQLite conftest only.
 
 ## Recovery
 1. If the revision state is behind and the failure is understood, run the
@@ -83,8 +87,8 @@ deployment tooling in the repo).
 - Do not delete the alembic version table to force re-runs.
 
 ## Root Cause Follow-Up
-- Only revision `001` exists while nine tables are modeled; confirm how the
-  other tables were created in each environment and add missing migrations so
-  fresh environments are reproducible.
+- The chain (`000`–`005`) now covers the modeled tables. Still confirm each
+  environment is stamped at the same head and that the pgvector extension
+  exists — `000_create_base_tables` runs `CREATE EXTENSION IF NOT EXISTS vector`.
 - Consider generating migrations from model diffs rather than hand-writing,
   to avoid future drift.

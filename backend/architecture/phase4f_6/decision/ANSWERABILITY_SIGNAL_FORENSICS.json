@@ -1,0 +1,2729 @@
+{
+  "provenance_2026_09_28": {
+    "status": "PRE-RECONSTRUCTION-FIX: the answer TEXT in the input predictions was produced by tokenizer.decode(), which re-inserts spaces at subword boundaries and corrupted every value the tokenizer split ('142.6 million' -> '142. 6 million', '$4,900' -> '$ 4, 900', '2011-2020' -> '2011 - 2020').",
+    "scope": "Only 'empirical_correctness_rate' (derived from the recorded per-example 'em' flag) is affected. All AUC / discrimination metrics are score-derived and NOT affected.",
+    "unaffected": "logit/score-derived signals (null_score, margin, cls_start_logit, start/end logits) are unchanged by the fix: score and span are bit-identical before vs after.",
+    "measured_effect": "same 182 examples, same checkpoints, same spans, only the decoder changed: F2 answerable EM 2.86% -> 14.29%, F1 16.92% -> 28.91% (re-run 2026-09-28). Leaked population; not a generalization result.",
+    "fix": "backend/answer_span.py, shared by chat/qa_model.py and all Phase 4F runners.",
+    "details": "backend/architecture/phase4f_6/decision/E0_PREDICTION_PROVENANCE_2026-09-28.md",
+    "input_not_regenerated": "model_40min_predictions.json (sha256 d7d9d65e944488ac...) was NOT regenerated: nothing in the repository produces it and the re-scoring tools pin that hash."
+  },
+  "artifact": "answerability_signal_forensics",
+  "phase": "threshold-free discriminative power of recorded extractive-QA scores (answerable vs unanswerable)",
+  "date": "2026-09-23T20:55:02.348115+05:30",
+  "population": {
+    "total": 182,
+    "answerable": 140,
+    "unanswerable": 42,
+    "prevalence_unanswerable": 0.23077
+  },
+  "positive_class": "UNANSWERABLE",
+  "task_1_input_integrity": {
+    "predictions_file": "backend/architecture/phase4f_6/e0_diagnostics/diagnostics/model_40min_predictions.json",
+    "predictions_sha256": "d7d9d65e944488ac26a0e197df589fbb4955aafe635fac82f52d2c6e4a649fa9",
+    "per_model": {
+      "F2": {
+        "n": 182,
+        "answerable": 140,
+        "unanswerable": 42,
+        "duplicate_ids": 0,
+        "missing_fields": []
+      },
+      "A0": {
+        "n": 182,
+        "answerable": 140,
+        "unanswerable": 42,
+        "duplicate_ids": 0,
+        "missing_fields": []
+      }
+    },
+    "example_id_sets_identical": true,
+    "required_score_fields_populated": true,
+    "aborted_on_mismatch": false,
+    "issues": []
+  },
+  "task_2_directions": {
+    "null_score": {
+      "recorded_field": "null_score",
+      "analysis_direction": "HIGHER=UNANSWERABLE",
+      "sign_applied_for_analysis_only": 1.0,
+      "justification": "cls_start_logit + cls_end_logit; high = no-answer dominates"
+    },
+    "best_answer_score": {
+      "recorded_field": "best_answer_score",
+      "analysis_direction": "REVERSED_FOR_ANALYSIS (LOWER=UNANSWERABLE)",
+      "sign_applied_for_analysis_only": -1.0,
+      "justification": "best_start_logit + best_end_logit; high = a strong answer span exists"
+    },
+    "cls_start_logit": {
+      "recorded_field": "cls_start_logit",
+      "analysis_direction": "HIGHER=UNANSWERABLE",
+      "sign_applied_for_analysis_only": 1.0,
+      "justification": "[CLS] start logit"
+    },
+    "cls_end_logit": {
+      "recorded_field": "cls_end_logit",
+      "analysis_direction": "HIGHER=UNANSWERABLE",
+      "sign_applied_for_analysis_only": 1.0,
+      "justification": "[CLS] end logit"
+    },
+    "margin": {
+      "recorded_field": "margin",
+      "analysis_direction": "HIGHER=UNANSWERABLE",
+      "sign_applied_for_analysis_only": 1.0,
+      "justification": "null_score - best_answer_score (definition preserved, not changed)"
+    },
+    "confidence": {
+      "recorded_field": "confidence",
+      "analysis_direction": "EMPIRICALLY_TESTED_BOTH_DIRECTIONS",
+      "sign_applied_for_analysis_only": null,
+      "justification": "(softmax(start)[best] + softmax(end)[best]) / 2; direction NOT assumed from the name"
+    }
+  },
+  "task_3_4_5_per_model": {
+    "F2": {
+      "null_score": {
+        "statistic": "null_score",
+        "recorded_field": "null_score",
+        "declared_direction": "HIGHER=UNANSWERABLE",
+        "analysis_direction_used": "HIGHER=UNANSWERABLE",
+        "original_field_overwritten": false,
+        "roc_auc": 0.4303,
+        "roc_auc_minus_0_5": -0.0697,
+        "roc_auc_95ci": [
+          0.3378,
+          0.5257
+        ],
+        "pr_auc_average_precision": 0.1974,
+        "pr_auc_95ci": [
+          0.1715,
+          0.2353
+        ],
+        "prevalence": 0.23077,
+        "pr_auc_minus_prevalence": -0.0334,
+        "manwhitney_U": 2530.0,
+        "rank_biserial": -0.1395,
+        "n_unanswerable": 42,
+        "n_answerable": 140,
+        "distribution_reported_on": "RAW recorded field values (not sign-flipped); only ROC-AUC / PR-AUC / Mann-Whitney U use the analysis-oriented score",
+        "mean_unanswerable": 1.3635,
+        "mean_answerable": 1.4422,
+        "median_unanswerable": 1.3593,
+        "median_answerable": 1.414,
+        "quantiles_answerable": {
+          "q05": 0.998,
+          "q25": 1.2612,
+          "q50": 1.414,
+          "q75": 1.607,
+          "q95": 1.9285
+        },
+        "quantiles_unanswerable": {
+          "q05": 1.016,
+          "q25": 1.2219,
+          "q50": 1.3593,
+          "q75": 1.5267,
+          "q95": 1.6409
+        },
+        "observed_range_answerable": [
+          0.8649,
+          2.0633
+        ],
+        "observed_range_unanswerable": [
+          0.9779,
+          1.6891
+        ],
+        "q05_q95_span_answerable": 0.9305,
+        "q05_q95_span_unanswerable": 0.6249,
+        "overlap_coefficient": 0.6429,
+        "overlap_binning": "30 equal-width bins over combined score range",
+        "ci_conflicting_direction": false,
+        "ci_includes_0_5": true,
+        "auc_pos_direction_raw": 0.4303,
+        "auc_neg_direction_raw": 0.5697,
+        "direction_source": "established_semantics",
+        "direction_justification": "cls_start_logit + cls_end_logit; high = no-answer dominates"
+      },
+      "best_answer_score": {
+        "statistic": "best_answer_score",
+        "recorded_field": "best_answer_score",
+        "declared_direction": "REVERSED_FOR_ANALYSIS (LOWER=UNANSWERABLE)",
+        "analysis_direction_used": "REVERSED_FOR_ANALYSIS (LOWER=UNANSWERABLE)",
+        "original_field_overwritten": false,
+        "roc_auc": 0.725,
+        "roc_auc_minus_0_5": 0.225,
+        "roc_auc_95ci": [
+          0.627,
+          0.8167
+        ],
+        "pr_auc_average_precision": 0.4853,
+        "pr_auc_95ci": [
+          0.3658,
+          0.6241
+        ],
+        "prevalence": 0.23077,
+        "pr_auc_minus_prevalence": 0.2545,
+        "manwhitney_U": 4263.0,
+        "rank_biserial": 0.45,
+        "n_unanswerable": 42,
+        "n_answerable": 140,
+        "distribution_reported_on": "RAW recorded field values (not sign-flipped); only ROC-AUC / PR-AUC / Mann-Whitney U use the analysis-oriented score",
+        "mean_unanswerable": 2.9764,
+        "mean_answerable": 3.6176,
+        "median_unanswerable": 2.9925,
+        "median_answerable": 3.8538,
+        "quantiles_answerable": {
+          "q05": 2.3287,
+          "q25": 3.3292,
+          "q50": 3.8538,
+          "q75": 4.0354,
+          "q95": 4.4707
+        },
+        "quantiles_unanswerable": {
+          "q05": 1.7533,
+          "q25": 2.3498,
+          "q50": 2.9925,
+          "q75": 3.5357,
+          "q95": 4.2363
+        },
+        "observed_range_answerable": [
+          1.7267,
+          4.559
+        ],
+        "observed_range_unanswerable": [
+          1.22,
+          4.5453
+        ],
+        "q05_q95_span_answerable": 2.1421,
+        "q05_q95_span_unanswerable": 2.483,
+        "overlap_coefficient": 0.5119,
+        "overlap_binning": "30 equal-width bins over combined score range",
+        "ci_conflicting_direction": false,
+        "ci_includes_0_5": false,
+        "auc_pos_direction_raw": 0.725,
+        "auc_neg_direction_raw": 0.275,
+        "direction_source": "established_semantics",
+        "direction_justification": "best_start_logit + best_end_logit; high = a strong answer span exists"
+      },
+      "cls_start_logit": {
+        "statistic": "cls_start_logit",
+        "recorded_field": "cls_start_logit",
+        "declared_direction": "HIGHER=UNANSWERABLE",
+        "analysis_direction_used": "HIGHER=UNANSWERABLE",
+        "original_field_overwritten": false,
+        "roc_auc": 0.4303,
+        "roc_auc_minus_0_5": -0.0697,
+        "roc_auc_95ci": [
+          0.3474,
+          0.5148
+        ],
+        "pr_auc_average_precision": 0.1921,
+        "pr_auc_95ci": [
+          0.1719,
+          0.2211
+        ],
+        "prevalence": 0.23077,
+        "pr_auc_minus_prevalence": -0.0386,
+        "manwhitney_U": 2530.0,
+        "rank_biserial": -0.1395,
+        "n_unanswerable": 42,
+        "n_answerable": 140,
+        "distribution_reported_on": "RAW recorded field values (not sign-flipped); only ROC-AUC / PR-AUC / Mann-Whitney U use the analysis-oriented score",
+        "mean_unanswerable": 0.6619,
+        "mean_answerable": 0.715,
+        "median_unanswerable": 0.6711,
+        "median_answerable": 0.6991,
+        "quantiles_answerable": {
+          "q05": 0.3276,
+          "q25": 0.5501,
+          "q50": 0.6991,
+          "q75": 0.9102,
+          "q95": 1.1016
+        },
+        "quantiles_unanswerable": {
+          "q05": 0.463,
+          "q25": 0.5644,
+          "q50": 0.6711,
+          "q75": 0.7554,
+          "q95": 0.891
+        },
+        "observed_range_answerable": [
+          0.1826,
+          1.2563
+        ],
+        "observed_range_unanswerable": [
+          0.4004,
+          0.9395
+        ],
+        "q05_q95_span_answerable": 0.774,
+        "q05_q95_span_unanswerable": 0.428,
+        "overlap_coefficient": 0.6,
+        "overlap_binning": "30 equal-width bins over combined score range",
+        "ci_conflicting_direction": false,
+        "ci_includes_0_5": true,
+        "auc_pos_direction_raw": 0.4303,
+        "auc_neg_direction_raw": 0.5697,
+        "direction_source": "established_semantics",
+        "direction_justification": "[CLS] start logit"
+      },
+      "cls_end_logit": {
+        "statistic": "cls_end_logit",
+        "recorded_field": "cls_end_logit",
+        "declared_direction": "HIGHER=UNANSWERABLE",
+        "analysis_direction_used": "HIGHER=UNANSWERABLE",
+        "original_field_overwritten": false,
+        "roc_auc": 0.4391,
+        "roc_auc_minus_0_5": -0.0609,
+        "roc_auc_95ci": [
+          0.3517,
+          0.5262
+        ],
+        "pr_auc_average_precision": 0.1959,
+        "pr_auc_95ci": [
+          0.1737,
+          0.2328
+        ],
+        "prevalence": 0.23077,
+        "pr_auc_minus_prevalence": -0.0349,
+        "manwhitney_U": 2582.0,
+        "rank_biserial": -0.1218,
+        "n_unanswerable": 42,
+        "n_answerable": 140,
+        "distribution_reported_on": "RAW recorded field values (not sign-flipped); only ROC-AUC / PR-AUC / Mann-Whitney U use the analysis-oriented score",
+        "mean_unanswerable": 0.7016,
+        "mean_answerable": 0.7272,
+        "median_unanswerable": 0.7076,
+        "median_answerable": 0.757,
+        "quantiles_answerable": {
+          "q05": 0.4822,
+          "q25": 0.613,
+          "q50": 0.757,
+          "q75": 0.8302,
+          "q95": 0.9561
+        },
+        "quantiles_unanswerable": {
+          "q05": 0.5644,
+          "q25": 0.6181,
+          "q50": 0.7076,
+          "q75": 0.7859,
+          "q95": 0.8782
+        },
+        "observed_range_answerable": [
+          0.4032,
+          1.0368
+        ],
+        "observed_range_unanswerable": [
+          0.3047,
+          0.9478
+        ],
+        "q05_q95_span_answerable": 0.4739,
+        "q05_q95_span_unanswerable": 0.3139,
+        "overlap_coefficient": 0.6024,
+        "overlap_binning": "30 equal-width bins over combined score range",
+        "ci_conflicting_direction": false,
+        "ci_includes_0_5": true,
+        "auc_pos_direction_raw": 0.4391,
+        "auc_neg_direction_raw": 0.5609,
+        "direction_source": "established_semantics",
+        "direction_justification": "[CLS] end logit"
+      },
+      "margin": {
+        "statistic": "margin",
+        "recorded_field": "margin",
+        "declared_direction": "HIGHER=UNANSWERABLE",
+        "analysis_direction_used": "HIGHER=UNANSWERABLE",
+        "original_field_overwritten": false,
+        "roc_auc": 0.7338,
+        "roc_auc_minus_0_5": 0.2338,
+        "roc_auc_95ci": [
+          0.6398,
+          0.8202
+        ],
+        "pr_auc_average_precision": 0.5492,
+        "pr_auc_95ci": [
+          0.4195,
+          0.6797
+        ],
+        "prevalence": 0.23077,
+        "pr_auc_minus_prevalence": 0.3185,
+        "manwhitney_U": 4315.0,
+        "rank_biserial": 0.4677,
+        "n_unanswerable": 42,
+        "n_answerable": 140,
+        "distribution_reported_on": "RAW recorded field values (not sign-flipped); only ROC-AUC / PR-AUC / Mann-Whitney U use the analysis-oriented score",
+        "mean_unanswerable": -1.6129,
+        "mean_answerable": -2.1754,
+        "median_unanswerable": -1.6716,
+        "median_answerable": -2.2906,
+        "quantiles_answerable": {
+          "q05": -2.9257,
+          "q25": -2.6447,
+          "q50": -2.2906,
+          "q75": -1.7858,
+          "q95": -1.2021
+        },
+        "quantiles_unanswerable": {
+          "q05": -2.7232,
+          "q25": -2.0996,
+          "q50": -1.6716,
+          "q75": -1.0125,
+          "q95": -0.5722
+        },
+        "observed_range_answerable": [
+          -3.0954,
+          -0.5646
+        ],
+        "observed_range_unanswerable": [
+          -3.1379,
+          -0.2063
+        ],
+        "q05_q95_span_answerable": 1.7235,
+        "q05_q95_span_unanswerable": 2.151,
+        "overlap_coefficient": 0.4571,
+        "overlap_binning": "30 equal-width bins over combined score range",
+        "ci_conflicting_direction": false,
+        "ci_includes_0_5": false,
+        "auc_pos_direction_raw": 0.7338,
+        "auc_neg_direction_raw": 0.2662,
+        "direction_source": "established_semantics",
+        "direction_justification": "null_score - best_answer_score (definition preserved, not changed)"
+      },
+      "confidence": {
+        "statistic": "confidence",
+        "recorded_field": "confidence",
+        "declared_direction": "EMPIRICALLY_TESTED_BOTH_DIRECTIONS",
+        "analysis_direction_used": "HIGHER=UNANSWERABLE",
+        "original_field_overwritten": false,
+        "roc_auc": 0.5224,
+        "roc_auc_minus_0_5": 0.0224,
+        "roc_auc_95ci": [
+          0.4267,
+          0.616
+        ],
+        "pr_auc_average_precision": 0.2998,
+        "pr_auc_95ci": [
+          0.2144,
+          0.4054
+        ],
+        "prevalence": 0.23077,
+        "pr_auc_minus_prevalence": 0.0691,
+        "manwhitney_U": 3072.0,
+        "rank_biserial": 0.0449,
+        "n_unanswerable": 42,
+        "n_answerable": 140,
+        "distribution_reported_on": "RAW recorded field values (not sign-flipped); only ROC-AUC / PR-AUC / Mann-Whitney U use the analysis-oriented score",
+        "mean_unanswerable": 0.0323,
+        "mean_answerable": 0.0307,
+        "median_unanswerable": 0.0296,
+        "median_answerable": 0.0318,
+        "quantiles_answerable": {
+          "q05": 0.0135,
+          "q25": 0.0189,
+          "q50": 0.0318,
+          "q75": 0.0417,
+          "q95": 0.0499
+        },
+        "quantiles_unanswerable": {
+          "q05": 0.0171,
+          "q25": 0.0223,
+          "q50": 0.0296,
+          "q75": 0.0375,
+          "q95": 0.0576
+        },
+        "observed_range_answerable": [
+          0.0116,
+          0.0563
+        ],
+        "observed_range_unanswerable": [
+          0.0145,
+          0.071
+        ],
+        "q05_q95_span_answerable": 0.0365,
+        "q05_q95_span_unanswerable": 0.0406,
+        "overlap_coefficient": 0.65,
+        "overlap_binning": "30 equal-width bins over combined score range",
+        "ci_conflicting_direction": false,
+        "ci_includes_0_5": true,
+        "auc_pos_direction_raw": 0.5224,
+        "auc_neg_direction_raw": 0.4776,
+        "direction_source": "empirical_both_directions",
+        "direction_justification": "(softmax(start)[best] + softmax(end)[best]) / 2; direction NOT assumed from the name"
+      }
+    },
+    "A0": {
+      "null_score": {
+        "statistic": "null_score",
+        "recorded_field": "null_score",
+        "declared_direction": "HIGHER=UNANSWERABLE",
+        "analysis_direction_used": "HIGHER=UNANSWERABLE",
+        "original_field_overwritten": false,
+        "roc_auc": 0.5257,
+        "roc_auc_minus_0_5": 0.0257,
+        "roc_auc_95ci": [
+          0.44,
+          0.6088
+        ],
+        "pr_auc_average_precision": 0.2495,
+        "pr_auc_95ci": [
+          0.2001,
+          0.3277
+        ],
+        "prevalence": 0.23077,
+        "pr_auc_minus_prevalence": 0.0187,
+        "manwhitney_U": 3091.0,
+        "rank_biserial": 0.0514,
+        "n_unanswerable": 42,
+        "n_answerable": 140,
+        "distribution_reported_on": "RAW recorded field values (not sign-flipped); only ROC-AUC / PR-AUC / Mann-Whitney U use the analysis-oriented score",
+        "mean_unanswerable": 2.1709,
+        "mean_answerable": 1.6094,
+        "median_unanswerable": 2.2074,
+        "median_answerable": 1.8968,
+        "quantiles_answerable": {
+          "q05": -6.476,
+          "q25": -1.8219,
+          "q50": 1.8968,
+          "q75": 5.3122,
+          "q95": 8.3568
+        },
+        "quantiles_unanswerable": {
+          "q05": -1.5301,
+          "q25": -0.2315,
+          "q50": 2.2074,
+          "q75": 4.0211,
+          "q95": 6.5732
+        },
+        "observed_range_answerable": [
+          -8.8582,
+          10.4906
+        ],
+        "observed_range_unanswerable": [
+          -2.1398,
+          10.7715
+        ],
+        "q05_q95_span_answerable": 14.8328,
+        "q05_q95_span_unanswerable": 8.1033,
+        "overlap_coefficient": 0.569,
+        "overlap_binning": "30 equal-width bins over combined score range",
+        "ci_conflicting_direction": false,
+        "ci_includes_0_5": true,
+        "auc_pos_direction_raw": 0.5257,
+        "auc_neg_direction_raw": 0.4743,
+        "direction_source": "established_semantics",
+        "direction_justification": "cls_start_logit + cls_end_logit; high = no-answer dominates"
+      },
+      "best_answer_score": {
+        "statistic": "best_answer_score",
+        "recorded_field": "best_answer_score",
+        "declared_direction": "REVERSED_FOR_ANALYSIS (LOWER=UNANSWERABLE)",
+        "analysis_direction_used": "REVERSED_FOR_ANALYSIS (LOWER=UNANSWERABLE)",
+        "original_field_overwritten": false,
+        "roc_auc": 0.5054,
+        "roc_auc_minus_0_5": 0.0054,
+        "roc_auc_95ci": [
+          0.4078,
+          0.6043
+        ],
+        "pr_auc_average_precision": 0.2557,
+        "pr_auc_95ci": [
+          0.1958,
+          0.3477
+        ],
+        "prevalence": 0.23077,
+        "pr_auc_minus_prevalence": 0.0249,
+        "manwhitney_U": 2972.0,
+        "rank_biserial": 0.0109,
+        "n_unanswerable": 42,
+        "n_answerable": 140,
+        "distribution_reported_on": "RAW recorded field values (not sign-flipped); only ROC-AUC / PR-AUC / Mann-Whitney U use the analysis-oriented score",
+        "mean_unanswerable": -0.5768,
+        "mean_answerable": -0.4481,
+        "median_unanswerable": -0.5894,
+        "median_answerable": -1.0939,
+        "quantiles_answerable": {
+          "q05": -6.5639,
+          "q25": -3.3354,
+          "q50": -1.0939,
+          "q75": 2.7185,
+          "q95": 6.581
+        },
+        "quantiles_unanswerable": {
+          "q05": -6.016,
+          "q25": -3.2021,
+          "q50": -0.5894,
+          "q75": 1.1514,
+          "q95": 5.7185
+        },
+        "observed_range_answerable": [
+          -9.7681,
+          10.1258
+        ],
+        "observed_range_unanswerable": [
+          -12.8282,
+          13.9565
+        ],
+        "q05_q95_span_answerable": 13.1449,
+        "q05_q95_span_unanswerable": 11.7345,
+        "overlap_coefficient": 0.6714,
+        "overlap_binning": "30 equal-width bins over combined score range",
+        "ci_conflicting_direction": false,
+        "ci_includes_0_5": true,
+        "auc_pos_direction_raw": 0.5054,
+        "auc_neg_direction_raw": 0.4946,
+        "direction_source": "established_semantics",
+        "direction_justification": "best_start_logit + best_end_logit; high = a strong answer span exists"
+      },
+      "cls_start_logit": {
+        "statistic": "cls_start_logit",
+        "recorded_field": "cls_start_logit",
+        "declared_direction": "HIGHER=UNANSWERABLE",
+        "analysis_direction_used": "HIGHER=UNANSWERABLE",
+        "original_field_overwritten": false,
+        "roc_auc": 0.5189,
+        "roc_auc_minus_0_5": 0.0189,
+        "roc_auc_95ci": [
+          0.4332,
+          0.6037
+        ],
+        "pr_auc_average_precision": 0.2479,
+        "pr_auc_95ci": [
+          0.198,
+          0.3272
+        ],
+        "prevalence": 0.23077,
+        "pr_auc_minus_prevalence": 0.0171,
+        "manwhitney_U": 3051.0,
+        "rank_biserial": 0.0378,
+        "n_unanswerable": 42,
+        "n_answerable": 140,
+        "distribution_reported_on": "RAW recorded field values (not sign-flipped); only ROC-AUC / PR-AUC / Mann-Whitney U use the analysis-oriented score",
+        "mean_unanswerable": 0.9555,
+        "mean_answerable": 0.6694,
+        "median_unanswerable": 1.0209,
+        "median_answerable": 0.697,
+        "quantiles_answerable": {
+          "q05": -3.3101,
+          "q25": -1.0146,
+          "q50": 0.697,
+          "q75": 2.5824,
+          "q95": 4.0866
+        },
+        "quantiles_unanswerable": {
+          "q05": -0.9965,
+          "q25": -0.3957,
+          "q50": 1.0209,
+          "q75": 1.9454,
+          "q95": 3.3797
+        },
+        "observed_range_answerable": [
+          -4.4236,
+          5.1413
+        ],
+        "observed_range_unanswerable": [
+          -1.2328,
+          5.4282
+        ],
+        "q05_q95_span_answerable": 7.3967,
+        "q05_q95_span_unanswerable": 4.3762,
+        "overlap_coefficient": 0.5762,
+        "overlap_binning": "30 equal-width bins over combined score range",
+        "ci_conflicting_direction": false,
+        "ci_includes_0_5": true,
+        "auc_pos_direction_raw": 0.5189,
+        "auc_neg_direction_raw": 0.4811,
+        "direction_source": "established_semantics",
+        "direction_justification": "[CLS] start logit"
+      },
+      "cls_end_logit": {
+        "statistic": "cls_end_logit",
+        "recorded_field": "cls_end_logit",
+        "declared_direction": "HIGHER=UNANSWERABLE",
+        "analysis_direction_used": "HIGHER=UNANSWERABLE",
+        "original_field_overwritten": false,
+        "roc_auc": 0.5257,
+        "roc_auc_minus_0_5": 0.0257,
+        "roc_auc_95ci": [
+          0.4403,
+          0.6087
+        ],
+        "pr_auc_average_precision": 0.2372,
+        "pr_auc_95ci": [
+          0.1991,
+          0.3152
+        ],
+        "prevalence": 0.23077,
+        "pr_auc_minus_prevalence": 0.0065,
+        "manwhitney_U": 3091.0,
+        "rank_biserial": 0.0514,
+        "n_unanswerable": 42,
+        "n_answerable": 140,
+        "distribution_reported_on": "RAW recorded field values (not sign-flipped); only ROC-AUC / PR-AUC / Mann-Whitney U use the analysis-oriented score",
+        "mean_unanswerable": 1.2154,
+        "mean_answerable": 0.94,
+        "median_unanswerable": 1.2747,
+        "median_answerable": 1.069,
+        "quantiles_answerable": {
+          "q05": -3.0431,
+          "q25": -0.7684,
+          "q50": 1.069,
+          "q75": 2.746,
+          "q95": 4.3167
+        },
+        "quantiles_unanswerable": {
+          "q05": -0.5361,
+          "q25": 0.0355,
+          "q50": 1.2747,
+          "q75": 2.0462,
+          "q95": 3.1935
+        },
+        "observed_range_answerable": [
+          -4.4347,
+          5.3933
+        ],
+        "observed_range_unanswerable": [
+          -0.9698,
+          5.3433
+        ],
+        "q05_q95_span_answerable": 7.3598,
+        "q05_q95_span_unanswerable": 3.7297,
+        "overlap_coefficient": 0.5381,
+        "overlap_binning": "30 equal-width bins over combined score range",
+        "ci_conflicting_direction": false,
+        "ci_includes_0_5": true,
+        "auc_pos_direction_raw": 0.5257,
+        "auc_neg_direction_raw": 0.4743,
+        "direction_source": "established_semantics",
+        "direction_justification": "[CLS] end logit"
+      },
+      "margin": {
+        "statistic": "margin",
+        "recorded_field": "margin",
+        "declared_direction": "HIGHER=UNANSWERABLE",
+        "analysis_direction_used": "HIGHER=UNANSWERABLE",
+        "original_field_overwritten": false,
+        "roc_auc": 0.5432,
+        "roc_auc_minus_0_5": 0.0432,
+        "roc_auc_95ci": [
+          0.4508,
+          0.6388
+        ],
+        "pr_auc_average_precision": 0.2599,
+        "pr_auc_95ci": [
+          0.2064,
+          0.3418
+        ],
+        "prevalence": 0.23077,
+        "pr_auc_minus_prevalence": 0.0291,
+        "manwhitney_U": 3194.0,
+        "rank_biserial": 0.0864,
+        "n_unanswerable": 42,
+        "n_answerable": 140,
+        "distribution_reported_on": "RAW recorded field values (not sign-flipped); only ROC-AUC / PR-AUC / Mann-Whitney U use the analysis-oriented score",
+        "mean_unanswerable": 2.7477,
+        "mean_answerable": 2.0575,
+        "median_unanswerable": 3.4925,
+        "median_answerable": 1.5338,
+        "quantiles_answerable": {
+          "q05": -6.2618,
+          "q25": -3.2535,
+          "q50": 1.5338,
+          "q75": 7.0589,
+          "q95": 12.3224
+        },
+        "quantiles_unanswerable": {
+          "q05": -5.9603,
+          "q25": -0.5349,
+          "q50": 3.4925,
+          "q75": 5.4765,
+          "q95": 10.859
+        },
+        "observed_range_answerable": [
+          -10.062,
+          17.6363
+        ],
+        "observed_range_unanswerable": [
+          -10.653,
+          22.2717
+        ],
+        "q05_q95_span_answerable": 18.5842,
+        "q05_q95_span_unanswerable": 16.8193,
+        "overlap_coefficient": 0.6548,
+        "overlap_binning": "30 equal-width bins over combined score range",
+        "ci_conflicting_direction": false,
+        "ci_includes_0_5": true,
+        "auc_pos_direction_raw": 0.5432,
+        "auc_neg_direction_raw": 0.4568,
+        "direction_source": "established_semantics",
+        "direction_justification": "null_score - best_answer_score (definition preserved, not changed)"
+      },
+      "confidence": {
+        "statistic": "confidence",
+        "recorded_field": "confidence",
+        "declared_direction": "EMPIRICALLY_TESTED_BOTH_DIRECTIONS",
+        "analysis_direction_used": "LOWER=UNANSWERABLE",
+        "original_field_overwritten": false,
+        "roc_auc": 0.5009,
+        "roc_auc_minus_0_5": 0.0009,
+        "roc_auc_95ci": [
+          0.4039,
+          0.5995
+        ],
+        "pr_auc_average_precision": 0.2458,
+        "pr_auc_95ci": [
+          0.1936,
+          0.3266
+        ],
+        "prevalence": 0.23077,
+        "pr_auc_minus_prevalence": 0.015,
+        "manwhitney_U": 2945.0,
+        "rank_biserial": 0.0017,
+        "n_unanswerable": 42,
+        "n_answerable": 140,
+        "distribution_reported_on": "RAW recorded field values (not sign-flipped); only ROC-AUC / PR-AUC / Mann-Whitney U use the analysis-oriented score",
+        "mean_unanswerable": 0.2159,
+        "mean_answerable": 0.2255,
+        "median_unanswerable": 0.1242,
+        "median_answerable": 0.1864,
+        "quantiles_answerable": {
+          "q05": 0.0021,
+          "q25": 0.0253,
+          "q50": 0.1864,
+          "q75": 0.3275,
+          "q95": 0.6522
+        },
+        "quantiles_unanswerable": {
+          "q05": 0.0045,
+          "q25": 0.061,
+          "q50": 0.1242,
+          "q75": 0.3373,
+          "q95": 0.5573
+        },
+        "observed_range_answerable": [
+          0.0001,
+          0.9168
+        ],
+        "observed_range_unanswerable": [
+          0.0,
+          0.9664
+        ],
+        "q05_q95_span_answerable": 0.6501,
+        "q05_q95_span_unanswerable": 0.5529,
+        "overlap_coefficient": 0.6119,
+        "overlap_binning": "30 equal-width bins over combined score range",
+        "ci_conflicting_direction": false,
+        "ci_includes_0_5": true,
+        "auc_pos_direction_raw": 0.4991,
+        "auc_neg_direction_raw": 0.5009,
+        "direction_source": "empirical_both_directions",
+        "direction_justification": "(softmax(start)[best] + softmax(end)[best]) / 2; direction NOT assumed from the name"
+      }
+    }
+  },
+  "task_6_bootstrap": {
+    "seed": 20260923,
+    "iterations": 10000,
+    "sampling": "stratified with replacement (140 answerable, 42 unanswerable)",
+    "interval": "percentile 2.5 / 97.5"
+  },
+  "task_7_checkpoint_stability": {
+    "classification_rules": {
+      "DIRECTION_CHANGE": "AUC > 0.5 for one checkpoint AND AUC < 0.5 for the other",
+      "NO_USEFUL_SIGNAL": "both 95% CIs include 0.5 AND both PR-AUCs are within +/-0.03 of prevalence",
+      "STABLE_SIGNAL": "both AUCs > 0.5 AND both bootstrap CI lower bounds > 0.5",
+      "DIFFERENT_STRENGTH": "same direction (both AUCs > 0.5) but materially different AUC (|dAUC| >= 0.10) or CIs that do not fully exclude 0.5"
+    },
+    "per_statistic": {
+      "null_score": {
+        "F2_auc": 0.4303,
+        "A0_auc": 0.5257,
+        "delta_roc_auc_F2_minus_A0": -0.0954,
+        "delta_pr_auc_F2_minus_A0": -0.0521,
+        "F2_ci95": [
+          0.3378,
+          0.5257
+        ],
+        "A0_ci95": [
+          0.44,
+          0.6088
+        ],
+        "classification": "DIRECTION_CHANGE"
+      },
+      "best_answer_score": {
+        "F2_auc": 0.725,
+        "A0_auc": 0.5054,
+        "delta_roc_auc_F2_minus_A0": 0.2196,
+        "delta_pr_auc_F2_minus_A0": 0.2296,
+        "F2_ci95": [
+          0.627,
+          0.8167
+        ],
+        "A0_ci95": [
+          0.4078,
+          0.6043
+        ],
+        "classification": "DIFFERENT_STRENGTH"
+      },
+      "cls_start_logit": {
+        "F2_auc": 0.4303,
+        "A0_auc": 0.5189,
+        "delta_roc_auc_F2_minus_A0": -0.0886,
+        "delta_pr_auc_F2_minus_A0": -0.0558,
+        "F2_ci95": [
+          0.3474,
+          0.5148
+        ],
+        "A0_ci95": [
+          0.4332,
+          0.6037
+        ],
+        "classification": "DIRECTION_CHANGE"
+      },
+      "cls_end_logit": {
+        "F2_auc": 0.4391,
+        "A0_auc": 0.5257,
+        "delta_roc_auc_F2_minus_A0": -0.0866,
+        "delta_pr_auc_F2_minus_A0": -0.0413,
+        "F2_ci95": [
+          0.3517,
+          0.5262
+        ],
+        "A0_ci95": [
+          0.4403,
+          0.6087
+        ],
+        "classification": "DIRECTION_CHANGE"
+      },
+      "margin": {
+        "F2_auc": 0.7338,
+        "A0_auc": 0.5432,
+        "delta_roc_auc_F2_minus_A0": 0.1906,
+        "delta_pr_auc_F2_minus_A0": 0.2893,
+        "F2_ci95": [
+          0.6398,
+          0.8202
+        ],
+        "A0_ci95": [
+          0.4508,
+          0.6388
+        ],
+        "classification": "DIFFERENT_STRENGTH"
+      },
+      "confidence": {
+        "F2_auc": 0.5224,
+        "A0_auc": 0.5009,
+        "delta_roc_auc_F2_minus_A0": 0.0215,
+        "delta_pr_auc_F2_minus_A0": 0.054,
+        "F2_ci95": [
+          0.4267,
+          0.616
+        ],
+        "A0_ci95": [
+          0.4039,
+          0.5995
+        ],
+        "classification": "DIFFERENT_STRENGTH"
+      }
+    }
+  },
+  "task_8_k_robustness_cross_check": {
+    "null_score": {
+      "statistic": "null_score",
+      "k47_statistic_key": "null_score",
+      "k95_statistic_key": "null_score",
+      "k47_F2": {
+        "true_abstention_pct": 19.0,
+        "false_abstention_pct": 27.9,
+        "abstention_precision": 0.1702,
+        "F1_answerable_pct": 16.92
+      },
+      "k47_A0": {
+        "true_abstention_pct": 14.3,
+        "false_abstention_pct": 29.3,
+        "abstention_precision": 0.1277,
+        "F1_answerable_pct": 18.32
+      },
+      "k95_F2": {
+        "true_abstention_pct": 47.6,
+        "false_abstention_pct": 53.6,
+        "abstention_precision": 0.2105,
+        "F1_answerable_pct": 12.47
+      },
+      "k95_A0": {
+        "true_abstention_pct": 52.4,
+        "false_abstention_pct": 52.1,
+        "abstention_precision": 0.2316,
+        "F1_answerable_pct": 12.16
+      }
+    },
+    "best_answer_score": {
+      "statistic": "best_answer_score",
+      "k47_statistic_key": "best_answer_score",
+      "k95_statistic_key": "best_answer_score",
+      "k47_F2": {
+        "true_abstention_pct": 50.0,
+        "false_abstention_pct": 18.6,
+        "abstention_precision": 0.4468,
+        "F1_answerable_pct": 15.41
+      },
+      "k47_A0": {
+        "true_abstention_pct": 26.2,
+        "false_abstention_pct": 25.7,
+        "abstention_precision": 0.234,
+        "F1_answerable_pct": 17.03
+      },
+      "k95_F2": {
+        "true_abstention_pct": 78.6,
+        "false_abstention_pct": 44.3,
+        "abstention_precision": 0.3474,
+        "F1_answerable_pct": 7.4
+      },
+      "k95_A0": {
+        "true_abstention_pct": 47.6,
+        "false_abstention_pct": 53.6,
+        "abstention_precision": 0.2105,
+        "F1_answerable_pct": 11.6
+      }
+    },
+    "cls_start_logit": {
+      "statistic": "cls_start_logit",
+      "k47_statistic_key": "cls_start",
+      "k95_statistic_key": "cls_start",
+      "k47_F2": {
+        "true_abstention_pct": 9.5,
+        "false_abstention_pct": 30.7,
+        "abstention_precision": 0.0851,
+        "F1_answerable_pct": 14.97
+      },
+      "k47_A0": {
+        "true_abstention_pct": 14.3,
+        "false_abstention_pct": 29.3,
+        "abstention_precision": 0.1277,
+        "F1_answerable_pct": 18.08
+      },
+      "k95_F2": {
+        "true_abstention_pct": 47.6,
+        "false_abstention_pct": 53.6,
+        "abstention_precision": 0.2105,
+        "F1_answerable_pct": 8.87
+      },
+      "k95_A0": {
+        "true_abstention_pct": 52.4,
+        "false_abstention_pct": 52.1,
+        "abstention_precision": 0.2316,
+        "F1_answerable_pct": 11.92
+      }
+    },
+    "cls_end_logit": {
+      "statistic": "cls_end_logit",
+      "k47_statistic_key": "cls_end",
+      "k95_statistic_key": "cls_end",
+      "k47_F2": {
+        "true_abstention_pct": 11.9,
+        "false_abstention_pct": 30.0,
+        "abstention_precision": 0.1064,
+        "F1_answerable_pct": 18.09
+      },
+      "k47_A0": {
+        "true_abstention_pct": 11.9,
+        "false_abstention_pct": 30.0,
+        "abstention_precision": 0.1064,
+        "F1_answerable_pct": 18.22
+      },
+      "k95_F2": {
+        "true_abstention_pct": 42.9,
+        "false_abstention_pct": 55.0,
+        "abstention_precision": 0.1895,
+        "F1_answerable_pct": 14.59
+      },
+      "k95_A0": {
+        "true_abstention_pct": 52.4,
+        "false_abstention_pct": 52.1,
+        "abstention_precision": 0.2316,
+        "F1_answerable_pct": 12.16
+      }
+    },
+    "margin": {
+      "statistic": "margin",
+      "k47_statistic_key": "margin",
+      "k95_statistic_key": "margin",
+      "k47_F2": {
+        "true_abstention_pct": 47.6,
+        "false_abstention_pct": 19.3,
+        "abstention_precision": 0.4255,
+        "F1_answerable_pct": 15.62
+      },
+      "k47_A0": {
+        "true_abstention_pct": 16.7,
+        "false_abstention_pct": 28.6,
+        "abstention_precision": 0.1489,
+        "F1_answerable_pct": 17.36
+      },
+      "k95_F2": {
+        "true_abstention_pct": 76.2,
+        "false_abstention_pct": 45.0,
+        "abstention_precision": 0.3368,
+        "F1_answerable_pct": 9.7
+      },
+      "k95_A0": {
+        "true_abstention_pct": 59.5,
+        "false_abstention_pct": 50.0,
+        "abstention_precision": 0.2632,
+        "F1_answerable_pct": 13.13
+      }
+    },
+    "_note": "Values copied verbatim from the recorded K=47/K=95 artifacts (no recomputation, no re-run of those experiments)."
+  },
+  "task_9_overlap_method": {
+    "bins": 30,
+    "rule": "equal-width bins over the combined (answerable + unanswerable) score range",
+    "overlap_definition": "sum over bins of min(answerable_density, unanswerable_density), densities = per-class bin proportions"
+  },
+  "task_10_confidence_calibration": {
+    "F2": {
+      "bins": [
+        {
+          "bin": "[0.0,0.1)",
+          "count": 182,
+          "mean_confidence": 0.0311,
+          "empirical_correctness_rate": 0.022,
+          "empirical_answerable_rate": 0.7692
+        },
+        {
+          "bin": "[0.1,0.2)",
+          "count": 0,
+          "mean_confidence": null,
+          "empirical_correctness_rate": null,
+          "empirical_answerable_rate": null
+        },
+        {
+          "bin": "[0.2,0.3)",
+          "count": 0,
+          "mean_confidence": null,
+          "empirical_correctness_rate": null,
+          "empirical_answerable_rate": null
+        },
+        {
+          "bin": "[0.3,0.4)",
+          "count": 0,
+          "mean_confidence": null,
+          "empirical_correctness_rate": null,
+          "empirical_answerable_rate": null
+        },
+        {
+          "bin": "[0.4,0.5)",
+          "count": 0,
+          "mean_confidence": null,
+          "empirical_correctness_rate": null,
+          "empirical_answerable_rate": null
+        },
+        {
+          "bin": "[0.5,0.6)",
+          "count": 0,
+          "mean_confidence": null,
+          "empirical_correctness_rate": null,
+          "empirical_answerable_rate": null
+        },
+        {
+          "bin": "[0.6,0.7)",
+          "count": 0,
+          "mean_confidence": null,
+          "empirical_correctness_rate": null,
+          "empirical_answerable_rate": null
+        },
+        {
+          "bin": "[0.7,0.8)",
+          "count": 0,
+          "mean_confidence": null,
+          "empirical_correctness_rate": null,
+          "empirical_answerable_rate": null
+        },
+        {
+          "bin": "[0.8,0.9)",
+          "count": 0,
+          "mean_confidence": null,
+          "empirical_correctness_rate": null,
+          "empirical_answerable_rate": null
+        },
+        {
+          "bin": "[0.9,1.0)",
+          "count": 0,
+          "mean_confidence": null,
+          "empirical_correctness_rate": null,
+          "empirical_answerable_rate": null
+        }
+      ],
+      "binning_rule": "10 fixed probability bins [0.0,0.1) ... [0.9,1.0]; raw confidence; NOT calibrated or transformed"
+    },
+    "A0": {
+      "bins": [
+        {
+          "bin": "[0.0,0.1)",
+          "count": 70,
+          "mean_confidence": 0.0317,
+          "empirical_correctness_rate": 0.0286,
+          "empirical_answerable_rate": 0.7429
+        },
+        {
+          "bin": "[0.1,0.2)",
+          "count": 27,
+          "mean_confidence": 0.1416,
+          "empirical_correctness_rate": 0.037,
+          "empirical_answerable_rate": 0.7407
+        },
+        {
+          "bin": "[0.2,0.3)",
+          "count": 33,
+          "mean_confidence": 0.2508,
+          "empirical_correctness_rate": 0.0303,
+          "empirical_answerable_rate": 0.8485
+        },
+        {
+          "bin": "[0.3,0.4)",
+          "count": 19,
+          "mean_confidence": 0.3466,
+          "empirical_correctness_rate": 0.0526,
+          "empirical_answerable_rate": 0.7368
+        },
+        {
+          "bin": "[0.4,0.5)",
+          "count": 12,
+          "mean_confidence": 0.4673,
+          "empirical_correctness_rate": 0.0,
+          "empirical_answerable_rate": 0.6667
+        },
+        {
+          "bin": "[0.5,0.6)",
+          "count": 8,
+          "mean_confidence": 0.5496,
+          "empirical_correctness_rate": 0.125,
+          "empirical_answerable_rate": 0.875
+        },
+        {
+          "bin": "[0.6,0.7)",
+          "count": 5,
+          "mean_confidence": 0.6471,
+          "empirical_correctness_rate": 0.0,
+          "empirical_answerable_rate": 1.0
+        },
+        {
+          "bin": "[0.7,0.8)",
+          "count": 4,
+          "mean_confidence": 0.7326,
+          "empirical_correctness_rate": 0.0,
+          "empirical_answerable_rate": 0.75
+        },
+        {
+          "bin": "[0.8,0.9)",
+          "count": 2,
+          "mean_confidence": 0.8387,
+          "empirical_correctness_rate": 0.0,
+          "empirical_answerable_rate": 1.0
+        },
+        {
+          "bin": "[0.9,1.0]",
+          "count": 2,
+          "mean_confidence": 0.9416,
+          "empirical_correctness_rate": 0.5,
+          "empirical_answerable_rate": 0.5
+        }
+      ],
+      "binning_rule": "10 fixed probability bins [0.0,0.1) ... [0.9,1.0]; raw confidence; NOT calibrated or transformed"
+    }
+  },
+  "task_11_spearman_correlation": {
+    "F2": {
+      "statistics_order": [
+        "null_score",
+        "best_answer_score",
+        "cls_start_logit",
+        "cls_end_logit",
+        "margin",
+        "confidence"
+      ],
+      "matrix": {
+        "null_score": {
+          "null_score": 1.0,
+          "best_answer_score": 0.509,
+          "cls_start_logit": 0.7876,
+          "cls_end_logit": 0.572,
+          "margin": -0.1735,
+          "confidence": -0.2487
+        },
+        "best_answer_score": {
+          "null_score": 0.509,
+          "best_answer_score": 1.0,
+          "cls_start_logit": 0.2682,
+          "cls_end_logit": 0.4227,
+          "margin": -0.9206,
+          "confidence": 0.4766
+        },
+        "cls_start_logit": {
+          "null_score": 0.7876,
+          "best_answer_score": 0.2682,
+          "cls_start_logit": 1.0,
+          "cls_end_logit": -0.001,
+          "margin": 0.0108,
+          "confidence": -0.3724
+        },
+        "cls_end_logit": {
+          "null_score": 0.572,
+          "best_answer_score": 0.4227,
+          "cls_start_logit": -0.001,
+          "cls_end_logit": 1.0,
+          "margin": -0.2313,
+          "confidence": -0.0093
+        },
+        "margin": {
+          "null_score": -0.1735,
+          "best_answer_score": -0.9206,
+          "cls_start_logit": 0.0108,
+          "cls_end_logit": -0.2313,
+          "margin": 1.0,
+          "confidence": -0.6911
+        },
+        "confidence": {
+          "null_score": -0.2487,
+          "best_answer_score": 0.4766,
+          "cls_start_logit": -0.3724,
+          "cls_end_logit": -0.0093,
+          "margin": -0.6911,
+          "confidence": 1.0
+        }
+      },
+      "normalization": null,
+      "method": "average ranks then Pearson (Spearman); raw recorded fields"
+    },
+    "A0": {
+      "statistics_order": [
+        "null_score",
+        "best_answer_score",
+        "cls_start_logit",
+        "cls_end_logit",
+        "margin",
+        "confidence"
+      ],
+      "matrix": {
+        "null_score": {
+          "null_score": 1.0,
+          "best_answer_score": -0.0395,
+          "cls_start_logit": 0.9978,
+          "cls_end_logit": 0.9979,
+          "margin": 0.7331,
+          "confidence": -0.5821
+        },
+        "best_answer_score": {
+          "null_score": -0.0395,
+          "best_answer_score": 1.0,
+          "cls_start_logit": -0.0331,
+          "cls_end_logit": -0.0448,
+          "margin": -0.6677,
+          "confidence": 0.744
+        },
+        "cls_start_logit": {
+          "null_score": 0.9978,
+          "best_answer_score": -0.0331,
+          "cls_start_logit": 1.0,
+          "cls_end_logit": 0.9926,
+          "margin": 0.7273,
+          "confidence": -0.5717
+        },
+        "cls_end_logit": {
+          "null_score": 0.9979,
+          "best_answer_score": -0.0448,
+          "cls_start_logit": 0.9926,
+          "cls_end_logit": 1.0,
+          "margin": 0.7349,
+          "confidence": -0.5889
+        },
+        "margin": {
+          "null_score": 0.7331,
+          "best_answer_score": -0.6677,
+          "cls_start_logit": 0.7273,
+          "cls_end_logit": 0.7349,
+          "margin": 1.0,
+          "confidence": -0.9221
+        },
+        "confidence": {
+          "null_score": -0.5821,
+          "best_answer_score": 0.744,
+          "cls_start_logit": -0.5717,
+          "cls_end_logit": -0.5889,
+          "margin": -0.9221,
+          "confidence": 1.0
+        }
+      },
+      "normalization": null,
+      "method": "average ranks then Pearson (Spearman); raw recorded fields"
+    }
+  },
+  "task_11_measured_structure_notes": {
+    "F2": {
+      "margin_vs_best_answer_score": -0.9206,
+      "margin_vs_null_score": -0.1735,
+      "null_vs_best_answer_score": 0.509,
+      "note": "measured Spearman correlations only; no combined score is created and no statistic is treated as equivalent to another"
+    },
+    "A0": {
+      "margin_vs_best_answer_score": -0.6677,
+      "margin_vs_null_score": 0.7331,
+      "null_vs_best_answer_score": -0.0395,
+      "note": "measured Spearman correlations only; no combined score is created and no statistic is treated as equivalent to another"
+    }
+  },
+  "task_12_category_bias": {
+    "F2": {
+      "null_score": {
+        "by_category": {
+          "DIRECT_SPAN": {
+            "n": 24,
+            "mean_unanswerability_score": 1.3627,
+            "median_unanswerability_score": 1.3496,
+            "mean_rank_percentile": 44.71,
+            "answerable_n": 24,
+            "unanswerable_n": 0
+          },
+          "NUMERIC": {
+            "n": 20,
+            "mean_unanswerability_score": 1.1483,
+            "median_unanswerability_score": 1.1767,
+            "mean_rank_percentile": 17.36,
+            "answerable_n": 20,
+            "unanswerable_n": 0
+          },
+          "TABLE_CELL": {
+            "n": 24,
+            "mean_unanswerability_score": 1.3842,
+            "median_unanswerability_score": 1.4427,
+            "mean_rank_percentile": 48.31,
+            "answerable_n": 24,
+            "unanswerable_n": 0
+          },
+          "TABLE_ROW": {
+            "n": 16,
+            "mean_unanswerability_score": 1.2613,
+            "median_unanswerability_score": 1.2605,
+            "mean_rank_percentile": 33.38,
+            "answerable_n": 16,
+            "unanswerable_n": 0
+          },
+          "LIST_ITEM": {
+            "n": 20,
+            "mean_unanswerability_score": 1.4571,
+            "median_unanswerability_score": 1.3836,
+            "mean_rank_percentile": 53.9,
+            "answerable_n": 20,
+            "unanswerable_n": 0
+          },
+          "SECTION_SPECIFIC": {
+            "n": 16,
+            "mean_unanswerability_score": 1.7256,
+            "median_unanswerability_score": 1.7315,
+            "mean_rank_percentile": 82.86,
+            "answerable_n": 16,
+            "unanswerable_n": 0
+          },
+          "MULTI_CHUNK": {
+            "n": 10,
+            "mean_unanswerability_score": 1.6652,
+            "median_unanswerability_score": 1.7466,
+            "mean_rank_percentile": 78.13,
+            "answerable_n": 10,
+            "unanswerable_n": 0
+          },
+          "LONG_CONTEXT": {
+            "n": 10,
+            "mean_unanswerability_score": 1.9433,
+            "median_unanswerability_score": 1.9345,
+            "mean_rank_percentile": 96.48,
+            "answerable_n": 10,
+            "unanswerable_n": 0
+          }
+        },
+        "class_distributions": {
+          "answerable": {
+            "n": 140,
+            "mean_unanswerability_score": 1.4422,
+            "median": 1.414
+          },
+          "unanswerable": {
+            "n": 42,
+            "mean_unanswerability_score": 1.3635,
+            "median": 1.3593
+          }
+        }
+      },
+      "best_answer_score": {
+        "by_category": {
+          "DIRECT_SPAN": {
+            "n": 24,
+            "mean_unanswerability_score": -3.7571,
+            "median_unanswerability_score": -3.8444,
+            "mean_rank_percentile": 42.19,
+            "answerable_n": 24,
+            "unanswerable_n": 0
+          },
+          "NUMERIC": {
+            "n": 20,
+            "mean_unanswerability_score": -3.0632,
+            "median_unanswerability_score": -3.3241,
+            "mean_rank_percentile": 68.41,
+            "answerable_n": 20,
+            "unanswerable_n": 0
+          },
+          "TABLE_CELL": {
+            "n": 24,
+            "mean_unanswerability_score": -3.935,
+            "median_unanswerability_score": -3.9641,
+            "mean_rank_percentile": 30.75,
+            "answerable_n": 24,
+            "unanswerable_n": 0
+          },
+          "TABLE_ROW": {
+            "n": 16,
+            "mean_unanswerability_score": -3.6529,
+            "median_unanswerability_score": -3.9375,
+            "mean_rank_percentile": 40.14,
+            "answerable_n": 16,
+            "unanswerable_n": 0
+          },
+          "LIST_ITEM": {
+            "n": 20,
+            "mean_unanswerability_score": -3.2939,
+            "median_unanswerability_score": -2.9881,
+            "mean_rank_percentile": 56.76,
+            "answerable_n": 20,
+            "unanswerable_n": 0
+          },
+          "SECTION_SPECIFIC": {
+            "n": 16,
+            "mean_unanswerability_score": -3.6803,
+            "median_unanswerability_score": -3.891,
+            "mean_rank_percentile": 43.3,
+            "answerable_n": 16,
+            "unanswerable_n": 0
+          },
+          "MULTI_CHUNK": {
+            "n": 10,
+            "mean_unanswerability_score": -4.0508,
+            "median_unanswerability_score": -4.0587,
+            "mean_rank_percentile": 25.77,
+            "answerable_n": 10,
+            "unanswerable_n": 0
+          },
+          "LONG_CONTEXT": {
+            "n": 10,
+            "mean_unanswerability_score": -3.6868,
+            "median_unanswerability_score": -3.6843,
+            "mean_rank_percentile": 46.48,
+            "answerable_n": 10,
+            "unanswerable_n": 0
+          }
+        },
+        "class_distributions": {
+          "answerable": {
+            "n": 140,
+            "mean_unanswerability_score": -3.6176,
+            "median": -3.8538
+          },
+          "unanswerable": {
+            "n": 42,
+            "mean_unanswerability_score": -2.9764,
+            "median": -2.9925
+          }
+        }
+      },
+      "cls_start_logit": {
+        "by_category": {
+          "DIRECT_SPAN": {
+            "n": 24,
+            "mean_unanswerability_score": 0.7928,
+            "median_unanswerability_score": 0.8318,
+            "mean_rank_percentile": 64.67,
+            "answerable_n": 24,
+            "unanswerable_n": 0
+          },
+          "NUMERIC": {
+            "n": 20,
+            "mean_unanswerability_score": 0.5986,
+            "median_unanswerability_score": 0.6152,
+            "mean_rank_percentile": 37.58,
+            "answerable_n": 20,
+            "unanswerable_n": 0
+          },
+          "TABLE_CELL": {
+            "n": 24,
+            "mean_unanswerability_score": 0.5174,
+            "median_unanswerability_score": 0.5384,
+            "mean_rank_percentile": 23.65,
+            "answerable_n": 24,
+            "unanswerable_n": 0
+          },
+          "TABLE_ROW": {
+            "n": 16,
+            "mean_unanswerability_score": 0.4432,
+            "median_unanswerability_score": 0.5095,
+            "mean_rank_percentile": 15.83,
+            "answerable_n": 16,
+            "unanswerable_n": 0
+          },
+          "LIST_ITEM": {
+            "n": 20,
+            "mean_unanswerability_score": 0.726,
+            "median_unanswerability_score": 0.7358,
+            "mean_rank_percentile": 54.2,
+            "answerable_n": 20,
+            "unanswerable_n": 0
+          },
+          "SECTION_SPECIFIC": {
+            "n": 16,
+            "mean_unanswerability_score": 0.955,
+            "median_unanswerability_score": 0.9716,
+            "mean_rank_percentile": 82.97,
+            "answerable_n": 16,
+            "unanswerable_n": 0
+          },
+          "MULTI_CHUNK": {
+            "n": 10,
+            "mean_unanswerability_score": 0.9101,
+            "median_unanswerability_score": 0.9326,
+            "mean_rank_percentile": 78.35,
+            "answerable_n": 10,
+            "unanswerable_n": 0
+          },
+          "LONG_CONTEXT": {
+            "n": 10,
+            "mean_unanswerability_score": 1.0687,
+            "median_unanswerability_score": 1.0969,
+            "mean_rank_percentile": 94.4,
+            "answerable_n": 10,
+            "unanswerable_n": 0
+          }
+        },
+        "class_distributions": {
+          "answerable": {
+            "n": 140,
+            "mean_unanswerability_score": 0.715,
+            "median": 0.6991
+          },
+          "unanswerable": {
+            "n": 42,
+            "mean_unanswerability_score": 0.6619,
+            "median": 0.6711
+          }
+        }
+      },
+      "cls_end_logit": {
+        "by_category": {
+          "DIRECT_SPAN": {
+            "n": 24,
+            "mean_unanswerability_score": 0.5698,
+            "median_unanswerability_score": 0.5899,
+            "mean_rank_percentile": 18.68,
+            "answerable_n": 24,
+            "unanswerable_n": 0
+          },
+          "NUMERIC": {
+            "n": 20,
+            "mean_unanswerability_score": 0.5497,
+            "median_unanswerability_score": 0.5562,
+            "mean_rank_percentile": 15.05,
+            "answerable_n": 20,
+            "unanswerable_n": 0
+          },
+          "TABLE_CELL": {
+            "n": 24,
+            "mean_unanswerability_score": 0.8668,
+            "median_unanswerability_score": 0.8774,
+            "mean_rank_percentile": 81.02,
+            "answerable_n": 24,
+            "unanswerable_n": 0
+          },
+          "TABLE_ROW": {
+            "n": 16,
+            "mean_unanswerability_score": 0.8181,
+            "median_unanswerability_score": 0.8141,
+            "mean_rank_percentile": 70.78,
+            "answerable_n": 16,
+            "unanswerable_n": 0
+          },
+          "LIST_ITEM": {
+            "n": 20,
+            "mean_unanswerability_score": 0.7311,
+            "median_unanswerability_score": 0.731,
+            "mean_rank_percentile": 51.57,
+            "answerable_n": 20,
+            "unanswerable_n": 0
+          },
+          "SECTION_SPECIFIC": {
+            "n": 16,
+            "mean_unanswerability_score": 0.7706,
+            "median_unanswerability_score": 0.7623,
+            "mean_rank_percentile": 59.72,
+            "answerable_n": 16,
+            "unanswerable_n": 0
+          },
+          "MULTI_CHUNK": {
+            "n": 10,
+            "mean_unanswerability_score": 0.7552,
+            "median_unanswerability_score": 0.7992,
+            "mean_rank_percentile": 57.91,
+            "answerable_n": 10,
+            "unanswerable_n": 0
+          },
+          "LONG_CONTEXT": {
+            "n": 10,
+            "mean_unanswerability_score": 0.8746,
+            "median_unanswerability_score": 0.857,
+            "mean_rank_percentile": 84.29,
+            "answerable_n": 10,
+            "unanswerable_n": 0
+          }
+        },
+        "class_distributions": {
+          "answerable": {
+            "n": 140,
+            "mean_unanswerability_score": 0.7272,
+            "median": 0.757
+          },
+          "unanswerable": {
+            "n": 42,
+            "mean_unanswerability_score": 0.7016,
+            "median": 0.7076
+          }
+        }
+      },
+      "margin": {
+        "by_category": {
+          "DIRECT_SPAN": {
+            "n": 24,
+            "mean_unanswerability_score": -2.3945,
+            "median_unanswerability_score": -2.4061,
+            "mean_rank_percentile": 36.1,
+            "answerable_n": 24,
+            "unanswerable_n": 0
+          },
+          "NUMERIC": {
+            "n": 20,
+            "mean_unanswerability_score": -1.9149,
+            "median_unanswerability_score": -2.0928,
+            "mean_rank_percentile": 56.79,
+            "answerable_n": 20,
+            "unanswerable_n": 0
+          },
+          "TABLE_CELL": {
+            "n": 24,
+            "mean_unanswerability_score": -2.5508,
+            "median_unanswerability_score": -2.6128,
+            "mean_rank_percentile": 26.83,
+            "answerable_n": 24,
+            "unanswerable_n": 0
+          },
+          "TABLE_ROW": {
+            "n": 16,
+            "mean_unanswerability_score": -2.3916,
+            "median_unanswerability_score": -2.6888,
+            "mean_rank_percentile": 32.69,
+            "answerable_n": 16,
+            "unanswerable_n": 0
+          },
+          "LIST_ITEM": {
+            "n": 20,
+            "mean_unanswerability_score": -1.8369,
+            "median_unanswerability_score": -1.6067,
+            "mean_rank_percentile": 59.04,
+            "answerable_n": 20,
+            "unanswerable_n": 0
+          },
+          "SECTION_SPECIFIC": {
+            "n": 16,
+            "mean_unanswerability_score": -1.9547,
+            "median_unanswerability_score": -2.001,
+            "mean_rank_percentile": 55.77,
+            "answerable_n": 16,
+            "unanswerable_n": 0
+          },
+          "MULTI_CHUNK": {
+            "n": 10,
+            "mean_unanswerability_score": -2.3855,
+            "median_unanswerability_score": -2.3628,
+            "mean_rank_percentile": 36.7,
+            "answerable_n": 10,
+            "unanswerable_n": 0
+          },
+          "LONG_CONTEXT": {
+            "n": 10,
+            "mean_unanswerability_score": -1.7436,
+            "median_unanswerability_score": -1.7091,
+            "mean_rank_percentile": 67.36,
+            "answerable_n": 10,
+            "unanswerable_n": 0
+          }
+        },
+        "class_distributions": {
+          "answerable": {
+            "n": 140,
+            "mean_unanswerability_score": -2.1754,
+            "median": -2.2906
+          },
+          "unanswerable": {
+            "n": 42,
+            "mean_unanswerability_score": -1.6129,
+            "median": -1.6716
+          }
+        }
+      },
+      "confidence": {
+        "by_category": {
+          "DIRECT_SPAN": {
+            "n": 24,
+            "mean_unanswerability_score": 0.0391,
+            "median_unanswerability_score": 0.0375,
+            "mean_rank_percentile": 69.53,
+            "answerable_n": 24,
+            "unanswerable_n": 0
+          },
+          "NUMERIC": {
+            "n": 20,
+            "mean_unanswerability_score": 0.036,
+            "median_unanswerability_score": 0.038,
+            "mean_rank_percentile": 62.14,
+            "answerable_n": 20,
+            "unanswerable_n": 0
+          },
+          "TABLE_CELL": {
+            "n": 24,
+            "mean_unanswerability_score": 0.0405,
+            "median_unanswerability_score": 0.0388,
+            "mean_rank_percentile": 73.76,
+            "answerable_n": 24,
+            "unanswerable_n": 0
+          },
+          "TABLE_ROW": {
+            "n": 16,
+            "mean_unanswerability_score": 0.0405,
+            "median_unanswerability_score": 0.0436,
+            "mean_rank_percentile": 73.04,
+            "answerable_n": 16,
+            "unanswerable_n": 0
+          },
+          "LIST_ITEM": {
+            "n": 20,
+            "mean_unanswerability_score": 0.0179,
+            "median_unanswerability_score": 0.0185,
+            "mean_rank_percentile": 18.71,
+            "answerable_n": 20,
+            "unanswerable_n": 0
+          },
+          "SECTION_SPECIFIC": {
+            "n": 16,
+            "mean_unanswerability_score": 0.018,
+            "median_unanswerability_score": 0.0186,
+            "mean_rank_percentile": 19.3,
+            "answerable_n": 16,
+            "unanswerable_n": 0
+          },
+          "MULTI_CHUNK": {
+            "n": 10,
+            "mean_unanswerability_score": 0.0236,
+            "median_unanswerability_score": 0.0231,
+            "mean_rank_percentile": 35.88,
+            "answerable_n": 10,
+            "unanswerable_n": 0
+          },
+          "LONG_CONTEXT": {
+            "n": 10,
+            "mean_unanswerability_score": 0.0143,
+            "median_unanswerability_score": 0.0142,
+            "mean_rank_percentile": 7.36,
+            "answerable_n": 10,
+            "unanswerable_n": 0
+          }
+        },
+        "class_distributions": {
+          "answerable": {
+            "n": 140,
+            "mean_unanswerability_score": 0.0307,
+            "median": 0.0318
+          },
+          "unanswerable": {
+            "n": 42,
+            "mean_unanswerability_score": 0.0323,
+            "median": 0.0296
+          }
+        }
+      }
+    },
+    "A0": {
+      "null_score": {
+        "by_category": {
+          "DIRECT_SPAN": {
+            "n": 24,
+            "mean_unanswerability_score": 2.4004,
+            "median_unanswerability_score": 1.6073,
+            "mean_rank_percentile": 53.27,
+            "answerable_n": 24,
+            "unanswerable_n": 0
+          },
+          "NUMERIC": {
+            "n": 20,
+            "mean_unanswerability_score": 1.9923,
+            "median_unanswerability_score": 1.8461,
+            "mean_rank_percentile": 50.96,
+            "answerable_n": 20,
+            "unanswerable_n": 0
+          },
+          "TABLE_CELL": {
+            "n": 24,
+            "mean_unanswerability_score": 3.6809,
+            "median_unanswerability_score": 3.0923,
+            "mean_rank_percentile": 62.77,
+            "answerable_n": 24,
+            "unanswerable_n": 0
+          },
+          "TABLE_ROW": {
+            "n": 16,
+            "mean_unanswerability_score": 5.5953,
+            "median_unanswerability_score": 5.6603,
+            "mean_rank_percentile": 77.47,
+            "answerable_n": 16,
+            "unanswerable_n": 0
+          },
+          "LIST_ITEM": {
+            "n": 20,
+            "mean_unanswerability_score": 0.3581,
+            "median_unanswerability_score": -0.5025,
+            "mean_rank_percentile": 42.31,
+            "answerable_n": 20,
+            "unanswerable_n": 0
+          },
+          "SECTION_SPECIFIC": {
+            "n": 16,
+            "mean_unanswerability_score": -5.3257,
+            "median_unanswerability_score": -5.0245,
+            "mean_rank_percentile": 7.66,
+            "answerable_n": 16,
+            "unanswerable_n": 0
+          },
+          "MULTI_CHUNK": {
+            "n": 10,
+            "mean_unanswerability_score": 4.0512,
+            "median_unanswerability_score": 4.3169,
+            "mean_rank_percentile": 67.69,
+            "answerable_n": 10,
+            "unanswerable_n": 0
+          },
+          "LONG_CONTEXT": {
+            "n": 10,
+            "mean_unanswerability_score": -1.2465,
+            "median_unanswerability_score": -1.0342,
+            "mean_rank_percentile": 26.59,
+            "answerable_n": 10,
+            "unanswerable_n": 0
+          }
+        },
+        "class_distributions": {
+          "answerable": {
+            "n": 140,
+            "mean_unanswerability_score": 1.6094,
+            "median": 1.8968
+          },
+          "unanswerable": {
+            "n": 42,
+            "mean_unanswerability_score": 2.1709,
+            "median": 2.2074
+          }
+        }
+      },
+      "best_answer_score": {
+        "by_category": {
+          "DIRECT_SPAN": {
+            "n": 24,
+            "mean_unanswerability_score": -0.1354,
+            "median_unanswerability_score": -0.9598,
+            "mean_rank_percentile": 43.29,
+            "answerable_n": 24,
+            "unanswerable_n": 0
+          },
+          "NUMERIC": {
+            "n": 20,
+            "mean_unanswerability_score": -3.5161,
+            "median_unanswerability_score": -3.0861,
+            "mean_rank_percentile": 25.44,
+            "answerable_n": 20,
+            "unanswerable_n": 0
+          },
+          "TABLE_CELL": {
+            "n": 24,
+            "mean_unanswerability_score": -0.1856,
+            "median_unanswerability_score": -0.3162,
+            "mean_rank_percentile": 46.13,
+            "answerable_n": 24,
+            "unanswerable_n": 0
+          },
+          "TABLE_ROW": {
+            "n": 16,
+            "mean_unanswerability_score": 4.8328,
+            "median_unanswerability_score": 5.5986,
+            "mean_rank_percentile": 80.73,
+            "answerable_n": 16,
+            "unanswerable_n": 0
+          },
+          "LIST_ITEM": {
+            "n": 20,
+            "mean_unanswerability_score": 1.3832,
+            "median_unanswerability_score": 2.0879,
+            "mean_rank_percentile": 57.2,
+            "answerable_n": 20,
+            "unanswerable_n": 0
+          },
+          "SECTION_SPECIFIC": {
+            "n": 16,
+            "mean_unanswerability_score": 0.1588,
+            "median_unanswerability_score": -0.1645,
+            "mean_rank_percentile": 45.36,
+            "answerable_n": 16,
+            "unanswerable_n": 0
+          },
+          "MULTI_CHUNK": {
+            "n": 10,
+            "mean_unanswerability_score": 1.6987,
+            "median_unanswerability_score": 3.5103,
+            "mean_rank_percentile": 61.81,
+            "answerable_n": 10,
+            "unanswerable_n": 0
+          },
+          "LONG_CONTEXT": {
+            "n": 10,
+            "mean_unanswerability_score": 1.624,
+            "median_unanswerability_score": 1.8256,
+            "mean_rank_percentile": 58.63,
+            "answerable_n": 10,
+            "unanswerable_n": 0
+          }
+        },
+        "class_distributions": {
+          "answerable": {
+            "n": 140,
+            "mean_unanswerability_score": 0.4481,
+            "median": 1.0939
+          },
+          "unanswerable": {
+            "n": 42,
+            "mean_unanswerability_score": 0.5768,
+            "median": 0.5894
+          }
+        }
+      },
+      "cls_start_logit": {
+        "by_category": {
+          "DIRECT_SPAN": {
+            "n": 24,
+            "mean_unanswerability_score": 1.1462,
+            "median_unanswerability_score": 0.8475,
+            "mean_rank_percentile": 54.01,
+            "answerable_n": 24,
+            "unanswerable_n": 0
+          },
+          "NUMERIC": {
+            "n": 20,
+            "mean_unanswerability_score": 0.9607,
+            "median_unanswerability_score": 0.8685,
+            "mean_rank_percentile": 52.55,
+            "answerable_n": 20,
+            "unanswerable_n": 0
+          },
+          "TABLE_CELL": {
+            "n": 24,
+            "mean_unanswerability_score": 1.6264,
+            "median_unanswerability_score": 1.3263,
+            "mean_rank_percentile": 61.77,
+            "answerable_n": 24,
+            "unanswerable_n": 0
+          },
+          "TABLE_ROW": {
+            "n": 16,
+            "mean_unanswerability_score": 2.6524,
+            "median_unanswerability_score": 2.6078,
+            "mean_rank_percentile": 77.23,
+            "answerable_n": 16,
+            "unanswerable_n": 0
+          },
+          "LIST_ITEM": {
+            "n": 20,
+            "mean_unanswerability_score": 0.0489,
+            "median_unanswerability_score": -0.4735,
+            "mean_rank_percentile": 42.06,
+            "answerable_n": 20,
+            "unanswerable_n": 0
+          },
+          "SECTION_SPECIFIC": {
+            "n": 16,
+            "mean_unanswerability_score": -2.9731,
+            "median_unanswerability_score": -2.875,
+            "mean_rank_percentile": 7.21,
+            "answerable_n": 16,
+            "unanswerable_n": 0
+          },
+          "MULTI_CHUNK": {
+            "n": 10,
+            "mean_unanswerability_score": 1.916,
+            "median_unanswerability_score": 2.0451,
+            "mean_rank_percentile": 67.75,
+            "answerable_n": 10,
+            "unanswerable_n": 0
+          },
+          "LONG_CONTEXT": {
+            "n": 10,
+            "mean_unanswerability_score": -0.7042,
+            "median_unanswerability_score": -0.664,
+            "mean_rank_percentile": 27.8,
+            "answerable_n": 10,
+            "unanswerable_n": 0
+          }
+        },
+        "class_distributions": {
+          "answerable": {
+            "n": 140,
+            "mean_unanswerability_score": 0.6694,
+            "median": 0.697
+          },
+          "unanswerable": {
+            "n": 42,
+            "mean_unanswerability_score": 0.9555,
+            "median": 1.0209
+          }
+        }
+      },
+      "cls_end_logit": {
+        "by_category": {
+          "DIRECT_SPAN": {
+            "n": 24,
+            "mean_unanswerability_score": 1.2542,
+            "median_unanswerability_score": 0.7427,
+            "mean_rank_percentile": 52.22,
+            "answerable_n": 24,
+            "unanswerable_n": 0
+          },
+          "NUMERIC": {
+            "n": 20,
+            "mean_unanswerability_score": 1.0316,
+            "median_unanswerability_score": 0.9845,
+            "mean_rank_percentile": 50.08,
+            "answerable_n": 20,
+            "unanswerable_n": 0
+          },
+          "TABLE_CELL": {
+            "n": 24,
+            "mean_unanswerability_score": 2.0545,
+            "median_unanswerability_score": 1.7427,
+            "mean_rank_percentile": 64.22,
+            "answerable_n": 24,
+            "unanswerable_n": 0
+          },
+          "TABLE_ROW": {
+            "n": 16,
+            "mean_unanswerability_score": 2.9428,
+            "median_unanswerability_score": 3.0526,
+            "mean_rank_percentile": 77.92,
+            "answerable_n": 16,
+            "unanswerable_n": 0
+          },
+          "LIST_ITEM": {
+            "n": 20,
+            "mean_unanswerability_score": 0.3093,
+            "median_unanswerability_score": -0.029,
+            "mean_rank_percentile": 42.45,
+            "answerable_n": 20,
+            "unanswerable_n": 0
+          },
+          "SECTION_SPECIFIC": {
+            "n": 16,
+            "mean_unanswerability_score": -2.3526,
+            "median_unanswerability_score": -2.1798,
+            "mean_rank_percentile": 8.0,
+            "answerable_n": 16,
+            "unanswerable_n": 0
+          },
+          "MULTI_CHUNK": {
+            "n": 10,
+            "mean_unanswerability_score": 2.1352,
+            "median_unanswerability_score": 2.2718,
+            "mean_rank_percentile": 67.58,
+            "answerable_n": 10,
+            "unanswerable_n": 0
+          },
+          "LONG_CONTEXT": {
+            "n": 10,
+            "mean_unanswerability_score": -0.5424,
+            "median_unanswerability_score": -0.4039,
+            "mean_rank_percentile": 25.99,
+            "answerable_n": 10,
+            "unanswerable_n": 0
+          }
+        },
+        "class_distributions": {
+          "answerable": {
+            "n": 140,
+            "mean_unanswerability_score": 0.94,
+            "median": 1.069
+          },
+          "unanswerable": {
+            "n": 42,
+            "mean_unanswerability_score": 1.2154,
+            "median": 1.2747
+          }
+        }
+      },
+      "margin": {
+        "by_category": {
+          "DIRECT_SPAN": {
+            "n": 24,
+            "mean_unanswerability_score": 2.265,
+            "median_unanswerability_score": 2.816,
+            "mean_rank_percentile": 51.44,
+            "answerable_n": 24,
+            "unanswerable_n": 0
+          },
+          "NUMERIC": {
+            "n": 20,
+            "mean_unanswerability_score": -1.5238,
+            "median_unanswerability_score": -2.0109,
+            "mean_rank_percentile": 32.61,
+            "answerable_n": 20,
+            "unanswerable_n": 0
+          },
+          "TABLE_CELL": {
+            "n": 24,
+            "mean_unanswerability_score": 3.4953,
+            "median_unanswerability_score": 3.5167,
+            "mean_rank_percentile": 56.89,
+            "answerable_n": 24,
+            "unanswerable_n": 0
+          },
+          "TABLE_ROW": {
+            "n": 16,
+            "mean_unanswerability_score": 10.4281,
+            "median_unanswerability_score": 10.5214,
+            "mean_rank_percentile": 85.47,
+            "answerable_n": 16,
+            "unanswerable_n": 0
+          },
+          "LIST_ITEM": {
+            "n": 20,
+            "mean_unanswerability_score": 1.7414,
+            "median_unanswerability_score": 0.1272,
+            "mean_rank_percentile": 47.94,
+            "answerable_n": 20,
+            "unanswerable_n": 0
+          },
+          "SECTION_SPECIFIC": {
+            "n": 16,
+            "mean_unanswerability_score": -5.1669,
+            "median_unanswerability_score": -4.844,
+            "mean_rank_percentile": 12.5,
+            "answerable_n": 16,
+            "unanswerable_n": 0
+          },
+          "MULTI_CHUNK": {
+            "n": 10,
+            "mean_unanswerability_score": 5.7499,
+            "median_unanswerability_score": 7.036,
+            "mean_rank_percentile": 69.78,
+            "answerable_n": 10,
+            "unanswerable_n": 0
+          },
+          "LONG_CONTEXT": {
+            "n": 10,
+            "mean_unanswerability_score": 0.3774,
+            "median_unanswerability_score": 0.491,
+            "mean_rank_percentile": 42.25,
+            "answerable_n": 10,
+            "unanswerable_n": 0
+          }
+        },
+        "class_distributions": {
+          "answerable": {
+            "n": 140,
+            "mean_unanswerability_score": 2.0575,
+            "median": 1.5338
+          },
+          "unanswerable": {
+            "n": 42,
+            "mean_unanswerability_score": 2.7477,
+            "median": 3.4925
+          }
+        }
+      },
+      "confidence": {
+        "by_category": {
+          "DIRECT_SPAN": {
+            "n": 24,
+            "mean_unanswerability_score": -0.2504,
+            "median_unanswerability_score": -0.1609,
+            "mean_rank_percentile": 47.09,
+            "answerable_n": 24,
+            "unanswerable_n": 0
+          },
+          "NUMERIC": {
+            "n": 20,
+            "mean_unanswerability_score": -0.4731,
+            "median_unanswerability_score": -0.5258,
+            "mean_rank_percentile": 22.01,
+            "answerable_n": 20,
+            "unanswerable_n": 0
+          },
+          "TABLE_CELL": {
+            "n": 24,
+            "mean_unanswerability_score": -0.1807,
+            "median_unanswerability_score": -0.1002,
+            "mean_rank_percentile": 56.82,
+            "answerable_n": 24,
+            "unanswerable_n": 0
+          },
+          "TABLE_ROW": {
+            "n": 16,
+            "mean_unanswerability_score": -0.0331,
+            "median_unanswerability_score": -0.0056,
+            "mean_rank_percentile": 84.72,
+            "answerable_n": 16,
+            "unanswerable_n": 0
+          },
+          "LIST_ITEM": {
+            "n": 20,
+            "mean_unanswerability_score": -0.1603,
+            "median_unanswerability_score": -0.1789,
+            "mean_rank_percentile": 55.88,
+            "answerable_n": 20,
+            "unanswerable_n": 0
+          },
+          "SECTION_SPECIFIC": {
+            "n": 16,
+            "mean_unanswerability_score": -0.2881,
+            "median_unanswerability_score": -0.2761,
+            "mean_rank_percentile": 33.17,
+            "answerable_n": 16,
+            "unanswerable_n": 0
+          },
+          "MULTI_CHUNK": {
+            "n": 10,
+            "mean_unanswerability_score": -0.126,
+            "median_unanswerability_score": -0.0278,
+            "mean_rank_percentile": 64.62,
+            "answerable_n": 10,
+            "unanswerable_n": 0
+          },
+          "LONG_CONTEXT": {
+            "n": 10,
+            "mean_unanswerability_score": -0.2154,
+            "median_unanswerability_score": -0.1715,
+            "mean_rank_percentile": 45.16,
+            "answerable_n": 10,
+            "unanswerable_n": 0
+          }
+        },
+        "class_distributions": {
+          "answerable": {
+            "n": 140,
+            "mean_unanswerability_score": -0.2255,
+            "median": -0.1864
+          },
+          "unanswerable": {
+            "n": 42,
+            "mean_unanswerability_score": -0.2159,
+            "median": -0.1242
+          }
+        }
+      }
+    }
+  },
+  "task_13_decisive_table": [
+    {
+      "model": "F2",
+      "statistic": "null_score",
+      "roc_auc": 0.4303,
+      "ci95": [
+        0.3378,
+        0.5257
+      ],
+      "pr_auc": 0.1974,
+      "prevalence": 0.23077,
+      "delta_auc_vs_0_5": -0.0697,
+      "delta_pr_vs_prevalence": -0.0334,
+      "k47_signal_tp_fp_pct": {
+        "true_abstention_pct": 19.0,
+        "false_abstention_pct": 27.9
+      },
+      "k95_signal_tp_fp_pct": {
+        "true_abstention_pct": 47.6,
+        "false_abstention_pct": 53.6
+      }
+    },
+    {
+      "model": "F2",
+      "statistic": "best_answer_score",
+      "roc_auc": 0.725,
+      "ci95": [
+        0.627,
+        0.8167
+      ],
+      "pr_auc": 0.4853,
+      "prevalence": 0.23077,
+      "delta_auc_vs_0_5": 0.225,
+      "delta_pr_vs_prevalence": 0.2545,
+      "k47_signal_tp_fp_pct": {
+        "true_abstention_pct": 50.0,
+        "false_abstention_pct": 18.6
+      },
+      "k95_signal_tp_fp_pct": {
+        "true_abstention_pct": 78.6,
+        "false_abstention_pct": 44.3
+      }
+    },
+    {
+      "model": "F2",
+      "statistic": "cls_start_logit",
+      "roc_auc": 0.4303,
+      "ci95": [
+        0.3474,
+        0.5148
+      ],
+      "pr_auc": 0.1921,
+      "prevalence": 0.23077,
+      "delta_auc_vs_0_5": -0.0697,
+      "delta_pr_vs_prevalence": -0.0386,
+      "k47_signal_tp_fp_pct": {
+        "true_abstention_pct": 9.5,
+        "false_abstention_pct": 30.7
+      },
+      "k95_signal_tp_fp_pct": {
+        "true_abstention_pct": 47.6,
+        "false_abstention_pct": 53.6
+      }
+    },
+    {
+      "model": "F2",
+      "statistic": "cls_end_logit",
+      "roc_auc": 0.4391,
+      "ci95": [
+        0.3517,
+        0.5262
+      ],
+      "pr_auc": 0.1959,
+      "prevalence": 0.23077,
+      "delta_auc_vs_0_5": -0.0609,
+      "delta_pr_vs_prevalence": -0.0349,
+      "k47_signal_tp_fp_pct": {
+        "true_abstention_pct": 11.9,
+        "false_abstention_pct": 30.0
+      },
+      "k95_signal_tp_fp_pct": {
+        "true_abstention_pct": 42.9,
+        "false_abstention_pct": 55.0
+      }
+    },
+    {
+      "model": "F2",
+      "statistic": "margin",
+      "roc_auc": 0.7338,
+      "ci95": [
+        0.6398,
+        0.8202
+      ],
+      "pr_auc": 0.5492,
+      "prevalence": 0.23077,
+      "delta_auc_vs_0_5": 0.2338,
+      "delta_pr_vs_prevalence": 0.3185,
+      "k47_signal_tp_fp_pct": {
+        "true_abstention_pct": 47.6,
+        "false_abstention_pct": 19.3
+      },
+      "k95_signal_tp_fp_pct": {
+        "true_abstention_pct": 76.2,
+        "false_abstention_pct": 45.0
+      }
+    },
+    {
+      "model": "F2",
+      "statistic": "confidence",
+      "roc_auc": 0.5224,
+      "ci95": [
+        0.4267,
+        0.616
+      ],
+      "pr_auc": 0.2998,
+      "prevalence": 0.23077,
+      "delta_auc_vs_0_5": 0.0224,
+      "delta_pr_vs_prevalence": 0.0691,
+      "k47_signal_tp_fp_pct": null,
+      "k95_signal_tp_fp_pct": null
+    },
+    {
+      "model": "A0",
+      "statistic": "null_score",
+      "roc_auc": 0.5257,
+      "ci95": [
+        0.44,
+        0.6088
+      ],
+      "pr_auc": 0.2495,
+      "prevalence": 0.23077,
+      "delta_auc_vs_0_5": 0.0257,
+      "delta_pr_vs_prevalence": 0.0187,
+      "k47_signal_tp_fp_pct": {
+        "true_abstention_pct": 14.3,
+        "false_abstention_pct": 29.3
+      },
+      "k95_signal_tp_fp_pct": {
+        "true_abstention_pct": 52.4,
+        "false_abstention_pct": 52.1
+      }
+    },
+    {
+      "model": "A0",
+      "statistic": "best_answer_score",
+      "roc_auc": 0.5054,
+      "ci95": [
+        0.4078,
+        0.6043
+      ],
+      "pr_auc": 0.2557,
+      "prevalence": 0.23077,
+      "delta_auc_vs_0_5": 0.0054,
+      "delta_pr_vs_prevalence": 0.0249,
+      "k47_signal_tp_fp_pct": {
+        "true_abstention_pct": 26.2,
+        "false_abstention_pct": 25.7
+      },
+      "k95_signal_tp_fp_pct": {
+        "true_abstention_pct": 47.6,
+        "false_abstention_pct": 53.6
+      }
+    },
+    {
+      "model": "A0",
+      "statistic": "cls_start_logit",
+      "roc_auc": 0.5189,
+      "ci95": [
+        0.4332,
+        0.6037
+      ],
+      "pr_auc": 0.2479,
+      "prevalence": 0.23077,
+      "delta_auc_vs_0_5": 0.0189,
+      "delta_pr_vs_prevalence": 0.0171,
+      "k47_signal_tp_fp_pct": {
+        "true_abstention_pct": 14.3,
+        "false_abstention_pct": 29.3
+      },
+      "k95_signal_tp_fp_pct": {
+        "true_abstention_pct": 52.4,
+        "false_abstention_pct": 52.1
+      }
+    },
+    {
+      "model": "A0",
+      "statistic": "cls_end_logit",
+      "roc_auc": 0.5257,
+      "ci95": [
+        0.4403,
+        0.6087
+      ],
+      "pr_auc": 0.2372,
+      "prevalence": 0.23077,
+      "delta_auc_vs_0_5": 0.0257,
+      "delta_pr_vs_prevalence": 0.0065,
+      "k47_signal_tp_fp_pct": {
+        "true_abstention_pct": 11.9,
+        "false_abstention_pct": 30.0
+      },
+      "k95_signal_tp_fp_pct": {
+        "true_abstention_pct": 52.4,
+        "false_abstention_pct": 52.1
+      }
+    },
+    {
+      "model": "A0",
+      "statistic": "margin",
+      "roc_auc": 0.5432,
+      "ci95": [
+        0.4508,
+        0.6388
+      ],
+      "pr_auc": 0.2599,
+      "prevalence": 0.23077,
+      "delta_auc_vs_0_5": 0.0432,
+      "delta_pr_vs_prevalence": 0.0291,
+      "k47_signal_tp_fp_pct": {
+        "true_abstention_pct": 16.7,
+        "false_abstention_pct": 28.6
+      },
+      "k95_signal_tp_fp_pct": {
+        "true_abstention_pct": 59.5,
+        "false_abstention_pct": 50.0
+      }
+    },
+    {
+      "model": "A0",
+      "statistic": "confidence",
+      "roc_auc": 0.5009,
+      "ci95": [
+        0.4039,
+        0.5995
+      ],
+      "pr_auc": 0.2458,
+      "prevalence": 0.23077,
+      "delta_auc_vs_0_5": 0.0009,
+      "delta_pr_vs_prevalence": 0.015,
+      "k47_signal_tp_fp_pct": null,
+      "k95_signal_tp_fp_pct": null
+    }
+  ],
+  "task_14_answers": {
+    "question_A_stable_signal_exists": "SIGNAL_PARTIAL",
+    "question_B_signal_properties": {
+      "checkpoint_stable": false,
+      "statistic_stable": false,
+      "budget_stable": {
+        "null_score": {
+          "true_abstention_pct_across_K_and_checkpoint": [
+            19.0,
+            47.6,
+            14.3,
+            52.4
+          ],
+          "range_pp": 38.1
+        },
+        "best_answer_score": {
+          "true_abstention_pct_across_K_and_checkpoint": [
+            50.0,
+            78.6,
+            26.2,
+            47.6
+          ],
+          "range_pp": 52.4
+        },
+        "cls_start_logit": {
+          "true_abstention_pct_across_K_and_checkpoint": [
+            9.5,
+            47.6,
+            14.3,
+            52.4
+          ],
+          "range_pp": 42.9
+        },
+        "cls_end_logit": {
+          "true_abstention_pct_across_K_and_checkpoint": [
+            11.9,
+            42.9,
+            11.9,
+            52.4
+          ],
+          "range_pp": 40.5
+        },
+        "margin": {
+          "true_abstention_pct_across_K_and_checkpoint": [
+            47.6,
+            76.2,
+            16.7,
+            59.5
+          ],
+          "range_pp": 59.5
+        }
+      },
+      "note": "see task_7_checkpoint_stability and task_8_k_robustness_cross_check for the measured basis"
+    },
+    "question_C_explanations": {
+      "score_scale_differences": "measured directly in the recorded same-constant different-behaviour result (the shared recorded constant 1.5705 abstained on 47 examples at F2 and 95 at A0)",
+      "weak_ranking_signal": "threshold-free AUC range across all 12 combos: 0.4303-0.7338",
+      "checkpoint_capability_differences": "measured separately: A0 retains more EM-correct answers at equal budget (recorded iso-coverage result)",
+      "category_specific_uncertainty": "see task_12_category_bias"
+    },
+    "measured_dynamic_range_finding": {
+      "F2_confidence_q05_q95_span_answerable": 0.0365,
+      "A0_confidence_q05_q95_span_answerable": 0.6501,
+      "note": "the recorded confidence statistic has almost no dynamic range at F2 (all 182 examples fall in one 0.1 bin) while A0 spans nearly the full probability range; this is a measured property of the recorded scores and is the reason the confidence direction is unstable"
+    }
+  },
+  "task_15_decision_boundary": {
+    "definitions": {
+      "SIGNAL_CONFIRMED": "at least one statistic AUC > 0.70 with CI clearly above 0.50 AND PR-AUC materially above prevalence",
+      "SIGNAL_PARTIAL": "at least one statistic AUC > 0.60 with direction supported by the CI but signal not stable across both checkpoints",
+      "SIGNAL_WEAK": "AUC generally 0.55-0.60, or CIs overlap substantially with 0.50, or PR-AUC improvement is small",
+      "SIGNAL_ABSENT": "no statistic provides meaningful separation and results remain near random"
+    },
+    "verdict": "SIGNAL_PARTIAL",
+    "evaluated_flags": {
+      "any_auc_gt_070_ci_above_050_pr_material": true,
+      "any_auc_gt_060_ci_supported": true,
+      "any_statistic_stable_signal": false,
+      "any_pr_auc_material_gain": true,
+      "all_ci_include_050": false
+    },
+    "literal_signal_confirmed_clause_met": true,
+    "literal_signal_confirmed_clause_met_by": [
+      "F2/best_answer_score",
+      "F2/margin"
+    ],
+    "applied_tier_gate": "The given definitions separate SIGNAL_CONFIRMED from SIGNAL_PARTIAL only by whether the statistic is 'not stable across both checkpoints'. The literal threshold-only clause of SIGNAL_CONFIRMED is met by the F2 statistics listed, but the signal does not survive the checkpoint comparison (A0 shows no statistic above 0.5432 and five of six A0 CIs include 0.50, while three statistics reverse direction between checkpoints), so the applied verdict is the lower tier. Both readings are reported rather than resolved silently.",
+    "applied_verdict": "SIGNAL_PARTIAL",
+    "statistics_supporting_auc_gt0.60_ci_excludes_0.5": [
+      "F2/best_answer_score",
+      "F2/margin"
+    ],
+    "direction_change_statistics": [
+      "cls_end_logit",
+      "cls_start_logit",
+      "null_score"
+    ],
+    "best_statistic_per_checkpoint": {
+      "F2": "margin",
+      "A0": "margin"
+    }
+  },
+  "most_stable_signal": "margin",
+  "smallest_checkpoint_delta_statistic": "confidence",
+  "most_checkpoint_sensitive_signal": "best_answer_score",
+  "stability_label_definitions": {
+    "most_stable_signal": "statistic with the highest worst-case AUC across the two checkpoints (min of F2/A0 AUC); STABLE_SIGNAL classifications take precedence",
+    "smallest_checkpoint_delta_statistic": "statistic with the smallest |dAUC| between checkpoints (may be small only because both are near chance)",
+    "most_checkpoint_sensitive_signal": "statistic with the largest |dAUC| between checkpoints"
+  },
+  "inputs": {
+    "predictions_file": "backend/architecture/phase4f_6/e0_diagnostics/diagnostics/model_40min_predictions.json",
+    "benchmark_file": "backend/phase4f/phase4f_5d/benchmark/qa_benchmark_v1.jsonl",
+    "benchmark_sha256": "1166bf4ff38265c209614ac20261417b7eeb43653f4482dfdf94721fd50a41d0",
+    "benchmark_sha256_verified": true,
+    "k47_reference": "backend/architecture/phase4f_6/decision/SCORE_STATISTIC_ISO_K47.json",
+    "k95_reference": "backend/architecture/phase4f_6/decision/SCORE_STATISTIC_ISO_K95.json"
+  },
+  "integrity": {
+    "benchmark_sha256": "1166bf4ff38265c209614ac20261417b7eeb43653f4482dfdf94721fd50a41d0",
+    "benchmark_expected": "1166bf4ff38265c209614ac20261417b7eeb43653f4482dfdf94721fd50a41d0",
+    "benchmark_match": true,
+    "dataset_sha256": "a517530354fc9bcaeef6f1aa16c3fb9ce92f1967668386bc66781e6e6bbf2e97",
+    "dataset_expected": "a517530354fc9bcaeef6f1aa16c3fb9ce92f1967668386bc66781e6e6bbf2e97",
+    "dataset_match": true,
+    "production_model_sha256": "cb9f1dde94fca0e1f82c440bdc184ff54ba02efb6ea432e37a8c6ff8a8f69deb",
+    "production_model_expected": "cb9f1dde94fca0e1f82c440bdc184ff54ba02efb6ea432e37a8c6ff8a8f69deb",
+    "production_model_match": true,
+    "f2_model_sha256": "717463178eeb37ee3a6424063e8666b6586dd15ee50d745c1ab3d16bb4b164b0",
+    "f2_model_expected": "717463178eeb37ee3a6424063e8666b6586dd15ee50d745c1ab3d16bb4b164b0",
+    "f2_model_match": true,
+    "f2_checkpoint_dir_scope_sha256": "416b63642ba80a1c4f11257df9d21f9e36427393533465d0ad3b2a15a0b5fc39",
+    "f2_checkpoint_dir_expected": "416b63642ba80a1c4f11257df9d21f9e36427393533465d0ad3b2a15a0b5fc39",
+    "f2_checkpoint_dir_match": true,
+    "source_fingerprint": "3ec81cc5868f29a047409358943127509b4700cf2ddae1b877030059e4687ab1",
+    "source_fingerprint_expected": "3ec81cc5868f29a047409358943127509b4700cf2ddae1b877030059e4687ab1",
+    "source_match": true,
+    "chunk_fingerprint": "e6965cdad6684c65b739a316e01cff9e020e96a1588ec4aa37b19cfe98b135ea",
+    "chunk_fingerprint_expected": "e6965cdad6684c65b739a316e01cff9e020e96a1588ec4aa37b19cfe98b135ea",
+    "chunk_match": true
+  },
+  "interpretation_boundary": [
+    "No inference, no model loading, no training, no database, no retrieval was used.",
+    "No threshold was fitted and no K was searched; every statistic is evaluated threshold-free (AUC/PR-AUC) or at the already-recorded K values.",
+    "No classifier and no derived/combined score were created.",
+    "ROC-AUC and PR-AUC are ranking-quality measurements, not causal effects and not architectural evidence.",
+    "A weak or absent answerability signal measures the CURRENT extractive outputs only; it does not prove anything about a differently designed answerability component.",
+    "No statistic is declared universally superior; results are reported per checkpoint and per budget."
+  ]
+}

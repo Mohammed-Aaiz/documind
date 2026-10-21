@@ -1,0 +1,38 @@
+{
+  "document_id": "financial_report_q3",
+  "source_type": "GENERATOR_DEFINED_SYNTHETIC_DOCUMENT",
+  "classification": "B_DETERMINISTIC_SOURCE_RECONSTRUCTIBLE",
+  "generator_provenance": {
+    "path": "backend/phase4f/dataset/expand_and_audit.py",
+    "symbols": [
+      "DOCUMENTS",
+      "_add_doc"
+    ],
+    "doc_definition_in_source": true,
+    "example_seed": 42,
+    "seed_scope": "seed affects example sampling only; document text is static data (no RNG)",
+    "required_inputs": "module import only (no external data, no network)",
+    "reconstruction_method": "CANON-v1 serialization of the static section tree"
+  },
+  "document_text": "Executive Summary\n\nIn the third quarter of fiscal year 2025, GlobalTech Industries reported consolidated revenue of $847.3 million, representing a 12.4 percent year-over-year increase from $753.8 million in Q3 2024. Net income attributable to shareholders was $142.6 million, or $3.47 per diluted share, compared to $118.2 million, or $2.89 per diluted share, in the prior year period. Operating margin improved to 22.1 percent from 20.3 percent.\n\nRevenue Breakdown\n\nRevenue growth was driven primarily by the Enterprise Solutions division, which posted revenue of $412.5 million (48.7 percent of total revenue), up 18.3 percent from the prior year. The Cloud Services division contributed $287.1 million (33.9 percent), growing 9.7 percent year-over-year. The Professional Services segment generated $147.7 million (17.4 percent), reflecting a modest 4.2 percent increase.\n\nDivision | Q3 2025 Revenue | Q3 2024 Revenue | YoY Growth\nEnterprise Solutions | $412.5M | $348.7M | +18.3%\nCloud Services | $287.1M | $261.7M | +9.7%\nProfessional Services | $147.7M | $141.8M | +4.2%\nOther | $0.0M | $1.6M | -100.0%\n\nOperating Expenses\n\nTotal operating expenses for Q3 2025 were $660.1 million, compared to $600.7 million in Q3 2024. Research and development expenses increased 14.8 percent to $198.3 million, reflecting continued investment in artificial intelligence and machine learning capabilities. Sales and marketing expenses were $234.5 million, up 8.2 percent. General and administrative expenses were $127.3 million, and amortization of acquired intangibles was $100.0 million.\n\nKey Financial Highlights\nRevenue: $847.3 million (+12.4% YoY)\nNet Income: $142.6 million (+20.6% YoY)\nEPS (Diluted): $3.47\nOperating Margin: 22.1%\nFree Cash Flow: $189.4 million\nCash and Equivalents: $2.1 billion\nTotal Debt: $1.8 billion\nDividend: $0.52 per share (paid October 15, 2025)\n\nForward Guidance\n\nFor the fourth quarter of fiscal year 2025, the company expects revenue in the range of $880 million to $910 million and adjusted EBITDA margin of 28 to 30 percent. For the full fiscal year 2025, revenue guidance has been raised to $3.35 billion to $3.42 billion, up from the previous range of $3.25 billion to $3.35 billion.",
+  "document_sha256": "0044c58e37e49c05b55288a620ce450c594d2c640962ef11988efb4b0f818cd4",
+  "document_bytes": 2213,
+  "structure": {
+    "doc_type": "financial_report",
+    "doc_structure": "prose_with_tables",
+    "sections": 4,
+    "paragraphs": 4,
+    "tables": 1,
+    "lists": 1
+  },
+  "benchmark_document_id_mapping": {
+    "benchmark_version": "v1",
+    "answerable_examples": 38,
+    "unanswerable_examples": 0,
+    "total": 38,
+    "expected_from_manifest": 38,
+    "matches_manifest": true
+  },
+  "isolated_artifact": true,
+  "production_storage_touched": false
+}
