@@ -1,0 +1,54 @@
+{
+  "run_id": "generation_benchmark_2026-10-18_m4_post_v2",
+  "started_at": "2026-10-18T16:16:08.610504+00:00",
+  "benchmark": "phases\\phase4f\\phase4f_5d\\benchmark\\qa_benchmark_v1.jsonl",
+  "benchmark_sha256": "1166bf4ff38265c209614ac20261417b7eeb43653f4482dfdf94721fd50a41d0",
+  "benchmark_hash_matches_expected": true,
+  "examples_evaluated": 182,
+  "answerable": 140,
+  "unanswerable": 42,
+  "generative_format": "10",
+  "retrieval": "not measured \u2014 benchmark rows are self-contained (context supplied with the row)",
+  "metrics": {
+    "extractive_em": 0.1571,
+    "extractive_f1": 0.3871,
+    "generative_em": 0.15,
+    "generative_f1": 0.3091,
+    "generative_lead_em": 0.15,
+    "generative_lead_f1": 0.2969,
+    "extractive_abstention_unanswerable": 0.0,
+    "extractive_spurious_unanswerable": 1.0,
+    "generative_abstention_unanswerable": 0.9524,
+    "generative_spurious_unanswerable": 0.0476,
+    "generative_empty_rate": 0.4451,
+    "generative_claim_count": 141,
+    "generative_supported_claims": 110,
+    "generative_unsupported_claim_count": 31,
+    "generative_unsupported_claim_rate": 0.2199,
+    "generative_citation_accuracy": 0.7801,
+    "generative_verified_rate": 0.5275,
+    "generative_answerability_gate_abstentions": 47,
+    "generative_withheld_unattributable": 34,
+    "generative_status_counts": {
+      "INSUFFICIENT_EVIDENCE": 81,
+      "SUPPORTED": 96,
+      "PARTIALLY_SUPPORTED": 5
+    }
+  },
+  "latency_ms": {
+    "generative_p50": 329.5,
+    "generative_p95": 1506.2,
+    "generative_max": 4179
+  },
+  "failure_categories_answerable": {
+    "incorrect_answer": 73,
+    "empty_or_abstained": 41,
+    "none": 21,
+    "partially_supported": 5
+  },
+  "notes": [
+    "EM/F1 are computed only on answerable rows, using the project's normalise/EM/token-F1 functions.",
+    "The extractive model has no no-answer head, so its abstention is only ever an empty span; the production evidence gate is NOT part of this measurement.",
+    "Faithfulness is measured by the deterministic verifier (lexical attribution), not by human or entailment judging."
+  ]
+}

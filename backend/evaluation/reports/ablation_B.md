@@ -1,0 +1,25 @@
+# Evaluation report — B4_dual_path
+
+- Generated: 2026-10-04T12:46:10.089296+00:00
+- Ablation variant: B
+- Questions: 42
+
+## Metrics (measured)
+
+| metric | value |
+|---|---|
+| evidence_coverage | 1.0000 |
+| exact_match | 0.0000 |
+| factual_grounded | 0.0000 |
+| mrr | 0.0000 |
+| ndcg@5 | 0.0000 |
+| path_agreement | 0.0000 |
+| precision@5 | 0.0000 |
+| recall@5 | 0.0000 |
+| token_f1 | 0.0000 |
+| unsupported_answer | 0.0000 |
+
+## Latency (ms)
+
+- retrieval_mean: 342.7
+- total_mean: 343.2

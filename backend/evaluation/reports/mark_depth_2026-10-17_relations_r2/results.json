@@ -1,0 +1,412 @@
+{
+  "summary": {
+    "run_id": "mark_depth_2026-10-17",
+    "started_at": "2026-10-17T18:38:03.980464+00:00",
+    "model": "google/flan-t5-base",
+    "fixture": "field-robotics-manual.pdf (synthetic, 6 sections)",
+    "questions": 5,
+    "formats": [
+      "5",
+      "10",
+      "15"
+    ],
+    "by_marks": {
+      "5": {
+        "answers": 5,
+        "mean_words": 16.4,
+        "mean_sentences": 1.2,
+        "mean_key_fact_recall": 0.417,
+        "mean_distinct_blocks": 0,
+        "max_redundancy": 0.222,
+        "supported_rate": 0.8,
+        "unsupported_claim_rate": 0.167,
+        "latency_p50_ms": 1741,
+        "latency_p95_ms": 3238
+      },
+      "10": {
+        "answers": 5,
+        "mean_words": 44.4,
+        "mean_sentences": 3.4,
+        "mean_key_fact_recall": 0.567,
+        "mean_distinct_blocks": 1.2,
+        "max_redundancy": 0.222,
+        "supported_rate": 0.8,
+        "unsupported_claim_rate": 0.059,
+        "latency_p50_ms": 1748,
+        "latency_p95_ms": 3763
+      },
+      "15": {
+        "answers": 5,
+        "mean_words": 68.4,
+        "mean_sentences": 5.4,
+        "mean_key_fact_recall": 0.733,
+        "mean_distinct_blocks": 2,
+        "max_redundancy": 0.238,
+        "supported_rate": 0.8,
+        "unsupported_claim_rate": 0.037,
+        "latency_p50_ms": 2359,
+        "latency_p95_ms": 4927
+      }
+    },
+    "per_question": {
+      "What is calibration and why is it required?": {
+        "5": {
+          "words": 16,
+          "key_fact_recall": 0.5,
+          "distinct_blocks": 0,
+          "status": "SUPPORTED"
+        },
+        "10": {
+          "words": 48,
+          "key_fact_recall": 0.5,
+          "distinct_blocks": 2,
+          "status": "SUPPORTED"
+        },
+        "15": {
+          "words": 86,
+          "key_fact_recall": 1.0,
+          "distinct_blocks": 4,
+          "status": "SUPPORTED"
+        }
+      },
+      "How often is the lidar array calibrated?": {
+        "5": {
+          "words": 0,
+          "key_fact_recall": 0.0,
+          "distinct_blocks": 0,
+          "status": "INSUFFICIENT_EVIDENCE"
+        },
+        "10": {
+          "words": 0,
+          "key_fact_recall": 0.0,
+          "distinct_blocks": 0,
+          "status": "INSUFFICIENT_EVIDENCE"
+        },
+        "15": {
+          "words": 0,
+          "key_fact_recall": 0.0,
+          "distinct_blocks": 0,
+          "status": "INSUFFICIENT_EVIDENCE"
+        }
+      },
+      "What are the steps of the calibration procedure?": {
+        "5": {
+          "words": 40,
+          "key_fact_recall": 0.75,
+          "distinct_blocks": 0,
+          "status": "SUPPORTED"
+        },
+        "10": {
+          "words": 83,
+          "key_fact_recall": 1.0,
+          "distinct_blocks": 1,
+          "status": "SUPPORTED"
+        },
+        "15": {
+          "words": 121,
+          "key_fact_recall": 1.0,
+          "distinct_blocks": 3,
+          "status": "SUPPORTED"
+        }
+      },
+      "Compare manual and automated calibration.": {
+        "5": {
+          "words": 17,
+          "key_fact_recall": 0.5,
+          "distinct_blocks": 0,
+          "status": "SUPPORTED"
+        },
+        "10": {
+          "words": 40,
+          "key_fact_recall": 1.0,
+          "distinct_blocks": 1,
+          "status": "SUPPORTED"
+        },
+        "15": {
+          "words": 70,
+          "key_fact_recall": 1.0,
+          "distinct_blocks": 1,
+          "status": "SUPPORTED"
+        }
+      },
+      "What happens when a calibration check fails, and what are the limits of calibration?": {
+        "5": {
+          "words": 9,
+          "key_fact_recall": 0.333,
+          "distinct_blocks": 0,
+          "status": "SUPPORTED"
+        },
+        "10": {
+          "words": 51,
+          "key_fact_recall": 0.333,
+          "distinct_blocks": 2,
+          "status": "SUPPORTED"
+        },
+        "15": {
+          "words": 65,
+          "key_fact_recall": 0.667,
+          "distinct_blocks": 2,
+          "status": "SUPPORTED"
+        }
+      }
+    },
+    "monotonic_depth": {
+      "words": true,
+      "key_fact_recall": true
+    }
+  },
+  "results": [
+    {
+      "question": "What is calibration and why is it required?",
+      "kind": "definition",
+      "marks": "5",
+      "answer": "the process of comparing an instrument's reading against a reference standard and correcting the difference",
+      "words": 16,
+      "sentences": 1,
+      "key_fact_recall": 0.5,
+      "distinct_blocks": 0,
+      "redundancy": 0.0,
+      "status": "SUPPORTED",
+      "unsupported_claims": 0,
+      "verified": true,
+      "latency_ms": 1942,
+      "warnings": []
+    },
+    {
+      "question": "What is calibration and why is it required?",
+      "kind": "definition",
+      "marks": "10",
+      "answer": "the process of comparing an instrument's reading against a reference standard and correcting the difference. The lidar array requires calibration every 30 days [2]. Manual calibration needs a technician and takes about two hours [4]. Automated calibration uses the docking station and finishes in twelve minutes [4].",
+      "words": 48,
+      "sentences": 4,
+      "key_fact_recall": 0.5,
+      "distinct_blocks": 2,
+      "redundancy": 0.15,
+      "status": "SUPPORTED",
+      "unsupported_claims": 0,
+      "verified": true,
+      "latency_ms": 1748,
+      "warnings": []
+    },
+    {
+      "question": "What is calibration and why is it required?",
+      "kind": "definition",
+      "marks": "15",
+      "answer": "The process of comparing an instrument's reading against a reference standard and correcting the difference.\n\n- The lidar array requires calibration every 30 days [2].\n- Manual calibration needs a technician and takes about two hours [4].\n- Automated calibration uses the docking station and finishes in twelve minutes [4].\n- A failed calibration check blocks the robot from dispatch until it is resolved [5].\n- The calibration programme keeps every field robot within its measurement tolerance [1].\n- Each robot is assigned a calibration owner in the fleet register [1].",
+      "words": 86,
+      "sentences": 7,
+      "key_fact_recall": 1.0,
+      "distinct_blocks": 4,
+      "redundancy": 0.238,
+      "status": "SUPPORTED",
+      "unsupported_claims": 0,
+      "verified": true,
+      "latency_ms": 1844,
+      "warnings": []
+    },
+    {
+      "question": "How often is the lidar array calibrated?",
+      "kind": "factual",
+      "marks": "5",
+      "answer": "",
+      "words": 0,
+      "sentences": 0,
+      "key_fact_recall": 0.0,
+      "distinct_blocks": 0,
+      "redundancy": 0.0,
+      "status": "INSUFFICIENT_EVIDENCE",
+      "unsupported_claims": 1,
+      "verified": false,
+      "latency_ms": 936,
+      "warnings": [
+        "The generated text could not be attributed to any retrieved evidence, so it was withheld."
+      ]
+    },
+    {
+      "question": "How often is the lidar array calibrated?",
+      "kind": "factual",
+      "marks": "10",
+      "answer": "",
+      "words": 0,
+      "sentences": 0,
+      "key_fact_recall": 0.0,
+      "distinct_blocks": 0,
+      "redundancy": 0.0,
+      "status": "INSUFFICIENT_EVIDENCE",
+      "unsupported_claims": 1,
+      "verified": false,
+      "latency_ms": 860,
+      "warnings": [
+        "The generated text could not be attributed to any retrieved evidence, so it was withheld."
+      ]
+    },
+    {
+      "question": "How often is the lidar array calibrated?",
+      "kind": "factual",
+      "marks": "15",
+      "answer": "",
+      "words": 0,
+      "sentences": 0,
+      "key_fact_recall": 0.0,
+      "distinct_blocks": 0,
+      "redundancy": 0.0,
+      "status": "INSUFFICIENT_EVIDENCE",
+      "unsupported_claims": 1,
+      "verified": false,
+      "latency_ms": 1517,
+      "warnings": [
+        "The generated text could not be attributed to any retrieved evidence, so it was withheld."
+      ]
+    },
+    {
+      "question": "What are the steps of the calibration procedure?",
+      "kind": "process",
+      "marks": "5",
+      "answer": "first the robot is parked on a level pad and the reference target is mounted. Second the lidar sweep is recorded and compared with the reference distances. Third the offsets are written to the controller and the sweep is repeated",
+      "words": 40,
+      "sentences": 3,
+      "key_fact_recall": 0.75,
+      "distinct_blocks": 0,
+      "redundancy": 0.222,
+      "status": "SUPPORTED",
+      "unsupported_claims": 0,
+      "verified": true,
+      "latency_ms": 3238,
+      "warnings": []
+    },
+    {
+      "question": "What are the steps of the calibration procedure?",
+      "kind": "process",
+      "marks": "10",
+      "answer": "first the robot is parked on a level pad and the reference target is mounted. Second the lidar sweep is recorded and compared with the reference distances. Third the offsets are written to the controller and the sweep is repeated. The calibration programme keeps every field robot within its measurement tolerance [1]. Calibration is the process of comparing an instrument's reading against a reference standard and correcting the difference [1]. Each robot is assigned a calibration owner in the fleet register [1].",
+      "words": 83,
+      "sentences": 6,
+      "key_fact_recall": 1.0,
+      "distinct_blocks": 1,
+      "redundancy": 0.222,
+      "status": "SUPPORTED",
+      "unsupported_claims": 0,
+      "verified": true,
+      "latency_ms": 3763,
+      "warnings": []
+    },
+    {
+      "question": "What are the steps of the calibration procedure?",
+      "kind": "process",
+      "marks": "15",
+      "answer": "First the robot is parked on a level pad and the reference target is mounted. Second the lidar sweep is recorded and compared with the reference distances. Third the offsets are written to the controller and the sweep is repeated. Finally the result is signed off in the maintenance log.\n\n- The calibration programme keeps every field robot within its measurement tolerance [1].\n- Calibration is the process of comparing an instrument's reading against a reference standard and correcting the difference [1].\n- Each robot is assigned a calibration owner in the fleet register [1].\n- Calibration follows four steps [3].\n- Manual calibration needs a technician and takes about two hours [4].\n- Automated calibration uses the docking station and finishes in twelve minutes [4].",
+      "words": 121,
+      "sentences": 10,
+      "key_fact_recall": 1.0,
+      "distinct_blocks": 3,
+      "redundancy": 0.222,
+      "status": "SUPPORTED",
+      "unsupported_claims": 0,
+      "verified": true,
+      "latency_ms": 4927,
+      "warnings": []
+    },
+    {
+      "question": "Compare manual and automated calibration.",
+      "kind": "comparison",
+      "marks": "5",
+      "answer": "Manual calibration is more accurate on damaged hardware, while automated calibration is cheaper for a large fleet.",
+      "words": 17,
+      "sentences": 1,
+      "key_fact_recall": 0.5,
+      "distinct_blocks": 0,
+      "redundancy": 0.0,
+      "status": "SUPPORTED",
+      "unsupported_claims": 0,
+      "verified": true,
+      "latency_ms": 1741,
+      "warnings": []
+    },
+    {
+      "question": "Compare manual and automated calibration.",
+      "kind": "comparison",
+      "marks": "10",
+      "answer": "Manual calibration is more accurate on damaged hardware, while automated calibration is cheaper for a large fleet. Manual calibration needs a technician and takes about two hours [4]. Automated calibration uses the docking station and finishes in twelve minutes [4].",
+      "words": 40,
+      "sentences": 3,
+      "key_fact_recall": 1.0,
+      "distinct_blocks": 1,
+      "redundancy": 0.15,
+      "status": "SUPPORTED",
+      "unsupported_claims": 0,
+      "verified": true,
+      "latency_ms": 1750,
+      "warnings": [
+        "The evidence supports only 2 additional point(s), so the answer is shorter than a 10-mark answer normally allows; nothing was invented to fill the gap."
+      ]
+    },
+    {
+      "question": "Compare manual and automated calibration.",
+      "kind": "comparison",
+      "marks": "15",
+      "answer": "Calibration is the process of comparing an instrument's reading against a reference standard and correcting the difference. Each robot is assigned a calibration owner in the fleet register.\n\n- Manual calibration needs a technician and takes about two hours [4].\n- Automated calibration uses the docking station and finishes in twelve minutes [4].\n- Manual calibration is more accurate on damaged hardware, while automated calibration is cheaper for a large fleet [4].",
+      "words": 70,
+      "sentences": 5,
+      "key_fact_recall": 1.0,
+      "distinct_blocks": 1,
+      "redundancy": 0.174,
+      "status": "SUPPORTED",
+      "unsupported_claims": 0,
+      "verified": true,
+      "latency_ms": 2646,
+      "warnings": [
+        "The evidence supports only 3 additional point(s), so the answer is shorter than a 15-mark answer normally allows; nothing was invented to fill the gap."
+      ]
+    },
+    {
+      "question": "What happens when a calibration check fails, and what are the limits of calibration?",
+      "kind": "explanation",
+      "marks": "5",
+      "answer": "blocks the robot from dispatch until it is resolved",
+      "words": 9,
+      "sentences": 1,
+      "key_fact_recall": 0.333,
+      "distinct_blocks": 0,
+      "redundancy": 0.0,
+      "status": "SUPPORTED",
+      "unsupported_claims": 0,
+      "verified": true,
+      "latency_ms": 1148,
+      "warnings": []
+    },
+    {
+      "question": "What happens when a calibration check fails, and what are the limits of calibration?",
+      "kind": "explanation",
+      "marks": "10",
+      "answer": "blocks the robot from dispatch until it is resolved. Calibration is the process of comparing an instrument's reading against a reference standard and correcting the difference [1]. Manual calibration needs a technician and takes about two hours [4]. Automated calibration uses the docking station and finishes in twelve minutes [4].",
+      "words": 51,
+      "sentences": 4,
+      "key_fact_recall": 0.333,
+      "distinct_blocks": 2,
+      "redundancy": 0.15,
+      "status": "SUPPORTED",
+      "unsupported_claims": 0,
+      "verified": true,
+      "latency_ms": 1157,
+      "warnings": []
+    },
+    {
+      "question": "What happens when a calibration check fails, and what are the limits of calibration?",
+      "kind": "explanation",
+      "marks": "15",
+      "answer": "A failed calibration check blocks the robot from dispatch until it is resolved. Repeated failures on the same axis indicate a worn bearing.\n\n- Calibration is the process of comparing an instrument's reading against a reference standard and correcting the difference [1].\n- Manual calibration needs a technician and takes about two hours [4].\n- Automated calibration uses the docking station and finishes in twelve minutes [4].",
+      "words": 65,
+      "sentences": 5,
+      "key_fact_recall": 0.667,
+      "distinct_blocks": 2,
+      "redundancy": 0.15,
+      "status": "SUPPORTED",
+      "unsupported_claims": 0,
+      "verified": true,
+      "latency_ms": 2359,
+      "warnings": [
+        "The evidence supports only 3 additional point(s), so the answer is shorter than a 15-mark answer normally allows; nothing was invented to fill the gap."
+      ]
+    }
+  ]
+}

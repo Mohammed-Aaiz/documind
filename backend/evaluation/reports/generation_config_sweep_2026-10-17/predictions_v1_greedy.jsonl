@@ -1,0 +1,182 @@
+{"example_id": "unans_fb3b3426", "unanswerable": true, "gold": "", "answer": "", "em": true, "f1": 1.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "tc_e7eb93d1", "unanswerable": false, "gold": "2010", "answer": "2010 exceeded $150M in revenue.", "em": false, "f1": 0.3333, "status": "SUPPORTED"}
+{"example_id": "ds_0ea2924f", "unanswerable": false, "gold": "142.6 million", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "sec_569eed5a", "unanswerable": false, "gold": "Transformation Era (2011-2020)", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "li_bad3c899", "unanswerable": false, "gold": "CFO: Robert Tanaka (since March 2019)", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "unans_ecebc88c", "unanswerable": true, "gold": "", "answer": "", "em": true, "f1": 1.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "unans_63ece8c5", "unanswerable": true, "gold": "", "answer": "", "em": true, "f1": 1.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "unans_7a9ef8c8", "unanswerable": true, "gold": "", "answer": "", "em": true, "f1": 1.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "unans_ee310eea", "unanswerable": true, "gold": "", "answer": "", "em": true, "f1": 1.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "num_bbca5ac4", "unanswerable": false, "gold": "$185 million", "answer": "$185 million", "em": true, "f1": 1.0, "status": "SUPPORTED"}
+{"example_id": "li_a4253b0c", "unanswerable": false, "gold": "COO: Elena Vasquez (since June 2021)", "answer": "Elena Vasquez", "em": false, "f1": 0.5, "status": "SUPPORTED"}
+{"example_id": "sec_36174b7c", "unanswerable": false, "gold": "Endpoints", "answer": "The API exposes RESTful endpoints under the base URL https://api.example.com/v2. All responses are JSON-encoded", "em": false, "f1": 0.1429, "status": "SUPPORTED"}
+{"example_id": "ds_59f2d6c6", "unanswerable": false, "gold": "3.35 billion ", "answer": "$3.35 billion", "em": false, "f1": 0.5, "status": "SUPPORTED"}
+{"example_id": "sec_4d47a64a", "unanswerable": false, "gold": "Dataset Overview", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "tc_539226f6", "unanswerable": false, "gold": "2006", "answer": "2006 was the year Revenue (USD) and Employees were the key milestone.", "em": false, "f1": 0.1667, "status": "SUPPORTED"}
+{"example_id": "num_95ee7e56", "unanswerable": false, "gold": "200", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "num_ecc1df08", "unanswerable": false, "gold": "45", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "tc_0ddace85", "unanswerable": false, "gold": "$178.0M", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "tr_a4210d62", "unanswerable": false, "gold": "Pressure | hPa | 954.2 | 1083.8 | 1013.2 | 0.1%", "answer": "[1] (benchmark-context) Variable | Unit | Min | Max | Mean Missing % Pressure | hPa | 954.2 | 1083.8 | 1013.2", "em": false, "f1": 0.5455, "status": "SUPPORTED"}
+{"example_id": "unans_04664035", "unanswerable": true, "gold": "", "answer": "", "em": true, "f1": 1.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "ds_1332ff96", "unanswerable": false, "gold": "40 percent", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "unans_4725a75e", "unanswerable": true, "gold": "", "answer": "", "em": true, "f1": 1.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "unans_de20050d", "unanswerable": true, "gold": "", "answer": "", "em": true, "f1": 1.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "lc_a5d50a79", "unanswerable": false, "gold": "$4,900 ", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "unans_e1454d12", "unanswerable": true, "gold": "", "answer": "", "em": true, "f1": 1.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "tc_fceaa66a", "unanswerable": false, "gold": "$61,250", "answer": "$61,250", "em": true, "f1": 1.0, "status": "SUPPORTED"}
+{"example_id": "ds_b1acb91a", "unanswerable": false, "gold": "753.8 million ", "answer": "$753.8 million", "em": false, "f1": 0.5, "status": "SUPPORTED"}
+{"example_id": "unans_885f9d0e", "unanswerable": true, "gold": "", "answer": "", "em": true, "f1": 1.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "tr_a50b71eb", "unanswerable": false, "gold": "Standard | 100 req/min | 150 req/min | 500,000 requests", "answer": "100 req/min, 150 requ/min and 500,000 requests", "em": false, "f1": 0.5714, "status": "SUPPORTED"}
+{"example_id": "num_1910985d", "unanswerable": false, "gold": "$2.1 billion", "answer": "$2.1 billion", "em": true, "f1": 1.0, "status": "SUPPORTED"}
+{"example_id": "tr_7e68327d", "unanswerable": false, "gold": "GET | /documents/{id} | Get document details | Yes", "answer": "document details", "em": false, "f1": 0.5, "status": "SUPPORTED"}
+{"example_id": "tc_6dd05b59", "unanswerable": false, "gold": "20 req/min", "answer": "20 req/min", "em": true, "f1": 1.0, "status": "SUPPORTED"}
+{"example_id": "tr_5cc553db", "unanswerable": false, "gold": "Precipitation | mm | 0.0 | 127.3 | 0.8 | 1.2%", "answer": "mm, 0.0, 127.3, 0.8, 1.2%", "em": false, "f1": 0.1667, "status": "SUPPORTED"}
+{"example_id": "ds_199662bc", "unanswerable": false, "gold": "0.4 percent", "answer": "0.4 percent", "em": true, "f1": 1.0, "status": "SUPPORTED"}
+{"example_id": "sec_5e1deffc", "unanswerable": false, "gold": "Station Distribution", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "unans_a60eda2e", "unanswerable": true, "gold": "", "answer": "", "em": true, "f1": 1.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "tc_a7432939", "unanswerable": false, "gold": "Q2 2025", "answer": "$61,250", "em": false, "f1": 0.0, "status": "SUPPORTED"}
+{"example_id": "num_c190bc80", "unanswerable": false, "gold": "$2.5 million", "answer": "$2.5 million", "em": true, "f1": 1.0, "status": "SUPPORTED"}
+{"example_id": "unans_496d4272", "unanswerable": true, "gold": "", "answer": "", "em": true, "f1": 1.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "tc_8faf2be8", "unanswerable": false, "gold": "650", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "sec_ac7f0172", "unanswerable": false, "gold": "Intellectual Property", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "tc_8340538b", "unanswerable": false, "gold": "1,000 req/min", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "tr_52b005d3", "unanswerable": false, "gold": "2006 | $52.1M | 280 | IPO on NASDAQ", "answer": "Revenue (USD) and employees", "em": false, "f1": 0.0, "status": "SUPPORTED"}
+{"example_id": "tr_c9fd7fdb", "unanswerable": false, "gold": "Professional Services | $147.7M | $141.8M | +4.2%", "answer": "$147.7M | $141.8M | +4.2%", "em": false, "f1": 0.8, "status": "SUPPORTED"}
+{"example_id": "li_ab55f3c4", "unanswerable": false, "gold": "CEO: Dr. Sarah Chen (since January 2022)", "answer": "Dr. Sarah Chen", "em": false, "f1": 0.6, "status": "PARTIALLY_SUPPORTED"}
+{"example_id": "tc_f3617604", "unanswerable": false, "gold": "mm", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "ds_b4e49165", "unanswerable": false, "gold": "1 hour", "answer": "1 hour", "em": true, "f1": 1.0, "status": "SUPPORTED"}
+{"example_id": "tr_11a2c534", "unanswerable": false, "gold": "Temperature | degrees Celsius | -42.3 | 48.7 | 12.4 | 0.3%", "answer": "[1] (benchmark-context) Variable | Unit | Min | Max | Mean Missing % Temperature degrees Celsius -42.3 | 48.7 | 12.4 | 0.3%", "em": false, "f1": 0.64, "status": "SUPPORTED"}
+{"example_id": "ds_9e3b4897", "unanswerable": false, "gold": "48.7 percent", "answer": "48.7 percent", "em": true, "f1": 1.0, "status": "SUPPORTED"}
+{"example_id": "mc_98a6aef8", "unanswerable": false, "gold": "7.4 million", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "tc_5f43398e", "unanswerable": false, "gold": "Temperature", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "unans_67e1a2fc", "unanswerable": true, "gold": "", "answer": "", "em": true, "f1": 1.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "ds_91da3093", "unanswerable": false, "gold": "910 million ", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "unans_d7480687", "unanswerable": true, "gold": "", "answer": "", "em": true, "f1": 1.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "num_2b054635", "unanswerable": false, "gold": "$178 million", "answer": "$178 million", "em": true, "f1": 1.0, "status": "SUPPORTED"}
+{"example_id": "unans_29bba51a", "unanswerable": true, "gold": "", "answer": "", "em": true, "f1": 1.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "unans_3b23eb33", "unanswerable": true, "gold": "", "answer": "", "em": true, "f1": 1.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "sec_cff07693", "unanswerable": false, "gold": "Rate Limits", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "sec_70c7b5b7", "unanswerable": false, "gold": "Forward Guidance", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "sec_e95f766d", "unanswerable": false, "gold": "Fees and Payment", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "num_ae8b0a75", "unanswerable": false, "gold": "$198.3 million", "answer": "$198.3 million", "em": true, "f1": 1.0, "status": "SUPPORTED"}
+{"example_id": "li_39ef9936", "unanswerable": false, "gold": "GeoClimate-2024: A Comprehensive Meteorological Dataset for the Continental United States.", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "mc_c70ece64", "unanswerable": false, "gold": "142.6 million", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "lc_24daf442", "unanswerable": false, "gold": "18.7 billion", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "tr_70ecedca", "unanswerable": false, "gold": "Visibility | km | 0.1 | 50.0 | 14.7 | 0.8%", "answer": "[1] (benchmark-context) Variable | Unit | Min | Max | Mean Missing % Visibility | km 0.1 | 50.0 | 14.7 | 0.8%", "em": false, "f1": 0.6087, "status": "SUPPORTED"}
+{"example_id": "ds_98c13a6f", "unanswerable": false, "gold": "127.3 million", "answer": "amortization of acquired intangibles was $100", "em": false, "f1": 0.0, "status": "SUPPORTED"}
+{"example_id": "li_631f3671", "unanswerable": false, "gold": "Free Cash Flow: $189.4 million", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "unans_520918ca", "unanswerable": true, "gold": "", "answer": "", "em": true, "f1": 1.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "unans_02ea167f", "unanswerable": true, "gold": "", "answer": "", "em": true, "f1": 1.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "unans_691bae51", "unanswerable": true, "gold": "", "answer": "", "em": true, "f1": 1.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "li_1f72c296", "unanswerable": false, "gold": "Operating Margin: 22.1%", "answer": "Revenue: $847.3 million (+12.4% YoY) Net Income: $142.6 million (+20.6% YoY), EPS (Diluted): $3.47 Operating Margin: 22.1% Free Cash Flow", "em": false, "f1": 0.2727, "status": "SUPPORTED"}
+{"example_id": "unans_b415e6a3", "unanswerable": true, "gold": "", "answer": "", "em": true, "f1": 1.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "sec_c00a7fc1", "unanswerable": false, "gold": "Operating Expenses", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "ds_abba258f", "unanswerable": false, "gold": "30 percent", "answer": "28 to 30 percent", "em": false, "f1": 0.6667, "status": "SUPPORTED"}
+{"example_id": "sec_2ebc9587", "unanswerable": false, "gold": "Revenue Breakdown", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "lc_2cf8dd10", "unanswerable": false, "gold": "$2.5 million", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "lc_04f0bb54", "unanswerable": false, "gold": "2,847 people", "answer": "2,847 people", "em": true, "f1": 1.0, "status": "SUPPORTED"}
+{"example_id": "tr_76e94a42", "unanswerable": false, "gold": "2010 | $178.0M | 650 | Revenue exceeds $150M", "answer": "Revenue exceeds $150M and employees are key milestones.", "em": false, "f1": 0.4, "status": "SUPPORTED"}
+{"example_id": "ds_1764df93", "unanswerable": false, "gold": "8.3 million ", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "num_476d730c", "unanswerable": false, "gold": "$18.50", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "tr_fc37dd5c", "unanswerable": false, "gold": "2001 | $8.3M | 45 | First telecom contracts", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "lc_a85234ce", "unanswerable": false, "gold": "340 million", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "unans_20e56903", "unanswerable": true, "gold": "", "answer": "", "em": true, "f1": 1.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "num_40784c07", "unanswerable": false, "gold": "$412.5 million", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "li_1241980d", "unanswerable": false, "gold": "OAuth 2.0: for third-party integrations", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "li_3927464a", "unanswerable": false, "gold": "Smith, J.A., Johnson, M.K., and Williams, R.T. (2025).", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "ds_025dc00e", "unanswerable": false, "gold": "3.35 billion", "answer": "$3.35 billion", "em": false, "f1": 0.5, "status": "SUPPORTED"}
+{"example_id": "tc_4367bf4e", "unanswerable": false, "gold": "Wind Speed", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "num_4d4de631", "unanswerable": false, "gold": "$18.7 billion", "answer": "$18.7 billion", "em": true, "f1": 1.0, "status": "SUPPORTED"}
+{"example_id": "tr_38d24c64", "unanswerable": false, "gold": "POST | /auth/token | Obtain access token | No", "answer": "/auth/token, Obtain access token", "em": false, "f1": 0.5455, "status": "SUPPORTED"}
+{"example_id": "mc_42e1f7cf", "unanswerable": false, "gold": "3600 seconds", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "num_d93a6164", "unanswerable": false, "gold": "40 percent", "answer": "40 percent", "em": true, "f1": 1.0, "status": "SUPPORTED"}
+{"example_id": "tr_b0ffbc0f", "unanswerable": false, "gold": "DELETE | /documents/{id} | Delete a document | Yes", "answer": "Auth Required", "em": false, "f1": 0.0, "status": "SUPPORTED"}
+{"example_id": "li_417011c7", "unanswerable": false, "gold": "Internal data analysis and reporting", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "unans_a042521b", "unanswerable": true, "gold": "", "answer": "", "em": true, "f1": 1.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "ds_e21b45e0", "unanswerable": false, "gold": "185 million", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "li_050b38c1", "unanswerable": false, "gold": "EPS (Diluted): $3.47", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "unans_a7ad9d04", "unanswerable": true, "gold": "", "answer": "", "em": true, "f1": 1.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "num_1ae85d6b", "unanswerable": false, "gold": "$1.24 billion", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "li_938c278e", "unanswerable": false, "gold": "Journal of Climate Data, 12(3), 45-67. DOI: 10.1234/jcd.2025.0123", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "tc_115f3133", "unanswerable": false, "gold": "500,000 requests", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "tc_479dca78", "unanswerable": false, "gold": "Enterprise Solutions", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "num_4460eb2e", "unanswerable": false, "gold": "50", "answer": "50 items", "em": false, "f1": 0.6667, "status": "SUPPORTED"}
+{"example_id": "unans_a334de2c", "unanswerable": true, "gold": "", "answer": "", "em": true, "f1": 1.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "unans_422d6ea0", "unanswerable": true, "gold": "", "answer": "", "em": true, "f1": 1.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "unans_a603100e", "unanswerable": true, "gold": "", "answer": "", "em": true, "f1": 1.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "mc_f03f1a93", "unanswerable": false, "gold": "1.5 percent", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "mc_7d94f7cc", "unanswerable": false, "gold": "287.1 million", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "ds_c8d09ef8", "unanswerable": false, "gold": "118.2 million", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "li_624603d6", "unanswerable": false, "gold": "Use by Licensee's employees and authorized contractors", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "tr_ddbb3252", "unanswerable": false, "gold": "POST | /qa/ask | Ask a question | Yes", "answer": "Auth required", "em": false, "f1": 0.0, "status": "SUPPORTED"}
+{"example_id": "ds_e1d452da", "unanswerable": false, "gold": "425 million ", "answer": "revenue of $425 million by fiscal year 2020", "em": false, "f1": 0.2, "status": "SUPPORTED"}
+{"example_id": "unans_7a4e5b72", "unanswerable": true, "gold": "", "answer": "", "em": true, "f1": 1.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "lc_430b8915", "unanswerable": false, "gold": "650 people", "answer": "200 employees", "em": false, "f1": 0.0, "status": "SUPPORTED"}
+{"example_id": "sec_5ecaad37", "unanswerable": false, "gold": "Founding and Early Years", "answer": "Founding and Early Years", "em": true, "f1": 1.0, "status": "SUPPORTED"}
+{"example_id": "unans_89493393", "unanswerable": true, "gold": "", "answer": "", "em": true, "f1": 1.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "li_70d2f27a", "unanswerable": false, "gold": "Dividend: $0.52 per share (paid October 15, 2025)", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "unans_7b46d69d", "unanswerable": true, "gold": "", "answer": "", "em": true, "f1": 1.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "ds_dbc2f9ba", "unanswerable": false, "gold": "3.42 billion", "answer": "$3.42 billion", "em": false, "f1": 0.5, "status": "SUPPORTED"}
+{"example_id": "tc_06f5c7e8", "unanswerable": false, "gold": "+4.2%", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "ds_9e814812", "unanswerable": false, "gold": "30 days", "answer": "30 days", "em": true, "f1": 1.0, "status": "SUPPORTED"}
+{"example_id": "unans_39b0bf0c", "unanswerable": true, "gold": "", "answer": "", "em": true, "f1": 1.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "tc_43fb1739", "unanswerable": false, "gold": "2.1", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "ds_1efed7c7", "unanswerable": false, "gold": "20.3 percent", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "num_b5827831", "unanswerable": false, "gold": "$4,900", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "num_6b7e6d26", "unanswerable": false, "gold": "12.4 percent", "answer": "12.4 percent", "em": true, "f1": 1.0, "status": "SUPPORTED"}
+{"example_id": "sec_2204bf8b", "unanswerable": false, "gold": "License Grant", "answer": "Licensee a non-exclusive, non-transferable, revocable license to install and use the Software on up to 50 concurrent devices for Licensee's internal business purposes only", "em": false, "f1": 0.08, "status": "SUPPORTED"}
+{"example_id": "sec_ce282b61", "unanswerable": false, "gold": "Present Day (2021-Present)", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "unans_1b510697", "unanswerable": true, "gold": "", "answer": "", "em": true, "f1": 1.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "tr_1b1273ff", "unanswerable": false, "gold": "Q3 2025 | $61,250 | October 15, 2025", "answer": "Amount (USD) and Due Date", "em": false, "f1": 0.0, "status": "SUPPORTED"}
+{"example_id": "li_a4eb60b5", "unanswerable": false, "gold": "mTLS: for high-security environments (mutual TLS client certificates)", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "num_4c6d491a", "unanswerable": false, "gold": "$425 million", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "num_930d8bfe", "unanswerable": false, "gold": "120", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "sec_4aeb4d54", "unanswerable": false, "gold": "Data Quality", "answer": "overall data completeness is 99.1 percent", "em": false, "f1": 0.25, "status": "SUPPORTED"}
+{"example_id": "unans_03d364a3", "unanswerable": true, "gold": "", "answer": "$52,000", "em": false, "f1": 0.0, "status": "SUPPORTED"}
+{"example_id": "tc_78ac63a0", "unanswerable": false, "gold": "$0.0M", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "mc_3c4ff454", "unanswerable": false, "gold": "234.5 million", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "unans_f6563cea", "unanswerable": true, "gold": "", "answer": "", "em": true, "f1": 1.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "tc_c7763cee", "unanswerable": false, "gold": "km", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "lc_ec10c85a", "unanswerable": false, "gold": "5 engineers", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "ds_df08a5cf", "unanswerable": false, "gold": "9.7 percent", "answer": "growth 9.7 percent year-over-year", "em": false, "f1": 0.6667, "status": "SUPPORTED"}
+{"example_id": "mc_f89ad49d", "unanswerable": false, "gold": "40 percent", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "ds_77360f42", "unanswerable": false, "gold": "412.5 million ", "answer": "$412.5 million", "em": false, "f1": 0.5, "status": "SUPPORTED"}
+{"example_id": "ds_17a97902", "unanswerable": false, "gold": "1.5 percent", "answer": "1.5 percent", "em": true, "f1": 1.0, "status": "SUPPORTED"}
+{"example_id": "unans_8afe7d03", "unanswerable": true, "gold": "", "answer": "", "em": true, "f1": 1.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "ds_02be1eaa", "unanswerable": false, "gold": "86400 seconds", "answer": "86400 seconds", "em": true, "f1": 1.0, "status": "SUPPORTED"}
+{"example_id": "num_69073ebd", "unanswerable": false, "gold": "$245,000", "answer": "$245,000 USD", "em": false, "f1": 0.6667, "status": "SUPPORTED"}
+{"example_id": "li_48a0f64c", "unanswerable": false, "gold": "JWT Bearer Token: standard for web applications", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "tr_805c4436", "unanswerable": false, "gold": "Q4 2025 | $61,250 | January 15, 2026", "answer": "Amount (USD) and Due Date", "em": false, "f1": 0.0, "status": "SUPPORTED"}
+{"example_id": "unans_3a0430bc", "unanswerable": true, "gold": "", "answer": "", "em": true, "f1": 1.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "ds_836b6624", "unanswerable": false, "gold": "880 million ", "answer": "$880 million", "em": false, "f1": 0.5, "status": "SUPPORTED"}
+{"example_id": "mc_c48b3cae", "unanswerable": false, "gold": "178 million", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "li_f17cfdc6", "unanswerable": false, "gold": "Net Income: $142.6 million (+20.6% YoY)", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "unans_0badce8d", "unanswerable": true, "gold": "", "answer": "", "em": true, "f1": 1.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "unans_08af12b6", "unanswerable": true, "gold": "", "answer": "", "em": true, "f1": 1.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "lc_da432ea1", "unanswerable": false, "gold": "$185 million", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "lc_f2a172cc", "unanswerable": false, "gold": "2.5 million", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "tc_dcc6b88d", "unanswerable": false, "gold": "1.2%", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "tr_175064d5", "unanswerable": false, "gold": "Cloud Services | $287.1M | $261.7M | +9.7%", "answer": "$287.1M, $261.7M, +9.7%", "em": false, "f1": 0.2222, "status": "SUPPORTED"}
+{"example_id": "tc_e8b586d5", "unanswerable": false, "gold": "2001", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "num_ebb0173c", "unanswerable": false, "gold": "$142.6 million", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "unans_20bbdfeb", "unanswerable": true, "gold": "", "answer": "", "em": true, "f1": 1.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "unans_2a3dd2f6", "unanswerable": true, "gold": "", "answer": "", "em": true, "f1": 1.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "li_1cd424f2", "unanswerable": false, "gold": "Cash and Equivalents: $2.1 billion", "answer": "Free Cash Flow: $189.4 million Cash and Equivalents: $2.1 billion Total Debt: $1.8 billion Dividend: $0.52 per share (paid October 15, 2025)", "em": false, "f1": 0.4, "status": "SUPPORTED"}
+{"example_id": "unans_06ccc9f0", "unanswerable": true, "gold": "", "answer": "", "em": true, "f1": 1.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "tc_e75b3a72", "unanswerable": false, "gold": "POST", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "mc_61595d05", "unanswerable": false, "gold": "99.1 percent", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "tc_03298034", "unanswerable": false, "gold": "Other", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "mc_ead1c5b3", "unanswerable": false, "gold": "8.3 million", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "num_c7ebc78d", "unanswerable": false, "gold": "9", "answer": "9 members", "em": false, "f1": 0.6667, "status": "SUPPORTED"}
+{"example_id": "ds_81ce24c7", "unanswerable": false, "gold": "4.2 percent", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "sec_7bd7c2bc", "unanswerable": false, "gold": "Authentication", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "tc_87f00ad1", "unanswerable": false, "gold": "198.4", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "sec_b86b80ef", "unanswerable": false, "gold": "Parties and Effective Date", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "li_af6e2596", "unanswerable": false, "gold": "Testing and quality assurance in non-production environments", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "tc_ecf59722", "unanswerable": false, "gold": "954.2", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "li_4e29c4e5", "unanswerable": false, "gold": "CTO: James Whitfield (co-founder, since 1998)", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "unans_0e172594", "unanswerable": true, "gold": "", "answer": "", "em": true, "f1": 1.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "li_5a304295", "unanswerable": false, "gold": "Integration with Licensee's proprietary platforms", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "lc_dad0e4e6", "unanswerable": false, "gold": "1,000 employees", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "unans_e25b96fd", "unanswerable": true, "gold": "", "answer": "", "em": true, "f1": 1.0, "status": "INSUFFICIENT_EVIDENCE"}
+{"example_id": "tc_1658c1fb", "unanswerable": false, "gold": "4.2", "answer": "", "em": false, "f1": 0.0, "status": "INSUFFICIENT_EVIDENCE"}

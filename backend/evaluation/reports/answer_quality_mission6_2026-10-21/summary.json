@@ -1,0 +1,54 @@
+{
+  "run_id": "answer_quality_mission6_2026-10-21",
+  "benchmark": "phases\\phase4f\\phase4f_5d\\benchmark\\qa_benchmark_v1.jsonl",
+  "benchmark_sha256": "1166bf4ff38265c209614ac20261417b7eeb43653f4482dfdf94721fd50a41d0",
+  "benchmark_hash_matches_expected": true,
+  "dataset_version": "answer_claims_v2",
+  "dataset_sha256": "f06795eb5034133d8dc600a4685621dc0999f4a00b71afa0f490731e0aecad88",
+  "previous_run": "generation_benchmark_2026-10-18_m5_post_v1_r2",
+  "current_run": "generation_benchmark_2026-10-21_m6_post_v1",
+  "rows": 182,
+  "answerable": 140,
+  "unanswerable": 42,
+  "answerable_answered": 109,
+  "answerable_exact": 63,
+  "previous_answerable_answered": 100,
+  "previous_answerable_exact": 21,
+  "current_producers": {
+    "deterministic_table": 40,
+    "withheld_unattributable": 20,
+    "model_generated": 69,
+    "gate_refusal": 11
+  },
+  "error_categories": {
+    "correct abstention": 40,
+    "none (table lookup)": 40,
+    "false abstention or withholding": 20,
+    "incorrect answer to an answerable question": 39,
+    "none": 23,
+    "false answerability-gate refusal": 11,
+    "metric or annotation artifact": 7,
+    "spurious answer to an unanswerable question": 2
+  },
+  "changes": {
+    "unchanged": 140,
+    "answer_changed": 33,
+    "answer_added_exact": 9
+  },
+  "regressions": {
+    "lost_answer": [],
+    "exact_to_not_exact": [],
+    "new_spurious_unanswerable": []
+  },
+  "unknown_fields": [
+    "claim_extraction_error",
+    "addresses_question (except exact matches)",
+    "complete_enough (except exact matches)",
+    "requested_attribute_identified (except exact matches)"
+  ],
+  "notes": [
+    "One record per benchmark row; no model inference is performed by this script.",
+    "Claim annotations (answer_claims_v2) were made against the Mission 5 answers, so they describe the previous run column, not the current one.",
+    "EM/F1 use the project's shared normalisation (evaluation.qa_metrics)."
+  ]
+}

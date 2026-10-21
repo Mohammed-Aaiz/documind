@@ -1,0 +1,3755 @@
+{
+  "analysis": "denominator-sensitivity",
+  "analysisVersion": "denominator-sensitivity-v1",
+  "corpora": {
+    "heading": {
+      "corpus": "heading",
+      "notApplicable": [
+        {
+          "corpus": "heading",
+          "metric": "factual_grounded",
+          "reason": "An alternate population is documented (answered questions, per qa_metrics.factual_grounding_rate), but per-question answered-ness is not present in the frozen production-aligned reports (their to_dict omits detail.predicted/insufficient_context). Recomputing it would require re-running the experiment or changing the frozen report schema, so no sensitivity value is produced here.",
+          "status": "not_applicable",
+          "variant": "A"
+        },
+        {
+          "corpus": "heading",
+          "metric": "path_agreement",
+          "reason": "No alternate population is documented; path_agreement is a per-question binary property of the retrieved source paths that is defined for every question regardless of answerability, so there is no population to switch.",
+          "status": "not_applicable",
+          "variant": "A"
+        },
+        {
+          "corpus": "heading",
+          "metric": "factual_grounded",
+          "reason": "An alternate population is documented (answered questions, per qa_metrics.factual_grounding_rate), but per-question answered-ness is not present in the frozen production-aligned reports (their to_dict omits detail.predicted/insufficient_context). Recomputing it would require re-running the experiment or changing the frozen report schema, so no sensitivity value is produced here.",
+          "status": "not_applicable",
+          "variant": "B"
+        },
+        {
+          "corpus": "heading",
+          "metric": "path_agreement",
+          "reason": "No alternate population is documented; path_agreement is a per-question binary property of the retrieved source paths that is defined for every question regardless of answerability, so there is no population to switch.",
+          "status": "not_applicable",
+          "variant": "B"
+        },
+        {
+          "corpus": "heading",
+          "metric": "factual_grounded",
+          "reason": "An alternate population is documented (answered questions, per qa_metrics.factual_grounding_rate), but per-question answered-ness is not present in the frozen production-aligned reports (their to_dict omits detail.predicted/insufficient_context). Recomputing it would require re-running the experiment or changing the frozen report schema, so no sensitivity value is produced here.",
+          "status": "not_applicable",
+          "variant": "C"
+        },
+        {
+          "corpus": "heading",
+          "metric": "path_agreement",
+          "reason": "No alternate population is documented; path_agreement is a per-question binary property of the retrieved source paths that is defined for every question regardless of answerability, so there is no population to switch.",
+          "status": "not_applicable",
+          "variant": "C"
+        },
+        {
+          "corpus": "heading",
+          "metric": "factual_grounded",
+          "reason": "An alternate population is documented (answered questions, per qa_metrics.factual_grounding_rate), but per-question answered-ness is not present in the frozen production-aligned reports (their to_dict omits detail.predicted/insufficient_context). Recomputing it would require re-running the experiment or changing the frozen report schema, so no sensitivity value is produced here.",
+          "status": "not_applicable",
+          "variant": "D"
+        },
+        {
+          "corpus": "heading",
+          "metric": "path_agreement",
+          "reason": "No alternate population is documented; path_agreement is a per-question binary property of the retrieved source paths that is defined for every question regardless of answerability, so there is no population to switch.",
+          "status": "not_applicable",
+          "variant": "D"
+        }
+      ],
+      "records": [
+        {
+          "corpus": "heading",
+          "current": {
+            "n": 23,
+            "population": "all measured questions",
+            "value": 0.847826
+          },
+          "delta": 0.127174,
+          "excluded_questions": 3,
+          "metric": "recall@5",
+          "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+          "sensitivity": {
+            "n": 20,
+            "population": "gold-bearing questions",
+            "value": 0.975
+          },
+          "status": "measured",
+          "variant": "A"
+        },
+        {
+          "corpus": "heading",
+          "current": {
+            "n": 23,
+            "population": "all measured questions",
+            "value": 0.182609
+          },
+          "delta": 0.027391,
+          "excluded_questions": 3,
+          "metric": "precision@5",
+          "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+          "sensitivity": {
+            "n": 20,
+            "population": "gold-bearing questions",
+            "value": 0.21
+          },
+          "status": "measured",
+          "variant": "A"
+        },
+        {
+          "corpus": "heading",
+          "current": {
+            "n": 23,
+            "population": "all measured questions",
+            "value": 0.731884
+          },
+          "delta": 0.109783,
+          "excluded_questions": 3,
+          "metric": "mrr",
+          "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+          "sensitivity": {
+            "n": 20,
+            "population": "gold-bearing questions",
+            "value": 0.841667
+          },
+          "status": "measured",
+          "variant": "A"
+        },
+        {
+          "corpus": "heading",
+          "current": {
+            "n": 23,
+            "population": "all measured questions",
+            "value": 0.756682
+          },
+          "delta": 0.113502,
+          "excluded_questions": 3,
+          "metric": "ndcg@5",
+          "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+          "sensitivity": {
+            "n": 20,
+            "population": "gold-bearing questions",
+            "value": 0.870185
+          },
+          "status": "measured",
+          "variant": "A"
+        },
+        {
+          "corpus": "heading",
+          "current": {
+            "n": 23,
+            "population": "all measured questions",
+            "value": 0.478261
+          },
+          "delta": 0.071739,
+          "excluded_questions": 3,
+          "metric": "exact_match",
+          "population_source": "qa_metrics.answer_accuracy documents the answerable population; run_phase3d/3f/4b aggregate EM/token-F1 over the answerable population.",
+          "sensitivity": {
+            "n": 20,
+            "population": "answerable questions",
+            "value": 0.55
+          },
+          "status": "measured",
+          "variant": "A"
+        },
+        {
+          "corpus": "heading",
+          "current": {
+            "n": 23,
+            "population": "all measured questions",
+            "value": 0.746998
+          },
+          "delta": 0.11205,
+          "excluded_questions": 3,
+          "metric": "token_f1",
+          "population_source": "qa_metrics.answer_accuracy documents the answerable population; run_phase3d/3f/4b aggregate EM/token-F1 over the answerable population.",
+          "sensitivity": {
+            "n": 20,
+            "population": "answerable questions",
+            "value": 0.859048
+          },
+          "status": "measured",
+          "variant": "A"
+        },
+        {
+          "corpus": "heading",
+          "current": {
+            "n": 23,
+            "population": "all measured questions",
+            "value": 1.0
+          },
+          "delta": 0.0,
+          "excluded_questions": 3,
+          "metric": "evidence_coverage",
+          "population_source": "run_phase3d/3f/4b aggregate evidence_coverage over the answerable population.",
+          "sensitivity": {
+            "n": 20,
+            "population": "answerable questions",
+            "value": 1.0
+          },
+          "status": "measured",
+          "variant": "A"
+        },
+        {
+          "corpus": "heading",
+          "current": {
+            "n": 23,
+            "population": "all measured questions",
+            "value": 0.0
+          },
+          "delta": 0.0,
+          "excluded_questions": 3,
+          "metric": "recall@5",
+          "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+          "sensitivity": {
+            "n": 20,
+            "population": "gold-bearing questions",
+            "value": 0.0
+          },
+          "status": "measured",
+          "variant": "B"
+        },
+        {
+          "corpus": "heading",
+          "current": {
+            "n": 23,
+            "population": "all measured questions",
+            "value": 0.0
+          },
+          "delta": 0.0,
+          "excluded_questions": 3,
+          "metric": "precision@5",
+          "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+          "sensitivity": {
+            "n": 20,
+            "population": "gold-bearing questions",
+            "value": 0.0
+          },
+          "status": "measured",
+          "variant": "B"
+        },
+        {
+          "corpus": "heading",
+          "current": {
+            "n": 23,
+            "population": "all measured questions",
+            "value": 0.0
+          },
+          "delta": 0.0,
+          "excluded_questions": 3,
+          "metric": "mrr",
+          "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+          "sensitivity": {
+            "n": 20,
+            "population": "gold-bearing questions",
+            "value": 0.0
+          },
+          "status": "measured",
+          "variant": "B"
+        },
+        {
+          "corpus": "heading",
+          "current": {
+            "n": 23,
+            "population": "all measured questions",
+            "value": 0.0
+          },
+          "delta": 0.0,
+          "excluded_questions": 3,
+          "metric": "ndcg@5",
+          "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+          "sensitivity": {
+            "n": 20,
+            "population": "gold-bearing questions",
+            "value": 0.0
+          },
+          "status": "measured",
+          "variant": "B"
+        },
+        {
+          "corpus": "heading",
+          "current": {
+            "n": 23,
+            "population": "all measured questions",
+            "value": 0.0
+          },
+          "delta": 0.0,
+          "excluded_questions": 3,
+          "metric": "exact_match",
+          "population_source": "qa_metrics.answer_accuracy documents the answerable population; run_phase3d/3f/4b aggregate EM/token-F1 over the answerable population.",
+          "sensitivity": {
+            "n": 20,
+            "population": "answerable questions",
+            "value": 0.0
+          },
+          "status": "measured",
+          "variant": "B"
+        },
+        {
+          "corpus": "heading",
+          "current": {
+            "n": 23,
+            "population": "all measured questions",
+            "value": 0.0
+          },
+          "delta": 0.0,
+          "excluded_questions": 3,
+          "metric": "token_f1",
+          "population_source": "qa_metrics.answer_accuracy documents the answerable population; run_phase3d/3f/4b aggregate EM/token-F1 over the answerable population.",
+          "sensitivity": {
+            "n": 20,
+            "population": "answerable questions",
+            "value": 0.0
+          },
+          "status": "measured",
+          "variant": "B"
+        },
+        {
+          "corpus": "heading",
+          "current": {
+            "n": 23,
+            "population": "all measured questions",
+            "value": 1.0
+          },
+          "delta": 0.0,
+          "excluded_questions": 3,
+          "metric": "evidence_coverage",
+          "population_source": "run_phase3d/3f/4b aggregate evidence_coverage over the answerable population.",
+          "sensitivity": {
+            "n": 20,
+            "population": "answerable questions",
+            "value": 1.0
+          },
+          "status": "measured",
+          "variant": "B"
+        },
+        {
+          "corpus": "heading",
+          "current": {
+            "n": 23,
+            "population": "all measured questions",
+            "value": 0.847826
+          },
+          "delta": 0.127174,
+          "excluded_questions": 3,
+          "metric": "recall@5",
+          "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+          "sensitivity": {
+            "n": 20,
+            "population": "gold-bearing questions",
+            "value": 0.975
+          },
+          "status": "measured",
+          "variant": "C"
+        },
+        {
+          "corpus": "heading",
+          "current": {
+            "n": 23,
+            "population": "all measured questions",
+            "value": 0.182609
+          },
+          "delta": 0.027391,
+          "excluded_questions": 3,
+          "metric": "precision@5",
+          "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+          "sensitivity": {
+            "n": 20,
+            "population": "gold-bearing questions",
+            "value": 0.21
+          },
+          "status": "measured",
+          "variant": "C"
+        },
+        {
+          "corpus": "heading",
+          "current": {
+            "n": 23,
+            "population": "all measured questions",
+            "value": 0.731884
+          },
+          "delta": 0.109783,
+          "excluded_questions": 3,
+          "metric": "mrr",
+          "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+          "sensitivity": {
+            "n": 20,
+            "population": "gold-bearing questions",
+            "value": 0.841667
+          },
+          "status": "measured",
+          "variant": "C"
+        },
+        {
+          "corpus": "heading",
+          "current": {
+            "n": 23,
+            "population": "all measured questions",
+            "value": 0.757851
+          },
+          "delta": 0.113678,
+          "excluded_questions": 3,
+          "metric": "ndcg@5",
+          "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+          "sensitivity": {
+            "n": 20,
+            "population": "gold-bearing questions",
+            "value": 0.871528
+          },
+          "status": "measured",
+          "variant": "C"
+        },
+        {
+          "corpus": "heading",
+          "current": {
+            "n": 23,
+            "population": "all measured questions",
+            "value": 0.434783
+          },
+          "delta": 0.065217,
+          "excluded_questions": 3,
+          "metric": "exact_match",
+          "population_source": "qa_metrics.answer_accuracy documents the answerable population; run_phase3d/3f/4b aggregate EM/token-F1 over the answerable population.",
+          "sensitivity": {
+            "n": 20,
+            "population": "answerable questions",
+            "value": 0.5
+          },
+          "status": "measured",
+          "variant": "C"
+        },
+        {
+          "corpus": "heading",
+          "current": {
+            "n": 23,
+            "population": "all measured questions",
+            "value": 0.674948
+          },
+          "delta": 0.101242,
+          "excluded_questions": 3,
+          "metric": "token_f1",
+          "population_source": "qa_metrics.answer_accuracy documents the answerable population; run_phase3d/3f/4b aggregate EM/token-F1 over the answerable population.",
+          "sensitivity": {
+            "n": 20,
+            "population": "answerable questions",
+            "value": 0.77619
+          },
+          "status": "measured",
+          "variant": "C"
+        },
+        {
+          "corpus": "heading",
+          "current": {
+            "n": 23,
+            "population": "all measured questions",
+            "value": 1.0
+          },
+          "delta": 0.0,
+          "excluded_questions": 3,
+          "metric": "evidence_coverage",
+          "population_source": "run_phase3d/3f/4b aggregate evidence_coverage over the answerable population.",
+          "sensitivity": {
+            "n": 20,
+            "population": "answerable questions",
+            "value": 1.0
+          },
+          "status": "measured",
+          "variant": "C"
+        },
+        {
+          "corpus": "heading",
+          "current": {
+            "n": 23,
+            "population": "all measured questions",
+            "value": 0.847826
+          },
+          "delta": 0.127174,
+          "excluded_questions": 3,
+          "metric": "recall@5",
+          "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+          "sensitivity": {
+            "n": 20,
+            "population": "gold-bearing questions",
+            "value": 0.975
+          },
+          "status": "measured",
+          "variant": "D"
+        },
+        {
+          "corpus": "heading",
+          "current": {
+            "n": 23,
+            "population": "all measured questions",
+            "value": 0.182609
+          },
+          "delta": 0.027391,
+          "excluded_questions": 3,
+          "metric": "precision@5",
+          "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+          "sensitivity": {
+            "n": 20,
+            "population": "gold-bearing questions",
+            "value": 0.21
+          },
+          "status": "measured",
+          "variant": "D"
+        },
+        {
+          "corpus": "heading",
+          "current": {
+            "n": 23,
+            "population": "all measured questions",
+            "value": 0.731884
+          },
+          "delta": 0.109783,
+          "excluded_questions": 3,
+          "metric": "mrr",
+          "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+          "sensitivity": {
+            "n": 20,
+            "population": "gold-bearing questions",
+            "value": 0.841667
+          },
+          "status": "measured",
+          "variant": "D"
+        },
+        {
+          "corpus": "heading",
+          "current": {
+            "n": 23,
+            "population": "all measured questions",
+            "value": 0.757851
+          },
+          "delta": 0.113678,
+          "excluded_questions": 3,
+          "metric": "ndcg@5",
+          "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+          "sensitivity": {
+            "n": 20,
+            "population": "gold-bearing questions",
+            "value": 0.871528
+          },
+          "status": "measured",
+          "variant": "D"
+        },
+        {
+          "corpus": "heading",
+          "current": {
+            "n": 23,
+            "population": "all measured questions",
+            "value": 0.434783
+          },
+          "delta": 0.065217,
+          "excluded_questions": 3,
+          "metric": "exact_match",
+          "population_source": "qa_metrics.answer_accuracy documents the answerable population; run_phase3d/3f/4b aggregate EM/token-F1 over the answerable population.",
+          "sensitivity": {
+            "n": 20,
+            "population": "answerable questions",
+            "value": 0.5
+          },
+          "status": "measured",
+          "variant": "D"
+        },
+        {
+          "corpus": "heading",
+          "current": {
+            "n": 23,
+            "population": "all measured questions",
+            "value": 0.674948
+          },
+          "delta": 0.101242,
+          "excluded_questions": 3,
+          "metric": "token_f1",
+          "population_source": "qa_metrics.answer_accuracy documents the answerable population; run_phase3d/3f/4b aggregate EM/token-F1 over the answerable population.",
+          "sensitivity": {
+            "n": 20,
+            "population": "answerable questions",
+            "value": 0.77619
+          },
+          "status": "measured",
+          "variant": "D"
+        },
+        {
+          "corpus": "heading",
+          "current": {
+            "n": 23,
+            "population": "all measured questions",
+            "value": 0.913043
+          },
+          "delta": 0.086957,
+          "excluded_questions": 3,
+          "metric": "evidence_coverage",
+          "population_source": "run_phase3d/3f/4b aggregate evidence_coverage over the answerable population.",
+          "sensitivity": {
+            "n": 20,
+            "population": "answerable questions",
+            "value": 1.0
+          },
+          "status": "measured",
+          "variant": "D"
+        }
+      ],
+      "unsupportedAnswerConfirmation": [
+        {
+          "corpus": "heading",
+          "denominator_correct": true,
+          "expected_denominator": 3,
+          "failures": 3,
+          "human_readable": "3/3",
+          "metric": "unsupported_answer",
+          "population": 3,
+          "reported_value": 1.0,
+          "status": "confirmed",
+          "variant": "A"
+        },
+        {
+          "corpus": "heading",
+          "denominator_correct": true,
+          "expected_denominator": 3,
+          "failures": 0,
+          "human_readable": "0/3",
+          "metric": "unsupported_answer",
+          "population": 3,
+          "reported_value": 0.0,
+          "status": "confirmed",
+          "variant": "B"
+        },
+        {
+          "corpus": "heading",
+          "denominator_correct": true,
+          "expected_denominator": 3,
+          "failures": 3,
+          "human_readable": "3/3",
+          "metric": "unsupported_answer",
+          "population": 3,
+          "reported_value": 1.0,
+          "status": "confirmed",
+          "variant": "C"
+        },
+        {
+          "corpus": "heading",
+          "denominator_correct": true,
+          "expected_denominator": 3,
+          "failures": 1,
+          "human_readable": "1/3",
+          "metric": "unsupported_answer",
+          "population": 3,
+          "reported_value": 0.333333,
+          "status": "confirmed",
+          "variant": "D"
+        }
+      ],
+      "variants": {
+        "A": {
+          "metrics": {
+            "evidence_coverage": {
+              "corpus": "heading",
+              "current": {
+                "n": 23,
+                "population": "all measured questions",
+                "value": 1.0
+              },
+              "delta": 0.0,
+              "excluded_questions": 3,
+              "metric": "evidence_coverage",
+              "population_source": "run_phase3d/3f/4b aggregate evidence_coverage over the answerable population.",
+              "sensitivity": {
+                "n": 20,
+                "population": "answerable questions",
+                "value": 1.0
+              },
+              "status": "measured",
+              "variant": "A"
+            },
+            "exact_match": {
+              "corpus": "heading",
+              "current": {
+                "n": 23,
+                "population": "all measured questions",
+                "value": 0.478261
+              },
+              "delta": 0.071739,
+              "excluded_questions": 3,
+              "metric": "exact_match",
+              "population_source": "qa_metrics.answer_accuracy documents the answerable population; run_phase3d/3f/4b aggregate EM/token-F1 over the answerable population.",
+              "sensitivity": {
+                "n": 20,
+                "population": "answerable questions",
+                "value": 0.55
+              },
+              "status": "measured",
+              "variant": "A"
+            },
+            "mrr": {
+              "corpus": "heading",
+              "current": {
+                "n": 23,
+                "population": "all measured questions",
+                "value": 0.731884
+              },
+              "delta": 0.109783,
+              "excluded_questions": 3,
+              "metric": "mrr",
+              "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+              "sensitivity": {
+                "n": 20,
+                "population": "gold-bearing questions",
+                "value": 0.841667
+              },
+              "status": "measured",
+              "variant": "A"
+            },
+            "ndcg@5": {
+              "corpus": "heading",
+              "current": {
+                "n": 23,
+                "population": "all measured questions",
+                "value": 0.756682
+              },
+              "delta": 0.113502,
+              "excluded_questions": 3,
+              "metric": "ndcg@5",
+              "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+              "sensitivity": {
+                "n": 20,
+                "population": "gold-bearing questions",
+                "value": 0.870185
+              },
+              "status": "measured",
+              "variant": "A"
+            },
+            "precision@5": {
+              "corpus": "heading",
+              "current": {
+                "n": 23,
+                "population": "all measured questions",
+                "value": 0.182609
+              },
+              "delta": 0.027391,
+              "excluded_questions": 3,
+              "metric": "precision@5",
+              "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+              "sensitivity": {
+                "n": 20,
+                "population": "gold-bearing questions",
+                "value": 0.21
+              },
+              "status": "measured",
+              "variant": "A"
+            },
+            "recall@5": {
+              "corpus": "heading",
+              "current": {
+                "n": 23,
+                "population": "all measured questions",
+                "value": 0.847826
+              },
+              "delta": 0.127174,
+              "excluded_questions": 3,
+              "metric": "recall@5",
+              "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+              "sensitivity": {
+                "n": 20,
+                "population": "gold-bearing questions",
+                "value": 0.975
+              },
+              "status": "measured",
+              "variant": "A"
+            },
+            "token_f1": {
+              "corpus": "heading",
+              "current": {
+                "n": 23,
+                "population": "all measured questions",
+                "value": 0.746998
+              },
+              "delta": 0.11205,
+              "excluded_questions": 3,
+              "metric": "token_f1",
+              "population_source": "qa_metrics.answer_accuracy documents the answerable population; run_phase3d/3f/4b aggregate EM/token-F1 over the answerable population.",
+              "sensitivity": {
+                "n": 20,
+                "population": "answerable questions",
+                "value": 0.859048
+              },
+              "status": "measured",
+              "variant": "A"
+            }
+          },
+          "populations": {
+            "all": 23,
+            "answerable": 20,
+            "gold_bearing": 20,
+            "unanswerable": 3
+          },
+          "questionCount": 23,
+          "sourceReport": "ablation_heading_A.json"
+        },
+        "B": {
+          "metrics": {
+            "evidence_coverage": {
+              "corpus": "heading",
+              "current": {
+                "n": 23,
+                "population": "all measured questions",
+                "value": 1.0
+              },
+              "delta": 0.0,
+              "excluded_questions": 3,
+              "metric": "evidence_coverage",
+              "population_source": "run_phase3d/3f/4b aggregate evidence_coverage over the answerable population.",
+              "sensitivity": {
+                "n": 20,
+                "population": "answerable questions",
+                "value": 1.0
+              },
+              "status": "measured",
+              "variant": "B"
+            },
+            "exact_match": {
+              "corpus": "heading",
+              "current": {
+                "n": 23,
+                "population": "all measured questions",
+                "value": 0.0
+              },
+              "delta": 0.0,
+              "excluded_questions": 3,
+              "metric": "exact_match",
+              "population_source": "qa_metrics.answer_accuracy documents the answerable population; run_phase3d/3f/4b aggregate EM/token-F1 over the answerable population.",
+              "sensitivity": {
+                "n": 20,
+                "population": "answerable questions",
+                "value": 0.0
+              },
+              "status": "measured",
+              "variant": "B"
+            },
+            "mrr": {
+              "corpus": "heading",
+              "current": {
+                "n": 23,
+                "population": "all measured questions",
+                "value": 0.0
+              },
+              "delta": 0.0,
+              "excluded_questions": 3,
+              "metric": "mrr",
+              "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+              "sensitivity": {
+                "n": 20,
+                "population": "gold-bearing questions",
+                "value": 0.0
+              },
+              "status": "measured",
+              "variant": "B"
+            },
+            "ndcg@5": {
+              "corpus": "heading",
+              "current": {
+                "n": 23,
+                "population": "all measured questions",
+                "value": 0.0
+              },
+              "delta": 0.0,
+              "excluded_questions": 3,
+              "metric": "ndcg@5",
+              "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+              "sensitivity": {
+                "n": 20,
+                "population": "gold-bearing questions",
+                "value": 0.0
+              },
+              "status": "measured",
+              "variant": "B"
+            },
+            "precision@5": {
+              "corpus": "heading",
+              "current": {
+                "n": 23,
+                "population": "all measured questions",
+                "value": 0.0
+              },
+              "delta": 0.0,
+              "excluded_questions": 3,
+              "metric": "precision@5",
+              "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+              "sensitivity": {
+                "n": 20,
+                "population": "gold-bearing questions",
+                "value": 0.0
+              },
+              "status": "measured",
+              "variant": "B"
+            },
+            "recall@5": {
+              "corpus": "heading",
+              "current": {
+                "n": 23,
+                "population": "all measured questions",
+                "value": 0.0
+              },
+              "delta": 0.0,
+              "excluded_questions": 3,
+              "metric": "recall@5",
+              "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+              "sensitivity": {
+                "n": 20,
+                "population": "gold-bearing questions",
+                "value": 0.0
+              },
+              "status": "measured",
+              "variant": "B"
+            },
+            "token_f1": {
+              "corpus": "heading",
+              "current": {
+                "n": 23,
+                "population": "all measured questions",
+                "value": 0.0
+              },
+              "delta": 0.0,
+              "excluded_questions": 3,
+              "metric": "token_f1",
+              "population_source": "qa_metrics.answer_accuracy documents the answerable population; run_phase3d/3f/4b aggregate EM/token-F1 over the answerable population.",
+              "sensitivity": {
+                "n": 20,
+                "population": "answerable questions",
+                "value": 0.0
+              },
+              "status": "measured",
+              "variant": "B"
+            }
+          },
+          "populations": {
+            "all": 23,
+            "answerable": 20,
+            "gold_bearing": 20,
+            "unanswerable": 3
+          },
+          "questionCount": 23,
+          "sourceReport": "ablation_heading_B.json"
+        },
+        "C": {
+          "metrics": {
+            "evidence_coverage": {
+              "corpus": "heading",
+              "current": {
+                "n": 23,
+                "population": "all measured questions",
+                "value": 1.0
+              },
+              "delta": 0.0,
+              "excluded_questions": 3,
+              "metric": "evidence_coverage",
+              "population_source": "run_phase3d/3f/4b aggregate evidence_coverage over the answerable population.",
+              "sensitivity": {
+                "n": 20,
+                "population": "answerable questions",
+                "value": 1.0
+              },
+              "status": "measured",
+              "variant": "C"
+            },
+            "exact_match": {
+              "corpus": "heading",
+              "current": {
+                "n": 23,
+                "population": "all measured questions",
+                "value": 0.434783
+              },
+              "delta": 0.065217,
+              "excluded_questions": 3,
+              "metric": "exact_match",
+              "population_source": "qa_metrics.answer_accuracy documents the answerable population; run_phase3d/3f/4b aggregate EM/token-F1 over the answerable population.",
+              "sensitivity": {
+                "n": 20,
+                "population": "answerable questions",
+                "value": 0.5
+              },
+              "status": "measured",
+              "variant": "C"
+            },
+            "mrr": {
+              "corpus": "heading",
+              "current": {
+                "n": 23,
+                "population": "all measured questions",
+                "value": 0.731884
+              },
+              "delta": 0.109783,
+              "excluded_questions": 3,
+              "metric": "mrr",
+              "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+              "sensitivity": {
+                "n": 20,
+                "population": "gold-bearing questions",
+                "value": 0.841667
+              },
+              "status": "measured",
+              "variant": "C"
+            },
+            "ndcg@5": {
+              "corpus": "heading",
+              "current": {
+                "n": 23,
+                "population": "all measured questions",
+                "value": 0.757851
+              },
+              "delta": 0.113678,
+              "excluded_questions": 3,
+              "metric": "ndcg@5",
+              "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+              "sensitivity": {
+                "n": 20,
+                "population": "gold-bearing questions",
+                "value": 0.871528
+              },
+              "status": "measured",
+              "variant": "C"
+            },
+            "precision@5": {
+              "corpus": "heading",
+              "current": {
+                "n": 23,
+                "population": "all measured questions",
+                "value": 0.182609
+              },
+              "delta": 0.027391,
+              "excluded_questions": 3,
+              "metric": "precision@5",
+              "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+              "sensitivity": {
+                "n": 20,
+                "population": "gold-bearing questions",
+                "value": 0.21
+              },
+              "status": "measured",
+              "variant": "C"
+            },
+            "recall@5": {
+              "corpus": "heading",
+              "current": {
+                "n": 23,
+                "population": "all measured questions",
+                "value": 0.847826
+              },
+              "delta": 0.127174,
+              "excluded_questions": 3,
+              "metric": "recall@5",
+              "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+              "sensitivity": {
+                "n": 20,
+                "population": "gold-bearing questions",
+                "value": 0.975
+              },
+              "status": "measured",
+              "variant": "C"
+            },
+            "token_f1": {
+              "corpus": "heading",
+              "current": {
+                "n": 23,
+                "population": "all measured questions",
+                "value": 0.674948
+              },
+              "delta": 0.101242,
+              "excluded_questions": 3,
+              "metric": "token_f1",
+              "population_source": "qa_metrics.answer_accuracy documents the answerable population; run_phase3d/3f/4b aggregate EM/token-F1 over the answerable population.",
+              "sensitivity": {
+                "n": 20,
+                "population": "answerable questions",
+                "value": 0.77619
+              },
+              "status": "measured",
+              "variant": "C"
+            }
+          },
+          "populations": {
+            "all": 23,
+            "answerable": 20,
+            "gold_bearing": 20,
+            "unanswerable": 3
+          },
+          "questionCount": 23,
+          "sourceReport": "ablation_heading_C.json"
+        },
+        "D": {
+          "metrics": {
+            "evidence_coverage": {
+              "corpus": "heading",
+              "current": {
+                "n": 23,
+                "population": "all measured questions",
+                "value": 0.913043
+              },
+              "delta": 0.086957,
+              "excluded_questions": 3,
+              "metric": "evidence_coverage",
+              "population_source": "run_phase3d/3f/4b aggregate evidence_coverage over the answerable population.",
+              "sensitivity": {
+                "n": 20,
+                "population": "answerable questions",
+                "value": 1.0
+              },
+              "status": "measured",
+              "variant": "D"
+            },
+            "exact_match": {
+              "corpus": "heading",
+              "current": {
+                "n": 23,
+                "population": "all measured questions",
+                "value": 0.434783
+              },
+              "delta": 0.065217,
+              "excluded_questions": 3,
+              "metric": "exact_match",
+              "population_source": "qa_metrics.answer_accuracy documents the answerable population; run_phase3d/3f/4b aggregate EM/token-F1 over the answerable population.",
+              "sensitivity": {
+                "n": 20,
+                "population": "answerable questions",
+                "value": 0.5
+              },
+              "status": "measured",
+              "variant": "D"
+            },
+            "mrr": {
+              "corpus": "heading",
+              "current": {
+                "n": 23,
+                "population": "all measured questions",
+                "value": 0.731884
+              },
+              "delta": 0.109783,
+              "excluded_questions": 3,
+              "metric": "mrr",
+              "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+              "sensitivity": {
+                "n": 20,
+                "population": "gold-bearing questions",
+                "value": 0.841667
+              },
+              "status": "measured",
+              "variant": "D"
+            },
+            "ndcg@5": {
+              "corpus": "heading",
+              "current": {
+                "n": 23,
+                "population": "all measured questions",
+                "value": 0.757851
+              },
+              "delta": 0.113678,
+              "excluded_questions": 3,
+              "metric": "ndcg@5",
+              "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+              "sensitivity": {
+                "n": 20,
+                "population": "gold-bearing questions",
+                "value": 0.871528
+              },
+              "status": "measured",
+              "variant": "D"
+            },
+            "precision@5": {
+              "corpus": "heading",
+              "current": {
+                "n": 23,
+                "population": "all measured questions",
+                "value": 0.182609
+              },
+              "delta": 0.027391,
+              "excluded_questions": 3,
+              "metric": "precision@5",
+              "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+              "sensitivity": {
+                "n": 20,
+                "population": "gold-bearing questions",
+                "value": 0.21
+              },
+              "status": "measured",
+              "variant": "D"
+            },
+            "recall@5": {
+              "corpus": "heading",
+              "current": {
+                "n": 23,
+                "population": "all measured questions",
+                "value": 0.847826
+              },
+              "delta": 0.127174,
+              "excluded_questions": 3,
+              "metric": "recall@5",
+              "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+              "sensitivity": {
+                "n": 20,
+                "population": "gold-bearing questions",
+                "value": 0.975
+              },
+              "status": "measured",
+              "variant": "D"
+            },
+            "token_f1": {
+              "corpus": "heading",
+              "current": {
+                "n": 23,
+                "population": "all measured questions",
+                "value": 0.674948
+              },
+              "delta": 0.101242,
+              "excluded_questions": 3,
+              "metric": "token_f1",
+              "population_source": "qa_metrics.answer_accuracy documents the answerable population; run_phase3d/3f/4b aggregate EM/token-F1 over the answerable population.",
+              "sensitivity": {
+                "n": 20,
+                "population": "answerable questions",
+                "value": 0.77619
+              },
+              "status": "measured",
+              "variant": "D"
+            }
+          },
+          "populations": {
+            "all": 23,
+            "answerable": 20,
+            "gold_bearing": 20,
+            "unanswerable": 3
+          },
+          "questionCount": 23,
+          "sourceReport": "ablation_heading_D.json"
+        }
+      }
+    },
+    "phase3d": {
+      "corpus": "phase3d",
+      "notApplicable": [
+        {
+          "corpus": "phase3d",
+          "metric": "factual_grounded",
+          "reason": "An alternate population is documented (answered questions, per qa_metrics.factual_grounding_rate), but per-question answered-ness is not present in the frozen production-aligned reports (their to_dict omits detail.predicted/insufficient_context). Recomputing it would require re-running the experiment or changing the frozen report schema, so no sensitivity value is produced here.",
+          "status": "not_applicable",
+          "variant": "A"
+        },
+        {
+          "corpus": "phase3d",
+          "metric": "path_agreement",
+          "reason": "No alternate population is documented; path_agreement is a per-question binary property of the retrieved source paths that is defined for every question regardless of answerability, so there is no population to switch.",
+          "status": "not_applicable",
+          "variant": "A"
+        },
+        {
+          "corpus": "phase3d",
+          "metric": "factual_grounded",
+          "reason": "An alternate population is documented (answered questions, per qa_metrics.factual_grounding_rate), but per-question answered-ness is not present in the frozen production-aligned reports (their to_dict omits detail.predicted/insufficient_context). Recomputing it would require re-running the experiment or changing the frozen report schema, so no sensitivity value is produced here.",
+          "status": "not_applicable",
+          "variant": "B"
+        },
+        {
+          "corpus": "phase3d",
+          "metric": "path_agreement",
+          "reason": "No alternate population is documented; path_agreement is a per-question binary property of the retrieved source paths that is defined for every question regardless of answerability, so there is no population to switch.",
+          "status": "not_applicable",
+          "variant": "B"
+        },
+        {
+          "corpus": "phase3d",
+          "metric": "factual_grounded",
+          "reason": "An alternate population is documented (answered questions, per qa_metrics.factual_grounding_rate), but per-question answered-ness is not present in the frozen production-aligned reports (their to_dict omits detail.predicted/insufficient_context). Recomputing it would require re-running the experiment or changing the frozen report schema, so no sensitivity value is produced here.",
+          "status": "not_applicable",
+          "variant": "C"
+        },
+        {
+          "corpus": "phase3d",
+          "metric": "path_agreement",
+          "reason": "No alternate population is documented; path_agreement is a per-question binary property of the retrieved source paths that is defined for every question regardless of answerability, so there is no population to switch.",
+          "status": "not_applicable",
+          "variant": "C"
+        },
+        {
+          "corpus": "phase3d",
+          "metric": "factual_grounded",
+          "reason": "An alternate population is documented (answered questions, per qa_metrics.factual_grounding_rate), but per-question answered-ness is not present in the frozen production-aligned reports (their to_dict omits detail.predicted/insufficient_context). Recomputing it would require re-running the experiment or changing the frozen report schema, so no sensitivity value is produced here.",
+          "status": "not_applicable",
+          "variant": "D"
+        },
+        {
+          "corpus": "phase3d",
+          "metric": "path_agreement",
+          "reason": "No alternate population is documented; path_agreement is a per-question binary property of the retrieved source paths that is defined for every question regardless of answerability, so there is no population to switch.",
+          "status": "not_applicable",
+          "variant": "D"
+        }
+      ],
+      "records": [
+        {
+          "corpus": "phase3d",
+          "current": {
+            "n": 42,
+            "population": "all measured questions",
+            "value": 0.77381
+          },
+          "delta": 0.059524,
+          "excluded_questions": 3,
+          "metric": "recall@5",
+          "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+          "sensitivity": {
+            "n": 39,
+            "population": "gold-bearing questions",
+            "value": 0.833333
+          },
+          "status": "measured",
+          "variant": "A"
+        },
+        {
+          "corpus": "phase3d",
+          "current": {
+            "n": 42,
+            "population": "all measured questions",
+            "value": 0.190476
+          },
+          "delta": 0.014652,
+          "excluded_questions": 3,
+          "metric": "precision@5",
+          "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+          "sensitivity": {
+            "n": 39,
+            "population": "gold-bearing questions",
+            "value": 0.205128
+          },
+          "status": "measured",
+          "variant": "A"
+        },
+        {
+          "corpus": "phase3d",
+          "current": {
+            "n": 42,
+            "population": "all measured questions",
+            "value": 0.741667
+          },
+          "delta": 0.057051,
+          "excluded_questions": 3,
+          "metric": "mrr",
+          "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+          "sensitivity": {
+            "n": 39,
+            "population": "gold-bearing questions",
+            "value": 0.798718
+          },
+          "status": "measured",
+          "variant": "A"
+        },
+        {
+          "corpus": "phase3d",
+          "current": {
+            "n": 42,
+            "population": "all measured questions",
+            "value": 0.726788
+          },
+          "delta": 0.055907,
+          "excluded_questions": 3,
+          "metric": "ndcg@5",
+          "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+          "sensitivity": {
+            "n": 39,
+            "population": "gold-bearing questions",
+            "value": 0.782695
+          },
+          "status": "measured",
+          "variant": "A"
+        },
+        {
+          "corpus": "phase3d",
+          "current": {
+            "n": 42,
+            "population": "all measured questions",
+            "value": 0.52381
+          },
+          "delta": 0.040293,
+          "excluded_questions": 3,
+          "metric": "exact_match",
+          "population_source": "qa_metrics.answer_accuracy documents the answerable population; run_phase3d/3f/4b aggregate EM/token-F1 over the answerable population.",
+          "sensitivity": {
+            "n": 39,
+            "population": "answerable questions",
+            "value": 0.564103
+          },
+          "status": "measured",
+          "variant": "A"
+        },
+        {
+          "corpus": "phase3d",
+          "current": {
+            "n": 42,
+            "population": "all measured questions",
+            "value": 0.629618
+          },
+          "delta": 0.048432,
+          "excluded_questions": 3,
+          "metric": "token_f1",
+          "population_source": "qa_metrics.answer_accuracy documents the answerable population; run_phase3d/3f/4b aggregate EM/token-F1 over the answerable population.",
+          "sensitivity": {
+            "n": 39,
+            "population": "answerable questions",
+            "value": 0.67805
+          },
+          "status": "measured",
+          "variant": "A"
+        },
+        {
+          "corpus": "phase3d",
+          "current": {
+            "n": 42,
+            "population": "all measured questions",
+            "value": 0.990476
+          },
+          "delta": -0.000733,
+          "excluded_questions": 3,
+          "metric": "evidence_coverage",
+          "population_source": "run_phase3d/3f/4b aggregate evidence_coverage over the answerable population.",
+          "sensitivity": {
+            "n": 39,
+            "population": "answerable questions",
+            "value": 0.989744
+          },
+          "status": "measured",
+          "variant": "A"
+        },
+        {
+          "corpus": "phase3d",
+          "current": {
+            "n": 42,
+            "population": "all measured questions",
+            "value": 0.0
+          },
+          "delta": 0.0,
+          "excluded_questions": 3,
+          "metric": "recall@5",
+          "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+          "sensitivity": {
+            "n": 39,
+            "population": "gold-bearing questions",
+            "value": 0.0
+          },
+          "status": "measured",
+          "variant": "B"
+        },
+        {
+          "corpus": "phase3d",
+          "current": {
+            "n": 42,
+            "population": "all measured questions",
+            "value": 0.0
+          },
+          "delta": 0.0,
+          "excluded_questions": 3,
+          "metric": "precision@5",
+          "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+          "sensitivity": {
+            "n": 39,
+            "population": "gold-bearing questions",
+            "value": 0.0
+          },
+          "status": "measured",
+          "variant": "B"
+        },
+        {
+          "corpus": "phase3d",
+          "current": {
+            "n": 42,
+            "population": "all measured questions",
+            "value": 0.0
+          },
+          "delta": 0.0,
+          "excluded_questions": 3,
+          "metric": "mrr",
+          "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+          "sensitivity": {
+            "n": 39,
+            "population": "gold-bearing questions",
+            "value": 0.0
+          },
+          "status": "measured",
+          "variant": "B"
+        },
+        {
+          "corpus": "phase3d",
+          "current": {
+            "n": 42,
+            "population": "all measured questions",
+            "value": 0.0
+          },
+          "delta": 0.0,
+          "excluded_questions": 3,
+          "metric": "ndcg@5",
+          "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+          "sensitivity": {
+            "n": 39,
+            "population": "gold-bearing questions",
+            "value": 0.0
+          },
+          "status": "measured",
+          "variant": "B"
+        },
+        {
+          "corpus": "phase3d",
+          "current": {
+            "n": 42,
+            "population": "all measured questions",
+            "value": 0.0
+          },
+          "delta": 0.0,
+          "excluded_questions": 3,
+          "metric": "exact_match",
+          "population_source": "qa_metrics.answer_accuracy documents the answerable population; run_phase3d/3f/4b aggregate EM/token-F1 over the answerable population.",
+          "sensitivity": {
+            "n": 39,
+            "population": "answerable questions",
+            "value": 0.0
+          },
+          "status": "measured",
+          "variant": "B"
+        },
+        {
+          "corpus": "phase3d",
+          "current": {
+            "n": 42,
+            "population": "all measured questions",
+            "value": 0.0
+          },
+          "delta": 0.0,
+          "excluded_questions": 3,
+          "metric": "token_f1",
+          "population_source": "qa_metrics.answer_accuracy documents the answerable population; run_phase3d/3f/4b aggregate EM/token-F1 over the answerable population.",
+          "sensitivity": {
+            "n": 39,
+            "population": "answerable questions",
+            "value": 0.0
+          },
+          "status": "measured",
+          "variant": "B"
+        },
+        {
+          "corpus": "phase3d",
+          "current": {
+            "n": 42,
+            "population": "all measured questions",
+            "value": 1.0
+          },
+          "delta": 0.0,
+          "excluded_questions": 3,
+          "metric": "evidence_coverage",
+          "population_source": "run_phase3d/3f/4b aggregate evidence_coverage over the answerable population.",
+          "sensitivity": {
+            "n": 39,
+            "population": "answerable questions",
+            "value": 1.0
+          },
+          "status": "measured",
+          "variant": "B"
+        },
+        {
+          "corpus": "phase3d",
+          "current": {
+            "n": 42,
+            "population": "all measured questions",
+            "value": 0.77381
+          },
+          "delta": 0.059524,
+          "excluded_questions": 3,
+          "metric": "recall@5",
+          "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+          "sensitivity": {
+            "n": 39,
+            "population": "gold-bearing questions",
+            "value": 0.833333
+          },
+          "status": "measured",
+          "variant": "C"
+        },
+        {
+          "corpus": "phase3d",
+          "current": {
+            "n": 42,
+            "population": "all measured questions",
+            "value": 0.190476
+          },
+          "delta": 0.014652,
+          "excluded_questions": 3,
+          "metric": "precision@5",
+          "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+          "sensitivity": {
+            "n": 39,
+            "population": "gold-bearing questions",
+            "value": 0.205128
+          },
+          "status": "measured",
+          "variant": "C"
+        },
+        {
+          "corpus": "phase3d",
+          "current": {
+            "n": 42,
+            "population": "all measured questions",
+            "value": 0.744048
+          },
+          "delta": 0.057234,
+          "excluded_questions": 3,
+          "metric": "mrr",
+          "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+          "sensitivity": {
+            "n": 39,
+            "population": "gold-bearing questions",
+            "value": 0.801282
+          },
+          "status": "measured",
+          "variant": "C"
+        },
+        {
+          "corpus": "phase3d",
+          "current": {
+            "n": 42,
+            "population": "all measured questions",
+            "value": 0.729515
+          },
+          "delta": 0.056117,
+          "excluded_questions": 3,
+          "metric": "ndcg@5",
+          "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+          "sensitivity": {
+            "n": 39,
+            "population": "gold-bearing questions",
+            "value": 0.785631
+          },
+          "status": "measured",
+          "variant": "C"
+        },
+        {
+          "corpus": "phase3d",
+          "current": {
+            "n": 42,
+            "population": "all measured questions",
+            "value": 0.47619
+          },
+          "delta": 0.03663,
+          "excluded_questions": 3,
+          "metric": "exact_match",
+          "population_source": "qa_metrics.answer_accuracy documents the answerable population; run_phase3d/3f/4b aggregate EM/token-F1 over the answerable population.",
+          "sensitivity": {
+            "n": 39,
+            "population": "answerable questions",
+            "value": 0.512821
+          },
+          "status": "measured",
+          "variant": "C"
+        },
+        {
+          "corpus": "phase3d",
+          "current": {
+            "n": 42,
+            "population": "all measured questions",
+            "value": 0.618933
+          },
+          "delta": 0.04761,
+          "excluded_questions": 3,
+          "metric": "token_f1",
+          "population_source": "qa_metrics.answer_accuracy documents the answerable population; run_phase3d/3f/4b aggregate EM/token-F1 over the answerable population.",
+          "sensitivity": {
+            "n": 39,
+            "population": "answerable questions",
+            "value": 0.666543
+          },
+          "status": "measured",
+          "variant": "C"
+        },
+        {
+          "corpus": "phase3d",
+          "current": {
+            "n": 42,
+            "population": "all measured questions",
+            "value": 0.990476
+          },
+          "delta": -0.000733,
+          "excluded_questions": 3,
+          "metric": "evidence_coverage",
+          "population_source": "run_phase3d/3f/4b aggregate evidence_coverage over the answerable population.",
+          "sensitivity": {
+            "n": 39,
+            "population": "answerable questions",
+            "value": 0.989744
+          },
+          "status": "measured",
+          "variant": "C"
+        },
+        {
+          "corpus": "phase3d",
+          "current": {
+            "n": 42,
+            "population": "all measured questions",
+            "value": 0.77381
+          },
+          "delta": 0.059524,
+          "excluded_questions": 3,
+          "metric": "recall@5",
+          "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+          "sensitivity": {
+            "n": 39,
+            "population": "gold-bearing questions",
+            "value": 0.833333
+          },
+          "status": "measured",
+          "variant": "D"
+        },
+        {
+          "corpus": "phase3d",
+          "current": {
+            "n": 42,
+            "population": "all measured questions",
+            "value": 0.190476
+          },
+          "delta": 0.014652,
+          "excluded_questions": 3,
+          "metric": "precision@5",
+          "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+          "sensitivity": {
+            "n": 39,
+            "population": "gold-bearing questions",
+            "value": 0.205128
+          },
+          "status": "measured",
+          "variant": "D"
+        },
+        {
+          "corpus": "phase3d",
+          "current": {
+            "n": 42,
+            "population": "all measured questions",
+            "value": 0.744048
+          },
+          "delta": 0.057234,
+          "excluded_questions": 3,
+          "metric": "mrr",
+          "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+          "sensitivity": {
+            "n": 39,
+            "population": "gold-bearing questions",
+            "value": 0.801282
+          },
+          "status": "measured",
+          "variant": "D"
+        },
+        {
+          "corpus": "phase3d",
+          "current": {
+            "n": 42,
+            "population": "all measured questions",
+            "value": 0.729515
+          },
+          "delta": 0.056117,
+          "excluded_questions": 3,
+          "metric": "ndcg@5",
+          "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+          "sensitivity": {
+            "n": 39,
+            "population": "gold-bearing questions",
+            "value": 0.785631
+          },
+          "status": "measured",
+          "variant": "D"
+        },
+        {
+          "corpus": "phase3d",
+          "current": {
+            "n": 42,
+            "population": "all measured questions",
+            "value": 0.47619
+          },
+          "delta": 0.03663,
+          "excluded_questions": 3,
+          "metric": "exact_match",
+          "population_source": "qa_metrics.answer_accuracy documents the answerable population; run_phase3d/3f/4b aggregate EM/token-F1 over the answerable population.",
+          "sensitivity": {
+            "n": 39,
+            "population": "answerable questions",
+            "value": 0.512821
+          },
+          "status": "measured",
+          "variant": "D"
+        },
+        {
+          "corpus": "phase3d",
+          "current": {
+            "n": 42,
+            "population": "all measured questions",
+            "value": 0.61213
+          },
+          "delta": 0.047087,
+          "excluded_questions": 3,
+          "metric": "token_f1",
+          "population_source": "qa_metrics.answer_accuracy documents the answerable population; run_phase3d/3f/4b aggregate EM/token-F1 over the answerable population.",
+          "sensitivity": {
+            "n": 39,
+            "population": "answerable questions",
+            "value": 0.659217
+          },
+          "status": "measured",
+          "variant": "D"
+        },
+        {
+          "corpus": "phase3d",
+          "current": {
+            "n": 42,
+            "population": "all measured questions",
+            "value": 0.871429
+          },
+          "delta": 0.067033,
+          "excluded_questions": 3,
+          "metric": "evidence_coverage",
+          "population_source": "run_phase3d/3f/4b aggregate evidence_coverage over the answerable population.",
+          "sensitivity": {
+            "n": 39,
+            "population": "answerable questions",
+            "value": 0.938462
+          },
+          "status": "measured",
+          "variant": "D"
+        }
+      ],
+      "unsupportedAnswerConfirmation": [
+        {
+          "corpus": "phase3d",
+          "denominator_correct": true,
+          "expected_denominator": 3,
+          "failures": 3,
+          "human_readable": "3/3",
+          "metric": "unsupported_answer",
+          "population": 3,
+          "reported_value": 1.0,
+          "status": "confirmed",
+          "variant": "A"
+        },
+        {
+          "corpus": "phase3d",
+          "denominator_correct": true,
+          "expected_denominator": 3,
+          "failures": 0,
+          "human_readable": "0/3",
+          "metric": "unsupported_answer",
+          "population": 3,
+          "reported_value": 0.0,
+          "status": "confirmed",
+          "variant": "B"
+        },
+        {
+          "corpus": "phase3d",
+          "denominator_correct": true,
+          "expected_denominator": 3,
+          "failures": 3,
+          "human_readable": "3/3",
+          "metric": "unsupported_answer",
+          "population": 3,
+          "reported_value": 1.0,
+          "status": "confirmed",
+          "variant": "C"
+        },
+        {
+          "corpus": "phase3d",
+          "denominator_correct": true,
+          "expected_denominator": 3,
+          "failures": 0,
+          "human_readable": "0/3",
+          "metric": "unsupported_answer",
+          "population": 3,
+          "reported_value": 0.0,
+          "status": "confirmed",
+          "variant": "D"
+        }
+      ],
+      "variants": {
+        "A": {
+          "metrics": {
+            "evidence_coverage": {
+              "corpus": "phase3d",
+              "current": {
+                "n": 42,
+                "population": "all measured questions",
+                "value": 0.990476
+              },
+              "delta": -0.000733,
+              "excluded_questions": 3,
+              "metric": "evidence_coverage",
+              "population_source": "run_phase3d/3f/4b aggregate evidence_coverage over the answerable population.",
+              "sensitivity": {
+                "n": 39,
+                "population": "answerable questions",
+                "value": 0.989744
+              },
+              "status": "measured",
+              "variant": "A"
+            },
+            "exact_match": {
+              "corpus": "phase3d",
+              "current": {
+                "n": 42,
+                "population": "all measured questions",
+                "value": 0.52381
+              },
+              "delta": 0.040293,
+              "excluded_questions": 3,
+              "metric": "exact_match",
+              "population_source": "qa_metrics.answer_accuracy documents the answerable population; run_phase3d/3f/4b aggregate EM/token-F1 over the answerable population.",
+              "sensitivity": {
+                "n": 39,
+                "population": "answerable questions",
+                "value": 0.564103
+              },
+              "status": "measured",
+              "variant": "A"
+            },
+            "mrr": {
+              "corpus": "phase3d",
+              "current": {
+                "n": 42,
+                "population": "all measured questions",
+                "value": 0.741667
+              },
+              "delta": 0.057051,
+              "excluded_questions": 3,
+              "metric": "mrr",
+              "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+              "sensitivity": {
+                "n": 39,
+                "population": "gold-bearing questions",
+                "value": 0.798718
+              },
+              "status": "measured",
+              "variant": "A"
+            },
+            "ndcg@5": {
+              "corpus": "phase3d",
+              "current": {
+                "n": 42,
+                "population": "all measured questions",
+                "value": 0.726788
+              },
+              "delta": 0.055907,
+              "excluded_questions": 3,
+              "metric": "ndcg@5",
+              "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+              "sensitivity": {
+                "n": 39,
+                "population": "gold-bearing questions",
+                "value": 0.782695
+              },
+              "status": "measured",
+              "variant": "A"
+            },
+            "precision@5": {
+              "corpus": "phase3d",
+              "current": {
+                "n": 42,
+                "population": "all measured questions",
+                "value": 0.190476
+              },
+              "delta": 0.014652,
+              "excluded_questions": 3,
+              "metric": "precision@5",
+              "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+              "sensitivity": {
+                "n": 39,
+                "population": "gold-bearing questions",
+                "value": 0.205128
+              },
+              "status": "measured",
+              "variant": "A"
+            },
+            "recall@5": {
+              "corpus": "phase3d",
+              "current": {
+                "n": 42,
+                "population": "all measured questions",
+                "value": 0.77381
+              },
+              "delta": 0.059524,
+              "excluded_questions": 3,
+              "metric": "recall@5",
+              "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+              "sensitivity": {
+                "n": 39,
+                "population": "gold-bearing questions",
+                "value": 0.833333
+              },
+              "status": "measured",
+              "variant": "A"
+            },
+            "token_f1": {
+              "corpus": "phase3d",
+              "current": {
+                "n": 42,
+                "population": "all measured questions",
+                "value": 0.629618
+              },
+              "delta": 0.048432,
+              "excluded_questions": 3,
+              "metric": "token_f1",
+              "population_source": "qa_metrics.answer_accuracy documents the answerable population; run_phase3d/3f/4b aggregate EM/token-F1 over the answerable population.",
+              "sensitivity": {
+                "n": 39,
+                "population": "answerable questions",
+                "value": 0.67805
+              },
+              "status": "measured",
+              "variant": "A"
+            }
+          },
+          "populations": {
+            "all": 42,
+            "answerable": 39,
+            "gold_bearing": 39,
+            "unanswerable": 3
+          },
+          "questionCount": 42,
+          "sourceReport": "ablation_A.json"
+        },
+        "B": {
+          "metrics": {
+            "evidence_coverage": {
+              "corpus": "phase3d",
+              "current": {
+                "n": 42,
+                "population": "all measured questions",
+                "value": 1.0
+              },
+              "delta": 0.0,
+              "excluded_questions": 3,
+              "metric": "evidence_coverage",
+              "population_source": "run_phase3d/3f/4b aggregate evidence_coverage over the answerable population.",
+              "sensitivity": {
+                "n": 39,
+                "population": "answerable questions",
+                "value": 1.0
+              },
+              "status": "measured",
+              "variant": "B"
+            },
+            "exact_match": {
+              "corpus": "phase3d",
+              "current": {
+                "n": 42,
+                "population": "all measured questions",
+                "value": 0.0
+              },
+              "delta": 0.0,
+              "excluded_questions": 3,
+              "metric": "exact_match",
+              "population_source": "qa_metrics.answer_accuracy documents the answerable population; run_phase3d/3f/4b aggregate EM/token-F1 over the answerable population.",
+              "sensitivity": {
+                "n": 39,
+                "population": "answerable questions",
+                "value": 0.0
+              },
+              "status": "measured",
+              "variant": "B"
+            },
+            "mrr": {
+              "corpus": "phase3d",
+              "current": {
+                "n": 42,
+                "population": "all measured questions",
+                "value": 0.0
+              },
+              "delta": 0.0,
+              "excluded_questions": 3,
+              "metric": "mrr",
+              "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+              "sensitivity": {
+                "n": 39,
+                "population": "gold-bearing questions",
+                "value": 0.0
+              },
+              "status": "measured",
+              "variant": "B"
+            },
+            "ndcg@5": {
+              "corpus": "phase3d",
+              "current": {
+                "n": 42,
+                "population": "all measured questions",
+                "value": 0.0
+              },
+              "delta": 0.0,
+              "excluded_questions": 3,
+              "metric": "ndcg@5",
+              "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+              "sensitivity": {
+                "n": 39,
+                "population": "gold-bearing questions",
+                "value": 0.0
+              },
+              "status": "measured",
+              "variant": "B"
+            },
+            "precision@5": {
+              "corpus": "phase3d",
+              "current": {
+                "n": 42,
+                "population": "all measured questions",
+                "value": 0.0
+              },
+              "delta": 0.0,
+              "excluded_questions": 3,
+              "metric": "precision@5",
+              "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+              "sensitivity": {
+                "n": 39,
+                "population": "gold-bearing questions",
+                "value": 0.0
+              },
+              "status": "measured",
+              "variant": "B"
+            },
+            "recall@5": {
+              "corpus": "phase3d",
+              "current": {
+                "n": 42,
+                "population": "all measured questions",
+                "value": 0.0
+              },
+              "delta": 0.0,
+              "excluded_questions": 3,
+              "metric": "recall@5",
+              "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+              "sensitivity": {
+                "n": 39,
+                "population": "gold-bearing questions",
+                "value": 0.0
+              },
+              "status": "measured",
+              "variant": "B"
+            },
+            "token_f1": {
+              "corpus": "phase3d",
+              "current": {
+                "n": 42,
+                "population": "all measured questions",
+                "value": 0.0
+              },
+              "delta": 0.0,
+              "excluded_questions": 3,
+              "metric": "token_f1",
+              "population_source": "qa_metrics.answer_accuracy documents the answerable population; run_phase3d/3f/4b aggregate EM/token-F1 over the answerable population.",
+              "sensitivity": {
+                "n": 39,
+                "population": "answerable questions",
+                "value": 0.0
+              },
+              "status": "measured",
+              "variant": "B"
+            }
+          },
+          "populations": {
+            "all": 42,
+            "answerable": 39,
+            "gold_bearing": 39,
+            "unanswerable": 3
+          },
+          "questionCount": 42,
+          "sourceReport": "ablation_B.json"
+        },
+        "C": {
+          "metrics": {
+            "evidence_coverage": {
+              "corpus": "phase3d",
+              "current": {
+                "n": 42,
+                "population": "all measured questions",
+                "value": 0.990476
+              },
+              "delta": -0.000733,
+              "excluded_questions": 3,
+              "metric": "evidence_coverage",
+              "population_source": "run_phase3d/3f/4b aggregate evidence_coverage over the answerable population.",
+              "sensitivity": {
+                "n": 39,
+                "population": "answerable questions",
+                "value": 0.989744
+              },
+              "status": "measured",
+              "variant": "C"
+            },
+            "exact_match": {
+              "corpus": "phase3d",
+              "current": {
+                "n": 42,
+                "population": "all measured questions",
+                "value": 0.47619
+              },
+              "delta": 0.03663,
+              "excluded_questions": 3,
+              "metric": "exact_match",
+              "population_source": "qa_metrics.answer_accuracy documents the answerable population; run_phase3d/3f/4b aggregate EM/token-F1 over the answerable population.",
+              "sensitivity": {
+                "n": 39,
+                "population": "answerable questions",
+                "value": 0.512821
+              },
+              "status": "measured",
+              "variant": "C"
+            },
+            "mrr": {
+              "corpus": "phase3d",
+              "current": {
+                "n": 42,
+                "population": "all measured questions",
+                "value": 0.744048
+              },
+              "delta": 0.057234,
+              "excluded_questions": 3,
+              "metric": "mrr",
+              "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+              "sensitivity": {
+                "n": 39,
+                "population": "gold-bearing questions",
+                "value": 0.801282
+              },
+              "status": "measured",
+              "variant": "C"
+            },
+            "ndcg@5": {
+              "corpus": "phase3d",
+              "current": {
+                "n": 42,
+                "population": "all measured questions",
+                "value": 0.729515
+              },
+              "delta": 0.056117,
+              "excluded_questions": 3,
+              "metric": "ndcg@5",
+              "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+              "sensitivity": {
+                "n": 39,
+                "population": "gold-bearing questions",
+                "value": 0.785631
+              },
+              "status": "measured",
+              "variant": "C"
+            },
+            "precision@5": {
+              "corpus": "phase3d",
+              "current": {
+                "n": 42,
+                "population": "all measured questions",
+                "value": 0.190476
+              },
+              "delta": 0.014652,
+              "excluded_questions": 3,
+              "metric": "precision@5",
+              "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+              "sensitivity": {
+                "n": 39,
+                "population": "gold-bearing questions",
+                "value": 0.205128
+              },
+              "status": "measured",
+              "variant": "C"
+            },
+            "recall@5": {
+              "corpus": "phase3d",
+              "current": {
+                "n": 42,
+                "population": "all measured questions",
+                "value": 0.77381
+              },
+              "delta": 0.059524,
+              "excluded_questions": 3,
+              "metric": "recall@5",
+              "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+              "sensitivity": {
+                "n": 39,
+                "population": "gold-bearing questions",
+                "value": 0.833333
+              },
+              "status": "measured",
+              "variant": "C"
+            },
+            "token_f1": {
+              "corpus": "phase3d",
+              "current": {
+                "n": 42,
+                "population": "all measured questions",
+                "value": 0.618933
+              },
+              "delta": 0.04761,
+              "excluded_questions": 3,
+              "metric": "token_f1",
+              "population_source": "qa_metrics.answer_accuracy documents the answerable population; run_phase3d/3f/4b aggregate EM/token-F1 over the answerable population.",
+              "sensitivity": {
+                "n": 39,
+                "population": "answerable questions",
+                "value": 0.666543
+              },
+              "status": "measured",
+              "variant": "C"
+            }
+          },
+          "populations": {
+            "all": 42,
+            "answerable": 39,
+            "gold_bearing": 39,
+            "unanswerable": 3
+          },
+          "questionCount": 42,
+          "sourceReport": "ablation_C.json"
+        },
+        "D": {
+          "metrics": {
+            "evidence_coverage": {
+              "corpus": "phase3d",
+              "current": {
+                "n": 42,
+                "population": "all measured questions",
+                "value": 0.871429
+              },
+              "delta": 0.067033,
+              "excluded_questions": 3,
+              "metric": "evidence_coverage",
+              "population_source": "run_phase3d/3f/4b aggregate evidence_coverage over the answerable population.",
+              "sensitivity": {
+                "n": 39,
+                "population": "answerable questions",
+                "value": 0.938462
+              },
+              "status": "measured",
+              "variant": "D"
+            },
+            "exact_match": {
+              "corpus": "phase3d",
+              "current": {
+                "n": 42,
+                "population": "all measured questions",
+                "value": 0.47619
+              },
+              "delta": 0.03663,
+              "excluded_questions": 3,
+              "metric": "exact_match",
+              "population_source": "qa_metrics.answer_accuracy documents the answerable population; run_phase3d/3f/4b aggregate EM/token-F1 over the answerable population.",
+              "sensitivity": {
+                "n": 39,
+                "population": "answerable questions",
+                "value": 0.512821
+              },
+              "status": "measured",
+              "variant": "D"
+            },
+            "mrr": {
+              "corpus": "phase3d",
+              "current": {
+                "n": 42,
+                "population": "all measured questions",
+                "value": 0.744048
+              },
+              "delta": 0.057234,
+              "excluded_questions": 3,
+              "metric": "mrr",
+              "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+              "sensitivity": {
+                "n": 39,
+                "population": "gold-bearing questions",
+                "value": 0.801282
+              },
+              "status": "measured",
+              "variant": "D"
+            },
+            "ndcg@5": {
+              "corpus": "phase3d",
+              "current": {
+                "n": 42,
+                "population": "all measured questions",
+                "value": 0.729515
+              },
+              "delta": 0.056117,
+              "excluded_questions": 3,
+              "metric": "ndcg@5",
+              "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+              "sensitivity": {
+                "n": 39,
+                "population": "gold-bearing questions",
+                "value": 0.785631
+              },
+              "status": "measured",
+              "variant": "D"
+            },
+            "precision@5": {
+              "corpus": "phase3d",
+              "current": {
+                "n": 42,
+                "population": "all measured questions",
+                "value": 0.190476
+              },
+              "delta": 0.014652,
+              "excluded_questions": 3,
+              "metric": "precision@5",
+              "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+              "sensitivity": {
+                "n": 39,
+                "population": "gold-bearing questions",
+                "value": 0.205128
+              },
+              "status": "measured",
+              "variant": "D"
+            },
+            "recall@5": {
+              "corpus": "phase3d",
+              "current": {
+                "n": 42,
+                "population": "all measured questions",
+                "value": 0.77381
+              },
+              "delta": 0.059524,
+              "excluded_questions": 3,
+              "metric": "recall@5",
+              "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+              "sensitivity": {
+                "n": 39,
+                "population": "gold-bearing questions",
+                "value": 0.833333
+              },
+              "status": "measured",
+              "variant": "D"
+            },
+            "token_f1": {
+              "corpus": "phase3d",
+              "current": {
+                "n": 42,
+                "population": "all measured questions",
+                "value": 0.61213
+              },
+              "delta": 0.047087,
+              "excluded_questions": 3,
+              "metric": "token_f1",
+              "population_source": "qa_metrics.answer_accuracy documents the answerable population; run_phase3d/3f/4b aggregate EM/token-F1 over the answerable population.",
+              "sensitivity": {
+                "n": 39,
+                "population": "answerable questions",
+                "value": 0.659217
+              },
+              "status": "measured",
+              "variant": "D"
+            }
+          },
+          "populations": {
+            "all": 42,
+            "answerable": 39,
+            "gold_bearing": 39,
+            "unanswerable": 3
+          },
+          "questionCount": 42,
+          "sourceReport": "ablation_D.json"
+        }
+      }
+    }
+  },
+  "nature": "re-aggregation of frozen production-aligned per-question results; no experiment was re-run and no report was modified",
+  "notApplicable": [
+    {
+      "corpus": "phase3d",
+      "metric": "factual_grounded",
+      "reason": "An alternate population is documented (answered questions, per qa_metrics.factual_grounding_rate), but per-question answered-ness is not present in the frozen production-aligned reports (their to_dict omits detail.predicted/insufficient_context). Recomputing it would require re-running the experiment or changing the frozen report schema, so no sensitivity value is produced here.",
+      "status": "not_applicable",
+      "variant": "A"
+    },
+    {
+      "corpus": "phase3d",
+      "metric": "path_agreement",
+      "reason": "No alternate population is documented; path_agreement is a per-question binary property of the retrieved source paths that is defined for every question regardless of answerability, so there is no population to switch.",
+      "status": "not_applicable",
+      "variant": "A"
+    },
+    {
+      "corpus": "phase3d",
+      "metric": "factual_grounded",
+      "reason": "An alternate population is documented (answered questions, per qa_metrics.factual_grounding_rate), but per-question answered-ness is not present in the frozen production-aligned reports (their to_dict omits detail.predicted/insufficient_context). Recomputing it would require re-running the experiment or changing the frozen report schema, so no sensitivity value is produced here.",
+      "status": "not_applicable",
+      "variant": "B"
+    },
+    {
+      "corpus": "phase3d",
+      "metric": "path_agreement",
+      "reason": "No alternate population is documented; path_agreement is a per-question binary property of the retrieved source paths that is defined for every question regardless of answerability, so there is no population to switch.",
+      "status": "not_applicable",
+      "variant": "B"
+    },
+    {
+      "corpus": "phase3d",
+      "metric": "factual_grounded",
+      "reason": "An alternate population is documented (answered questions, per qa_metrics.factual_grounding_rate), but per-question answered-ness is not present in the frozen production-aligned reports (their to_dict omits detail.predicted/insufficient_context). Recomputing it would require re-running the experiment or changing the frozen report schema, so no sensitivity value is produced here.",
+      "status": "not_applicable",
+      "variant": "C"
+    },
+    {
+      "corpus": "phase3d",
+      "metric": "path_agreement",
+      "reason": "No alternate population is documented; path_agreement is a per-question binary property of the retrieved source paths that is defined for every question regardless of answerability, so there is no population to switch.",
+      "status": "not_applicable",
+      "variant": "C"
+    },
+    {
+      "corpus": "phase3d",
+      "metric": "factual_grounded",
+      "reason": "An alternate population is documented (answered questions, per qa_metrics.factual_grounding_rate), but per-question answered-ness is not present in the frozen production-aligned reports (their to_dict omits detail.predicted/insufficient_context). Recomputing it would require re-running the experiment or changing the frozen report schema, so no sensitivity value is produced here.",
+      "status": "not_applicable",
+      "variant": "D"
+    },
+    {
+      "corpus": "phase3d",
+      "metric": "path_agreement",
+      "reason": "No alternate population is documented; path_agreement is a per-question binary property of the retrieved source paths that is defined for every question regardless of answerability, so there is no population to switch.",
+      "status": "not_applicable",
+      "variant": "D"
+    },
+    {
+      "corpus": "heading",
+      "metric": "factual_grounded",
+      "reason": "An alternate population is documented (answered questions, per qa_metrics.factual_grounding_rate), but per-question answered-ness is not present in the frozen production-aligned reports (their to_dict omits detail.predicted/insufficient_context). Recomputing it would require re-running the experiment or changing the frozen report schema, so no sensitivity value is produced here.",
+      "status": "not_applicable",
+      "variant": "A"
+    },
+    {
+      "corpus": "heading",
+      "metric": "path_agreement",
+      "reason": "No alternate population is documented; path_agreement is a per-question binary property of the retrieved source paths that is defined for every question regardless of answerability, so there is no population to switch.",
+      "status": "not_applicable",
+      "variant": "A"
+    },
+    {
+      "corpus": "heading",
+      "metric": "factual_grounded",
+      "reason": "An alternate population is documented (answered questions, per qa_metrics.factual_grounding_rate), but per-question answered-ness is not present in the frozen production-aligned reports (their to_dict omits detail.predicted/insufficient_context). Recomputing it would require re-running the experiment or changing the frozen report schema, so no sensitivity value is produced here.",
+      "status": "not_applicable",
+      "variant": "B"
+    },
+    {
+      "corpus": "heading",
+      "metric": "path_agreement",
+      "reason": "No alternate population is documented; path_agreement is a per-question binary property of the retrieved source paths that is defined for every question regardless of answerability, so there is no population to switch.",
+      "status": "not_applicable",
+      "variant": "B"
+    },
+    {
+      "corpus": "heading",
+      "metric": "factual_grounded",
+      "reason": "An alternate population is documented (answered questions, per qa_metrics.factual_grounding_rate), but per-question answered-ness is not present in the frozen production-aligned reports (their to_dict omits detail.predicted/insufficient_context). Recomputing it would require re-running the experiment or changing the frozen report schema, so no sensitivity value is produced here.",
+      "status": "not_applicable",
+      "variant": "C"
+    },
+    {
+      "corpus": "heading",
+      "metric": "path_agreement",
+      "reason": "No alternate population is documented; path_agreement is a per-question binary property of the retrieved source paths that is defined for every question regardless of answerability, so there is no population to switch.",
+      "status": "not_applicable",
+      "variant": "C"
+    },
+    {
+      "corpus": "heading",
+      "metric": "factual_grounded",
+      "reason": "An alternate population is documented (answered questions, per qa_metrics.factual_grounding_rate), but per-question answered-ness is not present in the frozen production-aligned reports (their to_dict omits detail.predicted/insufficient_context). Recomputing it would require re-running the experiment or changing the frozen report schema, so no sensitivity value is produced here.",
+      "status": "not_applicable",
+      "variant": "D"
+    },
+    {
+      "corpus": "heading",
+      "metric": "path_agreement",
+      "reason": "No alternate population is documented; path_agreement is a per-question binary property of the retrieved source paths that is defined for every question regardless of answerability, so there is no population to switch.",
+      "status": "not_applicable",
+      "variant": "D"
+    }
+  ],
+  "populationDefinitions": {
+    "all measured questions": "every measured question (existing runner _aggregate)",
+    "answerable questions": "questions the corpus marks answerable",
+    "gold-bearing questions": "questions carrying gold retrieval evidence; == answerable here",
+    "unanswerable questions": "questions the corpus marks unanswerable"
+  },
+  "records": [
+    {
+      "corpus": "phase3d",
+      "current": {
+        "n": 42,
+        "population": "all measured questions",
+        "value": 0.77381
+      },
+      "delta": 0.059524,
+      "excluded_questions": 3,
+      "metric": "recall@5",
+      "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+      "sensitivity": {
+        "n": 39,
+        "population": "gold-bearing questions",
+        "value": 0.833333
+      },
+      "status": "measured",
+      "variant": "A"
+    },
+    {
+      "corpus": "phase3d",
+      "current": {
+        "n": 42,
+        "population": "all measured questions",
+        "value": 0.190476
+      },
+      "delta": 0.014652,
+      "excluded_questions": 3,
+      "metric": "precision@5",
+      "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+      "sensitivity": {
+        "n": 39,
+        "population": "gold-bearing questions",
+        "value": 0.205128
+      },
+      "status": "measured",
+      "variant": "A"
+    },
+    {
+      "corpus": "phase3d",
+      "current": {
+        "n": 42,
+        "population": "all measured questions",
+        "value": 0.741667
+      },
+      "delta": 0.057051,
+      "excluded_questions": 3,
+      "metric": "mrr",
+      "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+      "sensitivity": {
+        "n": 39,
+        "population": "gold-bearing questions",
+        "value": 0.798718
+      },
+      "status": "measured",
+      "variant": "A"
+    },
+    {
+      "corpus": "phase3d",
+      "current": {
+        "n": 42,
+        "population": "all measured questions",
+        "value": 0.726788
+      },
+      "delta": 0.055907,
+      "excluded_questions": 3,
+      "metric": "ndcg@5",
+      "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+      "sensitivity": {
+        "n": 39,
+        "population": "gold-bearing questions",
+        "value": 0.782695
+      },
+      "status": "measured",
+      "variant": "A"
+    },
+    {
+      "corpus": "phase3d",
+      "current": {
+        "n": 42,
+        "population": "all measured questions",
+        "value": 0.52381
+      },
+      "delta": 0.040293,
+      "excluded_questions": 3,
+      "metric": "exact_match",
+      "population_source": "qa_metrics.answer_accuracy documents the answerable population; run_phase3d/3f/4b aggregate EM/token-F1 over the answerable population.",
+      "sensitivity": {
+        "n": 39,
+        "population": "answerable questions",
+        "value": 0.564103
+      },
+      "status": "measured",
+      "variant": "A"
+    },
+    {
+      "corpus": "phase3d",
+      "current": {
+        "n": 42,
+        "population": "all measured questions",
+        "value": 0.629618
+      },
+      "delta": 0.048432,
+      "excluded_questions": 3,
+      "metric": "token_f1",
+      "population_source": "qa_metrics.answer_accuracy documents the answerable population; run_phase3d/3f/4b aggregate EM/token-F1 over the answerable population.",
+      "sensitivity": {
+        "n": 39,
+        "population": "answerable questions",
+        "value": 0.67805
+      },
+      "status": "measured",
+      "variant": "A"
+    },
+    {
+      "corpus": "phase3d",
+      "current": {
+        "n": 42,
+        "population": "all measured questions",
+        "value": 0.990476
+      },
+      "delta": -0.000733,
+      "excluded_questions": 3,
+      "metric": "evidence_coverage",
+      "population_source": "run_phase3d/3f/4b aggregate evidence_coverage over the answerable population.",
+      "sensitivity": {
+        "n": 39,
+        "population": "answerable questions",
+        "value": 0.989744
+      },
+      "status": "measured",
+      "variant": "A"
+    },
+    {
+      "corpus": "phase3d",
+      "current": {
+        "n": 42,
+        "population": "all measured questions",
+        "value": 0.0
+      },
+      "delta": 0.0,
+      "excluded_questions": 3,
+      "metric": "recall@5",
+      "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+      "sensitivity": {
+        "n": 39,
+        "population": "gold-bearing questions",
+        "value": 0.0
+      },
+      "status": "measured",
+      "variant": "B"
+    },
+    {
+      "corpus": "phase3d",
+      "current": {
+        "n": 42,
+        "population": "all measured questions",
+        "value": 0.0
+      },
+      "delta": 0.0,
+      "excluded_questions": 3,
+      "metric": "precision@5",
+      "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+      "sensitivity": {
+        "n": 39,
+        "population": "gold-bearing questions",
+        "value": 0.0
+      },
+      "status": "measured",
+      "variant": "B"
+    },
+    {
+      "corpus": "phase3d",
+      "current": {
+        "n": 42,
+        "population": "all measured questions",
+        "value": 0.0
+      },
+      "delta": 0.0,
+      "excluded_questions": 3,
+      "metric": "mrr",
+      "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+      "sensitivity": {
+        "n": 39,
+        "population": "gold-bearing questions",
+        "value": 0.0
+      },
+      "status": "measured",
+      "variant": "B"
+    },
+    {
+      "corpus": "phase3d",
+      "current": {
+        "n": 42,
+        "population": "all measured questions",
+        "value": 0.0
+      },
+      "delta": 0.0,
+      "excluded_questions": 3,
+      "metric": "ndcg@5",
+      "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+      "sensitivity": {
+        "n": 39,
+        "population": "gold-bearing questions",
+        "value": 0.0
+      },
+      "status": "measured",
+      "variant": "B"
+    },
+    {
+      "corpus": "phase3d",
+      "current": {
+        "n": 42,
+        "population": "all measured questions",
+        "value": 0.0
+      },
+      "delta": 0.0,
+      "excluded_questions": 3,
+      "metric": "exact_match",
+      "population_source": "qa_metrics.answer_accuracy documents the answerable population; run_phase3d/3f/4b aggregate EM/token-F1 over the answerable population.",
+      "sensitivity": {
+        "n": 39,
+        "population": "answerable questions",
+        "value": 0.0
+      },
+      "status": "measured",
+      "variant": "B"
+    },
+    {
+      "corpus": "phase3d",
+      "current": {
+        "n": 42,
+        "population": "all measured questions",
+        "value": 0.0
+      },
+      "delta": 0.0,
+      "excluded_questions": 3,
+      "metric": "token_f1",
+      "population_source": "qa_metrics.answer_accuracy documents the answerable population; run_phase3d/3f/4b aggregate EM/token-F1 over the answerable population.",
+      "sensitivity": {
+        "n": 39,
+        "population": "answerable questions",
+        "value": 0.0
+      },
+      "status": "measured",
+      "variant": "B"
+    },
+    {
+      "corpus": "phase3d",
+      "current": {
+        "n": 42,
+        "population": "all measured questions",
+        "value": 1.0
+      },
+      "delta": 0.0,
+      "excluded_questions": 3,
+      "metric": "evidence_coverage",
+      "population_source": "run_phase3d/3f/4b aggregate evidence_coverage over the answerable population.",
+      "sensitivity": {
+        "n": 39,
+        "population": "answerable questions",
+        "value": 1.0
+      },
+      "status": "measured",
+      "variant": "B"
+    },
+    {
+      "corpus": "phase3d",
+      "current": {
+        "n": 42,
+        "population": "all measured questions",
+        "value": 0.77381
+      },
+      "delta": 0.059524,
+      "excluded_questions": 3,
+      "metric": "recall@5",
+      "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+      "sensitivity": {
+        "n": 39,
+        "population": "gold-bearing questions",
+        "value": 0.833333
+      },
+      "status": "measured",
+      "variant": "C"
+    },
+    {
+      "corpus": "phase3d",
+      "current": {
+        "n": 42,
+        "population": "all measured questions",
+        "value": 0.190476
+      },
+      "delta": 0.014652,
+      "excluded_questions": 3,
+      "metric": "precision@5",
+      "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+      "sensitivity": {
+        "n": 39,
+        "population": "gold-bearing questions",
+        "value": 0.205128
+      },
+      "status": "measured",
+      "variant": "C"
+    },
+    {
+      "corpus": "phase3d",
+      "current": {
+        "n": 42,
+        "population": "all measured questions",
+        "value": 0.744048
+      },
+      "delta": 0.057234,
+      "excluded_questions": 3,
+      "metric": "mrr",
+      "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+      "sensitivity": {
+        "n": 39,
+        "population": "gold-bearing questions",
+        "value": 0.801282
+      },
+      "status": "measured",
+      "variant": "C"
+    },
+    {
+      "corpus": "phase3d",
+      "current": {
+        "n": 42,
+        "population": "all measured questions",
+        "value": 0.729515
+      },
+      "delta": 0.056117,
+      "excluded_questions": 3,
+      "metric": "ndcg@5",
+      "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+      "sensitivity": {
+        "n": 39,
+        "population": "gold-bearing questions",
+        "value": 0.785631
+      },
+      "status": "measured",
+      "variant": "C"
+    },
+    {
+      "corpus": "phase3d",
+      "current": {
+        "n": 42,
+        "population": "all measured questions",
+        "value": 0.47619
+      },
+      "delta": 0.03663,
+      "excluded_questions": 3,
+      "metric": "exact_match",
+      "population_source": "qa_metrics.answer_accuracy documents the answerable population; run_phase3d/3f/4b aggregate EM/token-F1 over the answerable population.",
+      "sensitivity": {
+        "n": 39,
+        "population": "answerable questions",
+        "value": 0.512821
+      },
+      "status": "measured",
+      "variant": "C"
+    },
+    {
+      "corpus": "phase3d",
+      "current": {
+        "n": 42,
+        "population": "all measured questions",
+        "value": 0.618933
+      },
+      "delta": 0.04761,
+      "excluded_questions": 3,
+      "metric": "token_f1",
+      "population_source": "qa_metrics.answer_accuracy documents the answerable population; run_phase3d/3f/4b aggregate EM/token-F1 over the answerable population.",
+      "sensitivity": {
+        "n": 39,
+        "population": "answerable questions",
+        "value": 0.666543
+      },
+      "status": "measured",
+      "variant": "C"
+    },
+    {
+      "corpus": "phase3d",
+      "current": {
+        "n": 42,
+        "population": "all measured questions",
+        "value": 0.990476
+      },
+      "delta": -0.000733,
+      "excluded_questions": 3,
+      "metric": "evidence_coverage",
+      "population_source": "run_phase3d/3f/4b aggregate evidence_coverage over the answerable population.",
+      "sensitivity": {
+        "n": 39,
+        "population": "answerable questions",
+        "value": 0.989744
+      },
+      "status": "measured",
+      "variant": "C"
+    },
+    {
+      "corpus": "phase3d",
+      "current": {
+        "n": 42,
+        "population": "all measured questions",
+        "value": 0.77381
+      },
+      "delta": 0.059524,
+      "excluded_questions": 3,
+      "metric": "recall@5",
+      "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+      "sensitivity": {
+        "n": 39,
+        "population": "gold-bearing questions",
+        "value": 0.833333
+      },
+      "status": "measured",
+      "variant": "D"
+    },
+    {
+      "corpus": "phase3d",
+      "current": {
+        "n": 42,
+        "population": "all measured questions",
+        "value": 0.190476
+      },
+      "delta": 0.014652,
+      "excluded_questions": 3,
+      "metric": "precision@5",
+      "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+      "sensitivity": {
+        "n": 39,
+        "population": "gold-bearing questions",
+        "value": 0.205128
+      },
+      "status": "measured",
+      "variant": "D"
+    },
+    {
+      "corpus": "phase3d",
+      "current": {
+        "n": 42,
+        "population": "all measured questions",
+        "value": 0.744048
+      },
+      "delta": 0.057234,
+      "excluded_questions": 3,
+      "metric": "mrr",
+      "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+      "sensitivity": {
+        "n": 39,
+        "population": "gold-bearing questions",
+        "value": 0.801282
+      },
+      "status": "measured",
+      "variant": "D"
+    },
+    {
+      "corpus": "phase3d",
+      "current": {
+        "n": 42,
+        "population": "all measured questions",
+        "value": 0.729515
+      },
+      "delta": 0.056117,
+      "excluded_questions": 3,
+      "metric": "ndcg@5",
+      "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+      "sensitivity": {
+        "n": 39,
+        "population": "gold-bearing questions",
+        "value": 0.785631
+      },
+      "status": "measured",
+      "variant": "D"
+    },
+    {
+      "corpus": "phase3d",
+      "current": {
+        "n": 42,
+        "population": "all measured questions",
+        "value": 0.47619
+      },
+      "delta": 0.03663,
+      "excluded_questions": 3,
+      "metric": "exact_match",
+      "population_source": "qa_metrics.answer_accuracy documents the answerable population; run_phase3d/3f/4b aggregate EM/token-F1 over the answerable population.",
+      "sensitivity": {
+        "n": 39,
+        "population": "answerable questions",
+        "value": 0.512821
+      },
+      "status": "measured",
+      "variant": "D"
+    },
+    {
+      "corpus": "phase3d",
+      "current": {
+        "n": 42,
+        "population": "all measured questions",
+        "value": 0.61213
+      },
+      "delta": 0.047087,
+      "excluded_questions": 3,
+      "metric": "token_f1",
+      "population_source": "qa_metrics.answer_accuracy documents the answerable population; run_phase3d/3f/4b aggregate EM/token-F1 over the answerable population.",
+      "sensitivity": {
+        "n": 39,
+        "population": "answerable questions",
+        "value": 0.659217
+      },
+      "status": "measured",
+      "variant": "D"
+    },
+    {
+      "corpus": "phase3d",
+      "current": {
+        "n": 42,
+        "population": "all measured questions",
+        "value": 0.871429
+      },
+      "delta": 0.067033,
+      "excluded_questions": 3,
+      "metric": "evidence_coverage",
+      "population_source": "run_phase3d/3f/4b aggregate evidence_coverage over the answerable population.",
+      "sensitivity": {
+        "n": 39,
+        "population": "answerable questions",
+        "value": 0.938462
+      },
+      "status": "measured",
+      "variant": "D"
+    },
+    {
+      "corpus": "heading",
+      "current": {
+        "n": 23,
+        "population": "all measured questions",
+        "value": 0.847826
+      },
+      "delta": 0.127174,
+      "excluded_questions": 3,
+      "metric": "recall@5",
+      "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+      "sensitivity": {
+        "n": 20,
+        "population": "gold-bearing questions",
+        "value": 0.975
+      },
+      "status": "measured",
+      "variant": "A"
+    },
+    {
+      "corpus": "heading",
+      "current": {
+        "n": 23,
+        "population": "all measured questions",
+        "value": 0.182609
+      },
+      "delta": 0.027391,
+      "excluded_questions": 3,
+      "metric": "precision@5",
+      "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+      "sensitivity": {
+        "n": 20,
+        "population": "gold-bearing questions",
+        "value": 0.21
+      },
+      "status": "measured",
+      "variant": "A"
+    },
+    {
+      "corpus": "heading",
+      "current": {
+        "n": 23,
+        "population": "all measured questions",
+        "value": 0.731884
+      },
+      "delta": 0.109783,
+      "excluded_questions": 3,
+      "metric": "mrr",
+      "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+      "sensitivity": {
+        "n": 20,
+        "population": "gold-bearing questions",
+        "value": 0.841667
+      },
+      "status": "measured",
+      "variant": "A"
+    },
+    {
+      "corpus": "heading",
+      "current": {
+        "n": 23,
+        "population": "all measured questions",
+        "value": 0.756682
+      },
+      "delta": 0.113502,
+      "excluded_questions": 3,
+      "metric": "ndcg@5",
+      "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+      "sensitivity": {
+        "n": 20,
+        "population": "gold-bearing questions",
+        "value": 0.870185
+      },
+      "status": "measured",
+      "variant": "A"
+    },
+    {
+      "corpus": "heading",
+      "current": {
+        "n": 23,
+        "population": "all measured questions",
+        "value": 0.478261
+      },
+      "delta": 0.071739,
+      "excluded_questions": 3,
+      "metric": "exact_match",
+      "population_source": "qa_metrics.answer_accuracy documents the answerable population; run_phase3d/3f/4b aggregate EM/token-F1 over the answerable population.",
+      "sensitivity": {
+        "n": 20,
+        "population": "answerable questions",
+        "value": 0.55
+      },
+      "status": "measured",
+      "variant": "A"
+    },
+    {
+      "corpus": "heading",
+      "current": {
+        "n": 23,
+        "population": "all measured questions",
+        "value": 0.746998
+      },
+      "delta": 0.11205,
+      "excluded_questions": 3,
+      "metric": "token_f1",
+      "population_source": "qa_metrics.answer_accuracy documents the answerable population; run_phase3d/3f/4b aggregate EM/token-F1 over the answerable population.",
+      "sensitivity": {
+        "n": 20,
+        "population": "answerable questions",
+        "value": 0.859048
+      },
+      "status": "measured",
+      "variant": "A"
+    },
+    {
+      "corpus": "heading",
+      "current": {
+        "n": 23,
+        "population": "all measured questions",
+        "value": 1.0
+      },
+      "delta": 0.0,
+      "excluded_questions": 3,
+      "metric": "evidence_coverage",
+      "population_source": "run_phase3d/3f/4b aggregate evidence_coverage over the answerable population.",
+      "sensitivity": {
+        "n": 20,
+        "population": "answerable questions",
+        "value": 1.0
+      },
+      "status": "measured",
+      "variant": "A"
+    },
+    {
+      "corpus": "heading",
+      "current": {
+        "n": 23,
+        "population": "all measured questions",
+        "value": 0.0
+      },
+      "delta": 0.0,
+      "excluded_questions": 3,
+      "metric": "recall@5",
+      "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+      "sensitivity": {
+        "n": 20,
+        "population": "gold-bearing questions",
+        "value": 0.0
+      },
+      "status": "measured",
+      "variant": "B"
+    },
+    {
+      "corpus": "heading",
+      "current": {
+        "n": 23,
+        "population": "all measured questions",
+        "value": 0.0
+      },
+      "delta": 0.0,
+      "excluded_questions": 3,
+      "metric": "precision@5",
+      "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+      "sensitivity": {
+        "n": 20,
+        "population": "gold-bearing questions",
+        "value": 0.0
+      },
+      "status": "measured",
+      "variant": "B"
+    },
+    {
+      "corpus": "heading",
+      "current": {
+        "n": 23,
+        "population": "all measured questions",
+        "value": 0.0
+      },
+      "delta": 0.0,
+      "excluded_questions": 3,
+      "metric": "mrr",
+      "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+      "sensitivity": {
+        "n": 20,
+        "population": "gold-bearing questions",
+        "value": 0.0
+      },
+      "status": "measured",
+      "variant": "B"
+    },
+    {
+      "corpus": "heading",
+      "current": {
+        "n": 23,
+        "population": "all measured questions",
+        "value": 0.0
+      },
+      "delta": 0.0,
+      "excluded_questions": 3,
+      "metric": "ndcg@5",
+      "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+      "sensitivity": {
+        "n": 20,
+        "population": "gold-bearing questions",
+        "value": 0.0
+      },
+      "status": "measured",
+      "variant": "B"
+    },
+    {
+      "corpus": "heading",
+      "current": {
+        "n": 23,
+        "population": "all measured questions",
+        "value": 0.0
+      },
+      "delta": 0.0,
+      "excluded_questions": 3,
+      "metric": "exact_match",
+      "population_source": "qa_metrics.answer_accuracy documents the answerable population; run_phase3d/3f/4b aggregate EM/token-F1 over the answerable population.",
+      "sensitivity": {
+        "n": 20,
+        "population": "answerable questions",
+        "value": 0.0
+      },
+      "status": "measured",
+      "variant": "B"
+    },
+    {
+      "corpus": "heading",
+      "current": {
+        "n": 23,
+        "population": "all measured questions",
+        "value": 0.0
+      },
+      "delta": 0.0,
+      "excluded_questions": 3,
+      "metric": "token_f1",
+      "population_source": "qa_metrics.answer_accuracy documents the answerable population; run_phase3d/3f/4b aggregate EM/token-F1 over the answerable population.",
+      "sensitivity": {
+        "n": 20,
+        "population": "answerable questions",
+        "value": 0.0
+      },
+      "status": "measured",
+      "variant": "B"
+    },
+    {
+      "corpus": "heading",
+      "current": {
+        "n": 23,
+        "population": "all measured questions",
+        "value": 1.0
+      },
+      "delta": 0.0,
+      "excluded_questions": 3,
+      "metric": "evidence_coverage",
+      "population_source": "run_phase3d/3f/4b aggregate evidence_coverage over the answerable population.",
+      "sensitivity": {
+        "n": 20,
+        "population": "answerable questions",
+        "value": 1.0
+      },
+      "status": "measured",
+      "variant": "B"
+    },
+    {
+      "corpus": "heading",
+      "current": {
+        "n": 23,
+        "population": "all measured questions",
+        "value": 0.847826
+      },
+      "delta": 0.127174,
+      "excluded_questions": 3,
+      "metric": "recall@5",
+      "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+      "sensitivity": {
+        "n": 20,
+        "population": "gold-bearing questions",
+        "value": 0.975
+      },
+      "status": "measured",
+      "variant": "C"
+    },
+    {
+      "corpus": "heading",
+      "current": {
+        "n": 23,
+        "population": "all measured questions",
+        "value": 0.182609
+      },
+      "delta": 0.027391,
+      "excluded_questions": 3,
+      "metric": "precision@5",
+      "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+      "sensitivity": {
+        "n": 20,
+        "population": "gold-bearing questions",
+        "value": 0.21
+      },
+      "status": "measured",
+      "variant": "C"
+    },
+    {
+      "corpus": "heading",
+      "current": {
+        "n": 23,
+        "population": "all measured questions",
+        "value": 0.731884
+      },
+      "delta": 0.109783,
+      "excluded_questions": 3,
+      "metric": "mrr",
+      "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+      "sensitivity": {
+        "n": 20,
+        "population": "gold-bearing questions",
+        "value": 0.841667
+      },
+      "status": "measured",
+      "variant": "C"
+    },
+    {
+      "corpus": "heading",
+      "current": {
+        "n": 23,
+        "population": "all measured questions",
+        "value": 0.757851
+      },
+      "delta": 0.113678,
+      "excluded_questions": 3,
+      "metric": "ndcg@5",
+      "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+      "sensitivity": {
+        "n": 20,
+        "population": "gold-bearing questions",
+        "value": 0.871528
+      },
+      "status": "measured",
+      "variant": "C"
+    },
+    {
+      "corpus": "heading",
+      "current": {
+        "n": 23,
+        "population": "all measured questions",
+        "value": 0.434783
+      },
+      "delta": 0.065217,
+      "excluded_questions": 3,
+      "metric": "exact_match",
+      "population_source": "qa_metrics.answer_accuracy documents the answerable population; run_phase3d/3f/4b aggregate EM/token-F1 over the answerable population.",
+      "sensitivity": {
+        "n": 20,
+        "population": "answerable questions",
+        "value": 0.5
+      },
+      "status": "measured",
+      "variant": "C"
+    },
+    {
+      "corpus": "heading",
+      "current": {
+        "n": 23,
+        "population": "all measured questions",
+        "value": 0.674948
+      },
+      "delta": 0.101242,
+      "excluded_questions": 3,
+      "metric": "token_f1",
+      "population_source": "qa_metrics.answer_accuracy documents the answerable population; run_phase3d/3f/4b aggregate EM/token-F1 over the answerable population.",
+      "sensitivity": {
+        "n": 20,
+        "population": "answerable questions",
+        "value": 0.77619
+      },
+      "status": "measured",
+      "variant": "C"
+    },
+    {
+      "corpus": "heading",
+      "current": {
+        "n": 23,
+        "population": "all measured questions",
+        "value": 1.0
+      },
+      "delta": 0.0,
+      "excluded_questions": 3,
+      "metric": "evidence_coverage",
+      "population_source": "run_phase3d/3f/4b aggregate evidence_coverage over the answerable population.",
+      "sensitivity": {
+        "n": 20,
+        "population": "answerable questions",
+        "value": 1.0
+      },
+      "status": "measured",
+      "variant": "C"
+    },
+    {
+      "corpus": "heading",
+      "current": {
+        "n": 23,
+        "population": "all measured questions",
+        "value": 0.847826
+      },
+      "delta": 0.127174,
+      "excluded_questions": 3,
+      "metric": "recall@5",
+      "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+      "sensitivity": {
+        "n": 20,
+        "population": "gold-bearing questions",
+        "value": 0.975
+      },
+      "status": "measured",
+      "variant": "D"
+    },
+    {
+      "corpus": "heading",
+      "current": {
+        "n": 23,
+        "population": "all measured questions",
+        "value": 0.182609
+      },
+      "delta": 0.027391,
+      "excluded_questions": 3,
+      "metric": "precision@5",
+      "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+      "sensitivity": {
+        "n": 20,
+        "population": "gold-bearing questions",
+        "value": 0.21
+      },
+      "status": "measured",
+      "variant": "D"
+    },
+    {
+      "corpus": "heading",
+      "current": {
+        "n": 23,
+        "population": "all measured questions",
+        "value": 0.731884
+      },
+      "delta": 0.109783,
+      "excluded_questions": 3,
+      "metric": "mrr",
+      "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+      "sensitivity": {
+        "n": 20,
+        "population": "gold-bearing questions",
+        "value": 0.841667
+      },
+      "status": "measured",
+      "variant": "D"
+    },
+    {
+      "corpus": "heading",
+      "current": {
+        "n": 23,
+        "population": "all measured questions",
+        "value": 0.757851
+      },
+      "delta": 0.113678,
+      "excluded_questions": 3,
+      "metric": "ndcg@5",
+      "population_source": "run_phase3d/3f/4b aggregate retrieval over the answerable population; in these corpora answerable == gold-bearing (run_dual_path_ablation gives every unanswerable question gold_chunk_ids=(), and *_config.json records withGoldChunks == answerable).",
+      "sensitivity": {
+        "n": 20,
+        "population": "gold-bearing questions",
+        "value": 0.871528
+      },
+      "status": "measured",
+      "variant": "D"
+    },
+    {
+      "corpus": "heading",
+      "current": {
+        "n": 23,
+        "population": "all measured questions",
+        "value": 0.434783
+      },
+      "delta": 0.065217,
+      "excluded_questions": 3,
+      "metric": "exact_match",
+      "population_source": "qa_metrics.answer_accuracy documents the answerable population; run_phase3d/3f/4b aggregate EM/token-F1 over the answerable population.",
+      "sensitivity": {
+        "n": 20,
+        "population": "answerable questions",
+        "value": 0.5
+      },
+      "status": "measured",
+      "variant": "D"
+    },
+    {
+      "corpus": "heading",
+      "current": {
+        "n": 23,
+        "population": "all measured questions",
+        "value": 0.674948
+      },
+      "delta": 0.101242,
+      "excluded_questions": 3,
+      "metric": "token_f1",
+      "population_source": "qa_metrics.answer_accuracy documents the answerable population; run_phase3d/3f/4b aggregate EM/token-F1 over the answerable population.",
+      "sensitivity": {
+        "n": 20,
+        "population": "answerable questions",
+        "value": 0.77619
+      },
+      "status": "measured",
+      "variant": "D"
+    },
+    {
+      "corpus": "heading",
+      "current": {
+        "n": 23,
+        "population": "all measured questions",
+        "value": 0.913043
+      },
+      "delta": 0.086957,
+      "excluded_questions": 3,
+      "metric": "evidence_coverage",
+      "population_source": "run_phase3d/3f/4b aggregate evidence_coverage over the answerable population.",
+      "sensitivity": {
+        "n": 20,
+        "population": "answerable questions",
+        "value": 1.0
+      },
+      "status": "measured",
+      "variant": "D"
+    }
+  ],
+  "sourceReports": [
+    "ablation_A.json",
+    "ablation_B.json",
+    "ablation_C.json",
+    "ablation_D.json",
+    "ablation_heading_A.json",
+    "ablation_heading_B.json",
+    "ablation_heading_C.json",
+    "ablation_heading_D.json"
+  ],
+  "unsupportedAnswerConfirmation": [
+    {
+      "corpus": "phase3d",
+      "denominator_correct": true,
+      "expected_denominator": 3,
+      "failures": 3,
+      "human_readable": "3/3",
+      "metric": "unsupported_answer",
+      "population": 3,
+      "reported_value": 1.0,
+      "status": "confirmed",
+      "variant": "A"
+    },
+    {
+      "corpus": "phase3d",
+      "denominator_correct": true,
+      "expected_denominator": 3,
+      "failures": 0,
+      "human_readable": "0/3",
+      "metric": "unsupported_answer",
+      "population": 3,
+      "reported_value": 0.0,
+      "status": "confirmed",
+      "variant": "B"
+    },
+    {
+      "corpus": "phase3d",
+      "denominator_correct": true,
+      "expected_denominator": 3,
+      "failures": 3,
+      "human_readable": "3/3",
+      "metric": "unsupported_answer",
+      "population": 3,
+      "reported_value": 1.0,
+      "status": "confirmed",
+      "variant": "C"
+    },
+    {
+      "corpus": "phase3d",
+      "denominator_correct": true,
+      "expected_denominator": 3,
+      "failures": 0,
+      "human_readable": "0/3",
+      "metric": "unsupported_answer",
+      "population": 3,
+      "reported_value": 0.0,
+      "status": "confirmed",
+      "variant": "D"
+    },
+    {
+      "corpus": "heading",
+      "denominator_correct": true,
+      "expected_denominator": 3,
+      "failures": 3,
+      "human_readable": "3/3",
+      "metric": "unsupported_answer",
+      "population": 3,
+      "reported_value": 1.0,
+      "status": "confirmed",
+      "variant": "A"
+    },
+    {
+      "corpus": "heading",
+      "denominator_correct": true,
+      "expected_denominator": 3,
+      "failures": 0,
+      "human_readable": "0/3",
+      "metric": "unsupported_answer",
+      "population": 3,
+      "reported_value": 0.0,
+      "status": "confirmed",
+      "variant": "B"
+    },
+    {
+      "corpus": "heading",
+      "denominator_correct": true,
+      "expected_denominator": 3,
+      "failures": 3,
+      "human_readable": "3/3",
+      "metric": "unsupported_answer",
+      "population": 3,
+      "reported_value": 1.0,
+      "status": "confirmed",
+      "variant": "C"
+    },
+    {
+      "corpus": "heading",
+      "denominator_correct": true,
+      "expected_denominator": 3,
+      "failures": 1,
+      "human_readable": "1/3",
+      "metric": "unsupported_answer",
+      "population": 3,
+      "reported_value": 0.333333,
+      "status": "confirmed",
+      "variant": "D"
+    }
+  ]
+}

@@ -1,0 +1,3221 @@
+{
+  "answer_buckets": {
+    "answerable": 140,
+    "buckets": {
+      "answered_with_claims": 99,
+      "gate_abstention": 13,
+      "withheld": 28
+    },
+    "gate_cases": [
+      {
+        "example_id": "num_95ee7e56",
+        "gate_coverage": 0.3333,
+        "gate_missing": [
+          "page",
+          "size"
+        ],
+        "gold": "200",
+        "gold_in_context": true,
+        "question": "What is the maximum page size?",
+        "question_kind": "NUMERIC"
+      },
+      {
+        "example_id": "mc_c70ece64",
+        "gate_coverage": 0.0,
+        "gate_missing": [
+          "executive",
+          "summary",
+          "revenue",
+          "breakdown"
+        ],
+        "gold": "142.6 million",
+        "gold_in_context": true,
+        "question": "What value is mentioned near the boundary between Executive Summary and Revenue Breakdown?",
+        "question_kind": "MULTI_CHUNK"
+      },
+      {
+        "example_id": "num_40784c07",
+        "gate_coverage": 0.0,
+        "gate_missing": [
+          "division",
+          "revenue"
+        ],
+        "gold": "$412.5 million",
+        "gold_in_context": true,
+        "question": "What was the division revenue?",
+        "question_kind": "NUMERIC"
+      },
+      {
+        "example_id": "mc_42e1f7cf",
+        "gate_coverage": 0.0,
+        "gate_missing": [
+          "authentication",
+          "rate",
+          "limits"
+        ],
+        "gold": "3600 seconds",
+        "gold_in_context": true,
+        "question": "What value is mentioned near the boundary between Authentication and Rate Limits?",
+        "question_kind": "MULTI_CHUNK"
+      },
+      {
+        "example_id": "num_1ae85d6b",
+        "gate_coverage": 0.3333,
+        "gate_missing": [
+          "current",
+          "fy2024"
+        ],
+        "gold": "$1.24 billion",
+        "gold_in_context": true,
+        "question": "What is the current FY2024 revenue?",
+        "question_kind": "NUMERIC"
+      },
+      {
+        "example_id": "mc_f03f1a93",
+        "gate_coverage": 0.2222,
+        "gate_missing": [
+          "intellectual",
+          "property"
+        ],
+        "gold": "1.5 percent",
+        "gold_in_context": true,
+        "question": "What value is mentioned near the boundary between Fees and Payment and Intellectual Property?",
+        "question_kind": "MULTI_CHUNK"
+      },
+      {
+        "example_id": "mc_7d94f7cc",
+        "gate_coverage": 0.1111,
+        "gate_missing": [
+          "breakdown",
+          "operating",
+          "expenses"
+        ],
+        "gold": "287.1 million",
+        "gold_in_context": true,
+        "question": "What value is mentioned near the boundary between Revenue Breakdown and Operating Expenses?",
+        "question_kind": "MULTI_CHUNK"
+      },
+      {
+        "example_id": "num_b5827831",
+        "gate_coverage": 0.0,
+        "gate_missing": [
+          "monthly",
+          "subscription"
+        ],
+        "gold": "$4,900",
+        "gold_in_context": true,
+        "question": "What value was reported for monthly subscription?",
+        "question_kind": "NUMERIC"
+      },
+      {
+        "example_id": "num_4c6d491a",
+        "gate_coverage": 0.3333,
+        "gate_missing": [
+          "current",
+          "fy2020"
+        ],
+        "gold": "$425 million",
+        "gold_in_context": true,
+        "question": "What is the current FY2020 revenue?",
+        "question_kind": "NUMERIC"
+      },
+      {
+        "example_id": "mc_3c4ff454",
+        "gate_coverage": 0.2222,
+        "gate_missing": [
+          "operating",
+          "guidance"
+        ],
+        "gold": "234.5 million",
+        "gold_in_context": true,
+        "question": "What value is mentioned near the boundary between Operating Expenses and Forward Guidance?",
+        "question_kind": "MULTI_CHUNK"
+      },
+      {
+        "example_id": "mc_f89ad49d",
+        "gate_coverage": 0.0909,
+        "gate_missing": [
+          "transformation",
+          "era",
+          "2011-2020",
+          "day",
+          "2021-present"
+        ],
+        "gold": "40 percent",
+        "gold_in_context": true,
+        "question": "What value is mentioned near the boundary between Transformation Era (2011-2020) and Present Day (2021-Present)?",
+        "question_kind": "MULTI_CHUNK"
+      },
+      {
+        "example_id": "mc_c48b3cae",
+        "gate_coverage": 0.2727,
+        "gate_missing": [
+          "growth",
+          "phase",
+          "2003-2010"
+        ],
+        "gold": "178 million",
+        "gold_in_context": true,
+        "question": "What value is mentioned near the boundary between Growth Phase (2003-2010) and Transformation Era (2011-2020)?",
+        "question_kind": "MULTI_CHUNK"
+      },
+      {
+        "example_id": "mc_ead1c5b3",
+        "gate_coverage": 0.3636,
+        "gate_missing": [
+          "founding",
+          "early"
+        ],
+        "gold": "8.3 million",
+        "gold_in_context": true,
+        "question": "What value is mentioned near the boundary between Founding and Early Years and Growth Phase (2003-2010)?",
+        "question_kind": "MULTI_CHUNK"
+      }
+    ],
+    "withheld_cases": [
+      {
+        "example_id": "ds_0ea2924f",
+        "gold": "142.6 million",
+        "question": "What was the reported monetary value?",
+        "question_kind": "DIRECT_SPAN",
+        "unsupported_claims": [
+          "$3"
+        ]
+      },
+      {
+        "example_id": "sec_569eed5a",
+        "gold": "Transformation Era (2011-2020)",
+        "question": "Describe the content of the Transformation Era (2011-2020) section?",
+        "question_kind": "SECTION_SPECIFIC",
+        "unsupported_claims": []
+      },
+      {
+        "example_id": "sec_4d47a64a",
+        "gold": "Dataset Overview",
+        "question": "What is covered in the Dataset Overview section?",
+        "question_kind": "SECTION_SPECIFIC",
+        "unsupported_claims": [
+          "GeoClimate-2024 dataset"
+        ]
+      },
+      {
+        "example_id": "sec_5e1deffc",
+        "gold": "Station Distribution",
+        "question": "What information is provided in Station Distribution?",
+        "question_kind": "SECTION_SPECIFIC",
+        "unsupported_claims": [
+          "The mean elevation of stations is 342 meters above sea level"
+        ]
+      },
+      {
+        "example_id": "tc_8340538b",
+        "gold": "1,000 req/min",
+        "question": "What is Premium's rate limit?",
+        "question_kind": "TABLE_CELL",
+        "unsupported_claims": [
+          "1,000 req/min"
+        ]
+      },
+      {
+        "example_id": "mc_98a6aef8",
+        "gold": "7.4 million",
+        "question": "What value is mentioned near the boundary between Dataset Overview and Station Distribution?",
+        "question_kind": "MULTI_CHUNK",
+        "unsupported_claims": [
+          "847"
+        ]
+      },
+      {
+        "example_id": "sec_70c7b5b7",
+        "gold": "Forward Guidance",
+        "question": "What information is provided in Forward Guidance?",
+        "question_kind": "SECTION_SPECIFIC",
+        "unsupported_claims": [
+          "revenue in the range of $880 million to $910 million"
+        ]
+      },
+      {
+        "example_id": "sec_e95f766d",
+        "gold": "Fees and Payment",
+        "question": "What information is provided in Fees and Payment?",
+        "question_kind": "SECTION_SPECIFIC",
+        "unsupported_claims": [
+          "Licensee shall pay Licensor an annual license fee of $245,000 USD, payable in equal quarterly installments of $61,250 USD within 30 days of invoice date"
+        ]
+      },
+      {
+        "example_id": "li_39ef9936",
+        "gold": "GeoClimate-2024: A Comprehensive Meteorological Dataset for the Continental United States.",
+        "question": "What citation is listed second?",
+        "question_kind": "LIST_ITEM",
+        "unsupported_claims": [
+          "GeoClimate-2024: A Comprehensive Meteorological Dataset for the Continental United States"
+        ]
+      },
+      {
+        "example_id": "li_631f3671",
+        "gold": "Free Cash Flow: $189.4 million",
+        "question": "Name the fifth key financial highlights?",
+        "question_kind": "LIST_ITEM",
+        "unsupported_claims": [
+          "EPS (Diluted): $3.47 Operating Margin: 22.1% Free Cash Flow: $189.4 million Cash and Equivalents: $2.1 billion Total Debt: $1.8 billion Dividend: $0.52 per share (paid October 15, 2025)"
+        ]
+      },
+      {
+        "example_id": "li_1241980d",
+        "gold": "OAuth 2.0: for third-party integrations",
+        "question": "What supported authentication methods is listed third?",
+        "question_kind": "LIST_ITEM",
+        "unsupported_claims": [
+          "OAuth 2.0"
+        ]
+      },
+      {
+        "example_id": "li_3927464a",
+        "gold": "Smith, J.A., Johnson, M.K., and Williams, R.T. (2025).",
+        "question": "What comes first in the citation?",
+        "question_kind": "LIST_ITEM",
+        "unsupported_claims": [
+          "GeoClimate"
+        ]
+      },
+      {
+        "example_id": "ds_e21b45e0",
+        "gold": "185 million",
+        "question": "What does the document say about monetary value?",
+        "question_kind": "DIRECT_SPAN",
+        "unsupported_claims": []
+      },
+      {
+        "example_id": "li_050b38c1",
+        "gold": "EPS (Diluted): $3.47",
+        "question": "What is the third key financial highlights?",
+        "question_kind": "LIST_ITEM",
+        "unsupported_claims": [
+          "Revenue: $847.3 million (+12.4% YoY) Net Income: $142.6 million (+20.6% YoY), EPS (Diluted): $3.47 Operating Margin: 22.1% Free Cash Flow: $189.4 million Cash and Equivalents: $2.1 billion Total Debt: $1.8 billion Dividend: $0.52 per share (paid October 15, 2025)"
+        ]
+      },
+      {
+        "example_id": "tc_115f3133",
+        "gold": "500,000 requests",
+        "question": "How much is the monthly quota of Standard?",
+        "question_kind": "TABLE_CELL",
+        "unsupported_claims": [
+          "100 req/min, 150 requ/min and 500,000 requests"
+        ]
+      },
+      {
+        "example_id": "tc_479dca78",
+        "gold": "Enterprise Solutions",
+        "question": "According to the table, what is the division for Enterprise Solutions?",
+        "question_kind": "TABLE_CELL",
+        "unsupported_claims": [
+          "$412.5M"
+        ]
+      },
+      {
+        "example_id": "ds_c8d09ef8",
+        "gold": "118.2 million",
+        "question": "What is the value of monetary value for the amount?",
+        "question_kind": "DIRECT_SPAN",
+        "unsupported_claims": [
+          "$2"
+        ]
+      },
+      {
+        "example_id": "li_70d2f27a",
+        "gold": "Dividend: $0.52 per share (paid October 15, 2025)",
+        "question": "What key financial highlights is listed eighth?",
+        "question_kind": "LIST_ITEM",
+        "unsupported_claims": [
+          "Revenue: $847.3 million (+12.4% YoY) Net Income: $142.6 million (+20.6% YoY), EPS (Diluted): $3.47 Operating Margin: 22.1% Free Cash Flow: $189.4 million Cash and Equivalents: $2.1 billion Total Debt: $1.8 billion Dividend: $0.52 per share (paid October 15, 2025)"
+        ]
+      },
+      {
+        "example_id": "tc_06f5c7e8",
+        "gold": "+4.2%",
+        "question": "What yoy growth does Professional Services have?",
+        "question_kind": "TABLE_CELL",
+        "unsupported_claims": [
+          "+4.2%"
+        ]
+      },
+      {
+        "example_id": "sec_ce282b61",
+        "gold": "Present Day (2021-Present)",
+        "question": "Which section covers present day (2021-present)?",
+        "question_kind": "SECTION_SPECIFIC",
+        "unsupported_claims": []
+      },
+      {
+        "example_id": "tc_78ac63a0",
+        "gold": "$0.0M",
+        "question": "How much is the q3 2025 revenue of Other?",
+        "question_kind": "TABLE_CELL",
+        "unsupported_claims": [
+          "$0.0M and $1.6M"
+        ]
+      },
+      {
+        "example_id": "lc_ec10c85a",
+        "gold": "5 engineers",
+        "question": "In the full context, what value is given for count?",
+        "question_kind": "LONG_CONTEXT",
+        "unsupported_claims": [
+          "1"
+        ]
+      },
+      {
+        "example_id": "li_f17cfdc6",
+        "gold": "Net Income: $142.6 million (+20.6% YoY)",
+        "question": "What key financial highlights is listed second?",
+        "question_kind": "LIST_ITEM",
+        "unsupported_claims": [
+          "Revenue: $847.3 million (+12.4% YoY) Net Income: $142.6 million (+20.6% YoY), EPS (Diluted): $3.47 Operating Margin: 22.1% Free Cash Flow: $189.4 million Cash and Equivalents: $2.1 billion Total Debt: $1.8 billion Dividend: $0.52 per share (paid October 15, 2025)"
+        ]
+      },
+      {
+        "example_id": "tc_dcc6b88d",
+        "gold": "1.2%",
+        "question": "Looking at the table, what missing % value does Precipitation show?",
+        "question_kind": "TABLE_CELL",
+        "unsupported_claims": [
+          "0.0"
+        ]
+      },
+      {
+        "example_id": "num_ebb0173c",
+        "gold": "$142.6 million",
+        "question": "How many net income were recorded?",
+        "question_kind": "NUMERIC",
+        "unsupported_claims": []
+      },
+      {
+        "example_id": "tc_03298034",
+        "gold": "Other",
+        "question": "Looking at the table, what division value does Other show?",
+        "question_kind": "TABLE_CELL",
+        "unsupported_claims": [
+          "-100.0%"
+        ]
+      },
+      {
+        "example_id": "lc_dad0e4e6",
+        "gold": "1,000 employees",
+        "question": "Based on the extended passage, what is the count?",
+        "question_kind": "LONG_CONTEXT",
+        "unsupported_claims": [
+          "950"
+        ]
+      },
+      {
+        "example_id": "tc_1658c1fb",
+        "gold": "4.2",
+        "question": "What is the mean for Wind Speed?",
+        "question_kind": "TABLE_CELL",
+        "unsupported_claims": [
+          "0.0"
+        ]
+      }
+    ]
+  },
+  "benchmark": "phases\\phase4f\\phase4f_5d\\benchmark\\qa_benchmark_v1.jsonl",
+  "benchmark_hash_matches_expected": true,
+  "benchmark_sha256": "1166bf4ff38265c209614ac20261417b7eeb43653f4482dfdf94721fd50a41d0",
+  "claim_report": "answer_claim_evaluation_2026-10-18_m4_baseline_v2",
+  "dataset": {
+    "path": "evaluation/datasets/answer_claims_v2.jsonl",
+    "sha256": "f06795eb5034133d8dc600a4685621dc0999f4a00b71afa0f490731e0aecad88",
+    "statistics": {
+      "ambiguous_examples": 19,
+      "categories": {
+        "compound": 5,
+        "fragment": 6,
+        "heading": 1,
+        "sentence": 16,
+        "table_render": 22,
+        "value_list": 4,
+        "value_only": 49
+      },
+      "examples": 86,
+      "labels": {
+        "CONTRADICTED": 5,
+        "INSUFFICIENT_EVIDENCE": 2,
+        "NOT_A_CLAIM": 28,
+        "PARTIALLY_SUPPORTED": 2,
+        "SUPPORTED": 66
+      },
+      "non_claims": 28,
+      "produced_by": {
+        "both": 73,
+        "lexical_only": 14,
+        "relations_only": 16
+      },
+      "propositional": 75,
+      "total": 103,
+      "uncertainty": {
+        "low": 17,
+        "moderate": 2,
+        "none": 84
+      }
+    },
+    "version": "answer_claims_v2"
+  },
+  "generated_at": "2026-10-18T16:23:50.713224+00:00",
+  "generation_run": "generation_benchmark_2026-10-18_m4_post_v2",
+  "metrics": {
+    "_disagreements": [
+      {
+        "answers_question": false,
+        "category": "value_only",
+        "citation_correct": true,
+        "claim": "$3",
+        "claim_id": "ac_a4d2fdfed9",
+        "example_id": "ds_0ea2924f",
+        "gold": "CONTRADICTED",
+        "lexical_entity_conflict": false,
+        "lexical_label": "UNSUPPORTED",
+        "lexical_reason": "claim text is not sufficiently present in the evidence",
+        "lexical_supported": false,
+        "produced_by": [
+          "relations"
+        ],
+        "question_kind": "DIRECT_SPAN",
+        "rationale": "The passage's reported monetary value is $142.6 million; '$3' is the start of a per-share figure ('or $3.'), not the reported value.",
+        "relations_citation_ok": true,
+        "relations_contradicting_blocks": [
+          1
+        ],
+        "relations_label": "CONTRADICTED",
+        "relations_reason": "evidence contradicts the claim: Net income attributable to shareholders was $142.6 million, or $3.",
+        "relations_supported": false,
+        "relations_supporting_blocks": [],
+        "stated_citations": [],
+        "uncertainty": "none"
+      },
+      {
+        "answers_question": false,
+        "category": "value_only",
+        "citation_correct": true,
+        "claim": "1",
+        "claim_id": "ac_f8ffa771f0",
+        "example_id": "ds_1efed7c7",
+        "gold": "CONTRADICTED",
+        "lexical_entity_conflict": false,
+        "lexical_label": "SUPPORTED",
+        "lexical_reason": "attributed to evidence",
+        "lexical_supported": true,
+        "produced_by": [
+          "lexical",
+          "relations"
+        ],
+        "question_kind": "DIRECT_SPAN",
+        "rationale": "Passage states the metric's percentage is 20.3 percent; '1 percent' is a change in the preceding sentence, not the metric value.",
+        "relations_citation_ok": true,
+        "relations_contradicting_blocks": [
+          1
+        ],
+        "relations_label": "CONTRADICTED",
+        "relations_reason": "evidence contradicts the claim: 1 percent from 20.3 percent.",
+        "relations_supported": false,
+        "relations_supporting_blocks": [],
+        "stated_citations": [],
+        "uncertainty": "none"
+      },
+      {
+        "answers_question": false,
+        "category": "value_only",
+        "citation_correct": true,
+        "claim": "4",
+        "claim_id": "ac_35b60b3e71",
+        "example_id": "ds_81ce24c7",
+        "gold": "CONTRADICTED",
+        "lexical_entity_conflict": false,
+        "lexical_label": "SUPPORTED",
+        "lexical_reason": "attributed to evidence",
+        "lexical_supported": true,
+        "produced_by": [
+          "lexical",
+          "relations"
+        ],
+        "question_kind": "DIRECT_SPAN",
+        "rationale": "Passage gives the metric's increase as 4.2 percent and a separate figure of 4 percent; the bare '4' is not the metric value.",
+        "relations_citation_ok": true,
+        "relations_contradicting_blocks": [
+          1
+        ],
+        "relations_label": "CONTRADICTED",
+        "relations_reason": "evidence contradicts the claim: 4 percent), reflecting a modest 4.2 percent increase.",
+        "relations_supported": false,
+        "relations_supporting_blocks": [],
+        "stated_citations": [],
+        "uncertainty": "low"
+      },
+      {
+        "answers_question": false,
+        "category": "value_only",
+        "citation_correct": true,
+        "claim": "$2",
+        "claim_id": "ac_b89c21fb46",
+        "example_id": "ds_c8d09ef8",
+        "gold": "CONTRADICTED",
+        "lexical_entity_conflict": false,
+        "lexical_label": "UNSUPPORTED",
+        "lexical_reason": "claim text is not sufficiently present in the evidence",
+        "lexical_supported": false,
+        "produced_by": [
+          "relations"
+        ],
+        "question_kind": "DIRECT_SPAN",
+        "rationale": "The passage's reported monetary value is $118.2 million; '$2' begins a per-share figure, not the reported value.",
+        "relations_citation_ok": true,
+        "relations_contradicting_blocks": [
+          1
+        ],
+        "relations_label": "CONTRADICTED",
+        "relations_reason": "evidence contradicts the claim: 47 per diluted share, compared to $118.2 million, or $2.",
+        "relations_supported": false,
+        "relations_supporting_blocks": [],
+        "stated_citations": [],
+        "uncertainty": "none"
+      },
+      {
+        "answers_question": true,
+        "category": "sentence",
+        "citation_correct": true,
+        "claim": "growth 9.7 percent",
+        "claim_id": "ac_1d17c44c4d",
+        "example_id": "ds_df08a5cf",
+        "gold": "SUPPORTED",
+        "lexical_entity_conflict": false,
+        "lexical_label": "SUPPORTED",
+        "lexical_reason": "attributed to evidence",
+        "lexical_supported": true,
+        "produced_by": [
+          "lexical"
+        ],
+        "question_kind": "DIRECT_SPAN",
+        "rationale": "Passage states the segment grew 9.7 percent year-over-year; 'growth 9.7 percent' is a paraphrase.",
+        "relations_citation_ok": true,
+        "relations_contradicting_blocks": [],
+        "relations_label": "INSUFFICIENT_EVIDENCE",
+        "relations_reason": "no passage asserts or contradicts the claim",
+        "relations_supported": false,
+        "relations_supporting_blocks": [],
+        "stated_citations": [],
+        "uncertainty": "none"
+      },
+      {
+        "answers_question": false,
+        "category": "value_only",
+        "citation_correct": true,
+        "claim": "950",
+        "claim_id": "ac_b42c678017",
+        "example_id": "lc_dad0e4e6",
+        "gold": "SUPPORTED",
+        "lexical_entity_conflict": false,
+        "lexical_label": "UNSUPPORTED",
+        "lexical_reason": "claim text is not sufficiently present in the evidence",
+        "lexical_supported": false,
+        "produced_by": [
+          "relations"
+        ],
+        "question_kind": "LONG_CONTEXT",
+        "rationale": "The passage states the acquisition brought the total count to 950, so the claim is supported; the question's intended count is the later 1,000, which the claim does not answer.",
+        "relations_citation_ok": true,
+        "relations_contradicting_blocks": [],
+        "relations_label": "SUPPORTED",
+        "relations_reason": "claim is supported by the evidence",
+        "relations_supported": true,
+        "relations_supporting_blocks": [
+          1
+        ],
+        "stated_citations": [],
+        "uncertainty": "moderate"
+      },
+      {
+        "answers_question": true,
+        "category": "compound",
+        "citation_correct": true,
+        "claim": "Cash and Equivalents: $2.1 billion Total Debt: $1.8 billion Dividend: $0.52 per share (paid October 15, 2025)",
+        "claim_id": "ac_2695a487cf",
+        "example_id": "li_1cd424f2",
+        "gold": "SUPPORTED",
+        "lexical_entity_conflict": false,
+        "lexical_label": "SUPPORTED",
+        "lexical_reason": "attributed to evidence",
+        "lexical_supported": true,
+        "produced_by": [
+          "lexical"
+        ],
+        "question_kind": "LIST_ITEM",
+        "rationale": "Cash and equivalents ($2.1 billion), total debt ($1.8 billion) and the dividend ($0.52 per share, paid October 15, 2025) all appear in the same highlights list; the asked fact is included.",
+        "relations_citation_ok": true,
+        "relations_contradicting_blocks": [],
+        "relations_label": "INSUFFICIENT_EVIDENCE",
+        "relations_reason": "no passage asserts or contradicts the claim",
+        "relations_supported": false,
+        "relations_supporting_blocks": [],
+        "stated_citations": [],
+        "uncertainty": "none"
+      },
+      {
+        "answers_question": true,
+        "category": "sentence",
+        "citation_correct": true,
+        "claim": "The mean elevation of stations is 342 meters above sea level",
+        "claim_id": "ac_c3b8b6d7d4",
+        "example_id": "sec_5e1deffc",
+        "gold": "SUPPORTED",
+        "lexical_entity_conflict": true,
+        "lexical_label": "UNSUPPORTED",
+        "lexical_reason": "value appears in the evidence but belongs to a different entity",
+        "lexical_supported": false,
+        "produced_by": [
+          "relations"
+        ],
+        "question_kind": "SECTION_SPECIFIC",
+        "rationale": "Passage states the mean elevation of stations is 342 meters above sea level.",
+        "relations_citation_ok": true,
+        "relations_contradicting_blocks": [],
+        "relations_label": "SUPPORTED",
+        "relations_reason": "claim is supported by the evidence",
+        "relations_supported": true,
+        "relations_supporting_blocks": [
+          1
+        ],
+        "stated_citations": [],
+        "uncertainty": "none"
+      },
+      {
+        "answers_question": true,
+        "category": "sentence",
+        "citation_correct": true,
+        "claim": "Licensee shall pay Licensor an annual license fee of $245,000 USD, payable in equal quarterly installments of $61,250 USD within 30 days of invoice date",
+        "claim_id": "ac_a91d9a76c3",
+        "example_id": "sec_e95f766d",
+        "gold": "SUPPORTED",
+        "lexical_entity_conflict": true,
+        "lexical_label": "UNSUPPORTED",
+        "lexical_reason": "value appears in the evidence but belongs to a different entity",
+        "lexical_supported": false,
+        "produced_by": [
+          "relations"
+        ],
+        "question_kind": "SECTION_SPECIFIC",
+        "rationale": "Passage states the annual fee, quarterly instalments and the 30-day invoice term.",
+        "relations_citation_ok": true,
+        "relations_contradicting_blocks": [],
+        "relations_label": "SUPPORTED",
+        "relations_reason": "claim is supported by the evidence",
+        "relations_supported": true,
+        "relations_supporting_blocks": [
+          1
+        ],
+        "stated_citations": [],
+        "uncertainty": "none"
+      },
+      {
+        "answers_question": true,
+        "category": "value_only",
+        "citation_correct": true,
+        "claim": "+4.2%.",
+        "claim_id": "ac_a81ea9c816",
+        "example_id": "tc_06f5c7e8",
+        "gold": "SUPPORTED",
+        "lexical_entity_conflict": false,
+        "lexical_label": "UNSUPPORTED",
+        "lexical_reason": "claim text is not sufficiently present in the evidence",
+        "lexical_supported": false,
+        "produced_by": [
+          "relations"
+        ],
+        "question_kind": "TABLE_CELL",
+        "rationale": "Passage gives +4.2% YoY growth for Professional Services.",
+        "relations_citation_ok": true,
+        "relations_contradicting_blocks": [],
+        "relations_label": "SUPPORTED",
+        "relations_reason": "claim is supported by the evidence",
+        "relations_supported": true,
+        "relations_supporting_blocks": [
+          1
+        ],
+        "stated_citations": [],
+        "uncertainty": "none"
+      },
+      {
+        "answers_question": true,
+        "category": "compound",
+        "citation_correct": true,
+        "claim": "100 req/min, 150 requ/min and 500,000 requests.",
+        "claim_id": "ac_10e790c73c",
+        "example_id": "tc_115f3133",
+        "gold": "SUPPORTED",
+        "lexical_entity_conflict": true,
+        "lexical_label": "UNSUPPORTED",
+        "lexical_reason": "value appears in the evidence but belongs to a different entity",
+        "lexical_supported": false,
+        "produced_by": [
+          "relations"
+        ],
+        "question_kind": "TABLE_CELL",
+        "rationale": "The Standard row gives 100 req/min, 150 req/min and 500,000 requests; the asked monthly quota is present, though the answer also lists the other columns.",
+        "relations_citation_ok": true,
+        "relations_contradicting_blocks": [],
+        "relations_label": "SUPPORTED",
+        "relations_reason": "claim is supported by the evidence",
+        "relations_supported": true,
+        "relations_supporting_blocks": [
+          1
+        ],
+        "stated_citations": [],
+        "uncertainty": "low"
+      },
+      {
+        "answers_question": false,
+        "category": "value_only",
+        "citation_correct": true,
+        "claim": "0.0.",
+        "claim_id": "ac_4b2fdadadf",
+        "example_id": "tc_1658c1fb",
+        "gold": "CONTRADICTED",
+        "lexical_entity_conflict": false,
+        "lexical_label": "UNSUPPORTED",
+        "lexical_reason": "claim text is not sufficiently present in the evidence",
+        "lexical_supported": false,
+        "produced_by": [
+          "relations"
+        ],
+        "question_kind": "TABLE_CELL",
+        "rationale": "The question asks for the Mean; the passage gives Mean 4.2 and 0.0 only as the Min, so the claimed mean conflicts with the stated mean.",
+        "relations_citation_ok": true,
+        "relations_contradicting_blocks": [
+          1
+        ],
+        "relations_label": "CONTRADICTED",
+        "relations_reason": "evidence contradicts the claim: the asked column states a different value",
+        "relations_supported": false,
+        "relations_supporting_blocks": [],
+        "stated_citations": [],
+        "uncertainty": "none"
+      },
+      {
+        "answers_question": false,
+        "category": "value_only",
+        "citation_correct": true,
+        "claim": "m/s.",
+        "claim_id": "ac_c43c696353",
+        "example_id": "tc_4367bf4e",
+        "gold": "INSUFFICIENT_EVIDENCE",
+        "lexical_entity_conflict": false,
+        "lexical_label": "UNSUPPORTED",
+        "lexical_reason": "claim text is not sufficiently present in the evidence",
+        "lexical_supported": false,
+        "produced_by": [
+          "lexical",
+          "relations"
+        ],
+        "question_kind": "TABLE_CELL",
+        "rationale": "The question asks for the variable (gold: Wind Speed); 'm/s' is the unit column and the passage does not assert that the variable is m/s.",
+        "relations_citation_ok": true,
+        "relations_contradicting_blocks": [],
+        "relations_label": "INSUFFICIENT_EVIDENCE",
+        "relations_reason": "the value appears under a different attribute than the question asks",
+        "relations_supported": false,
+        "relations_supporting_blocks": [],
+        "stated_citations": [],
+        "uncertainty": "low"
+      },
+      {
+        "answers_question": true,
+        "category": "value_only",
+        "citation_correct": true,
+        "claim": "2.1.",
+        "claim_id": "ac_e9fa5e40dc",
+        "example_id": "tc_43fb1739",
+        "gold": "SUPPORTED",
+        "lexical_entity_conflict": false,
+        "lexical_label": "UNSUPPORTED",
+        "lexical_reason": "claim text is not sufficiently present in the evidence",
+        "lexical_supported": false,
+        "produced_by": [
+          "lexical",
+          "relations"
+        ],
+        "question_kind": "TABLE_CELL",
+        "rationale": "The Humidity row gives Min 2.1.",
+        "relations_citation_ok": true,
+        "relations_contradicting_blocks": [],
+        "relations_label": "SUPPORTED",
+        "relations_reason": "claim is supported by the evidence",
+        "relations_supported": true,
+        "relations_supporting_blocks": [
+          1
+        ],
+        "stated_citations": [],
+        "uncertainty": "none"
+      },
+      {
+        "answers_question": false,
+        "category": "value_only",
+        "citation_correct": true,
+        "claim": "$412.5M",
+        "claim_id": "ac_285e372f61",
+        "example_id": "tc_479dca78",
+        "gold": "INSUFFICIENT_EVIDENCE",
+        "lexical_entity_conflict": true,
+        "lexical_label": "UNSUPPORTED",
+        "lexical_reason": "value appears in the evidence but belongs to a different entity",
+        "lexical_supported": false,
+        "produced_by": [
+          "relations"
+        ],
+        "question_kind": "TABLE_CELL",
+        "rationale": "The question asks for the division (gold: Enterprise Solutions); $412.5M is that row's revenue, and the passage does not assert a division named $412.5M.",
+        "relations_citation_ok": true,
+        "relations_contradicting_blocks": [],
+        "relations_label": "INSUFFICIENT_EVIDENCE",
+        "relations_reason": "the value appears under a different attribute than the question asks",
+        "relations_supported": false,
+        "relations_supporting_blocks": [],
+        "stated_citations": [],
+        "uncertainty": "low"
+      },
+      {
+        "answers_question": false,
+        "category": "compound",
+        "citation_correct": true,
+        "claim": "2006 was a year with revenue of $52.1 million and 280 IPO on NASDAQ.",
+        "claim_id": "ac_365da68a6f",
+        "example_id": "tc_539226f6",
+        "gold": "PARTIALLY_SUPPORTED",
+        "lexical_entity_conflict": false,
+        "lexical_label": "SUPPORTED",
+        "lexical_reason": "attributed to evidence",
+        "lexical_supported": true,
+        "produced_by": [
+          "lexical"
+        ],
+        "question_kind": "TABLE_CELL",
+        "rationale": "2006, $52.1M revenue and the NASDAQ IPO are stated, but the row's 280 is the employee count, not '280 IPO'; one element is misattributed.",
+        "relations_citation_ok": true,
+        "relations_contradicting_blocks": [
+          1
+        ],
+        "relations_label": "CONTRADICTED",
+        "relations_reason": "evidence contradicts the claim: Year | Revenue (USD) | Employees | Key Milestone 2006 | $52.1M | 280 | IPO on NASDAQ",
+        "relations_supported": false,
+        "relations_supporting_blocks": [],
+        "stated_citations": [],
+        "uncertainty": "low"
+      },
+      {
+        "answers_question": true,
+        "category": "compound",
+        "citation_correct": true,
+        "claim": "$0.0M and $1.6M.",
+        "claim_id": "ac_67d36872fb",
+        "example_id": "tc_78ac63a0",
+        "gold": "SUPPORTED",
+        "lexical_entity_conflict": true,
+        "lexical_label": "UNSUPPORTED",
+        "lexical_reason": "value appears in the evidence but belongs to a different entity",
+        "lexical_supported": false,
+        "produced_by": [
+          "relations"
+        ],
+        "question_kind": "TABLE_CELL",
+        "rationale": "The Other row gives $0.0M (Q3 2025) and $1.6M (Q3 2024); both values are correct and the asked value is present.",
+        "relations_citation_ok": true,
+        "relations_contradicting_blocks": [],
+        "relations_label": "SUPPORTED",
+        "relations_reason": "claim is supported by the evidence",
+        "relations_supported": true,
+        "relations_supporting_blocks": [
+          1
+        ],
+        "stated_citations": [],
+        "uncertainty": "low"
+      },
+      {
+        "answers_question": true,
+        "category": "value_only",
+        "citation_correct": true,
+        "claim": "1,000 req/min.",
+        "claim_id": "ac_01dba26693",
+        "example_id": "tc_8340538b",
+        "gold": "SUPPORTED",
+        "lexical_entity_conflict": true,
+        "lexical_label": "UNSUPPORTED",
+        "lexical_reason": "value appears in the evidence but belongs to a different entity",
+        "lexical_supported": false,
+        "produced_by": [
+          "relations"
+        ],
+        "question_kind": "TABLE_CELL",
+        "rationale": "The Premium row gives a 1,000 req/min rate limit.",
+        "relations_citation_ok": true,
+        "relations_contradicting_blocks": [],
+        "relations_label": "SUPPORTED",
+        "relations_reason": "claim is supported by the evidence",
+        "relations_supported": true,
+        "relations_supporting_blocks": [
+          1
+        ],
+        "stated_citations": [],
+        "uncertainty": "none"
+      },
+      {
+        "answers_question": true,
+        "category": "value_only",
+        "citation_correct": true,
+        "claim": "km.",
+        "claim_id": "ac_baeb3485c8",
+        "example_id": "tc_c7763cee",
+        "gold": "SUPPORTED",
+        "lexical_entity_conflict": false,
+        "lexical_label": "UNSUPPORTED",
+        "lexical_reason": "claim text is not sufficiently present in the evidence",
+        "lexical_supported": false,
+        "produced_by": [
+          "lexical",
+          "relations"
+        ],
+        "question_kind": "TABLE_CELL",
+        "rationale": "The Visibility row gives the unit km.",
+        "relations_citation_ok": true,
+        "relations_contradicting_blocks": [],
+        "relations_label": "SUPPORTED",
+        "relations_reason": "claim is supported by the evidence",
+        "relations_supported": true,
+        "relations_supporting_blocks": [
+          1
+        ],
+        "stated_citations": [],
+        "uncertainty": "none"
+      },
+      {
+        "answers_question": false,
+        "category": "sentence",
+        "citation_correct": true,
+        "claim": "Year Revenue (USD) was $8.3 million and 45 First telecom contracts.",
+        "claim_id": "ac_33b96b148c",
+        "example_id": "tc_e8b586d5",
+        "gold": "PARTIALLY_SUPPORTED",
+        "lexical_entity_conflict": false,
+        "lexical_label": "SUPPORTED",
+        "lexical_reason": "attributed to evidence",
+        "lexical_supported": true,
+        "produced_by": [
+          "lexical"
+        ],
+        "question_kind": "TABLE_CELL",
+        "rationale": "Revenue $8.3M and the first telecom contracts are stated, but '45' is the employee count, not the number of contracts; one element is misattributed.",
+        "relations_citation_ok": true,
+        "relations_contradicting_blocks": [
+          1
+        ],
+        "relations_label": "CONTRADICTED",
+        "relations_reason": "evidence contradicts the claim: Year | Revenue (USD) | Employees | Key Milestone 2001 | $8.3M | 45 | First telecom contracts",
+        "relations_supported": false,
+        "relations_supporting_blocks": [],
+        "stated_citations": [],
+        "uncertainty": "low"
+      },
+      {
+        "answers_question": true,
+        "category": "value_only",
+        "citation_correct": true,
+        "claim": "hPa.",
+        "claim_id": "ac_aa241aae9b",
+        "example_id": "tc_ecf59722",
+        "gold": "SUPPORTED",
+        "lexical_entity_conflict": false,
+        "lexical_label": "UNSUPPORTED",
+        "lexical_reason": "claim text is not sufficiently present in the evidence",
+        "lexical_supported": false,
+        "produced_by": [
+          "lexical",
+          "relations"
+        ],
+        "question_kind": "TABLE_CELL",
+        "rationale": "The Pressure row gives the unit hPa.",
+        "relations_citation_ok": true,
+        "relations_contradicting_blocks": [],
+        "relations_label": "INSUFFICIENT_EVIDENCE",
+        "relations_reason": "the value appears under a different attribute than the question asks",
+        "relations_supported": false,
+        "relations_supporting_blocks": [],
+        "stated_citations": [],
+        "uncertainty": "none"
+      },
+      {
+        "answers_question": false,
+        "category": "sentence",
+        "citation_correct": true,
+        "claim": "Auth required.",
+        "claim_id": "ac_79aa6fd173",
+        "example_id": "tr_b0ffbc0f",
+        "gold": "SUPPORTED",
+        "lexical_entity_conflict": false,
+        "lexical_label": "UNSUPPORTED",
+        "lexical_reason": "claim text is not sufficiently present in the evidence",
+        "lexical_supported": false,
+        "produced_by": [
+          "lexical",
+          "relations"
+        ],
+        "question_kind": "TABLE_ROW",
+        "rationale": "The DELETE row says authentication is required; the elliptical claim is supported but is only one column of the asked row.",
+        "relations_citation_ok": true,
+        "relations_contradicting_blocks": [],
+        "relations_label": "SUPPORTED",
+        "relations_reason": "claim is supported by the evidence",
+        "relations_supported": true,
+        "relations_supporting_blocks": [
+          1
+        ],
+        "stated_citations": [],
+        "uncertainty": "low"
+      }
+    ],
+    "answer_relevance": {
+      "answers_question": 57,
+      "examples": [
+        {
+          "claim": "200 employees",
+          "claim_id": "ac_dceb717125",
+          "gold": "SUPPORTED"
+        },
+        {
+          "claim": "950",
+          "claim_id": "ac_b42c678017",
+          "gold": "SUPPORTED"
+        },
+        {
+          "claim": "Revenue exceeds $150M",
+          "claim_id": "ac_599e7ddc7c",
+          "gold": "SUPPORTED"
+        },
+        {
+          "claim": "$61,250.",
+          "claim_id": "ac_226f1f1ac6",
+          "gold": "SUPPORTED"
+        },
+        {
+          "claim": "Auth required POST.",
+          "claim_id": "ac_9eb0779195",
+          "gold": "SUPPORTED"
+        },
+        {
+          "claim": "Revenue exceeds $150M.",
+          "claim_id": "ac_11417a6469",
+          "gold": "SUPPORTED"
+        },
+        {
+          "claim": "Document details",
+          "claim_id": "ac_fa95c220cc",
+          "gold": "SUPPORTED"
+        },
+        {
+          "claim": "Auth required.",
+          "claim_id": "ac_79aa6fd173",
+          "gold": "SUPPORTED"
+        }
+      ],
+      "lexical_accepted": 11,
+      "off_target_claims": 18,
+      "propositional_claims": 75,
+      "relations_accepted": 9,
+      "supported_off_target": 9,
+      "supported_off_target_lexical_accepted": 7,
+      "supported_off_target_relations_accepted": 9
+    },
+    "attribute_binding": {
+      "claim_ids": [
+        "ac_c43c696353",
+        "ac_285e372f61",
+        "ac_aa241aae9b"
+      ],
+      "contradiction_by_table_binding": 1,
+      "misbound_gold_labels": {
+        "CONTRADICTED": 0,
+        "INSUFFICIENT_EVIDENCE": 2,
+        "PARTIALLY_SUPPORTED": 0,
+        "SUPPORTED": 1
+      },
+      "misbound_withheld": 3,
+      "note": "A value found under a different attribute is abstained on rather than labelled CONTRADICTED unless the asked attribute states its own value. Column choice uses question/header overlap and abstains on ties.",
+      "prose_contradictions": 4,
+      "value_only_claims": 49
+    },
+    "benchmark": "phases\\phase4f\\phase4f_5d\\benchmark\\qa_benchmark_v1.jsonl",
+    "benchmark_hash_matches_expected": true,
+    "benchmark_sha256": "1166bf4ff38265c209614ac20261417b7eeb43653f4482dfdf94721fd50a41d0",
+    "citation": {
+      "attribution_accuracy": 1.0,
+      "attribution_correct": 1,
+      "claims_with_stated_citation": 1,
+      "claims_without_stated_citation": 74,
+      "note": "The benchmark supplies one evidence block per row, so any stated [1] is correct and any other index is not.  This measures whether the generator cites, not whether retrieval supplied the right passage."
+    },
+    "dataset": "evaluation/datasets/answer_claims_v2.jsonl",
+    "dataset_change": {
+      "added": [
+        {
+          "category": "value_only",
+          "claim": "Dr. Sarah Chen",
+          "claim_id": "ac_c411173a36",
+          "label": "SUPPORTED",
+          "supersedes": [
+            "ac_0344c2a5d5",
+            "ac_17daf46833"
+          ]
+        }
+      ],
+      "example_id": "li_ab55f3c4",
+      "reason": "splitter no longer treats 'Dr.' as a sentence end",
+      "removed": [
+        {
+          "category": "fragment",
+          "claim": "Dr.",
+          "claim_id": "ac_0344c2a5d5",
+          "label": "NOT_A_CLAIM"
+        },
+        {
+          "category": "value_only",
+          "claim": "Sarah Chen",
+          "claim_id": "ac_17daf46833",
+          "label": "SUPPORTED"
+        }
+      ]
+    },
+    "dataset_statistics": {
+      "ambiguous_examples": 19,
+      "categories": {
+        "compound": 5,
+        "fragment": 6,
+        "heading": 1,
+        "sentence": 16,
+        "table_render": 22,
+        "value_list": 4,
+        "value_only": 49
+      },
+      "examples": 86,
+      "labels": {
+        "CONTRADICTED": 5,
+        "INSUFFICIENT_EVIDENCE": 2,
+        "NOT_A_CLAIM": 28,
+        "PARTIALLY_SUPPORTED": 2,
+        "SUPPORTED": 66
+      },
+      "non_claims": 28,
+      "produced_by": {
+        "both": 73,
+        "lexical_only": 14,
+        "relations_only": 16
+      },
+      "propositional": 75,
+      "total": 103,
+      "uncertainty": {
+        "low": 17,
+        "moderate": 2,
+        "none": 84
+      }
+    },
+    "dataset_version": "answer_claims_v2",
+    "denominators": {
+      "answerable_questions": 140,
+      "claims_scored": 75,
+      "claims_with_stated_citation": 1,
+      "gold_contradicted": 5,
+      "gold_insufficient": 2,
+      "gold_partial": 2,
+      "non_claims": 28,
+      "nonempty_answers_lexical": 75,
+      "nonempty_answers_relations": 74,
+      "questions_with_claims_lexical": 75,
+      "questions_with_claims_relations": 74,
+      "support_negatives": 9,
+      "support_positives": 66,
+      "unique_claims_lexical": 87,
+      "unique_claims_relations": 89
+    },
+    "evidence": "one block per row: the benchmark row's context (what the generator saw)",
+    "extraction": "generation.planning.split_claims (abbreviation fix 2026-10-18)",
+    "fragment_only_examples": 12,
+    "generation_impact": {
+      "added_by_relations": {
+        "count": 11,
+        "em": 0.0,
+        "f1": 0.0398,
+        "rows": [
+          {
+            "answer": "$3",
+            "em": false,
+            "example_id": "ds_0ea2924f",
+            "f1": 0.0
+          },
+          {
+            "answer": "The mean elevation of stations is 342 meters above sea level",
+            "em": false,
+            "example_id": "sec_5e1deffc",
+            "f1": 0.0
+          },
+          {
+            "answer": "1,000 req/min. Tier | Rate Limit | Burst Limit | Monthly Quota [1]",
+            "em": false,
+            "example_id": "tc_8340538b",
+            "f1": 0.1667
+          },
+          {
+            "answer": "Licensee shall pay Licensor an annual license fee of $245,000 USD, payable in equal quarterly installments of $61,250 USD within 30 days of invoice date",
+            "em": false,
+            "example_id": "sec_e95f766d",
+            "f1": 0.0
+          },
+          {
+            "answer": "100 req/min, 150 requ/min and 500,000 requests. Tier | Rate Limit | Burst Limit | Monthly Quota [1]",
+            "em": false,
+            "example_id": "tc_115f3133",
+            "f1": 0.1176
+          },
+          {
+            "answer": "$412.5M",
+            "em": false,
+            "example_id": "tc_479dca78",
+            "f1": 0.0
+          },
+          {
+            "answer": "$2",
+            "em": false,
+            "example_id": "ds_c8d09ef8",
+            "f1": 0.0
+          },
+          {
+            "answer": "+4.2%. Division | Q3 2025 Revenue | Q3 2024 Revenue | YoY Growth [1]",
+            "em": false,
+            "example_id": "tc_06f5c7e8",
+            "f1": 0.0
+          },
+          {
+            "answer": "$0.0M and $1.6M. Division | Q3 2025 Revenue | Q3 2024 Revenue | YoY Growth [1]",
+            "em": false,
+            "example_id": "tc_78ac63a0",
+            "f1": 0.1538
+          },
+          {
+            "answer": "950",
+            "em": false,
+            "example_id": "lc_dad0e4e6",
+            "f1": 0.0
+          },
+          {
+            "answer": "0.0. Variable | Unit | Min | Max | Mean | Missing % [1]",
+            "em": false,
+            "example_id": "tc_1658c1fb",
+            "f1": 0.0
+          }
+        ]
+      },
+      "answer_sets": {
+        "both_answered_differently": 0,
+        "identical": 117,
+        "only_lexical_answered": 12,
+        "only_relations_answered": 11
+      },
+      "coverage_lexical": {
+        "answer_coverage": 0.5357,
+        "answerable": 140,
+        "answered": 75,
+        "claims": 87,
+        "claims_per_answer": 1.16,
+        "empty": 65,
+        "evaluated": 140,
+        "gate_abstentions": 49,
+        "questions_with_claims": 75,
+        "run_id": "generation_benchmark_2026-10-17_fmt10",
+        "unique_claims": 87,
+        "withheld": 16
+      },
+      "coverage_relations": {
+        "answer_coverage": 0.5286,
+        "answerable": 140,
+        "answered": 74,
+        "claims": 89,
+        "claims_per_answer": 1.203,
+        "empty": 66,
+        "evaluated": 140,
+        "gate_abstentions": 49,
+        "questions_with_claims": 74,
+        "run_id": "generation_benchmark_2026-10-17_fmt10_relations_r5",
+        "unique_claims": 89,
+        "withheld": 17
+      },
+      "dropped_by_relations": {
+        "count": 12,
+        "em": 0.0,
+        "f1": 0.3472,
+        "rows": [
+          {
+            "answer": "2006 was a year with revenue of $52.1 million and 280 IPO on NASDAQ. Year | Revenue (USD) | Employees | Key Milestone 2006 | $52.1M | 280 | IPO on NASDAQ [1]",
+            "em": false,
+            "example_id": "tc_539226f6",
+            "f1": 0.087
+          },
+          {
+            "answer": "[1] (benchmark-context) Variable, Unit, Min, Max, Mean, Missing % Pressure, hPa",
+            "em": false,
+            "example_id": "tr_a4210d62",
+            "f1": 0.1111
+          },
+          {
+            "answer": "Tier, Rate Limit, Burst Limit, Monthly Quota, 500,000 requests",
+            "em": false,
+            "example_id": "tr_a50b71eb",
+            "f1": 0.2667
+          },
+          {
+            "answer": "[1] (benchmark-context) Variable, Unit, Min, Max, Mean, Missing %",
+            "em": false,
+            "example_id": "tr_11a2c534",
+            "f1": 0.0
+          },
+          {
+            "answer": "[1] (benchmark-context) Variable, Unit, Min, Max, Mean, Missing % Visibility, km, 0.1, 50.0, 14.7",
+            "em": false,
+            "example_id": "tr_70ecedca",
+            "f1": 0.0952
+          },
+          {
+            "answer": "[1] (benchmark-context) Year Revenue (USD) | Employees | Key Milestone 2001 | $8.3M | 45 First telecom contracts",
+            "em": false,
+            "example_id": "tr_fc37dd5c",
+            "f1": 0.6364
+          },
+          {
+            "answer": "/auth/token, Obtain access token. POST | /auth/token | Obtain access token | No [1]",
+            "em": false,
+            "example_id": "tr_38d24c64",
+            "f1": 0.8235
+          },
+          {
+            "answer": "Payment Schedule, Amount (USD), Due Date, October 15, 2025",
+            "em": false,
+            "example_id": "tr_1b1273ff",
+            "f1": 0.4
+          },
+          {
+            "answer": "growth 9.7 percent",
+            "em": false,
+            "example_id": "ds_df08a5cf",
+            "f1": 0.8
+          },
+          {
+            "answer": "Payment Schedule | Amount (USD) | Due Date Q4 2025 | $61,250",
+            "em": false,
+            "example_id": "tr_805c4436",
+            "f1": 0.4706
+          },
+          {
+            "answer": "Year Revenue (USD) was $8.3 million and 45 First telecom contracts.",
+            "em": false,
+            "example_id": "tc_e8b586d5",
+            "f1": 0.0
+          },
+          {
+            "answer": "Cash and Equivalents: $2.1 billion Total Debt: $1.8 billion Dividend: $0.52 per share (paid October 15, 2025)",
+            "em": false,
+            "example_id": "li_1cd424f2",
+            "f1": 0.4762
+          }
+        ]
+      },
+      "recorded_metrics": {
+        "lexical": {
+          "extractive_abstention_unanswerable": 0.0,
+          "extractive_em": 0.1571,
+          "extractive_f1": 0.3871,
+          "extractive_spurious_unanswerable": 1.0,
+          "generative_abstention_unanswerable": 0.9524,
+          "generative_answerability_gate_abstentions": 83,
+          "generative_citation_accuracy": 0.8019,
+          "generative_claim_count": 106,
+          "generative_em": 0.1286,
+          "generative_empty_rate": 0.5769,
+          "generative_f1": 0.2567,
+          "generative_lead_em": 0.1286,
+          "generative_lead_f1": 0.2473,
+          "generative_spurious_unanswerable": 0.0476,
+          "generative_status_counts": {
+            "INSUFFICIENT_EVIDENCE": 105,
+            "PARTIALLY_SUPPORTED": 5,
+            "SUPPORTED": 72
+          },
+          "generative_supported_claims": 85,
+          "generative_unsupported_claim_count": 21,
+          "generative_unsupported_claim_rate": 0.1981,
+          "generative_verified_rate": 0.3956,
+          "generative_withheld_unattributable": 22
+        },
+        "relations": {
+          "extractive_abstention_unanswerable": 0.0,
+          "extractive_em": 0.1571,
+          "extractive_f1": 0.3871,
+          "extractive_spurious_unanswerable": 1.0,
+          "generative_abstention_unanswerable": 0.9524,
+          "generative_answerability_gate_abstentions": 83,
+          "generative_citation_accuracy": 0.8349,
+          "generative_claim_count": 109,
+          "generative_em": 0.1286,
+          "generative_empty_rate": 0.5824,
+          "generative_f1": 0.23,
+          "generative_lead_em": 0.1286,
+          "generative_lead_f1": 0.2293,
+          "generative_spurious_unanswerable": 0.0476,
+          "generative_status_counts": {
+            "INSUFFICIENT_EVIDENCE": 106,
+            "PARTIALLY_SUPPORTED": 1,
+            "SUPPORTED": 75
+          },
+          "generative_supported_claims": 91,
+          "generative_unsupported_claim_count": 18,
+          "generative_unsupported_claim_rate": 0.1651,
+          "generative_verified_rate": 0.4121,
+          "generative_withheld_unattributable": 23
+        }
+      }
+    },
+    "integrity": {
+      "answerable_rows": 140,
+      "benchmark_rows": 182,
+      "claims": 103,
+      "examples": 86
+    },
+    "labels": {
+      "lexical": "SUPPORTED / UNSUPPORTED (binary; native wrong-entity reason reported separately)",
+      "relations": "SUPPORTED / CONTRADICTED / INSUFFICIENT_EVIDENCE",
+      "relations_binding": "A value under a different attribute is INSUFFICIENT_EVIDENCE unless the asked attribute states a competing value, in which case it is CONTRADICTED"
+    },
+    "lexical": {
+      "binary_decision_accuracy": 0.8,
+      "claims": 75,
+      "contradiction_f1": null,
+      "contradiction_false_negatives": 5,
+      "contradiction_false_positives": 0,
+      "contradiction_precision": null,
+      "contradiction_precision_ci95": null,
+      "contradiction_recall": 0.0,
+      "contradiction_recall_ci95": [
+        0.0,
+        0.4345
+      ],
+      "contradiction_true_positives": 0,
+      "exact_three_way": 0.7333,
+      "false_accept_ci95": [
+        0.1888,
+        0.7334
+      ],
+      "false_accept_count": 4,
+      "false_accept_rate": 0.4444,
+      "false_reject_ci95": [
+        0.0957,
+        0.2743
+      ],
+      "false_reject_count": 11,
+      "false_reject_rate": 0.1667,
+      "insufficient_correct": 0,
+      "insufficient_gold": 2,
+      "partial_accepted": 2,
+      "partial_gold": 2,
+      "support_f1": 0.88,
+      "support_false_negatives": 11,
+      "support_false_positives": 4,
+      "support_precision": 0.9322,
+      "support_precision_ci95": [
+        0.8382,
+        0.9733
+      ],
+      "support_recall": 0.8333,
+      "support_recall_ci95": [
+        0.7257,
+        0.9043
+      ],
+      "support_true_negatives": 5,
+      "support_true_positives": 55
+    },
+    "lexical_by_category": {
+      "compound": {
+        "binary_decision_accuracy": 0.4,
+        "claims": 5,
+        "contradiction_f1": null,
+        "contradiction_false_negatives": 0,
+        "contradiction_false_positives": 0,
+        "contradiction_precision": null,
+        "contradiction_precision_ci95": null,
+        "contradiction_recall": null,
+        "contradiction_recall_ci95": null,
+        "contradiction_true_positives": 0,
+        "exact_three_way": 0.4,
+        "false_accept_ci95": [
+          0.2065,
+          1.0
+        ],
+        "false_accept_count": 1,
+        "false_accept_rate": 1.0,
+        "false_reject_ci95": [
+          0.15,
+          0.85
+        ],
+        "false_reject_count": 2,
+        "false_reject_rate": 0.5,
+        "insufficient_correct": 0,
+        "insufficient_gold": 0,
+        "partial_accepted": 1,
+        "partial_gold": 1,
+        "support_f1": 0.5714,
+        "support_false_negatives": 2,
+        "support_false_positives": 1,
+        "support_precision": 0.6667,
+        "support_precision_ci95": [
+          0.2077,
+          0.9385
+        ],
+        "support_recall": 0.5,
+        "support_recall_ci95": [
+          0.15,
+          0.85
+        ],
+        "support_true_negatives": 0,
+        "support_true_positives": 2
+      },
+      "fragment": {
+        "binary_decision_accuracy": 1.0,
+        "claims": 1,
+        "contradiction_f1": null,
+        "contradiction_false_negatives": 0,
+        "contradiction_false_positives": 0,
+        "contradiction_precision": null,
+        "contradiction_precision_ci95": null,
+        "contradiction_recall": null,
+        "contradiction_recall_ci95": null,
+        "contradiction_true_positives": 0,
+        "exact_three_way": 1.0,
+        "false_accept_ci95": null,
+        "false_accept_count": 0,
+        "false_accept_rate": null,
+        "false_reject_ci95": [
+          0.0,
+          0.7935
+        ],
+        "false_reject_count": 0,
+        "false_reject_rate": 0.0,
+        "insufficient_correct": 0,
+        "insufficient_gold": 0,
+        "partial_accepted": 0,
+        "partial_gold": 0,
+        "support_f1": 1.0,
+        "support_false_negatives": 0,
+        "support_false_positives": 0,
+        "support_precision": 1.0,
+        "support_precision_ci95": [
+          0.2065,
+          1.0
+        ],
+        "support_recall": 1.0,
+        "support_recall_ci95": [
+          0.2065,
+          1.0
+        ],
+        "support_true_negatives": 0,
+        "support_true_positives": 1
+      },
+      "sentence": {
+        "binary_decision_accuracy": 0.75,
+        "claims": 16,
+        "contradiction_f1": null,
+        "contradiction_false_negatives": 0,
+        "contradiction_false_positives": 0,
+        "contradiction_precision": null,
+        "contradiction_precision_ci95": null,
+        "contradiction_recall": null,
+        "contradiction_recall_ci95": null,
+        "contradiction_true_positives": 0,
+        "exact_three_way": 0.75,
+        "false_accept_ci95": [
+          0.2065,
+          1.0
+        ],
+        "false_accept_count": 1,
+        "false_accept_rate": 1.0,
+        "false_reject_ci95": [
+          0.0705,
+          0.4519
+        ],
+        "false_reject_count": 3,
+        "false_reject_rate": 0.2,
+        "insufficient_correct": 0,
+        "insufficient_gold": 0,
+        "partial_accepted": 1,
+        "partial_gold": 1,
+        "support_f1": 0.8572,
+        "support_false_negatives": 3,
+        "support_false_positives": 1,
+        "support_precision": 0.9231,
+        "support_precision_ci95": [
+          0.6669,
+          0.9863
+        ],
+        "support_recall": 0.8,
+        "support_recall_ci95": [
+          0.5481,
+          0.9295
+        ],
+        "support_true_negatives": 0,
+        "support_true_positives": 12
+      },
+      "value_list": {
+        "binary_decision_accuracy": 1.0,
+        "claims": 4,
+        "contradiction_f1": null,
+        "contradiction_false_negatives": 0,
+        "contradiction_false_positives": 0,
+        "contradiction_precision": null,
+        "contradiction_precision_ci95": null,
+        "contradiction_recall": null,
+        "contradiction_recall_ci95": null,
+        "contradiction_true_positives": 0,
+        "exact_three_way": 1.0,
+        "false_accept_ci95": null,
+        "false_accept_count": 0,
+        "false_accept_rate": null,
+        "false_reject_ci95": [
+          0.0,
+          0.4899
+        ],
+        "false_reject_count": 0,
+        "false_reject_rate": 0.0,
+        "insufficient_correct": 0,
+        "insufficient_gold": 0,
+        "partial_accepted": 0,
+        "partial_gold": 0,
+        "support_f1": 1.0,
+        "support_false_negatives": 0,
+        "support_false_positives": 0,
+        "support_precision": 1.0,
+        "support_precision_ci95": [
+          0.5101,
+          1.0
+        ],
+        "support_recall": 1.0,
+        "support_recall_ci95": [
+          0.5101,
+          1.0
+        ],
+        "support_true_negatives": 0,
+        "support_true_positives": 4
+      },
+      "value_only": {
+        "binary_decision_accuracy": 0.8367,
+        "claims": 49,
+        "contradiction_f1": null,
+        "contradiction_false_negatives": 5,
+        "contradiction_false_positives": 0,
+        "contradiction_precision": null,
+        "contradiction_precision_ci95": null,
+        "contradiction_recall": 0.0,
+        "contradiction_recall_ci95": [
+          0.0,
+          0.4345
+        ],
+        "contradiction_true_positives": 0,
+        "exact_three_way": 0.7347,
+        "false_accept_ci95": [
+          0.0822,
+          0.6411
+        ],
+        "false_accept_count": 2,
+        "false_accept_rate": 0.2857,
+        "false_reject_ci95": [
+          0.0672,
+          0.2784
+        ],
+        "false_reject_count": 6,
+        "false_reject_rate": 0.1429,
+        "insufficient_correct": 0,
+        "insufficient_gold": 2,
+        "partial_accepted": 0,
+        "partial_gold": 0,
+        "support_f1": 0.9,
+        "support_false_negatives": 6,
+        "support_false_positives": 2,
+        "support_precision": 0.9474,
+        "support_precision_ci95": [
+          0.8271,
+          0.9854
+        ],
+        "support_recall": 0.8571,
+        "support_recall_ci95": [
+          0.7216,
+          0.9328
+        ],
+        "support_true_negatives": 5,
+        "support_true_positives": 36
+      }
+    },
+    "lexical_by_question_kind": {
+      "DIRECT_SPAN": {
+        "binary_decision_accuracy": 0.9,
+        "claims": 20,
+        "contradiction_f1": null,
+        "contradiction_false_negatives": 4,
+        "contradiction_false_positives": 0,
+        "contradiction_precision": null,
+        "contradiction_precision_ci95": null,
+        "contradiction_recall": 0.0,
+        "contradiction_recall_ci95": [
+          0.0,
+          0.4899
+        ],
+        "contradiction_true_positives": 0,
+        "exact_three_way": 0.8,
+        "false_accept_ci95": [
+          0.15,
+          0.85
+        ],
+        "false_accept_count": 2,
+        "false_accept_rate": 0.5,
+        "false_reject_ci95": [
+          0.0,
+          0.1936
+        ],
+        "false_reject_count": 0,
+        "false_reject_rate": 0.0,
+        "insufficient_correct": 0,
+        "insufficient_gold": 0,
+        "partial_accepted": 0,
+        "partial_gold": 0,
+        "support_f1": 0.9412,
+        "support_false_negatives": 0,
+        "support_false_positives": 2,
+        "support_precision": 0.8889,
+        "support_precision_ci95": [
+          0.672,
+          0.969
+        ],
+        "support_recall": 1.0,
+        "support_recall_ci95": [
+          0.8064,
+          1.0
+        ],
+        "support_true_negatives": 2,
+        "support_true_positives": 16
+      },
+      "LIST_ITEM": {
+        "binary_decision_accuracy": 1.0,
+        "claims": 6,
+        "contradiction_f1": null,
+        "contradiction_false_negatives": 0,
+        "contradiction_false_positives": 0,
+        "contradiction_precision": null,
+        "contradiction_precision_ci95": null,
+        "contradiction_recall": null,
+        "contradiction_recall_ci95": null,
+        "contradiction_true_positives": 0,
+        "exact_three_way": 1.0,
+        "false_accept_ci95": null,
+        "false_accept_count": 0,
+        "false_accept_rate": null,
+        "false_reject_ci95": [
+          0.0,
+          0.3903
+        ],
+        "false_reject_count": 0,
+        "false_reject_rate": 0.0,
+        "insufficient_correct": 0,
+        "insufficient_gold": 0,
+        "partial_accepted": 0,
+        "partial_gold": 0,
+        "support_f1": 1.0,
+        "support_false_negatives": 0,
+        "support_false_positives": 0,
+        "support_precision": 1.0,
+        "support_precision_ci95": [
+          0.6097,
+          1.0
+        ],
+        "support_recall": 1.0,
+        "support_recall_ci95": [
+          0.6097,
+          1.0
+        ],
+        "support_true_negatives": 0,
+        "support_true_positives": 6
+      },
+      "LONG_CONTEXT": {
+        "binary_decision_accuracy": 0.6667,
+        "claims": 3,
+        "contradiction_f1": null,
+        "contradiction_false_negatives": 0,
+        "contradiction_false_positives": 0,
+        "contradiction_precision": null,
+        "contradiction_precision_ci95": null,
+        "contradiction_recall": null,
+        "contradiction_recall_ci95": null,
+        "contradiction_true_positives": 0,
+        "exact_three_way": 0.6667,
+        "false_accept_ci95": null,
+        "false_accept_count": 0,
+        "false_accept_rate": null,
+        "false_reject_ci95": [
+          0.0615,
+          0.7923
+        ],
+        "false_reject_count": 1,
+        "false_reject_rate": 0.3333,
+        "insufficient_correct": 0,
+        "insufficient_gold": 0,
+        "partial_accepted": 0,
+        "partial_gold": 0,
+        "support_f1": 0.8,
+        "support_false_negatives": 1,
+        "support_false_positives": 0,
+        "support_precision": 1.0,
+        "support_precision_ci95": [
+          0.3424,
+          1.0
+        ],
+        "support_recall": 0.6667,
+        "support_recall_ci95": [
+          0.2077,
+          0.9385
+        ],
+        "support_true_negatives": 0,
+        "support_true_positives": 2
+      },
+      "NUMERIC": {
+        "binary_decision_accuracy": 1.0,
+        "claims": 13,
+        "contradiction_f1": null,
+        "contradiction_false_negatives": 0,
+        "contradiction_false_positives": 0,
+        "contradiction_precision": null,
+        "contradiction_precision_ci95": null,
+        "contradiction_recall": null,
+        "contradiction_recall_ci95": null,
+        "contradiction_true_positives": 0,
+        "exact_three_way": 1.0,
+        "false_accept_ci95": null,
+        "false_accept_count": 0,
+        "false_accept_rate": null,
+        "false_reject_ci95": [
+          0.0,
+          0.2281
+        ],
+        "false_reject_count": 0,
+        "false_reject_rate": 0.0,
+        "insufficient_correct": 0,
+        "insufficient_gold": 0,
+        "partial_accepted": 0,
+        "partial_gold": 0,
+        "support_f1": 1.0,
+        "support_false_negatives": 0,
+        "support_false_positives": 0,
+        "support_precision": 1.0,
+        "support_precision_ci95": [
+          0.7719,
+          1.0
+        ],
+        "support_recall": 1.0,
+        "support_recall_ci95": [
+          0.7719,
+          1.0
+        ],
+        "support_true_negatives": 0,
+        "support_true_positives": 13
+      },
+      "SECTION_SPECIFIC": {
+        "binary_decision_accuracy": 0.6667,
+        "claims": 6,
+        "contradiction_f1": null,
+        "contradiction_false_negatives": 0,
+        "contradiction_false_positives": 0,
+        "contradiction_precision": null,
+        "contradiction_precision_ci95": null,
+        "contradiction_recall": null,
+        "contradiction_recall_ci95": null,
+        "contradiction_true_positives": 0,
+        "exact_three_way": 0.6667,
+        "false_accept_ci95": null,
+        "false_accept_count": 0,
+        "false_accept_rate": null,
+        "false_reject_ci95": [
+          0.0968,
+          0.7
+        ],
+        "false_reject_count": 2,
+        "false_reject_rate": 0.3333,
+        "insufficient_correct": 0,
+        "insufficient_gold": 0,
+        "partial_accepted": 0,
+        "partial_gold": 0,
+        "support_f1": 0.8,
+        "support_false_negatives": 2,
+        "support_false_positives": 0,
+        "support_precision": 1.0,
+        "support_precision_ci95": [
+          0.5101,
+          1.0
+        ],
+        "support_recall": 0.6667,
+        "support_recall_ci95": [
+          0.3,
+          0.9032
+        ],
+        "support_true_negatives": 0,
+        "support_true_positives": 4
+      },
+      "TABLE_CELL": {
+        "binary_decision_accuracy": 0.5263,
+        "claims": 19,
+        "contradiction_f1": null,
+        "contradiction_false_negatives": 1,
+        "contradiction_false_positives": 0,
+        "contradiction_precision": null,
+        "contradiction_precision_ci95": null,
+        "contradiction_recall": 0.0,
+        "contradiction_recall_ci95": [
+          0.0,
+          0.7935
+        ],
+        "contradiction_true_positives": 0,
+        "exact_three_way": 0.3684,
+        "false_accept_ci95": [
+          0.1176,
+          0.7693
+        ],
+        "false_accept_count": 2,
+        "false_accept_rate": 0.4,
+        "false_reject_ci95": [
+          0.268,
+          0.732
+        ],
+        "false_reject_count": 7,
+        "false_reject_rate": 0.5,
+        "insufficient_correct": 0,
+        "insufficient_gold": 2,
+        "partial_accepted": 2,
+        "partial_gold": 2,
+        "support_f1": 0.6087,
+        "support_false_negatives": 7,
+        "support_false_positives": 2,
+        "support_precision": 0.7778,
+        "support_precision_ci95": [
+          0.4526,
+          0.9368
+        ],
+        "support_recall": 0.5,
+        "support_recall_ci95": [
+          0.268,
+          0.732
+        ],
+        "support_true_negatives": 3,
+        "support_true_positives": 7
+      },
+      "TABLE_ROW": {
+        "binary_decision_accuracy": 0.875,
+        "claims": 8,
+        "contradiction_f1": null,
+        "contradiction_false_negatives": 0,
+        "contradiction_false_positives": 0,
+        "contradiction_precision": null,
+        "contradiction_precision_ci95": null,
+        "contradiction_recall": null,
+        "contradiction_recall_ci95": null,
+        "contradiction_true_positives": 0,
+        "exact_three_way": 0.875,
+        "false_accept_ci95": null,
+        "false_accept_count": 0,
+        "false_accept_rate": null,
+        "false_reject_ci95": [
+          0.0224,
+          0.4709
+        ],
+        "false_reject_count": 1,
+        "false_reject_rate": 0.125,
+        "insufficient_correct": 0,
+        "insufficient_gold": 0,
+        "partial_accepted": 0,
+        "partial_gold": 0,
+        "support_f1": 0.9333,
+        "support_false_negatives": 1,
+        "support_false_positives": 0,
+        "support_precision": 1.0,
+        "support_precision_ci95": [
+          0.6457,
+          1.0
+        ],
+        "support_recall": 0.875,
+        "support_recall_ci95": [
+          0.5291,
+          0.9776
+        ],
+        "support_true_negatives": 0,
+        "support_true_positives": 7
+      }
+    },
+    "lexical_entity_signals": {
+      "count": 6,
+      "gold_contradicted": 0,
+      "gold_insufficient": 1,
+      "gold_partial": 0,
+      "gold_supported": 5,
+      "note": "The lexical verifier's native 'different entity' reason is not a contradiction verdict; it is counted here and excluded from the three-way contradiction metrics."
+    },
+    "limitations": [
+      "Single annotator (the coding agent); labels are a reference set, not adjudicated human ground truth.",
+      "86 of 140 answerable questions produced claims; the rest abstained or were withheld, so claim-level metrics do not cover them.",
+      "The benchmark provides one evidence block per row, so citation attribution and multi-passage support cannot be measured.",
+      "Claims are dominated by short value answers (49 value-only, 29 non-propositional fragments), so the set under-represents academic prose.",
+      "The two recorded runs regenerate answers from the same frozen benchmark; no new generation was run for this evaluation.",
+      "Claim extraction is versioned: v1 uses the frozen pre-fix splitter (legacy_split) and keeps the artificial 'Dr.' fragment; v2 uses the corrected production splitter. Population counts and metrics are not sample-comparable across versions.",
+      "Claim and evidence splitters share one abbreviation rule (generation.sentence_boundaries); a newline is always a sentence boundary in evidence, so an abbreviation at a line break can still split (no benchmark row exercises this).",
+      "No 15-mark relation-verifier benchmark run exists, so the 5/10/15-mark comparison is not available for verifier choice.",
+      "Attribute binding is a heuristic over readable structures only (pipe tables and two prose patterns). It abstains when the asked column cannot be identified; it is not a general table parser.",
+      "The two frozen labels for unit-only table cells disagree with each other: 'm/s' offered as the asked variable is INSUFFICIENT_EVIDENCE, while 'hPa' offered as the asked minimum is SUPPORTED. The verifier follows the protocol and holds both back, so one is counted as a false rejection.",
+      "Latency and the one-off embedder load are measured; process memory and CPU were not instrumented."
+    ],
+    "non_claims": {
+      "fragments": 28,
+      "lexical_accept_rate": 1.0,
+      "lexical_accepted": 28,
+      "relations_accept_rate": 0.7143,
+      "relations_accepted": 20
+    },
+    "propositional_examples": 74,
+    "provenance_sensitivity": {
+      "claims": 59,
+      "lexical": {
+        "binary_decision_accuracy": 0.8983,
+        "claims": 59,
+        "contradiction_f1": null,
+        "contradiction_false_negatives": 2,
+        "contradiction_false_positives": 0,
+        "contradiction_precision": null,
+        "contradiction_precision_ci95": null,
+        "contradiction_recall": 0.0,
+        "contradiction_recall_ci95": [
+          0.0,
+          0.6576
+        ],
+        "contradiction_true_positives": 0,
+        "exact_three_way": 0.8814,
+        "false_accept_ci95": [
+          0.2077,
+          0.9385
+        ],
+        "false_accept_count": 2,
+        "false_accept_rate": 0.6667,
+        "false_reject_ci95": [
+          0.0281,
+          0.1698
+        ],
+        "false_reject_count": 4,
+        "false_reject_rate": 0.0714,
+        "insufficient_correct": 0,
+        "insufficient_gold": 1,
+        "partial_accepted": 0,
+        "partial_gold": 0,
+        "support_f1": 0.9455,
+        "support_false_negatives": 4,
+        "support_false_positives": 2,
+        "support_precision": 0.963,
+        "support_precision_ci95": [
+          0.8746,
+          0.9898
+        ],
+        "support_recall": 0.9286,
+        "support_recall_ci95": [
+          0.8302,
+          0.9719
+        ],
+        "support_true_negatives": 1,
+        "support_true_positives": 52
+      },
+      "relations": {
+        "binary_decision_accuracy": 0.9831,
+        "claims": 59,
+        "contradiction_f1": 1.0,
+        "contradiction_false_negatives": 0,
+        "contradiction_false_positives": 0,
+        "contradiction_precision": 1.0,
+        "contradiction_precision_ci95": [
+          0.3424,
+          1.0
+        ],
+        "contradiction_recall": 1.0,
+        "contradiction_recall_ci95": [
+          0.3424,
+          1.0
+        ],
+        "contradiction_true_positives": 2,
+        "exact_three_way": 0.9831,
+        "false_accept_ci95": [
+          0.0,
+          0.5615
+        ],
+        "false_accept_count": 0,
+        "false_accept_rate": 0.0,
+        "false_reject_ci95": [
+          0.0032,
+          0.0945
+        ],
+        "false_reject_count": 1,
+        "false_reject_rate": 0.0179,
+        "insufficient_correct": 1,
+        "insufficient_gold": 1,
+        "partial_accepted": 0,
+        "partial_gold": 0,
+        "support_f1": 0.991,
+        "support_false_negatives": 1,
+        "support_false_positives": 0,
+        "support_precision": 1.0,
+        "support_precision_ci95": [
+          0.9347,
+          1.0
+        ],
+        "support_recall": 0.9821,
+        "support_recall_ci95": [
+          0.9055,
+          0.9968
+        ],
+        "support_true_negatives": 3,
+        "support_true_positives": 55
+      }
+    },
+    "relations": {
+      "binary_decision_accuracy": 0.96,
+      "claims": 75,
+      "contradiction_f1": 0.8333,
+      "contradiction_false_negatives": 0,
+      "contradiction_false_positives": 2,
+      "contradiction_precision": 0.7143,
+      "contradiction_precision_ci95": [
+        0.3589,
+        0.9178
+      ],
+      "contradiction_recall": 1.0,
+      "contradiction_recall_ci95": [
+        0.5655,
+        1.0
+      ],
+      "contradiction_true_positives": 5,
+      "exact_three_way": 0.9333,
+      "false_accept_ci95": [
+        0.0,
+        0.2992
+      ],
+      "false_accept_count": 0,
+      "false_accept_rate": 0.0,
+      "false_reject_ci95": [
+        0.0156,
+        0.1253
+      ],
+      "false_reject_count": 3,
+      "false_reject_rate": 0.0455,
+      "insufficient_correct": 2,
+      "insufficient_gold": 2,
+      "partial_accepted": 0,
+      "partial_gold": 2,
+      "support_f1": 0.9767,
+      "support_false_negatives": 3,
+      "support_false_positives": 0,
+      "support_precision": 1.0,
+      "support_precision_ci95": [
+        0.9425,
+        1.0
+      ],
+      "support_recall": 0.9545,
+      "support_recall_ci95": [
+        0.8747,
+        0.9844
+      ],
+      "support_true_negatives": 9,
+      "support_true_positives": 63
+    },
+    "relations_by_category": {
+      "compound": {
+        "binary_decision_accuracy": 0.8,
+        "claims": 5,
+        "contradiction_f1": null,
+        "contradiction_false_negatives": 0,
+        "contradiction_false_positives": 1,
+        "contradiction_precision": 0.0,
+        "contradiction_precision_ci95": [
+          0.0,
+          0.7935
+        ],
+        "contradiction_recall": null,
+        "contradiction_recall_ci95": null,
+        "contradiction_true_positives": 0,
+        "exact_three_way": 0.6,
+        "false_accept_ci95": [
+          0.0,
+          0.7935
+        ],
+        "false_accept_count": 0,
+        "false_accept_rate": 0.0,
+        "false_reject_ci95": [
+          0.0456,
+          0.6994
+        ],
+        "false_reject_count": 1,
+        "false_reject_rate": 0.25,
+        "insufficient_correct": 0,
+        "insufficient_gold": 0,
+        "partial_accepted": 0,
+        "partial_gold": 1,
+        "support_f1": 0.8571,
+        "support_false_negatives": 1,
+        "support_false_positives": 0,
+        "support_precision": 1.0,
+        "support_precision_ci95": [
+          0.4385,
+          1.0
+        ],
+        "support_recall": 0.75,
+        "support_recall_ci95": [
+          0.3006,
+          0.9544
+        ],
+        "support_true_negatives": 1,
+        "support_true_positives": 3
+      },
+      "fragment": {
+        "binary_decision_accuracy": 1.0,
+        "claims": 1,
+        "contradiction_f1": null,
+        "contradiction_false_negatives": 0,
+        "contradiction_false_positives": 0,
+        "contradiction_precision": null,
+        "contradiction_precision_ci95": null,
+        "contradiction_recall": null,
+        "contradiction_recall_ci95": null,
+        "contradiction_true_positives": 0,
+        "exact_three_way": 1.0,
+        "false_accept_ci95": null,
+        "false_accept_count": 0,
+        "false_accept_rate": null,
+        "false_reject_ci95": [
+          0.0,
+          0.7935
+        ],
+        "false_reject_count": 0,
+        "false_reject_rate": 0.0,
+        "insufficient_correct": 0,
+        "insufficient_gold": 0,
+        "partial_accepted": 0,
+        "partial_gold": 0,
+        "support_f1": 1.0,
+        "support_false_negatives": 0,
+        "support_false_positives": 0,
+        "support_precision": 1.0,
+        "support_precision_ci95": [
+          0.2065,
+          1.0
+        ],
+        "support_recall": 1.0,
+        "support_recall_ci95": [
+          0.2065,
+          1.0
+        ],
+        "support_true_negatives": 0,
+        "support_true_positives": 1
+      },
+      "sentence": {
+        "binary_decision_accuracy": 0.9375,
+        "claims": 16,
+        "contradiction_f1": null,
+        "contradiction_false_negatives": 0,
+        "contradiction_false_positives": 1,
+        "contradiction_precision": 0.0,
+        "contradiction_precision_ci95": [
+          0.0,
+          0.7935
+        ],
+        "contradiction_recall": null,
+        "contradiction_recall_ci95": null,
+        "contradiction_true_positives": 0,
+        "exact_three_way": 0.875,
+        "false_accept_ci95": [
+          0.0,
+          0.7935
+        ],
+        "false_accept_count": 0,
+        "false_accept_rate": 0.0,
+        "false_reject_ci95": [
+          0.0119,
+          0.2982
+        ],
+        "false_reject_count": 1,
+        "false_reject_rate": 0.0667,
+        "insufficient_correct": 0,
+        "insufficient_gold": 0,
+        "partial_accepted": 0,
+        "partial_gold": 1,
+        "support_f1": 0.9655,
+        "support_false_negatives": 1,
+        "support_false_positives": 0,
+        "support_precision": 1.0,
+        "support_precision_ci95": [
+          0.7847,
+          1.0
+        ],
+        "support_recall": 0.9333,
+        "support_recall_ci95": [
+          0.7018,
+          0.9881
+        ],
+        "support_true_negatives": 1,
+        "support_true_positives": 14
+      },
+      "value_list": {
+        "binary_decision_accuracy": 1.0,
+        "claims": 4,
+        "contradiction_f1": null,
+        "contradiction_false_negatives": 0,
+        "contradiction_false_positives": 0,
+        "contradiction_precision": null,
+        "contradiction_precision_ci95": null,
+        "contradiction_recall": null,
+        "contradiction_recall_ci95": null,
+        "contradiction_true_positives": 0,
+        "exact_three_way": 1.0,
+        "false_accept_ci95": null,
+        "false_accept_count": 0,
+        "false_accept_rate": null,
+        "false_reject_ci95": [
+          0.0,
+          0.4899
+        ],
+        "false_reject_count": 0,
+        "false_reject_rate": 0.0,
+        "insufficient_correct": 0,
+        "insufficient_gold": 0,
+        "partial_accepted": 0,
+        "partial_gold": 0,
+        "support_f1": 1.0,
+        "support_false_negatives": 0,
+        "support_false_positives": 0,
+        "support_precision": 1.0,
+        "support_precision_ci95": [
+          0.5101,
+          1.0
+        ],
+        "support_recall": 1.0,
+        "support_recall_ci95": [
+          0.5101,
+          1.0
+        ],
+        "support_true_negatives": 0,
+        "support_true_positives": 4
+      },
+      "value_only": {
+        "binary_decision_accuracy": 0.9796,
+        "claims": 49,
+        "contradiction_f1": 1.0,
+        "contradiction_false_negatives": 0,
+        "contradiction_false_positives": 0,
+        "contradiction_precision": 1.0,
+        "contradiction_precision_ci95": [
+          0.5655,
+          1.0
+        ],
+        "contradiction_recall": 1.0,
+        "contradiction_recall_ci95": [
+          0.5655,
+          1.0
+        ],
+        "contradiction_true_positives": 5,
+        "exact_three_way": 0.9796,
+        "false_accept_ci95": [
+          0.0,
+          0.3543
+        ],
+        "false_accept_count": 0,
+        "false_accept_rate": 0.0,
+        "false_reject_ci95": [
+          0.0042,
+          0.1232
+        ],
+        "false_reject_count": 1,
+        "false_reject_rate": 0.0238,
+        "insufficient_correct": 2,
+        "insufficient_gold": 2,
+        "partial_accepted": 0,
+        "partial_gold": 0,
+        "support_f1": 0.988,
+        "support_false_negatives": 1,
+        "support_false_positives": 0,
+        "support_precision": 1.0,
+        "support_precision_ci95": [
+          0.9143,
+          1.0
+        ],
+        "support_recall": 0.9762,
+        "support_recall_ci95": [
+          0.8768,
+          0.9958
+        ],
+        "support_true_negatives": 7,
+        "support_true_positives": 41
+      }
+    },
+    "relations_by_question_kind": {
+      "DIRECT_SPAN": {
+        "binary_decision_accuracy": 0.95,
+        "claims": 20,
+        "contradiction_f1": 1.0,
+        "contradiction_false_negatives": 0,
+        "contradiction_false_positives": 0,
+        "contradiction_precision": 1.0,
+        "contradiction_precision_ci95": [
+          0.5101,
+          1.0
+        ],
+        "contradiction_recall": 1.0,
+        "contradiction_recall_ci95": [
+          0.5101,
+          1.0
+        ],
+        "contradiction_true_positives": 4,
+        "exact_three_way": 0.95,
+        "false_accept_ci95": [
+          0.0,
+          0.4899
+        ],
+        "false_accept_count": 0,
+        "false_accept_rate": 0.0,
+        "false_reject_ci95": [
+          0.0111,
+          0.2833
+        ],
+        "false_reject_count": 1,
+        "false_reject_rate": 0.0625,
+        "insufficient_correct": 0,
+        "insufficient_gold": 0,
+        "partial_accepted": 0,
+        "partial_gold": 0,
+        "support_f1": 0.9677,
+        "support_false_negatives": 1,
+        "support_false_positives": 0,
+        "support_precision": 1.0,
+        "support_precision_ci95": [
+          0.7961,
+          1.0
+        ],
+        "support_recall": 0.9375,
+        "support_recall_ci95": [
+          0.7167,
+          0.9889
+        ],
+        "support_true_negatives": 4,
+        "support_true_positives": 15
+      },
+      "LIST_ITEM": {
+        "binary_decision_accuracy": 0.8333,
+        "claims": 6,
+        "contradiction_f1": null,
+        "contradiction_false_negatives": 0,
+        "contradiction_false_positives": 0,
+        "contradiction_precision": null,
+        "contradiction_precision_ci95": null,
+        "contradiction_recall": null,
+        "contradiction_recall_ci95": null,
+        "contradiction_true_positives": 0,
+        "exact_three_way": 0.8333,
+        "false_accept_ci95": null,
+        "false_accept_count": 0,
+        "false_accept_rate": null,
+        "false_reject_ci95": [
+          0.0301,
+          0.5635
+        ],
+        "false_reject_count": 1,
+        "false_reject_rate": 0.1667,
+        "insufficient_correct": 0,
+        "insufficient_gold": 0,
+        "partial_accepted": 0,
+        "partial_gold": 0,
+        "support_f1": 0.9091,
+        "support_false_negatives": 1,
+        "support_false_positives": 0,
+        "support_precision": 1.0,
+        "support_precision_ci95": [
+          0.5655,
+          1.0
+        ],
+        "support_recall": 0.8333,
+        "support_recall_ci95": [
+          0.4365,
+          0.9699
+        ],
+        "support_true_negatives": 0,
+        "support_true_positives": 5
+      },
+      "LONG_CONTEXT": {
+        "binary_decision_accuracy": 1.0,
+        "claims": 3,
+        "contradiction_f1": null,
+        "contradiction_false_negatives": 0,
+        "contradiction_false_positives": 0,
+        "contradiction_precision": null,
+        "contradiction_precision_ci95": null,
+        "contradiction_recall": null,
+        "contradiction_recall_ci95": null,
+        "contradiction_true_positives": 0,
+        "exact_three_way": 1.0,
+        "false_accept_ci95": null,
+        "false_accept_count": 0,
+        "false_accept_rate": null,
+        "false_reject_ci95": [
+          0.0,
+          0.5615
+        ],
+        "false_reject_count": 0,
+        "false_reject_rate": 0.0,
+        "insufficient_correct": 0,
+        "insufficient_gold": 0,
+        "partial_accepted": 0,
+        "partial_gold": 0,
+        "support_f1": 1.0,
+        "support_false_negatives": 0,
+        "support_false_positives": 0,
+        "support_precision": 1.0,
+        "support_precision_ci95": [
+          0.4385,
+          1.0
+        ],
+        "support_recall": 1.0,
+        "support_recall_ci95": [
+          0.4385,
+          1.0
+        ],
+        "support_true_negatives": 0,
+        "support_true_positives": 3
+      },
+      "NUMERIC": {
+        "binary_decision_accuracy": 1.0,
+        "claims": 13,
+        "contradiction_f1": null,
+        "contradiction_false_negatives": 0,
+        "contradiction_false_positives": 0,
+        "contradiction_precision": null,
+        "contradiction_precision_ci95": null,
+        "contradiction_recall": null,
+        "contradiction_recall_ci95": null,
+        "contradiction_true_positives": 0,
+        "exact_three_way": 1.0,
+        "false_accept_ci95": null,
+        "false_accept_count": 0,
+        "false_accept_rate": null,
+        "false_reject_ci95": [
+          0.0,
+          0.2281
+        ],
+        "false_reject_count": 0,
+        "false_reject_rate": 0.0,
+        "insufficient_correct": 0,
+        "insufficient_gold": 0,
+        "partial_accepted": 0,
+        "partial_gold": 0,
+        "support_f1": 1.0,
+        "support_false_negatives": 0,
+        "support_false_positives": 0,
+        "support_precision": 1.0,
+        "support_precision_ci95": [
+          0.7719,
+          1.0
+        ],
+        "support_recall": 1.0,
+        "support_recall_ci95": [
+          0.7719,
+          1.0
+        ],
+        "support_true_negatives": 0,
+        "support_true_positives": 13
+      },
+      "SECTION_SPECIFIC": {
+        "binary_decision_accuracy": 1.0,
+        "claims": 6,
+        "contradiction_f1": null,
+        "contradiction_false_negatives": 0,
+        "contradiction_false_positives": 0,
+        "contradiction_precision": null,
+        "contradiction_precision_ci95": null,
+        "contradiction_recall": null,
+        "contradiction_recall_ci95": null,
+        "contradiction_true_positives": 0,
+        "exact_three_way": 1.0,
+        "false_accept_ci95": null,
+        "false_accept_count": 0,
+        "false_accept_rate": null,
+        "false_reject_ci95": [
+          0.0,
+          0.3903
+        ],
+        "false_reject_count": 0,
+        "false_reject_rate": 0.0,
+        "insufficient_correct": 0,
+        "insufficient_gold": 0,
+        "partial_accepted": 0,
+        "partial_gold": 0,
+        "support_f1": 1.0,
+        "support_false_negatives": 0,
+        "support_false_positives": 0,
+        "support_precision": 1.0,
+        "support_precision_ci95": [
+          0.6097,
+          1.0
+        ],
+        "support_recall": 1.0,
+        "support_recall_ci95": [
+          0.6097,
+          1.0
+        ],
+        "support_true_negatives": 0,
+        "support_true_positives": 6
+      },
+      "TABLE_CELL": {
+        "binary_decision_accuracy": 0.9474,
+        "claims": 19,
+        "contradiction_f1": 0.5,
+        "contradiction_false_negatives": 0,
+        "contradiction_false_positives": 2,
+        "contradiction_precision": 0.3333,
+        "contradiction_precision_ci95": [
+          0.0615,
+          0.7923
+        ],
+        "contradiction_recall": 1.0,
+        "contradiction_recall_ci95": [
+          0.2065,
+          1.0
+        ],
+        "contradiction_true_positives": 1,
+        "exact_three_way": 0.8421,
+        "false_accept_ci95": [
+          0.0,
+          0.4345
+        ],
+        "false_accept_count": 0,
+        "false_accept_rate": 0.0,
+        "false_reject_ci95": [
+          0.0127,
+          0.3147
+        ],
+        "false_reject_count": 1,
+        "false_reject_rate": 0.0714,
+        "insufficient_correct": 2,
+        "insufficient_gold": 2,
+        "partial_accepted": 0,
+        "partial_gold": 2,
+        "support_f1": 0.963,
+        "support_false_negatives": 1,
+        "support_false_positives": 0,
+        "support_precision": 1.0,
+        "support_precision_ci95": [
+          0.7719,
+          1.0
+        ],
+        "support_recall": 0.9286,
+        "support_recall_ci95": [
+          0.6853,
+          0.9873
+        ],
+        "support_true_negatives": 5,
+        "support_true_positives": 13
+      },
+      "TABLE_ROW": {
+        "binary_decision_accuracy": 1.0,
+        "claims": 8,
+        "contradiction_f1": null,
+        "contradiction_false_negatives": 0,
+        "contradiction_false_positives": 0,
+        "contradiction_precision": null,
+        "contradiction_precision_ci95": null,
+        "contradiction_recall": null,
+        "contradiction_recall_ci95": null,
+        "contradiction_true_positives": 0,
+        "exact_three_way": 1.0,
+        "false_accept_ci95": null,
+        "false_accept_count": 0,
+        "false_accept_rate": null,
+        "false_reject_ci95": [
+          0.0,
+          0.3244
+        ],
+        "false_reject_count": 0,
+        "false_reject_rate": 0.0,
+        "insufficient_correct": 0,
+        "insufficient_gold": 0,
+        "partial_accepted": 0,
+        "partial_gold": 0,
+        "support_f1": 1.0,
+        "support_false_negatives": 0,
+        "support_false_positives": 0,
+        "support_precision": 1.0,
+        "support_precision_ci95": [
+          0.6756,
+          1.0
+        ],
+        "support_recall": 1.0,
+        "support_recall_ci95": [
+          0.6756,
+          1.0
+        ],
+        "support_true_negatives": 0,
+        "support_true_positives": 8
+      }
+    },
+    "run_id": "answer_claim_evaluation_2026-10-18_m4_baseline_v2",
+    "started_at": "2026-10-18T16:09:13.153565+00:00",
+    "supersedes": "answer_claims_v1",
+    "timing_ms_per_claim": {
+      "embedder_cold_start_ms": 10821.304,
+      "lexical_max_ms": 0.4803,
+      "lexical_mean_ms": 0.0929,
+      "relations_max_ms": 30.779,
+      "relations_mean_ms": 5.7967
+    },
+    "uncertainty_sensitivity": {
+      "claims": 56,
+      "lexical": {
+        "binary_decision_accuracy": 0.8571,
+        "claims": 56,
+        "contradiction_f1": null,
+        "contradiction_false_negatives": 4,
+        "contradiction_false_positives": 0,
+        "contradiction_precision": null,
+        "contradiction_precision_ci95": null,
+        "contradiction_recall": 0.0,
+        "contradiction_recall_ci95": [
+          0.0,
+          0.4899
+        ],
+        "contradiction_true_positives": 0,
+        "exact_three_way": 0.8036,
+        "false_accept_ci95": [
+          0.0456,
+          0.6994
+        ],
+        "false_accept_count": 1,
+        "false_accept_rate": 0.25,
+        "false_reject_ci95": [
+          0.0668,
+          0.2527
+        ],
+        "false_reject_count": 7,
+        "false_reject_rate": 0.1346,
+        "insufficient_correct": 0,
+        "insufficient_gold": 0,
+        "partial_accepted": 0,
+        "partial_gold": 0,
+        "support_f1": 0.9184,
+        "support_false_negatives": 7,
+        "support_false_positives": 1,
+        "support_precision": 0.9783,
+        "support_precision_ci95": [
+          0.8866,
+          0.9962
+        ],
+        "support_recall": 0.8654,
+        "support_recall_ci95": [
+          0.7473,
+          0.9332
+        ],
+        "support_true_negatives": 3,
+        "support_true_positives": 45
+      },
+      "relations": {
+        "binary_decision_accuracy": 0.9464,
+        "claims": 56,
+        "contradiction_f1": 1.0,
+        "contradiction_false_negatives": 0,
+        "contradiction_false_positives": 0,
+        "contradiction_precision": 1.0,
+        "contradiction_precision_ci95": [
+          0.5101,
+          1.0
+        ],
+        "contradiction_recall": 1.0,
+        "contradiction_recall_ci95": [
+          0.5101,
+          1.0
+        ],
+        "contradiction_true_positives": 4,
+        "exact_three_way": 0.9464,
+        "false_accept_ci95": [
+          0.0,
+          0.4899
+        ],
+        "false_accept_count": 0,
+        "false_accept_rate": 0.0,
+        "false_reject_ci95": [
+          0.0198,
+          0.1564
+        ],
+        "false_reject_count": 3,
+        "false_reject_rate": 0.0577,
+        "insufficient_correct": 0,
+        "insufficient_gold": 0,
+        "partial_accepted": 0,
+        "partial_gold": 0,
+        "support_f1": 0.9703,
+        "support_false_negatives": 3,
+        "support_false_positives": 0,
+        "support_precision": 1.0,
+        "support_precision_ci95": [
+          0.9273,
+          1.0
+        ],
+        "support_recall": 0.9423,
+        "support_recall_ci95": [
+          0.8436,
+          0.9802
+        ],
+        "support_true_negatives": 4,
+        "support_true_positives": 49
+      }
+    }
+  },
+  "non_claims": {
+    "categories": {
+      "fragment": 5,
+      "heading": 1,
+      "table_render": 22
+    },
+    "count": 28,
+    "denominator": 103,
+    "lexical_accepted": 28,
+    "rate": 0.2718,
+    "records": [
+      {
+        "category": "fragment",
+        "claim": "percent",
+        "claim_id": "ac_e8598c6397",
+        "example_id": "ds_1332ff96",
+        "lexical_label": "SUPPORTED",
+        "relations_label": "SUPPORTED"
+      },
+      {
+        "category": "fragment",
+        "claim": "CFO",
+        "claim_id": "ac_56ba947a6b",
+        "example_id": "li_bad3c899",
+        "lexical_label": "SUPPORTED",
+        "relations_label": "SUPPORTED"
+      },
+      {
+        "category": "heading",
+        "claim": "Founding and Early Years",
+        "claim_id": "ac_649ad5c8df",
+        "example_id": "sec_5ecaad37",
+        "lexical_label": "SUPPORTED",
+        "relations_label": "SUPPORTED"
+      },
+      {
+        "category": "table_render",
+        "claim": "Division | Q3 2025 Revenue | Q3 2024 Revenue | YoY Growth [1]",
+        "claim_id": "ac_af9753dbcd",
+        "example_id": "tc_06f5c7e8",
+        "lexical_label": "SUPPORTED",
+        "relations_label": "SUPPORTED"
+      },
+      {
+        "category": "table_render",
+        "claim": "Tier | Rate Limit | Burst Limit | Monthly Quota [1]",
+        "claim_id": "ac_dac918a93c",
+        "example_id": "tc_115f3133",
+        "lexical_label": "SUPPORTED",
+        "relations_label": "SUPPORTED"
+      },
+      {
+        "category": "table_render",
+        "claim": "Variable | Unit | Min | Max | Mean | Missing % [1]",
+        "claim_id": "ac_b65670f4da",
+        "example_id": "tc_1658c1fb",
+        "lexical_label": "SUPPORTED",
+        "relations_label": "SUPPORTED"
+      },
+      {
+        "category": "table_render",
+        "claim": "Variable | Unit | Min | Max | Mean | Missing % [1]",
+        "claim_id": "ac_374f1e0d44",
+        "example_id": "tc_4367bf4e",
+        "lexical_label": "SUPPORTED",
+        "relations_label": "SUPPORTED"
+      },
+      {
+        "category": "table_render",
+        "claim": "Variable | Unit | Min | Max | Mean | Missing % [1]",
+        "claim_id": "ac_e3f4f344a6",
+        "example_id": "tc_43fb1739",
+        "lexical_label": "SUPPORTED",
+        "relations_label": "SUPPORTED"
+      },
+      {
+        "category": "table_render",
+        "claim": "Year | Revenue (USD) | Employees | Key Milestone 2006 | $52.1M | 280 | IPO on NASDAQ [1]",
+        "claim_id": "ac_4c7f3f5a58",
+        "example_id": "tc_539226f6",
+        "lexical_label": "SUPPORTED",
+        "relations_label": "SUPPORTED"
+      },
+      {
+        "category": "table_render",
+        "claim": "Tier | Rate Limit | Burst Limit | Monthly Quota [1]",
+        "claim_id": "ac_53250b2199",
+        "example_id": "tc_6dd05b59",
+        "lexical_label": "SUPPORTED",
+        "relations_label": "SUPPORTED"
+      },
+      {
+        "category": "table_render",
+        "claim": "Division | Q3 2025 Revenue | Q3 2024 Revenue | YoY Growth [1]",
+        "claim_id": "ac_aa03a6ef91",
+        "example_id": "tc_78ac63a0",
+        "lexical_label": "SUPPORTED",
+        "relations_label": "SUPPORTED"
+      },
+      {
+        "category": "table_render",
+        "claim": "Tier | Rate Limit | Burst Limit | Monthly Quota [1]",
+        "claim_id": "ac_be31d3cda3",
+        "example_id": "tc_8340538b",
+        "lexical_label": "SUPPORTED",
+        "relations_label": "SUPPORTED"
+      },
+      {
+        "category": "fragment",
+        "claim": "Missing %",
+        "claim_id": "ac_1454a25bca",
+        "example_id": "tc_87f00ad1",
+        "lexical_label": "SUPPORTED",
+        "relations_label": "SUPPORTED"
+      },
+      {
+        "category": "table_render",
+        "claim": "Payment Schedule | Amount (USD) | Due Date [1]",
+        "claim_id": "ac_8777df0436",
+        "example_id": "tc_a7432939",
+        "lexical_label": "SUPPORTED",
+        "relations_label": "SUPPORTED"
+      },
+      {
+        "category": "table_render",
+        "claim": "Variable | Unit | Min | Max | Mean | Missing % [1]",
+        "claim_id": "ac_ad146f29b8",
+        "example_id": "tc_c7763cee",
+        "lexical_label": "SUPPORTED",
+        "relations_label": "SUPPORTED"
+      },
+      {
+        "category": "table_render",
+        "claim": "Method | Endpoint | Description | Auth Required [1] POST | /documents | Upload a new document | Yes [1]",
+        "claim_id": "ac_954713f316",
+        "example_id": "tc_e75b3a72",
+        "lexical_label": "SUPPORTED",
+        "relations_label": "INSUFFICIENT_EVIDENCE"
+      },
+      {
+        "category": "table_render",
+        "claim": "Variable | Unit | Min | Max | Mean | Missing % [1]",
+        "claim_id": "ac_de9da404f6",
+        "example_id": "tc_ecf59722",
+        "lexical_label": "SUPPORTED",
+        "relations_label": "SUPPORTED"
+      },
+      {
+        "category": "table_render",
+        "claim": "Payment Schedule | Amount (USD) | Due Date [1]",
+        "claim_id": "ac_51ed250e28",
+        "example_id": "tc_fceaa66a",
+        "lexical_label": "SUPPORTED",
+        "relations_label": "SUPPORTED"
+      },
+      {
+        "category": "table_render",
+        "claim": "[1] (benchmark-context) Variable, Unit, Min, Max, Mean, Missing %",
+        "claim_id": "ac_f77a5f6664",
+        "example_id": "tr_11a2c534",
+        "lexical_label": "SUPPORTED",
+        "relations_label": "INSUFFICIENT_EVIDENCE"
+      },
+      {
+        "category": "table_render",
+        "claim": "Payment Schedule, Amount (USD), Due Date, October 15, 2025",
+        "claim_id": "ac_2bfeb91482",
+        "example_id": "tr_1b1273ff",
+        "lexical_label": "SUPPORTED",
+        "relations_label": "CONTRADICTED"
+      },
+      {
+        "category": "table_render",
+        "claim": "POST | /auth/token | Obtain access token | No [1]",
+        "claim_id": "ac_a9482d5746",
+        "example_id": "tr_38d24c64",
+        "lexical_label": "SUPPORTED",
+        "relations_label": "SUPPORTED"
+      },
+      {
+        "category": "fragment",
+        "claim": "Revenue (USD) and employees",
+        "claim_id": "ac_05a8fc626d",
+        "example_id": "tr_52b005d3",
+        "lexical_label": "SUPPORTED",
+        "relations_label": "SUPPORTED"
+      },
+      {
+        "category": "table_render",
+        "claim": "[1] (benchmark-context) Variable, Unit, Min, Max, Mean, Missing % Visibility, km, 0.1, 50.0, 14.7",
+        "claim_id": "ac_24a53c441a",
+        "example_id": "tr_70ecedca",
+        "lexical_label": "SUPPORTED",
+        "relations_label": "INSUFFICIENT_EVIDENCE"
+      },
+      {
+        "category": "table_render",
+        "claim": "Payment Schedule | Amount (USD) | Due Date Q4 2025 | $61,250",
+        "claim_id": "ac_f36ed07787",
+        "example_id": "tr_805c4436",
+        "lexical_label": "SUPPORTED",
+        "relations_label": "CONTRADICTED"
+      },
+      {
+        "category": "table_render",
+        "claim": "[1] (benchmark-context) Variable, Unit, Min, Max, Mean, Missing % Pressure, hPa",
+        "claim_id": "ac_78430491fb",
+        "example_id": "tr_a4210d62",
+        "lexical_label": "SUPPORTED",
+        "relations_label": "INSUFFICIENT_EVIDENCE"
+      },
+      {
+        "category": "fragment",
+        "claim": "Tier, Rate Limit, Burst Limit, Monthly Quota, 500,000 requests",
+        "claim_id": "ac_7cbf6603b7",
+        "example_id": "tr_a50b71eb",
+        "lexical_label": "SUPPORTED",
+        "relations_label": "CONTRADICTED"
+      },
+      {
+        "category": "table_render",
+        "claim": "DELETE | /documents/{id} | Delete a document | Yes [1]",
+        "claim_id": "ac_916f1091e1",
+        "example_id": "tr_b0ffbc0f",
+        "lexical_label": "SUPPORTED",
+        "relations_label": "SUPPORTED"
+      },
+      {
+        "category": "table_render",
+        "claim": "[1] (benchmark-context) Year Revenue (USD) | Employees | Key Milestone 2001 | $8.3M | 45 First telecom contracts",
+        "claim_id": "ac_f24bd97c2f",
+        "example_id": "tr_fc37dd5c",
+        "lexical_label": "SUPPORTED",
+        "relations_label": "INSUFFICIENT_EVIDENCE"
+      }
+    ],
+    "relations_accepted": 20
+  },
+  "recorded_runs": {
+    "lexical": "generation_benchmark_2026-10-17_fmt10",
+    "relations": "generation_benchmark_2026-10-17_fmt10_relations_r5"
+  },
+  "run_id": "answer_quality_diagnosis_2026-10-18_m4_post",
+  "supported_off_target": {
+    "count": 9,
+    "records": [
+      {
+        "category": "value_only",
+        "claim": "200 employees",
+        "claim_id": "ac_dceb717125",
+        "example_id": "lc_430b8915",
+        "lexical_label": "SUPPORTED",
+        "rationale": "The passage does state 200 employees (in 2005), so the claim is supported; it is not the 2010 count the question intends (650), so it does not answer the question.",
+        "relations_label": "SUPPORTED"
+      },
+      {
+        "category": "value_only",
+        "claim": "950",
+        "claim_id": "ac_b42c678017",
+        "example_id": "lc_dad0e4e6",
+        "lexical_label": "UNSUPPORTED",
+        "rationale": "The passage states the acquisition brought the total count to 950, so the claim is supported; the question's intended count is the later 1,000, which the claim does not answer.",
+        "relations_label": "SUPPORTED"
+      },
+      {
+        "category": "sentence",
+        "claim": "Revenue exceeds $150M",
+        "claim_id": "ac_599e7ddc7c",
+        "example_id": "tc_8faf2be8",
+        "lexical_label": "SUPPORTED",
+        "rationale": "The 2010 row states the milestone 'Revenue exceeds $150M'; the claim is supported but does not answer the question (employees = 650).",
+        "relations_label": "SUPPORTED"
+      },
+      {
+        "category": "value_only",
+        "claim": "$61,250.",
+        "claim_id": "ac_226f1f1ac6",
+        "example_id": "tc_a7432939",
+        "lexical_label": "SUPPORTED",
+        "rationale": "The Q2 2025 row states $61,250 as the amount; the benchmark's gold is the row label 'Q2 2025', so the claim is supported but not the gold span.",
+        "relations_label": "SUPPORTED"
+      },
+      {
+        "category": "sentence",
+        "claim": "Auth required POST.",
+        "claim_id": "ac_9eb0779195",
+        "example_id": "tc_e75b3a72",
+        "lexical_label": "SUPPORTED",
+        "rationale": "The POST /documents row says authentication is required; the claim is supported but the asked method is POST.",
+        "relations_label": "SUPPORTED"
+      },
+      {
+        "category": "sentence",
+        "claim": "Revenue exceeds $150M.",
+        "claim_id": "ac_11417a6469",
+        "example_id": "tc_e7eb93d1",
+        "lexical_label": "SUPPORTED",
+        "rationale": "The 2010 row states the milestone 'Revenue exceeds $150M'; supported, but the asked year is 2010.",
+        "relations_label": "SUPPORTED"
+      },
+      {
+        "category": "fragment",
+        "claim": "Document details",
+        "claim_id": "ac_fa95c220cc",
+        "example_id": "tr_7e68327d",
+        "lexical_label": "SUPPORTED",
+        "rationale": "The GET /documents/{id} row gives the description 'Get document details'; the fragment is supported but is only one column of the asked row.",
+        "relations_label": "SUPPORTED"
+      },
+      {
+        "category": "sentence",
+        "claim": "Auth required.",
+        "claim_id": "ac_79aa6fd173",
+        "example_id": "tr_b0ffbc0f",
+        "lexical_label": "UNSUPPORTED",
+        "rationale": "The DELETE row says authentication is required; the elliptical claim is supported but is only one column of the asked row.",
+        "relations_label": "SUPPORTED"
+      },
+      {
+        "category": "value_only",
+        "claim": "/qa/ask",
+        "claim_id": "ac_c7157361dc",
+        "example_id": "tr_ddbb3252",
+        "lexical_label": "SUPPORTED",
+        "rationale": "The POST /qa/ask row gives the endpoint /qa/ask; supported, but it is only one column of the asked row.",
+        "relations_label": "SUPPORTED"
+      }
+    ]
+  }
+}

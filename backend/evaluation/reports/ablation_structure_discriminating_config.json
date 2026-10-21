@@ -1,0 +1,75 @@
+{
+  "corpus": "structure_discriminating",
+  "corpusStatistics": {
+    "answerable": 64,
+    "categories": {
+      "direct_textual": 32,
+      "page_cross_page": 8,
+      "section_dependent": 12,
+      "table_dependent": 20
+    },
+    "documents": 4,
+    "questions": 72,
+    "unanswerable": 8,
+    "withGoldChunks": 64
+  },
+  "generated_at": "2026-10-04T13:47:23.380772+00:00",
+  "ingestedChunkCount": 46,
+  "labelledQuestionCount": 64,
+  "productionConfiguration": {
+    "chunker": {
+      "configuredValue": "legacy",
+      "note": "Production default is 'legacy' (chunk_text). Under legacy the chunk rows carry NULL heading_path/section, so heading/section seeding in the structural path is inert; the structure signal that remains active is the element-level stream.",
+      "resolvedVersion": "chunk-v1-legacy-chars-1000-200"
+    },
+    "gate": {
+      "implementation": "brain.gate.evaluate",
+      "qaConfidenceNone": 0.0,
+      "qaConfidenceStrong": 0.3,
+      "retrievalStrong": 0.5
+    },
+    "model": {
+      "embeddingDimensions": 384,
+      "embeddingModel": "all-MiniLM-L6-v2",
+      "qaModelPath": "./models/documind-qa"
+    },
+    "productionAligned": true,
+    "retrieval": {
+      "composition": "retrieve_chunks -> retrieve_dual_path (RRF) -> _augment_with_structure (element stream)",
+      "dualPathEnabled": true,
+      "elementStreamMaxDocuments": 5,
+      "elementStreamPerDocument": 20,
+      "graphMaxHops": 2,
+      "rrfK": 60,
+      "rrfSemanticWeight": 0.7,
+      "rrfStructuralWeight": 0.3,
+      "semanticSeedCount": 3,
+      "structuralCandidateLimit": 15,
+      "structuralSeedLimit": 8,
+      "topK": 5
+    }
+  },
+  "reportPrefix": "ablation_structure_discriminating",
+  "variants": {
+    "A": {
+      "evidence_gate": false,
+      "structure": false,
+      "vector": true
+    },
+    "B": {
+      "evidence_gate": false,
+      "structure": true,
+      "vector": false
+    },
+    "C": {
+      "evidence_gate": false,
+      "structure": true,
+      "vector": true
+    },
+    "D": {
+      "evidence_gate": true,
+      "structure": true,
+      "vector": true
+    }
+  }
+}

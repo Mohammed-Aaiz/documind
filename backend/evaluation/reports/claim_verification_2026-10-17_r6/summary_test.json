@@ -1,0 +1,330 @@
+{
+  "run_id": "claim_verification_2026-10-17",
+  "started_at": "2026-10-17T18:35:43.822975+00:00",
+  "split": "test",
+  "dataset": "evaluation/datasets/claim_verification_v1.py",
+  "dataset_statistics": {
+    "total": 52,
+    "dev": 29,
+    "test": 23,
+    "labels": {
+      "SUPPORTED": 20,
+      "CONTRADICTED": 20,
+      "INSUFFICIENT_EVIDENCE": 12
+    },
+    "categories": {
+      "A": 6,
+      "B": 5,
+      "C": 5,
+      "D": 5,
+      "E": 3,
+      "F": 4,
+      "G": 4,
+      "H": 4,
+      "I": 4,
+      "J": 4,
+      "K": 3,
+      "M": 5
+    },
+    "hard_examples": 2,
+    "citation_error_examples": 3,
+    "evidence_conflict_examples": 1
+  },
+  "baseline": {
+    "examples": 23,
+    "support_precision": 0.3333,
+    "support_recall": 0.4444,
+    "support_f1": 0.3809,
+    "support_true_positives": 4,
+    "support_false_positives": 8,
+    "support_false_negatives": 5,
+    "contradiction_precision": null,
+    "contradiction_recall": 0.0,
+    "contradiction_f1": 0.0,
+    "false_accept_rate": 0.5714,
+    "false_reject_rate": 0.5556,
+    "insufficient_gold": 6,
+    "insufficient_correct": 0,
+    "wrong_citation_examples": 1,
+    "wrong_citations_detected": 1
+  },
+  "relations": {
+    "examples": 23,
+    "support_precision": 1.0,
+    "support_recall": 0.7778,
+    "support_f1": 0.875,
+    "support_true_positives": 7,
+    "support_false_positives": 0,
+    "support_false_negatives": 2,
+    "contradiction_precision": 1.0,
+    "contradiction_recall": 0.75,
+    "contradiction_f1": 0.8571,
+    "false_accept_rate": 0.0,
+    "false_reject_rate": 0.2222,
+    "insufficient_gold": 6,
+    "insufficient_correct": 6,
+    "wrong_citation_examples": 1,
+    "wrong_citations_detected": 1
+  },
+  "baseline_by_category": {
+    "A": {
+      "examples": 3,
+      "correct": 0
+    },
+    "B": {
+      "examples": 2,
+      "correct": 0
+    },
+    "C": {
+      "examples": 2,
+      "correct": 2
+    },
+    "D": {
+      "examples": 2,
+      "correct": 0
+    },
+    "E": {
+      "examples": 1,
+      "correct": 0
+    },
+    "F": {
+      "examples": 2,
+      "correct": 0
+    },
+    "G": {
+      "examples": 2,
+      "correct": 0
+    },
+    "H": {
+      "examples": 2,
+      "correct": 0
+    },
+    "I": {
+      "examples": 2,
+      "correct": 1
+    },
+    "J": {
+      "examples": 2,
+      "correct": 0
+    },
+    "K": {
+      "examples": 1,
+      "correct": 1
+    },
+    "M": {
+      "examples": 2,
+      "correct": 0
+    }
+  },
+  "relations_by_category": {
+    "A": {
+      "examples": 3,
+      "correct": 2
+    },
+    "B": {
+      "examples": 2,
+      "correct": 0
+    },
+    "C": {
+      "examples": 2,
+      "correct": 2
+    },
+    "D": {
+      "examples": 2,
+      "correct": 2
+    },
+    "E": {
+      "examples": 1,
+      "correct": 1
+    },
+    "F": {
+      "examples": 2,
+      "correct": 2
+    },
+    "G": {
+      "examples": 2,
+      "correct": 2
+    },
+    "H": {
+      "examples": 2,
+      "correct": 2
+    },
+    "I": {
+      "examples": 2,
+      "correct": 2
+    },
+    "J": {
+      "examples": 2,
+      "correct": 1
+    },
+    "K": {
+      "examples": 1,
+      "correct": 1
+    },
+    "M": {
+      "examples": 2,
+      "correct": 2
+    }
+  },
+  "latency_ms_per_claim": {
+    "embedder_cold_start_ms": 10542.9815,
+    "baseline_mean": 0.0796,
+    "relations_mean": 5.7533,
+    "baseline_max": 0.4003,
+    "relations_max": 23.3985
+  },
+  "mismatches": [
+    {
+      "example_id": "A03",
+      "category": "A",
+      "gold": "SUPPORTED",
+      "baseline": "UNSUPPORTED",
+      "relations": "SUPPORTED",
+      "claim": "A technician spends roughly two hours on manual calibration."
+    },
+    {
+      "example_id": "A04",
+      "category": "A",
+      "gold": "SUPPORTED",
+      "baseline": "UNSUPPORTED",
+      "relations": "SUPPORTED",
+      "claim": "The reference target supplied by the manufacturer is used for lidar calibration."
+    },
+    {
+      "example_id": "A06",
+      "category": "A",
+      "gold": "SUPPORTED",
+      "baseline": "UNSUPPORTED",
+      "relations": "INSUFFICIENT_EVIDENCE",
+      "claim": "Lidar needs recalibrating once a month."
+    },
+    {
+      "example_id": "B03",
+      "category": "B",
+      "gold": "CONTRADICTED",
+      "baseline": "SUPPORTED",
+      "relations": "INSUFFICIENT_EVIDENCE",
+      "claim": "Repeated failures on the same axis cause a worn bearing."
+    },
+    {
+      "example_id": "B04",
+      "category": "B",
+      "gold": "CONTRADICTED",
+      "baseline": "UNSUPPORTED",
+      "relations": "INSUFFICIENT_EVIDENCE",
+      "claim": "Calibration records are kept for the warranty period of five years."
+    },
+    {
+      "example_id": "D03",
+      "category": "D",
+      "gold": "CONTRADICTED",
+      "baseline": "SUPPORTED",
+      "relations": "CONTRADICTED",
+      "claim": "Calibration records are retained for five months."
+    },
+    {
+      "example_id": "D04",
+      "category": "D",
+      "gold": "CONTRADICTED",
+      "baseline": "SUPPORTED",
+      "relations": "CONTRADICTED",
+      "claim": "Net income was $142.6 billion."
+    },
+    {
+      "example_id": "E03",
+      "category": "E",
+      "gold": "SUPPORTED",
+      "baseline": "UNSUPPORTED",
+      "relations": "SUPPORTED",
+      "claim": "Automated calibration is performed by the docking station."
+    },
+    {
+      "example_id": "F03",
+      "category": "F",
+      "gold": "INSUFFICIENT_EVIDENCE",
+      "baseline": "SUPPORTED",
+      "relations": "INSUFFICIENT_EVIDENCE",
+      "claim": "The sensor array requires calibration every 30 days."
+    },
+    {
+      "example_id": "F04",
+      "category": "F",
+      "gold": "CONTRADICTED",
+      "baseline": "SUPPORTED",
+      "relations": "CONTRADICTED",
+      "claim": "The lidar array requires calibration every 90 days."
+    },
+    {
+      "example_id": "G03",
+      "category": "G",
+      "gold": "CONTRADICTED",
+      "baseline": "SUPPORTED",
+      "relations": "CONTRADICTED",
+      "claim": "The system stores raw audio."
+    },
+    {
+      "example_id": "G04",
+      "category": "G",
+      "gold": "CONTRADICTED",
+      "baseline": "SUPPORTED",
+      "relations": "CONTRADICTED",
+      "claim": "Lidar calibration requires the reference target."
+    },
+    {
+      "example_id": "H03",
+      "category": "H",
+      "gold": "INSUFFICIENT_EVIDENCE",
+      "baseline": "UNSUPPORTED",
+      "relations": "INSUFFICIENT_EVIDENCE",
+      "claim": "Parking on a level pad prevents calibration drift."
+    },
+    {
+      "example_id": "H04",
+      "category": "H",
+      "gold": "INSUFFICIENT_EVIDENCE",
+      "baseline": "UNSUPPORTED",
+      "relations": "INSUFFICIENT_EVIDENCE",
+      "claim": "The five-year retention policy exists to satisfy auditors."
+    },
+    {
+      "example_id": "I04",
+      "category": "I",
+      "gold": "INSUFFICIENT_EVIDENCE",
+      "baseline": "UNSUPPORTED",
+      "relations": "INSUFFICIENT_EVIDENCE",
+      "claim": "Manual calibration is always more accurate than automated calibration."
+    },
+    {
+      "example_id": "J03",
+      "category": "J",
+      "gold": "SUPPORTED",
+      "baseline": "UNSUPPORTED",
+      "relations": "INSUFFICIENT_EVIDENCE",
+      "claim": "Lidar is calibrated every 30 days, but calibration cannot repair physical damage."
+    },
+    {
+      "example_id": "J04",
+      "category": "J",
+      "gold": "INSUFFICIENT_EVIDENCE",
+      "baseline": "UNSUPPORTED",
+      "relations": "INSUFFICIENT_EVIDENCE",
+      "claim": "Lidar calibration is required every 30 days because the records are kept for five years."
+    },
+    {
+      "example_id": "M03",
+      "category": "M",
+      "gold": "INSUFFICIENT_EVIDENCE",
+      "baseline": "UNSUPPORTED",
+      "relations": "INSUFFICIENT_EVIDENCE",
+      "claim": "The retention policy is 30 days."
+    },
+    {
+      "example_id": "M04",
+      "category": "M",
+      "gold": "CONTRADICTED",
+      "baseline": "SUPPORTED",
+      "relations": "CONTRADICTED",
+      "claim": "The lidar calibration interval is 30 days."
+    }
+  ]
+}

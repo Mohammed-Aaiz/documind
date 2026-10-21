@@ -1,0 +1,74 @@
+{
+  "corpus": "heading",
+  "corpusStatistics": {
+    "answerable": 20,
+    "categories": {
+      "direct_textual": 3,
+      "page_cross_page": 7,
+      "section_dependent": 13
+    },
+    "documents": 4,
+    "questions": 23,
+    "unanswerable": 3,
+    "withGoldChunks": 20
+  },
+  "generated_at": "2026-10-04T12:48:59.921672+00:00",
+  "ingestedChunkCount": 56,
+  "labelledQuestionCount": 20,
+  "productionConfiguration": {
+    "chunker": {
+      "configuredValue": "legacy",
+      "note": "Production default is 'legacy' (chunk_text). Under legacy the chunk rows carry NULL heading_path/section, so heading/section seeding in the structural path is inert; the structure signal that remains active is the element-level stream.",
+      "resolvedVersion": "chunk-v1-legacy-chars-1000-200"
+    },
+    "gate": {
+      "implementation": "brain.gate.evaluate",
+      "qaConfidenceNone": 0.0,
+      "qaConfidenceStrong": 0.3,
+      "retrievalStrong": 0.5
+    },
+    "model": {
+      "embeddingDimensions": 384,
+      "embeddingModel": "all-MiniLM-L6-v2",
+      "qaModelPath": "./models/documind-qa"
+    },
+    "productionAligned": true,
+    "retrieval": {
+      "composition": "retrieve_chunks -> retrieve_dual_path (RRF) -> _augment_with_structure (element stream)",
+      "dualPathEnabled": true,
+      "elementStreamMaxDocuments": 5,
+      "elementStreamPerDocument": 20,
+      "graphMaxHops": 2,
+      "rrfK": 60,
+      "rrfSemanticWeight": 0.7,
+      "rrfStructuralWeight": 0.3,
+      "semanticSeedCount": 3,
+      "structuralCandidateLimit": 15,
+      "structuralSeedLimit": 8,
+      "topK": 5
+    }
+  },
+  "reportPrefix": "ablation_heading",
+  "variants": {
+    "A": {
+      "evidence_gate": false,
+      "structure": false,
+      "vector": true
+    },
+    "B": {
+      "evidence_gate": false,
+      "structure": true,
+      "vector": false
+    },
+    "C": {
+      "evidence_gate": false,
+      "structure": true,
+      "vector": true
+    },
+    "D": {
+      "evidence_gate": true,
+      "structure": true,
+      "vector": true
+    }
+  }
+}

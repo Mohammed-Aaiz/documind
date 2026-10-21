@@ -19,7 +19,7 @@ from typing import Callable
 import sys
 import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", ".."))
-from tests.phase3d_corpus import (
+from evaluation.datasets.phase3d_corpus import (
     build_corpus as _build_corpus,
     unanswerable_questions as _unanswerable,
     CorpusDoc as _CorpusDoc,

@@ -1,0 +1,50 @@
+{
+  "run_id": "answer_quality_mission5_2026-10-18_diagnosis",
+  "benchmark": "phases\\phase4f\\phase4f_5d\\benchmark\\qa_benchmark_v1.jsonl",
+  "benchmark_sha256": "1166bf4ff38265c209614ac20261417b7eeb43653f4482dfdf94721fd50a41d0",
+  "benchmark_hash_matches_expected": true,
+  "dataset_version": "answer_claims_v2",
+  "dataset_sha256": "f06795eb5034133d8dc600a4685621dc0999f4a00b71afa0f490731e0aecad88",
+  "baseline_run": "generation_benchmark_2026-10-18_m4_baseline",
+  "m4_run": "generation_benchmark_2026-10-18_m4_post_v2",
+  "rows": 182,
+  "answerable": 140,
+  "unanswerable": 42,
+  "baseline_buckets": {
+    "answered_nonempty": 57,
+    "withheld": 16,
+    "gate_refusal": 49,
+    "answered_exact": 18
+  },
+  "m4_buckets": {
+    "answered_nonempty": 78,
+    "withheld": 28,
+    "answered_exact": 21,
+    "gate_refusal": 13
+  },
+  "changes": {
+    "unchanged": 116,
+    "answer_added_exact": 3,
+    "answer_added_nonempty": 21
+  },
+  "m4_answered": 99,
+  "m4_em": 21,
+  "m4_f1_mean": 0.3091,
+  "returned_vs_withheld_unsupported": {
+    "returned_claims": 113,
+    "returned_unsupported": 5,
+    "withheld_answers": 24,
+    "withheld_unsupported": 24
+  },
+  "table_entity_candidates": [
+    "tc_8340538b",
+    "tc_115f3133",
+    "tc_479dca78",
+    "tc_06f5c7e8",
+    "tc_78ac63a0",
+    "tc_dcc6b88d",
+    "tc_03298034",
+    "tc_1658c1fb"
+  ],
+  "off_target_claims": 18
+}

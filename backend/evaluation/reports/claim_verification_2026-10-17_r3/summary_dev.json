@@ -1,0 +1,361 @@
+{
+  "run_id": "claim_verification_2026-10-17",
+  "started_at": "2026-10-17T18:27:33.214738+00:00",
+  "split": "dev",
+  "dataset": "evaluation/datasets/claim_verification_v1.py",
+  "dataset_statistics": {
+    "total": 52,
+    "dev": 29,
+    "test": 23,
+    "labels": {
+      "SUPPORTED": 20,
+      "CONTRADICTED": 20,
+      "INSUFFICIENT_EVIDENCE": 12
+    },
+    "categories": {
+      "A": 6,
+      "B": 5,
+      "C": 5,
+      "D": 5,
+      "E": 3,
+      "F": 4,
+      "G": 4,
+      "H": 4,
+      "I": 4,
+      "J": 4,
+      "K": 3,
+      "M": 5
+    },
+    "hard_examples": 2,
+    "citation_error_examples": 3,
+    "evidence_conflict_examples": 1
+  },
+  "baseline": {
+    "examples": 29,
+    "support_precision": 0.4,
+    "support_recall": 0.5455,
+    "support_f1": 0.4616,
+    "support_true_positives": 6,
+    "support_false_positives": 9,
+    "support_false_negatives": 5,
+    "contradiction_precision": null,
+    "contradiction_recall": 0.0,
+    "contradiction_f1": 0.0,
+    "false_accept_rate": 0.5,
+    "false_reject_rate": 0.4545,
+    "insufficient_gold": 6,
+    "insufficient_correct": 0,
+    "wrong_citation_examples": 2,
+    "wrong_citations_detected": 2
+  },
+  "relations": {
+    "examples": 29,
+    "support_precision": 0.8182,
+    "support_recall": 0.8182,
+    "support_f1": 0.8182,
+    "support_true_positives": 9,
+    "support_false_positives": 2,
+    "support_false_negatives": 2,
+    "contradiction_precision": 1.0,
+    "contradiction_recall": 0.75,
+    "contradiction_f1": 0.8571,
+    "false_accept_rate": 0.1111,
+    "false_reject_rate": 0.1818,
+    "insufficient_gold": 6,
+    "insufficient_correct": 5,
+    "wrong_citation_examples": 2,
+    "wrong_citations_detected": 2
+  },
+  "baseline_by_category": {
+    "A": {
+      "examples": 3,
+      "correct": 0
+    },
+    "B": {
+      "examples": 3,
+      "correct": 0
+    },
+    "C": {
+      "examples": 3,
+      "correct": 2
+    },
+    "D": {
+      "examples": 3,
+      "correct": 0
+    },
+    "E": {
+      "examples": 2,
+      "correct": 2
+    },
+    "F": {
+      "examples": 2,
+      "correct": 0
+    },
+    "G": {
+      "examples": 2,
+      "correct": 0
+    },
+    "H": {
+      "examples": 2,
+      "correct": 0
+    },
+    "I": {
+      "examples": 2,
+      "correct": 0
+    },
+    "J": {
+      "examples": 2,
+      "correct": 1
+    },
+    "K": {
+      "examples": 2,
+      "correct": 1
+    },
+    "M": {
+      "examples": 3,
+      "correct": 0
+    }
+  },
+  "relations_by_category": {
+    "A": {
+      "examples": 3,
+      "correct": 1
+    },
+    "B": {
+      "examples": 3,
+      "correct": 2
+    },
+    "C": {
+      "examples": 3,
+      "correct": 3
+    },
+    "D": {
+      "examples": 3,
+      "correct": 3
+    },
+    "E": {
+      "examples": 2,
+      "correct": 2
+    },
+    "F": {
+      "examples": 2,
+      "correct": 1
+    },
+    "G": {
+      "examples": 2,
+      "correct": 2
+    },
+    "H": {
+      "examples": 2,
+      "correct": 1
+    },
+    "I": {
+      "examples": 2,
+      "correct": 1
+    },
+    "J": {
+      "examples": 2,
+      "correct": 2
+    },
+    "K": {
+      "examples": 2,
+      "correct": 2
+    },
+    "M": {
+      "examples": 3,
+      "correct": 3
+    }
+  },
+  "latency_ms_per_claim": {
+    "baseline_mean": 1.1406,
+    "relations_mean": 363.3469,
+    "baseline_max": 31.3476,
+    "relations_max": 10328.7365
+  },
+  "mismatches": [
+    {
+      "example_id": "A01",
+      "category": "A",
+      "gold": "SUPPORTED",
+      "baseline": "UNSUPPORTED",
+      "relations": "SUPPORTED",
+      "claim": "Calibration compares instrument readings to a reference and corrects the deviation."
+    },
+    {
+      "example_id": "A02",
+      "category": "A",
+      "gold": "SUPPORTED",
+      "baseline": "UNSUPPORTED",
+      "relations": "INSUFFICIENT_EVIDENCE",
+      "claim": "The robot cannot be dispatched while a calibration failure is unresolved."
+    },
+    {
+      "example_id": "A05",
+      "category": "A",
+      "gold": "SUPPORTED",
+      "baseline": "UNSUPPORTED",
+      "relations": "INSUFFICIENT_EVIDENCE",
+      "claim": "Calibration begins by parking the robot on a level pad and mounting the reference target."
+    },
+    {
+      "example_id": "B01",
+      "category": "B",
+      "gold": "CONTRADICTED",
+      "baseline": "UNSUPPORTED",
+      "relations": "CONTRADICTED",
+      "claim": "The sensor array is recalibrated every 30 days."
+    },
+    {
+      "example_id": "B02",
+      "category": "B",
+      "gold": "CONTRADICTED",
+      "baseline": "SUPPORTED",
+      "relations": "INSUFFICIENT_EVIDENCE",
+      "claim": "The sensor array requires calibration every 30 days."
+    },
+    {
+      "example_id": "B05",
+      "category": "B",
+      "gold": "CONTRADICTED",
+      "baseline": "UNSUPPORTED",
+      "relations": "CONTRADICTED",
+      "claim": "The power rail operates at 24 volts."
+    },
+    {
+      "example_id": "C05",
+      "category": "C",
+      "gold": "SUPPORTED",
+      "baseline": "UNSUPPORTED",
+      "relations": "SUPPORTED",
+      "claim": "Records are kept for 5 years."
+    },
+    {
+      "example_id": "D01",
+      "category": "D",
+      "gold": "CONTRADICTED",
+      "baseline": "UNSUPPORTED",
+      "relations": "CONTRADICTED",
+      "claim": "The lidar array requires calibration every 90 days."
+    },
+    {
+      "example_id": "D02",
+      "category": "D",
+      "gold": "CONTRADICTED",
+      "baseline": "SUPPORTED",
+      "relations": "CONTRADICTED",
+      "claim": "The lidar array requires calibration every 30 weeks."
+    },
+    {
+      "example_id": "D05",
+      "category": "D",
+      "gold": "CONTRADICTED",
+      "baseline": "SUPPORTED",
+      "relations": "CONTRADICTED",
+      "claim": "The power rail operates at 12 amps."
+    },
+    {
+      "example_id": "F01",
+      "category": "F",
+      "gold": "CONTRADICTED",
+      "baseline": "UNSUPPORTED",
+      "relations": "CONTRADICTED",
+      "claim": "Elena Vasquez is the CFO."
+    },
+    {
+      "example_id": "F02",
+      "category": "F",
+      "gold": "CONTRADICTED",
+      "baseline": "SUPPORTED",
+      "relations": "INSUFFICIENT_EVIDENCE",
+      "claim": "Automated calibration takes about two hours."
+    },
+    {
+      "example_id": "G01",
+      "category": "G",
+      "gold": "CONTRADICTED",
+      "baseline": "SUPPORTED",
+      "relations": "CONTRADICTED",
+      "claim": "Calibration can correct a physically damaged lidar unit."
+    },
+    {
+      "example_id": "G02",
+      "category": "G",
+      "gold": "CONTRADICTED",
+      "baseline": "SUPPORTED",
+      "relations": "CONTRADICTED",
+      "claim": "A failed calibration check does not block the robot from dispatch."
+    },
+    {
+      "example_id": "H01",
+      "category": "H",
+      "gold": "INSUFFICIENT_EVIDENCE",
+      "baseline": "UNSUPPORTED",
+      "relations": "INSUFFICIENT_EVIDENCE",
+      "claim": "A worn bearing causes repeated failures on the same axis."
+    },
+    {
+      "example_id": "H02",
+      "category": "H",
+      "gold": "INSUFFICIENT_EVIDENCE",
+      "baseline": "UNSUPPORTED",
+      "relations": "SUPPORTED",
+      "claim": "Firmware updates cause collisions, so the interval is shortened."
+    },
+    {
+      "example_id": "I01",
+      "category": "I",
+      "gold": "CONTRADICTED",
+      "baseline": "SUPPORTED",
+      "relations": "CONTRADICTED",
+      "claim": "Manual calibration is cheaper than automated calibration."
+    },
+    {
+      "example_id": "I02",
+      "category": "I",
+      "gold": "CONTRADICTED",
+      "baseline": "SUPPORTED",
+      "relations": "SUPPORTED",
+      "claim": "Automated and manual calibration take about the same time."
+    },
+    {
+      "example_id": "J01",
+      "category": "J",
+      "gold": "SUPPORTED",
+      "baseline": "UNSUPPORTED",
+      "relations": "SUPPORTED",
+      "claim": "The lidar array is calibrated every 30 days and the records are kept for five years."
+    },
+    {
+      "example_id": "K03",
+      "category": "K",
+      "gold": "INSUFFICIENT_EVIDENCE",
+      "baseline": "UNSUPPORTED",
+      "relations": "INSUFFICIENT_EVIDENCE",
+      "claim": "The lidar array requires calibration every 30 days."
+    },
+    {
+      "example_id": "M01",
+      "category": "M",
+      "gold": "INSUFFICIENT_EVIDENCE",
+      "baseline": "UNSUPPORTED",
+      "relations": "INSUFFICIENT_EVIDENCE",
+      "claim": "The board met on 12 March."
+    },
+    {
+      "example_id": "M02",
+      "category": "M",
+      "gold": "INSUFFICIENT_EVIDENCE",
+      "baseline": "SUPPORTED",
+      "relations": "INSUFFICIENT_EVIDENCE",
+      "claim": "The system uses TensorFlow."
+    },
+    {
+      "example_id": "M05",
+      "category": "M",
+      "gold": "INSUFFICIENT_EVIDENCE",
+      "baseline": "UNSUPPORTED",
+      "relations": "INSUFFICIENT_EVIDENCE",
+      "claim": "The chunk overlap is 64 tokens."
+    }
+  ]
+}

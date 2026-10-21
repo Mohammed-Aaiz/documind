@@ -1,0 +1,52 @@
+{
+  "run_id": "generation_benchmark_2026-10-21_m7_post_v1",
+  "started_at": "2026-10-21T12:52:24.722896+00:00",
+  "benchmark": "phases\\phase4f\\phase4f_5d\\benchmark\\qa_benchmark_v1.jsonl",
+  "benchmark_sha256": "1166bf4ff38265c209614ac20261417b7eeb43653f4482dfdf94721fd50a41d0",
+  "benchmark_hash_matches_expected": true,
+  "examples_evaluated": 182,
+  "answerable": 140,
+  "unanswerable": 42,
+  "generative_format": "10",
+  "retrieval": "not measured \u2014 benchmark rows are self-contained (context supplied with the row)",
+  "metrics": {
+    "extractive_em": 0.1571,
+    "extractive_f1": 0.3871,
+    "generative_em": 0.5786,
+    "generative_f1": 0.6637,
+    "generative_lead_em": 0.5571,
+    "generative_lead_f1": 0.6556,
+    "extractive_abstention_unanswerable": 0.0,
+    "extractive_spurious_unanswerable": 1.0,
+    "generative_abstention_unanswerable": 0.9524,
+    "generative_spurious_unanswerable": 0.0476,
+    "generative_empty_rate": 0.3516,
+    "generative_claim_count": 134,
+    "generative_supported_claims": 123,
+    "generative_unsupported_claim_count": 11,
+    "generative_unsupported_claim_rate": 0.0821,
+    "generative_citation_accuracy": 0.9179,
+    "generative_verified_rate": 0.6484,
+    "generative_answerability_gate_abstentions": 45,
+    "generative_withheld_unattributable": 19,
+    "generative_status_counts": {
+      "INSUFFICIENT_EVIDENCE": 64,
+      "SUPPORTED": 118
+    }
+  },
+  "latency_ms": {
+    "generative_p50": 0.0,
+    "generative_p95": 620.0,
+    "generative_max": 1622
+  },
+  "failure_categories_answerable": {
+    "none": 81,
+    "empty_or_abstained": 24,
+    "incorrect_answer": 35
+  },
+  "notes": [
+    "EM/F1 are computed only on answerable rows, using the project's normalise/EM/token-F1 functions.",
+    "The extractive model has no no-answer head, so its abstention is only ever an empty span; the production evidence gate is NOT part of this measurement.",
+    "Faithfulness is measured by the deterministic verifier (lexical attribution), not by human or entailment judging."
+  ]
+}

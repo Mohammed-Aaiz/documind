@@ -1,0 +1,54 @@
+{
+  "run_id": "generation_benchmark_2026-10-17_fmt10_relations_r3",
+  "started_at": "2026-10-17T18:36:03.148458+00:00",
+  "benchmark": "phases\\phase4f\\phase4f_5d\\benchmark\\qa_benchmark_v1.jsonl",
+  "benchmark_sha256": "1166bf4ff38265c209614ac20261417b7eeb43653f4482dfdf94721fd50a41d0",
+  "benchmark_hash_matches_expected": true,
+  "examples_evaluated": 182,
+  "answerable": 140,
+  "unanswerable": 42,
+  "generative_format": "10",
+  "retrieval": "not measured \u2014 benchmark rows are self-contained (context supplied with the row)",
+  "metrics": {
+    "extractive_em": 0.1571,
+    "extractive_f1": 0.3871,
+    "generative_em": 0.1286,
+    "generative_f1": 0.23,
+    "generative_lead_em": 0.1286,
+    "generative_lead_f1": 0.2293,
+    "extractive_abstention_unanswerable": 0.0,
+    "extractive_spurious_unanswerable": 1.0,
+    "generative_abstention_unanswerable": 0.9286,
+    "generative_spurious_unanswerable": 0.0714,
+    "generative_empty_rate": 0.5769,
+    "generative_claim_count": 109,
+    "generative_supported_claims": 92,
+    "generative_unsupported_claim_count": 17,
+    "generative_unsupported_claim_rate": 0.156,
+    "generative_citation_accuracy": 0.844,
+    "generative_verified_rate": 0.4176,
+    "generative_answerability_gate_abstentions": 83,
+    "generative_withheld_unattributable": 22,
+    "generative_status_counts": {
+      "INSUFFICIENT_EVIDENCE": 105,
+      "SUPPORTED": 76,
+      "PARTIALLY_SUPPORTED": 1
+    }
+  },
+  "latency_ms": {
+    "generative_p50": 232.5,
+    "generative_p95": 1207.6,
+    "generative_max": 3936
+  },
+  "failure_categories_answerable": {
+    "incorrect_answer": 55,
+    "empty_or_abstained": 66,
+    "none": 18,
+    "partially_supported": 1
+  },
+  "notes": [
+    "EM/F1 are computed only on answerable rows, using the project's normalise/EM/token-F1 functions.",
+    "The extractive model has no no-answer head, so its abstention is only ever an empty span; the production evidence gate is NOT part of this measurement.",
+    "Faithfulness is measured by the deterministic verifier (lexical attribution), not by human or entailment judging."
+  ]
+}

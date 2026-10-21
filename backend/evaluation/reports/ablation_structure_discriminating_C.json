@@ -1,0 +1,1875 @@
+{
+  "ablation": "C",
+  "baseline": "B4_dual_path",
+  "by_category": {
+    "direct_textual": {
+      "evidence_coverage": 1.0,
+      "exact_match": 0.1875,
+      "factual_grounded": 1.0,
+      "mrr": 0.5078125,
+      "ndcg@5": 0.5509766502757987,
+      "path_agreement": 1.0,
+      "precision@5": 0.17500000000000004,
+      "recall@5": 0.703125,
+      "token_f1": 0.3310416666666666,
+      "unsupported_answer": 1.0
+    },
+    "page_cross_page": {
+      "evidence_coverage": 1.0,
+      "exact_match": 0.5,
+      "factual_grounded": 1.0,
+      "mrr": 0.875,
+      "ndcg@5": 0.8976975370363879,
+      "path_agreement": 1.0,
+      "precision@5": 0.22499999999999998,
+      "recall@5": 1.0,
+      "token_f1": 0.5833333333333333,
+      "unsupported_answer": null
+    },
+    "section_dependent": {
+      "evidence_coverage": 1.0,
+      "exact_match": 0.5,
+      "factual_grounded": 1.0,
+      "mrr": 0.7083333333333334,
+      "ndcg@5": 0.7536195722150518,
+      "path_agreement": 1.0,
+      "precision@5": 0.25000000000000006,
+      "recall@5": 0.8809523809523809,
+      "token_f1": 0.638888888888889,
+      "unsupported_answer": null
+    },
+    "table_dependent": {
+      "evidence_coverage": 1.0,
+      "exact_match": 0.1,
+      "factual_grounded": 1.0,
+      "mrr": 0.5766666666666667,
+      "ndcg@5": 0.6700218421025615,
+      "path_agreement": 1.0,
+      "precision@5": 0.30000000000000016,
+      "recall@5": 0.9857142857142858,
+      "token_f1": 0.43269230769230765,
+      "unsupported_answer": null
+    }
+  },
+  "generated_at": "2026-10-04T13:47:23.367842+00:00",
+  "latency_ms": {
+    "retrieval_mean": 1947.384977776892,
+    "total_mean": 2143.792463885903
+  },
+  "metrics": {
+    "evidence_coverage": 1.0,
+    "exact_match": 0.25,
+    "factual_grounded": 1.0,
+    "mrr": 0.6011574074074073,
+    "ndcg@5": 0.6563431224131737,
+    "path_agreement": 1.0,
+    "precision@5": 0.22777777777777772,
+    "recall@5": 0.8442460317460317,
+    "token_f1": 0.43861823361823365,
+    "unsupported_answer": 1.0
+  },
+  "not_measured": {},
+  "question_count": 72,
+  "results": [
+    {
+      "answerable": true,
+      "category": "table_dependent",
+      "evidence": {
+        "evidence_coverage": 1.0,
+        "factual_grounded": 1.0,
+        "path_agreement": 1.0,
+        "unsupported_answer": 0.0
+      },
+      "latency_ms": {
+        "retrieval": 2817.3822999960976,
+        "total": 3003.072199993767
+      },
+      "qa": {
+        "exact_match": 0.0,
+        "token_f1": 0.5
+      },
+      "question_id": "at_tbl_1",
+      "retrieval": {
+        "mrr": 1.0,
+        "ndcg@5": 0.9197207891481876,
+        "precision@5": 0.4,
+        "recall@5": 1.0
+      }
+    },
+    {
+      "answerable": true,
+      "category": "table_dependent",
+      "evidence": {
+        "evidence_coverage": 1.0,
+        "factual_grounded": 1.0,
+        "path_agreement": 1.0,
+        "unsupported_answer": 0.0
+      },
+      "latency_ms": {
+        "retrieval": 1663.6639999924228,
+        "total": 1856.81709999335
+      },
+      "qa": {
+        "exact_match": 0.0,
+        "token_f1": 0.15384615384615385
+      },
+      "question_id": "at_tbl_2",
+      "retrieval": {
+        "mrr": 1.0,
+        "ndcg@5": 1.0,
+        "precision@5": 1.0,
+        "recall@5": 0.7142857142857143
+      }
+    },
+    {
+      "answerable": true,
+      "category": "table_dependent",
+      "evidence": {
+        "evidence_coverage": 1.0,
+        "factual_grounded": 1.0,
+        "path_agreement": 1.0,
+        "unsupported_answer": 0.0
+      },
+      "latency_ms": {
+        "retrieval": 2057.7906999969855,
+        "total": 2279.4663999957265
+      },
+      "qa": {
+        "exact_match": 0.0,
+        "token_f1": 0.5
+      },
+      "question_id": "at_tbl_3",
+      "retrieval": {
+        "mrr": 0.5,
+        "ndcg@5": 0.6309297535714575,
+        "precision@5": 0.2,
+        "recall@5": 1.0
+      }
+    },
+    {
+      "answerable": true,
+      "category": "table_dependent",
+      "evidence": {
+        "evidence_coverage": 1.0,
+        "factual_grounded": 1.0,
+        "path_agreement": 1.0,
+        "unsupported_answer": 0.0
+      },
+      "latency_ms": {
+        "retrieval": 2440.8892999927048,
+        "total": 2626.838999989559
+      },
+      "qa": {
+        "exact_match": 0.0,
+        "token_f1": 0.0
+      },
+      "question_id": "at_tbl_4",
+      "retrieval": {
+        "mrr": 1.0,
+        "ndcg@5": 1.0,
+        "precision@5": 0.2,
+        "recall@5": 1.0
+      }
+    },
+    {
+      "answerable": true,
+      "category": "table_dependent",
+      "evidence": {
+        "evidence_coverage": 1.0,
+        "factual_grounded": 1.0,
+        "path_agreement": 1.0,
+        "unsupported_answer": 0.0
+      },
+      "latency_ms": {
+        "retrieval": 1862.665399996331,
+        "total": 2075.4468999948585
+      },
+      "qa": {
+        "exact_match": 0.0,
+        "token_f1": 0.0
+      },
+      "question_id": "at_tbl_5",
+      "retrieval": {
+        "mrr": 1.0,
+        "ndcg@5": 1.0,
+        "precision@5": 0.2,
+        "recall@5": 1.0
+      }
+    },
+    {
+      "answerable": true,
+      "category": "table_dependent",
+      "evidence": {
+        "evidence_coverage": 1.0,
+        "factual_grounded": 1.0,
+        "path_agreement": 1.0,
+        "unsupported_answer": 0.0
+      },
+      "latency_ms": {
+        "retrieval": 2859.4539999903645,
+        "total": 3084.32389999507
+      },
+      "qa": {
+        "exact_match": 0.0,
+        "token_f1": 0.0
+      },
+      "question_id": "ac_tbl_1",
+      "retrieval": {
+        "mrr": 1.0,
+        "ndcg@5": 1.0,
+        "precision@5": 0.2,
+        "recall@5": 1.0
+      }
+    },
+    {
+      "answerable": true,
+      "category": "table_dependent",
+      "evidence": {
+        "evidence_coverage": 1.0,
+        "factual_grounded": 1.0,
+        "path_agreement": 1.0,
+        "unsupported_answer": 0.0
+      },
+      "latency_ms": {
+        "retrieval": 2273.9539000031073,
+        "total": 2481.053700001212
+      },
+      "qa": {
+        "exact_match": 0.0,
+        "token_f1": 0.0
+      },
+      "question_id": "ac_tbl_2",
+      "retrieval": {
+        "mrr": 0.3333333333333333,
+        "ndcg@5": 0.5,
+        "precision@5": 0.2,
+        "recall@5": 1.0
+      }
+    },
+    {
+      "answerable": true,
+      "category": "table_dependent",
+      "evidence": {
+        "evidence_coverage": 1.0,
+        "factual_grounded": 1.0,
+        "path_agreement": 1.0,
+        "unsupported_answer": 0.0
+      },
+      "latency_ms": {
+        "retrieval": 1840.1950999977998,
+        "total": 2048.5413999849698
+      },
+      "qa": {
+        "exact_match": 0.0,
+        "token_f1": 0.5
+      },
+      "question_id": "ac_tbl_3",
+      "retrieval": {
+        "mrr": 0.5,
+        "ndcg@5": 0.6309297535714575,
+        "precision@5": 0.2,
+        "recall@5": 1.0
+      }
+    },
+    {
+      "answerable": true,
+      "category": "table_dependent",
+      "evidence": {
+        "evidence_coverage": 1.0,
+        "factual_grounded": 1.0,
+        "path_agreement": 1.0,
+        "unsupported_answer": 0.0
+      },
+      "latency_ms": {
+        "retrieval": 1900.5535000032978,
+        "total": 2098.7304000009317
+      },
+      "qa": {
+        "exact_match": 0.0,
+        "token_f1": 0.0
+      },
+      "question_id": "ac_tbl_4",
+      "retrieval": {
+        "mrr": 0.3333333333333333,
+        "ndcg@5": 0.5,
+        "precision@5": 0.2,
+        "recall@5": 1.0
+      }
+    },
+    {
+      "answerable": true,
+      "category": "table_dependent",
+      "evidence": {
+        "evidence_coverage": 1.0,
+        "factual_grounded": 1.0,
+        "path_agreement": 1.0,
+        "unsupported_answer": 0.0
+      },
+      "latency_ms": {
+        "retrieval": 2158.0675000004703,
+        "total": 2363.5384000081103
+      },
+      "qa": {
+        "exact_match": 0.0,
+        "token_f1": 0.0
+      },
+      "question_id": "ac_tbl_5",
+      "retrieval": {
+        "mrr": 0.3333333333333333,
+        "ndcg@5": 0.5,
+        "precision@5": 0.2,
+        "recall@5": 1.0
+      }
+    },
+    {
+      "answerable": true,
+      "category": "section_dependent",
+      "evidence": {
+        "evidence_coverage": 1.0,
+        "factual_grounded": 1.0,
+        "path_agreement": 1.0,
+        "unsupported_answer": 0.0
+      },
+      "latency_ms": {
+        "retrieval": 2087.755200001993,
+        "total": 2280.6524000043282
+      },
+      "qa": {
+        "exact_match": 1.0,
+        "token_f1": 1.0
+      },
+      "question_id": "at_sec_1",
+      "retrieval": {
+        "mrr": 0.5,
+        "ndcg@5": 0.6509209298071326,
+        "precision@5": 0.4,
+        "recall@5": 1.0
+      }
+    },
+    {
+      "answerable": true,
+      "category": "section_dependent",
+      "evidence": {
+        "evidence_coverage": 1.0,
+        "factual_grounded": 1.0,
+        "path_agreement": 1.0,
+        "unsupported_answer": 0.0
+      },
+      "latency_ms": {
+        "retrieval": 1830.5828000011388,
+        "total": 2046.151499991538
+      },
+      "qa": {
+        "exact_match": 0.0,
+        "token_f1": 0.0
+      },
+      "question_id": "at_sec_2",
+      "retrieval": {
+        "mrr": 1.0,
+        "ndcg@5": 0.8687949224876582,
+        "precision@5": 0.8,
+        "recall@5": 0.5714285714285714
+      }
+    },
+    {
+      "answerable": true,
+      "category": "section_dependent",
+      "evidence": {
+        "evidence_coverage": 1.0,
+        "factual_grounded": 1.0,
+        "path_agreement": 1.0,
+        "unsupported_answer": 0.0
+      },
+      "latency_ms": {
+        "retrieval": 1821.4541000052122,
+        "total": 2033.330100006424
+      },
+      "qa": {
+        "exact_match": 0.0,
+        "token_f1": 0.5
+      },
+      "question_id": "at_sec_3",
+      "retrieval": {
+        "mrr": 0.5,
+        "ndcg@5": 0.6309297535714575,
+        "precision@5": 0.2,
+        "recall@5": 1.0
+      }
+    },
+    {
+      "answerable": true,
+      "category": "section_dependent",
+      "evidence": {
+        "evidence_coverage": 1.0,
+        "factual_grounded": 1.0,
+        "path_agreement": 1.0,
+        "unsupported_answer": 0.0
+      },
+      "latency_ms": {
+        "retrieval": 2872.56659999548,
+        "total": 3076.53369999025
+      },
+      "qa": {
+        "exact_match": 0.0,
+        "token_f1": 0.0
+      },
+      "question_id": "at_sec_4",
+      "retrieval": {
+        "mrr": 0.0,
+        "ndcg@5": 0.0,
+        "precision@5": 0.0,
+        "recall@5": 0.0
+      }
+    },
+    {
+      "answerable": true,
+      "category": "section_dependent",
+      "evidence": {
+        "evidence_coverage": 1.0,
+        "factual_grounded": 1.0,
+        "path_agreement": 1.0,
+        "unsupported_answer": 0.0
+      },
+      "latency_ms": {
+        "retrieval": 1825.2713999972912,
+        "total": 2026.2912999896798
+      },
+      "qa": {
+        "exact_match": 1.0,
+        "token_f1": 1.0
+      },
+      "question_id": "at_sec_5",
+      "retrieval": {
+        "mrr": 1.0,
+        "ndcg@5": 1.0,
+        "precision@5": 0.2,
+        "recall@5": 1.0
+      }
+    },
+    {
+      "answerable": true,
+      "category": "section_dependent",
+      "evidence": {
+        "evidence_coverage": 1.0,
+        "factual_grounded": 1.0,
+        "path_agreement": 1.0,
+        "unsupported_answer": 0.0
+      },
+      "latency_ms": {
+        "retrieval": 1847.2193999914452,
+        "total": 2051.88719999569
+      },
+      "qa": {
+        "exact_match": 1.0,
+        "token_f1": 1.0
+      },
+      "question_id": "at_sec_6",
+      "retrieval": {
+        "mrr": 0.5,
+        "ndcg@5": 0.6309297535714575,
+        "precision@5": 0.2,
+        "recall@5": 1.0
+      }
+    },
+    {
+      "answerable": true,
+      "category": "page_cross_page",
+      "evidence": {
+        "evidence_coverage": 1.0,
+        "factual_grounded": 1.0,
+        "path_agreement": 1.0,
+        "unsupported_answer": 0.0
+      },
+      "latency_ms": {
+        "retrieval": 1740.6215999944834,
+        "total": 1928.2018999947468
+      },
+      "qa": {
+        "exact_match": 1.0,
+        "token_f1": 1.0
+      },
+      "question_id": "at_pg_1",
+      "retrieval": {
+        "mrr": 1.0,
+        "ndcg@5": 1.0,
+        "precision@5": 0.2,
+        "recall@5": 1.0
+      }
+    },
+    {
+      "answerable": true,
+      "category": "page_cross_page",
+      "evidence": {
+        "evidence_coverage": 1.0,
+        "factual_grounded": 1.0,
+        "path_agreement": 1.0,
+        "unsupported_answer": 0.0
+      },
+      "latency_ms": {
+        "retrieval": 1766.8403999996372,
+        "total": 1963.3182999968994
+      },
+      "qa": {
+        "exact_match": 1.0,
+        "token_f1": 1.0
+      },
+      "question_id": "at_pg_2",
+      "retrieval": {
+        "mrr": 1.0,
+        "ndcg@5": 1.0,
+        "precision@5": 0.2,
+        "recall@5": 1.0
+      }
+    },
+    {
+      "answerable": true,
+      "category": "direct_textual",
+      "evidence": {
+        "evidence_coverage": 1.0,
+        "factual_grounded": 1.0,
+        "path_agreement": 1.0,
+        "unsupported_answer": 0.0
+      },
+      "latency_ms": {
+        "retrieval": 1796.2945000035688,
+        "total": 2011.9810000032885
+      },
+      "qa": {
+        "exact_match": 1.0,
+        "token_f1": 1.0
+      },
+      "question_id": "at_mh_1",
+      "retrieval": {
+        "mrr": 0.3333333333333333,
+        "ndcg@5": 0.5,
+        "precision@5": 0.2,
+        "recall@5": 1.0
+      }
+    },
+    {
+      "answerable": true,
+      "category": "direct_textual",
+      "evidence": {
+        "evidence_coverage": 1.0,
+        "factual_grounded": 1.0,
+        "path_agreement": 1.0,
+        "unsupported_answer": 0.0
+      },
+      "latency_ms": {
+        "retrieval": 1878.6185000062687,
+        "total": 2098.641000004136
+      },
+      "qa": {
+        "exact_match": 0.0,
+        "token_f1": 0.09999999999999999
+      },
+      "question_id": "at_ds_1",
+      "retrieval": {
+        "mrr": 0.3333333333333333,
+        "ndcg@5": 0.5,
+        "precision@5": 0.2,
+        "recall@5": 1.0
+      }
+    },
+    {
+      "answerable": true,
+      "category": "direct_textual",
+      "evidence": {
+        "evidence_coverage": 1.0,
+        "factual_grounded": 1.0,
+        "path_agreement": 1.0,
+        "unsupported_answer": 0.0
+      },
+      "latency_ms": {
+        "retrieval": 1828.1096999999136,
+        "total": 2025.5628999875626
+      },
+      "qa": {
+        "exact_match": 1.0,
+        "token_f1": 1.0
+      },
+      "question_id": "at_sem_1",
+      "retrieval": {
+        "mrr": 1.0,
+        "ndcg@5": 1.0,
+        "precision@5": 0.2,
+        "recall@5": 1.0
+      }
+    },
+    {
+      "answerable": true,
+      "category": "direct_textual",
+      "evidence": {
+        "evidence_coverage": 1.0,
+        "factual_grounded": 1.0,
+        "path_agreement": 1.0,
+        "unsupported_answer": 0.0
+      },
+      "latency_ms": {
+        "retrieval": 2567.7558000024874,
+        "total": 2762.103200002457
+      },
+      "qa": {
+        "exact_match": 1.0,
+        "token_f1": 1.0
+      },
+      "question_id": "at_sem_2",
+      "retrieval": {
+        "mrr": 1.0,
+        "ndcg@5": 1.0,
+        "precision@5": 0.2,
+        "recall@5": 1.0
+      }
+    },
+    {
+      "answerable": true,
+      "category": "table_dependent",
+      "evidence": {
+        "evidence_coverage": 1.0,
+        "factual_grounded": 1.0,
+        "path_agreement": 1.0,
+        "unsupported_answer": 0.0
+      },
+      "latency_ms": {
+        "retrieval": 1750.4167000006419,
+        "total": 1974.146299995482
+      },
+      "qa": {
+        "exact_match": 1.0,
+        "token_f1": 1.0
+      },
+      "question_id": "fs_tbl_1",
+      "retrieval": {
+        "mrr": 0.3333333333333333,
+        "ndcg@5": 0.5,
+        "precision@5": 0.2,
+        "recall@5": 1.0
+      }
+    },
+    {
+      "answerable": true,
+      "category": "table_dependent",
+      "evidence": {
+        "evidence_coverage": 1.0,
+        "factual_grounded": 1.0,
+        "path_agreement": 1.0,
+        "unsupported_answer": 0.0
+      },
+      "latency_ms": {
+        "retrieval": 1662.1412999957101,
+        "total": 1881.0034999914933
+      },
+      "qa": {
+        "exact_match": 0.0,
+        "token_f1": 0.5
+      },
+      "question_id": "fs_tbl_2",
+      "retrieval": {
+        "mrr": 0.3333333333333333,
+        "ndcg@5": 0.5,
+        "precision@5": 0.2,
+        "recall@5": 1.0
+      }
+    },
+    {
+      "answerable": true,
+      "category": "table_dependent",
+      "evidence": {
+        "evidence_coverage": 1.0,
+        "factual_grounded": 1.0,
+        "path_agreement": 1.0,
+        "unsupported_answer": 0.0
+      },
+      "latency_ms": {
+        "retrieval": 1898.2183999905828,
+        "total": 2099.9610999861034
+      },
+      "qa": {
+        "exact_match": 0.0,
+        "token_f1": 0.5
+      },
+      "question_id": "fs_tbl_3",
+      "retrieval": {
+        "mrr": 0.3333333333333333,
+        "ndcg@5": 0.5,
+        "precision@5": 0.2,
+        "recall@5": 1.0
+      }
+    },
+    {
+      "answerable": true,
+      "category": "table_dependent",
+      "evidence": {
+        "evidence_coverage": 1.0,
+        "factual_grounded": 1.0,
+        "path_agreement": 1.0,
+        "unsupported_answer": 0.0
+      },
+      "latency_ms": {
+        "retrieval": 1734.8516999918502,
+        "total": 1947.8356999898097
+      },
+      "qa": {
+        "exact_match": 0.0,
+        "token_f1": 0.5
+      },
+      "question_id": "fs_tbl_4",
+      "retrieval": {
+        "mrr": 0.2,
+        "ndcg@5": 0.38685280723454163,
+        "precision@5": 0.2,
+        "recall@5": 1.0
+      }
+    },
+    {
+      "answerable": true,
+      "category": "table_dependent",
+      "evidence": {
+        "evidence_coverage": 1.0,
+        "factual_grounded": 1.0,
+        "path_agreement": 1.0,
+        "unsupported_answer": 0.0
+      },
+      "latency_ms": {
+        "retrieval": 1834.6326000028057,
+        "total": 2060.889100001077
+      },
+      "qa": {
+        "exact_match": 0.0,
+        "token_f1": 0.5
+      },
+      "question_id": "fs_tbl_5",
+      "retrieval": {
+        "mrr": 0.3333333333333333,
+        "ndcg@5": 0.5,
+        "precision@5": 0.2,
+        "recall@5": 1.0
+      }
+    },
+    {
+      "answerable": true,
+      "category": "section_dependent",
+      "evidence": {
+        "evidence_coverage": 1.0,
+        "factual_grounded": 1.0,
+        "path_agreement": 1.0,
+        "unsupported_answer": 0.0
+      },
+      "latency_ms": {
+        "retrieval": 1923.9043999987189,
+        "total": 2094.0929999924265
+      },
+      "qa": {
+        "exact_match": 1.0,
+        "token_f1": 1.0
+      },
+      "question_id": "fs_sec_1",
+      "retrieval": {
+        "mrr": 1.0,
+        "ndcg@5": 1.0,
+        "precision@5": 0.2,
+        "recall@5": 1.0
+      }
+    },
+    {
+      "answerable": true,
+      "category": "section_dependent",
+      "evidence": {
+        "evidence_coverage": 1.0,
+        "factual_grounded": 1.0,
+        "path_agreement": 1.0,
+        "unsupported_answer": 0.0
+      },
+      "latency_ms": {
+        "retrieval": 1674.0386000019498,
+        "total": 1829.877399999532
+      },
+      "qa": {
+        "exact_match": 0.0,
+        "token_f1": 0.6666666666666666
+      },
+      "question_id": "fs_sec_2",
+      "retrieval": {
+        "mrr": 1.0,
+        "ndcg@5": 1.0,
+        "precision@5": 0.2,
+        "recall@5": 1.0
+      }
+    },
+    {
+      "answerable": true,
+      "category": "section_dependent",
+      "evidence": {
+        "evidence_coverage": 1.0,
+        "factual_grounded": 1.0,
+        "path_agreement": 1.0,
+        "unsupported_answer": 0.0
+      },
+      "latency_ms": {
+        "retrieval": 1892.3074999911478,
+        "total": 2082.0591999799944
+      },
+      "qa": {
+        "exact_match": 1.0,
+        "token_f1": 1.0
+      },
+      "question_id": "fs_sec_3",
+      "retrieval": {
+        "mrr": 1.0,
+        "ndcg@5": 1.0,
+        "precision@5": 0.2,
+        "recall@5": 1.0
+      }
+    },
+    {
+      "answerable": true,
+      "category": "page_cross_page",
+      "evidence": {
+        "evidence_coverage": 1.0,
+        "factual_grounded": 1.0,
+        "path_agreement": 1.0,
+        "unsupported_answer": 0.0
+      },
+      "latency_ms": {
+        "retrieval": 1857.4347000103444,
+        "total": 2055.591900018044
+      },
+      "qa": {
+        "exact_match": 1.0,
+        "token_f1": 1.0
+      },
+      "question_id": "fs_pg_1",
+      "retrieval": {
+        "mrr": 1.0,
+        "ndcg@5": 1.0,
+        "precision@5": 0.2,
+        "recall@5": 1.0
+      }
+    },
+    {
+      "answerable": true,
+      "category": "page_cross_page",
+      "evidence": {
+        "evidence_coverage": 1.0,
+        "factual_grounded": 1.0,
+        "path_agreement": 1.0,
+        "unsupported_answer": 0.0
+      },
+      "latency_ms": {
+        "retrieval": 1746.2548000039533,
+        "total": 1920.0032999942778
+      },
+      "qa": {
+        "exact_match": 0.0,
+        "token_f1": 0.0
+      },
+      "question_id": "fs_pg_2",
+      "retrieval": {
+        "mrr": 1.0,
+        "ndcg@5": 1.0,
+        "precision@5": 0.2,
+        "recall@5": 1.0
+      }
+    },
+    {
+      "answerable": true,
+      "category": "direct_textual",
+      "evidence": {
+        "evidence_coverage": 1.0,
+        "factual_grounded": 1.0,
+        "path_agreement": 1.0,
+        "unsupported_answer": 0.0
+      },
+      "latency_ms": {
+        "retrieval": 1919.4561000040267,
+        "total": 2146.0130000050412
+      },
+      "qa": {
+        "exact_match": 0.0,
+        "token_f1": 0.0
+      },
+      "question_id": "fs_mh_1",
+      "retrieval": {
+        "mrr": 0.3333333333333333,
+        "ndcg@5": 0.5,
+        "precision@5": 0.2,
+        "recall@5": 1.0
+      }
+    },
+    {
+      "answerable": true,
+      "category": "direct_textual",
+      "evidence": {
+        "evidence_coverage": 1.0,
+        "factual_grounded": 1.0,
+        "path_agreement": 1.0,
+        "unsupported_answer": 0.0
+      },
+      "latency_ms": {
+        "retrieval": 1716.1737000133144,
+        "total": 1881.1532000108855
+      },
+      "qa": {
+        "exact_match": 0.0,
+        "token_f1": 0.6666666666666666
+      },
+      "question_id": "fs_ds_1",
+      "retrieval": {
+        "mrr": 1.0,
+        "ndcg@5": 1.0,
+        "precision@5": 0.2,
+        "recall@5": 1.0
+      }
+    },
+    {
+      "answerable": true,
+      "category": "direct_textual",
+      "evidence": {
+        "evidence_coverage": 1.0,
+        "factual_grounded": 1.0,
+        "path_agreement": 1.0,
+        "unsupported_answer": 0.0
+      },
+      "latency_ms": {
+        "retrieval": 1636.1064999946393,
+        "total": 1809.5004999922821
+      },
+      "qa": {
+        "exact_match": 0.0,
+        "token_f1": 0.0
+      },
+      "question_id": "fs_ds_2",
+      "retrieval": {
+        "mrr": 0.0,
+        "ndcg@5": 0.0,
+        "precision@5": 0.0,
+        "recall@5": 0.0
+      }
+    },
+    {
+      "answerable": true,
+      "category": "direct_textual",
+      "evidence": {
+        "evidence_coverage": 1.0,
+        "factual_grounded": 1.0,
+        "path_agreement": 1.0,
+        "unsupported_answer": 0.0
+      },
+      "latency_ms": {
+        "retrieval": 1652.1454000030644,
+        "total": 1849.3578999914462
+      },
+      "qa": {
+        "exact_match": 0.0,
+        "token_f1": 0.0
+      },
+      "question_id": "fs_ds_3",
+      "retrieval": {
+        "mrr": 0.3333333333333333,
+        "ndcg@5": 0.5,
+        "precision@5": 0.2,
+        "recall@5": 1.0
+      }
+    },
+    {
+      "answerable": true,
+      "category": "direct_textual",
+      "evidence": {
+        "evidence_coverage": 1.0,
+        "factual_grounded": 1.0,
+        "path_agreement": 1.0,
+        "unsupported_answer": 0.0
+      },
+      "latency_ms": {
+        "retrieval": 1723.9833000057843,
+        "total": 1876.7724000063026
+      },
+      "qa": {
+        "exact_match": 1.0,
+        "token_f1": 1.0
+      },
+      "question_id": "fs_ds_4",
+      "retrieval": {
+        "mrr": 1.0,
+        "ndcg@5": 1.0,
+        "precision@5": 0.2,
+        "recall@5": 1.0
+      }
+    },
+    {
+      "answerable": true,
+      "category": "direct_textual",
+      "evidence": {
+        "evidence_coverage": 1.0,
+        "factual_grounded": 1.0,
+        "path_agreement": 1.0,
+        "unsupported_answer": 0.0
+      },
+      "latency_ms": {
+        "retrieval": 1731.931899994379,
+        "total": 1913.9118999883067
+      },
+      "qa": {
+        "exact_match": 0.0,
+        "token_f1": 0.5
+      },
+      "question_id": "fs_sem_1",
+      "retrieval": {
+        "mrr": 0.3333333333333333,
+        "ndcg@5": 0.5,
+        "precision@5": 0.2,
+        "recall@5": 1.0
+      }
+    },
+    {
+      "answerable": true,
+      "category": "direct_textual",
+      "evidence": {
+        "evidence_coverage": 1.0,
+        "factual_grounded": 1.0,
+        "path_agreement": 1.0,
+        "unsupported_answer": 0.0
+      },
+      "latency_ms": {
+        "retrieval": 1662.0981999876676,
+        "total": 1860.7072999875527
+      },
+      "qa": {
+        "exact_match": 1.0,
+        "token_f1": 1.0
+      },
+      "question_id": "fs_sem_2",
+      "retrieval": {
+        "mrr": 1.0,
+        "ndcg@5": 1.0,
+        "precision@5": 0.2,
+        "recall@5": 1.0
+      }
+    },
+    {
+      "answerable": true,
+      "category": "table_dependent",
+      "evidence": {
+        "evidence_coverage": 1.0,
+        "factual_grounded": 1.0,
+        "path_agreement": 1.0,
+        "unsupported_answer": 0.0
+      },
+      "latency_ms": {
+        "retrieval": 1747.2456999967108,
+        "total": 1948.6345000041183
+      },
+      "qa": {
+        "exact_match": 1.0,
+        "token_f1": 1.0
+      },
+      "question_id": "os_tbl_1",
+      "retrieval": {
+        "mrr": 0.3333333333333333,
+        "ndcg@5": 0.5437713091520254,
+        "precision@5": 0.4,
+        "recall@5": 1.0
+      }
+    },
+    {
+      "answerable": true,
+      "category": "table_dependent",
+      "evidence": {
+        "evidence_coverage": 1.0,
+        "factual_grounded": 1.0,
+        "path_agreement": 1.0,
+        "unsupported_answer": 0.0
+      },
+      "latency_ms": {
+        "retrieval": 1743.7566000007791,
+        "total": 1959.770399989793
+      },
+      "qa": {
+        "exact_match": 0.0,
+        "token_f1": 0.75
+      },
+      "question_id": "os_tbl_2",
+      "retrieval": {
+        "mrr": 1.0,
+        "ndcg@5": 0.8503449055347546,
+        "precision@5": 0.4,
+        "recall@5": 1.0
+      }
+    },
+    {
+      "answerable": true,
+      "category": "table_dependent",
+      "evidence": {
+        "evidence_coverage": 1.0,
+        "factual_grounded": 1.0,
+        "path_agreement": 1.0,
+        "unsupported_answer": 0.0
+      },
+      "latency_ms": {
+        "retrieval": 1611.1383999959799,
+        "total": 1819.5822999841766
+      },
+      "qa": {
+        "exact_match": 0.0,
+        "token_f1": 0.75
+      },
+      "question_id": "os_tbl_3",
+      "retrieval": {
+        "mrr": 1.0,
+        "ndcg@5": 0.8503449055347546,
+        "precision@5": 0.4,
+        "recall@5": 1.0
+      }
+    },
+    {
+      "answerable": true,
+      "category": "table_dependent",
+      "evidence": {
+        "evidence_coverage": 1.0,
+        "factual_grounded": 1.0,
+        "path_agreement": 1.0,
+        "unsupported_answer": 0.0
+      },
+      "latency_ms": {
+        "retrieval": 1753.3544000034453,
+        "total": 1954.1364000033354
+      },
+      "qa": {
+        "exact_match": 0.0,
+        "token_f1": 0.75
+      },
+      "question_id": "os_tbl_4",
+      "retrieval": {
+        "mrr": 0.3333333333333333,
+        "ndcg@5": 0.5437713091520254,
+        "precision@5": 0.4,
+        "recall@5": 1.0
+      }
+    },
+    {
+      "answerable": true,
+      "category": "table_dependent",
+      "evidence": {
+        "evidence_coverage": 1.0,
+        "factual_grounded": 1.0,
+        "path_agreement": 1.0,
+        "unsupported_answer": 0.0
+      },
+      "latency_ms": {
+        "retrieval": 1744.3733000109205,
+        "total": 1946.775800010073
+      },
+      "qa": {
+        "exact_match": 0.0,
+        "token_f1": 0.75
+      },
+      "question_id": "os_tbl_5",
+      "retrieval": {
+        "mrr": 0.3333333333333333,
+        "ndcg@5": 0.5437713091520254,
+        "precision@5": 0.4,
+        "recall@5": 1.0
+      }
+    },
+    {
+      "answerable": true,
+      "category": "section_dependent",
+      "evidence": {
+        "evidence_coverage": 1.0,
+        "factual_grounded": 1.0,
+        "path_agreement": 1.0,
+        "unsupported_answer": 0.0
+      },
+      "latency_ms": {
+        "retrieval": 2050.637199994526,
+        "total": 2252.492399988114
+      },
+      "qa": {
+        "exact_match": 0.0,
+        "token_f1": 0.0
+      },
+      "question_id": "os_sec_1",
+      "retrieval": {
+        "mrr": 0.5,
+        "ndcg@5": 0.6309297535714575,
+        "precision@5": 0.2,
+        "recall@5": 1.0
+      }
+    },
+    {
+      "answerable": true,
+      "category": "section_dependent",
+      "evidence": {
+        "evidence_coverage": 1.0,
+        "factual_grounded": 1.0,
+        "path_agreement": 1.0,
+        "unsupported_answer": 0.0
+      },
+      "latency_ms": {
+        "retrieval": 2399.769199997536,
+        "total": 2600.7361999945715
+      },
+      "qa": {
+        "exact_match": 1.0,
+        "token_f1": 1.0
+      },
+      "question_id": "os_sec_2",
+      "retrieval": {
+        "mrr": 0.5,
+        "ndcg@5": 0.6309297535714575,
+        "precision@5": 0.2,
+        "recall@5": 1.0
+      }
+    },
+    {
+      "answerable": true,
+      "category": "page_cross_page",
+      "evidence": {
+        "evidence_coverage": 1.0,
+        "factual_grounded": 1.0,
+        "path_agreement": 1.0,
+        "unsupported_answer": 0.0
+      },
+      "latency_ms": {
+        "retrieval": 2094.0382999979192,
+        "total": 2292.867899988778
+      },
+      "qa": {
+        "exact_match": 0.0,
+        "token_f1": 0.6666666666666666
+      },
+      "question_id": "os_pg_1",
+      "retrieval": {
+        "mrr": 1.0,
+        "ndcg@5": 1.0,
+        "precision@5": 0.2,
+        "recall@5": 1.0
+      }
+    },
+    {
+      "answerable": true,
+      "category": "page_cross_page",
+      "evidence": {
+        "evidence_coverage": 1.0,
+        "factual_grounded": 1.0,
+        "path_agreement": 1.0,
+        "unsupported_answer": 0.0
+      },
+      "latency_ms": {
+        "retrieval": 2072.3690999875544,
+        "total": 2282.682399978512
+      },
+      "qa": {
+        "exact_match": 0.0,
+        "token_f1": 0.0
+      },
+      "question_id": "os_pg_2",
+      "retrieval": {
+        "mrr": 0.5,
+        "ndcg@5": 0.6309297535714575,
+        "precision@5": 0.2,
+        "recall@5": 1.0
+      }
+    },
+    {
+      "answerable": true,
+      "category": "direct_textual",
+      "evidence": {
+        "evidence_coverage": 1.0,
+        "factual_grounded": 1.0,
+        "path_agreement": 1.0,
+        "unsupported_answer": 0.0
+      },
+      "latency_ms": {
+        "retrieval": 1825.7904000056442,
+        "total": 2009.7511999920243
+      },
+      "qa": {
+        "exact_match": 0.0,
+        "token_f1": 0.0
+      },
+      "question_id": "os_mh_1",
+      "retrieval": {
+        "mrr": 1.0,
+        "ndcg@5": 1.0,
+        "precision@5": 0.4,
+        "recall@5": 1.0
+      }
+    },
+    {
+      "answerable": true,
+      "category": "direct_textual",
+      "evidence": {
+        "evidence_coverage": 1.0,
+        "factual_grounded": 1.0,
+        "path_agreement": 1.0,
+        "unsupported_answer": 0.0
+      },
+      "latency_ms": {
+        "retrieval": 1773.9629999996396,
+        "total": 1953.950099996291
+      },
+      "qa": {
+        "exact_match": 0.0,
+        "token_f1": 0.0
+      },
+      "question_id": "os_mh_2",
+      "retrieval": {
+        "mrr": 0.25,
+        "ndcg@5": 0.5012658353418871,
+        "precision@5": 0.4,
+        "recall@5": 1.0
+      }
+    },
+    {
+      "answerable": true,
+      "category": "direct_textual",
+      "evidence": {
+        "evidence_coverage": 1.0,
+        "factual_grounded": 1.0,
+        "path_agreement": 1.0,
+        "unsupported_answer": 0.0
+      },
+      "latency_ms": {
+        "retrieval": 1643.0972000089241,
+        "total": 1855.9508000180358
+      },
+      "qa": {
+        "exact_match": 0.0,
+        "token_f1": 0.0
+      },
+      "question_id": "os_mh_3",
+      "retrieval": {
+        "mrr": 0.5,
+        "ndcg@5": 0.38685280723454163,
+        "precision@5": 0.2,
+        "recall@5": 0.5
+      }
+    },
+    {
+      "answerable": true,
+      "category": "direct_textual",
+      "evidence": {
+        "evidence_coverage": 1.0,
+        "factual_grounded": 1.0,
+        "path_agreement": 1.0,
+        "unsupported_answer": 0.0
+      },
+      "latency_ms": {
+        "retrieval": 1752.5107999972533,
+        "total": 1942.647300005774
+      },
+      "qa": {
+        "exact_match": 0.0,
+        "token_f1": 0.5
+      },
+      "question_id": "os_mh_4",
+      "retrieval": {
+        "mrr": 1.0,
+        "ndcg@5": 0.8503449055347546,
+        "precision@5": 0.4,
+        "recall@5": 1.0
+      }
+    },
+    {
+      "answerable": true,
+      "category": "direct_textual",
+      "evidence": {
+        "evidence_coverage": 1.0,
+        "factual_grounded": 1.0,
+        "path_agreement": 1.0,
+        "unsupported_answer": 0.0
+      },
+      "latency_ms": {
+        "retrieval": 2062.1565000037663,
+        "total": 2254.4141999969725
+      },
+      "qa": {
+        "exact_match": 0.0,
+        "token_f1": 0.6666666666666666
+      },
+      "question_id": "os_mh_5",
+      "retrieval": {
+        "mrr": 0.5,
+        "ndcg@5": 0.6309297535714575,
+        "precision@5": 0.2,
+        "recall@5": 1.0
+      }
+    },
+    {
+      "answerable": true,
+      "category": "direct_textual",
+      "evidence": {
+        "evidence_coverage": 1.0,
+        "factual_grounded": 1.0,
+        "path_agreement": 1.0,
+        "unsupported_answer": 0.0
+      },
+      "latency_ms": {
+        "retrieval": 2306.7696999933105,
+        "total": 2511.869399997522
+      },
+      "qa": {
+        "exact_match": 0.0,
+        "token_f1": 0.0
+      },
+      "question_id": "os_mh_6",
+      "retrieval": {
+        "mrr": 0.5,
+        "ndcg@5": 0.6309297535714575,
+        "precision@5": 0.2,
+        "recall@5": 1.0
+      }
+    },
+    {
+      "answerable": true,
+      "category": "direct_textual",
+      "evidence": {
+        "evidence_coverage": 1.0,
+        "factual_grounded": 1.0,
+        "path_agreement": 1.0,
+        "unsupported_answer": 0.0
+      },
+      "latency_ms": {
+        "retrieval": 2006.5720999991754,
+        "total": 2234.5711999951163
+      },
+      "qa": {
+        "exact_match": 0.0,
+        "token_f1": 0.16
+      },
+      "question_id": "os_ds_1",
+      "retrieval": {
+        "mrr": 1.0,
+        "ndcg@5": 1.0,
+        "precision@5": 0.4,
+        "recall@5": 1.0
+      }
+    },
+    {
+      "answerable": true,
+      "category": "direct_textual",
+      "evidence": {
+        "evidence_coverage": 1.0,
+        "factual_grounded": 1.0,
+        "path_agreement": 1.0,
+        "unsupported_answer": 0.0
+      },
+      "latency_ms": {
+        "retrieval": 1818.8235999987228,
+        "total": 2005.878699987079
+      },
+      "qa": {
+        "exact_match": 0.0,
+        "token_f1": 0.0
+      },
+      "question_id": "os_ds_2",
+      "retrieval": {
+        "mrr": 1.0,
+        "ndcg@5": 1.0,
+        "precision@5": 0.4,
+        "recall@5": 1.0
+      }
+    },
+    {
+      "answerable": true,
+      "category": "direct_textual",
+      "evidence": {
+        "evidence_coverage": 1.0,
+        "factual_grounded": 1.0,
+        "path_agreement": 1.0,
+        "unsupported_answer": 0.0
+      },
+      "latency_ms": {
+        "retrieval": 2168.7309999979334,
+        "total": 2365.9393999987515
+      },
+      "qa": {
+        "exact_match": 0.0,
+        "token_f1": 0.33333333333333337
+      },
+      "question_id": "os_sem_1",
+      "retrieval": {
+        "mrr": 0.3333333333333333,
+        "ndcg@5": 0.5,
+        "precision@5": 0.2,
+        "recall@5": 1.0
+      }
+    },
+    {
+      "answerable": true,
+      "category": "direct_textual",
+      "evidence": {
+        "evidence_coverage": 1.0,
+        "factual_grounded": 1.0,
+        "path_agreement": 1.0,
+        "unsupported_answer": 0.0
+      },
+      "latency_ms": {
+        "retrieval": 2115.580099998624,
+        "total": 2302.49209998874
+      },
+      "qa": {
+        "exact_match": 1.0,
+        "token_f1": 1.0
+      },
+      "question_id": "os_sem_2",
+      "retrieval": {
+        "mrr": 1.0,
+        "ndcg@5": 1.0,
+        "precision@5": 0.2,
+        "recall@5": 1.0
+      }
+    },
+    {
+      "answerable": true,
+      "category": "section_dependent",
+      "evidence": {
+        "evidence_coverage": 1.0,
+        "factual_grounded": 1.0,
+        "path_agreement": 1.0,
+        "unsupported_answer": 0.0
+      },
+      "latency_ms": {
+        "retrieval": 2463.7352999998257,
+        "total": 2615.829299989855
+      },
+      "qa": {
+        "exact_match": 0.0,
+        "token_f1": 0.5
+      },
+      "question_id": "ar_sec_1",
+      "retrieval": {
+        "mrr": 1.0,
+        "ndcg@5": 1.0,
+        "precision@5": 0.2,
+        "recall@5": 1.0
+      }
+    },
+    {
+      "answerable": true,
+      "category": "page_cross_page",
+      "evidence": {
+        "evidence_coverage": 1.0,
+        "factual_grounded": 1.0,
+        "path_agreement": 1.0,
+        "unsupported_answer": 0.0
+      },
+      "latency_ms": {
+        "retrieval": 1847.4063999892678,
+        "total": 1976.9319999904837
+      },
+      "qa": {
+        "exact_match": 0.0,
+        "token_f1": 0.0
+      },
+      "question_id": "ar_pg_1",
+      "retrieval": {
+        "mrr": 0.5,
+        "ndcg@5": 0.6309297535714575,
+        "precision@5": 0.2,
+        "recall@5": 1.0
+      }
+    },
+    {
+      "answerable": true,
+      "category": "page_cross_page",
+      "evidence": {
+        "evidence_coverage": 1.0,
+        "factual_grounded": 1.0,
+        "path_agreement": 1.0,
+        "unsupported_answer": 0.0
+      },
+      "latency_ms": {
+        "retrieval": 1918.697400004021,
+        "total": 2072.981900011655
+      },
+      "qa": {
+        "exact_match": 1.0,
+        "token_f1": 1.0
+      },
+      "question_id": "ar_pg_2",
+      "retrieval": {
+        "mrr": 1.0,
+        "ndcg@5": 0.9197207891481876,
+        "precision@5": 0.4,
+        "recall@5": 1.0
+      }
+    },
+    {
+      "answerable": true,
+      "category": "direct_textual",
+      "evidence": {
+        "evidence_coverage": 1.0,
+        "factual_grounded": 1.0,
+        "path_agreement": 1.0,
+        "unsupported_answer": 0.0
+      },
+      "latency_ms": {
+        "retrieval": 1789.968899989617,
+        "total": 1919.1079999873182
+      },
+      "qa": {
+        "exact_match": 0.0,
+        "token_f1": 0.6666666666666666
+      },
+      "question_id": "ar_ds_1",
+      "retrieval": {
+        "mrr": 1.0,
+        "ndcg@5": 1.0,
+        "precision@5": 0.2,
+        "recall@5": 1.0
+      }
+    },
+    {
+      "answerable": true,
+      "category": "direct_textual",
+      "evidence": {
+        "evidence_coverage": 1.0,
+        "factual_grounded": 1.0,
+        "path_agreement": 1.0,
+        "unsupported_answer": 0.0
+      },
+      "latency_ms": {
+        "retrieval": 2021.9676999986405,
+        "total": 2192.843199998606
+      },
+      "qa": {
+        "exact_match": 0.0,
+        "token_f1": 0.5
+      },
+      "question_id": "ar_sem_1",
+      "retrieval": {
+        "mrr": 0.5,
+        "ndcg@5": 0.6309297535714575,
+        "precision@5": 0.2,
+        "recall@5": 1.0
+      }
+    },
+    {
+      "answerable": true,
+      "category": "direct_textual",
+      "evidence": {
+        "evidence_coverage": 1.0,
+        "factual_grounded": 1.0,
+        "path_agreement": 1.0,
+        "unsupported_answer": 0.0
+      },
+      "latency_ms": {
+        "retrieval": 1634.6644000004744,
+        "total": 1860.055299999658
+      },
+      "qa": {
+        "exact_match": 0.0,
+        "token_f1": 0.5
+      },
+      "question_id": "ar_sem_2",
+      "retrieval": {
+        "mrr": 1.0,
+        "ndcg@5": 1.0,
+        "precision@5": 0.2,
+        "recall@5": 1.0
+      }
+    },
+    {
+      "answerable": false,
+      "category": "direct_textual",
+      "evidence": {
+        "evidence_coverage": 1.0,
+        "factual_grounded": 1.0,
+        "path_agreement": 1.0,
+        "unsupported_answer": 1.0
+      },
+      "latency_ms": {
+        "retrieval": 2005.234800002654,
+        "total": 2215.1715000072727
+      },
+      "qa": {
+        "exact_match": 0.0,
+        "token_f1": 0.0
+      },
+      "question_id": "at_una_1",
+      "retrieval": {
+        "mrr": 0.0,
+        "ndcg@5": 0.0,
+        "precision@5": 0.0,
+        "recall@5": 0.0
+      }
+    },
+    {
+      "answerable": false,
+      "category": "direct_textual",
+      "evidence": {
+        "evidence_coverage": 1.0,
+        "factual_grounded": 1.0,
+        "path_agreement": 1.0,
+        "unsupported_answer": 1.0
+      },
+      "latency_ms": {
+        "retrieval": 1633.7004999950295,
+        "total": 1812.7718000032473
+      },
+      "qa": {
+        "exact_match": 0.0,
+        "token_f1": 0.0
+      },
+      "question_id": "at_una_2",
+      "retrieval": {
+        "mrr": 0.0,
+        "ndcg@5": 0.0,
+        "precision@5": 0.0,
+        "recall@5": 0.0
+      }
+    },
+    {
+      "answerable": false,
+      "category": "direct_textual",
+      "evidence": {
+        "evidence_coverage": 1.0,
+        "factual_grounded": 1.0,
+        "path_agreement": 1.0,
+        "unsupported_answer": 1.0
+      },
+      "latency_ms": {
+        "retrieval": 2030.9190999978455,
+        "total": 2233.4776999923633
+      },
+      "qa": {
+        "exact_match": 0.0,
+        "token_f1": 0.0
+      },
+      "question_id": "at_una_3",
+      "retrieval": {
+        "mrr": 0.0,
+        "ndcg@5": 0.0,
+        "precision@5": 0.0,
+        "recall@5": 0.0
+      }
+    },
+    {
+      "answerable": false,
+      "category": "direct_textual",
+      "evidence": {
+        "evidence_coverage": 1.0,
+        "factual_grounded": 1.0,
+        "path_agreement": 1.0,
+        "unsupported_answer": 1.0
+      },
+      "latency_ms": {
+        "retrieval": 1742.9204000072787,
+        "total": 1944.3565000110539
+      },
+      "qa": {
+        "exact_match": 0.0,
+        "token_f1": 0.0
+      },
+      "question_id": "at_una_4",
+      "retrieval": {
+        "mrr": 0.0,
+        "ndcg@5": 0.0,
+        "precision@5": 0.0,
+        "recall@5": 0.0
+      }
+    },
+    {
+      "answerable": false,
+      "category": "direct_textual",
+      "evidence": {
+        "evidence_coverage": 1.0,
+        "factual_grounded": 1.0,
+        "path_agreement": 1.0,
+        "unsupported_answer": 1.0
+      },
+      "latency_ms": {
+        "retrieval": 2153.6288000061177,
+        "total": 2357.9495000158204
+      },
+      "qa": {
+        "exact_match": 0.0,
+        "token_f1": 0.0
+      },
+      "question_id": "fs_una_5",
+      "retrieval": {
+        "mrr": 0.0,
+        "ndcg@5": 0.0,
+        "precision@5": 0.0,
+        "recall@5": 0.0
+      }
+    },
+    {
+      "answerable": false,
+      "category": "direct_textual",
+      "evidence": {
+        "evidence_coverage": 1.0,
+        "factual_grounded": 1.0,
+        "path_agreement": 1.0,
+        "unsupported_answer": 1.0
+      },
+      "latency_ms": {
+        "retrieval": 2151.824700005818,
+        "total": 2353.0574000033084
+      },
+      "qa": {
+        "exact_match": 0.0,
+        "token_f1": 0.0
+      },
+      "question_id": "fs_una_6",
+      "retrieval": {
+        "mrr": 0.0,
+        "ndcg@5": 0.0,
+        "precision@5": 0.0,
+        "recall@5": 0.0
+      }
+    },
+    {
+      "answerable": false,
+      "category": "direct_textual",
+      "evidence": {
+        "evidence_coverage": 1.0,
+        "factual_grounded": 1.0,
+        "path_agreement": 1.0,
+        "unsupported_answer": 1.0
+      },
+      "latency_ms": {
+        "retrieval": 2297.7505999879213,
+        "total": 2517.148199985968
+      },
+      "qa": {
+        "exact_match": 0.0,
+        "token_f1": 0.0
+      },
+      "question_id": "os_una_7",
+      "retrieval": {
+        "mrr": 0.0,
+        "ndcg@5": 0.0,
+        "precision@5": 0.0,
+        "recall@5": 0.0
+      }
+    },
+    {
+      "answerable": false,
+      "category": "direct_textual",
+      "evidence": {
+        "evidence_coverage": 1.0,
+        "factual_grounded": 1.0,
+        "path_agreement": 1.0,
+        "unsupported_answer": 1.0
+      },
+      "latency_ms": {
+        "retrieval": 2074.8213000042597,
+        "total": 2280.8718000160297
+      },
+      "qa": {
+        "exact_match": 0.0,
+        "token_f1": 0.0
+      },
+      "question_id": "ar_una_8",
+      "retrieval": {
+        "mrr": 0.0,
+        "ndcg@5": 0.0,
+        "precision@5": 0.0,
+        "recall@5": 0.0
+      }
+    }
+  ]
+}

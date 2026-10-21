@@ -1,0 +1,46 @@
+{
+  "run_id": "candidate_qwen25_05b_instruct_2026-10-17",
+  "started_at": "2026-10-17T17:56:09.600605+00:00",
+  "model": "Qwen/Qwen2.5-0.5B-Instruct",
+  "model_revision": "7ae557604adf67be50417f59c2c2f167def9a775",
+  "answer_format": "10",
+  "system_prompt": "You answer questions using only the given context. Reply with the shortest correct answer phrase and nothing else. If the context does not contain the answer, reply exactly: INSUFFICIENT_EVIDENCE",
+  "max_new_tokens": 64,
+  "decoding": "greedy (do_sample=False)",
+  "benchmark": "phases\\phase4f\\phase4f_5d\\benchmark\\qa_benchmark_v1.jsonl",
+  "benchmark_sha256": "1166bf4ff38265c209614ac20261417b7eeb43653f4482dfdf94721fd50a41d0",
+  "benchmark_hash_matches_expected": true,
+  "examples_evaluated": 182,
+  "answerable": 140,
+  "unanswerable": 42,
+  "load_seconds": 2.61,
+  "peak_rss_mb": 1699.0,
+  "metrics": {
+    "candidate_em": 0.0929,
+    "candidate_f1": 0.1886,
+    "candidate_lead_em": 0.0929,
+    "candidate_lead_f1": 0.1685,
+    "extractive_em": 0.1571,
+    "extractive_f1": 0.3871,
+    "abstention_unanswerable": 0.9762,
+    "spurious_unanswerable": 0.0238,
+    "empty_rate_all": 0.6813,
+    "supported_rate": 0.2802,
+    "unsupported_claim_rate": 0.1,
+    "claims": 70,
+    "withheld_unattributable": 36,
+    "gate_abstentions": 83,
+    "model_refusals": 5
+  },
+  "latency_ms": {
+    "p50": 1918.0,
+    "p95": 4217.7,
+    "max": 6375
+  },
+  "notes": [
+    "Same frozen rows, same answerability gate, same verifier and same mark elaboration as the production path; only the generating model differs.",
+    "The candidate is a causal chat model evaluated at 10 marks, the same format as the incumbent comparison report.",
+    "EM/F1 are computed on answerable rows only, using the project's metrics.",
+    "This is an experimental evaluation; no production default was changed."
+  ]
+}
