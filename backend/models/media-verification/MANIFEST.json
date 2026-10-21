@@ -1,0 +1,33 @@
+{
+  "model_name": "Deep-Fake-Detector-v2-Model",
+  "source": "huggingface",
+  "source_repository": "prithivMLmods/Deep-Fake-Detector-v2-Model",
+  "source_url": "https://huggingface.co/prithivMLmods/Deep-Fake-Detector-v2-Model",
+  "revision": "3a99ae26f52c7ac7c3a53103b6cf3a8b617f7093",
+  "framework": "pytorch",
+  "library": "transformers",
+  "architecture": "ViTForImageClassification",
+  "base_model": "google/vit-base-patch16-224-in21k",
+  "task": "image-classification",
+  "pipeline_tag": "image-classification",
+  "labels": {
+    "0": "Realism",
+    "1": "Deepfake"
+  },
+  "input": {
+    "channels": 3,
+    "height": 224,
+    "width": 224,
+    "rescale_factor": 0.00392156862745098,
+    "image_mean": [0.5, 0.5, 0.5],
+    "image_std": [0.5, 0.5, 0.5],
+    "resample": 2
+  },
+  "license": "apache-2.0",
+  "weights_file": "model.safetensors",
+  "weights_sha256": "88ac0939285009e3700cfc9b9a0912b14b092d200ef0df86efe4f2cf190ea4de",
+  "weights_size_bytes": 343223968,
+  "documented_accuracy": 0.9212,
+  "offline_required": true,
+  "provisioned_utc": "2026-10-03T19:00:00Z"
+}
