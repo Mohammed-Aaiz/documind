@@ -1,0 +1,284 @@
+{
+  "schema_version": "documind-research-dataset-template-v1",
+  "status": "synthetic_template_not_benchmark",
+  "provenance": "Author-written format example only; not educational course material, independently reviewed questions or an executed benchmark. No marks have been awarded.",
+  "offset_convention": "Zero-based Unicode code-point offsets in canonical PAGE text; start inclusive, end exclusive. Each alternative is sufficient only when ALL its spans are covered; any ONE complete alternative covers the unit.",
+  "documents": [
+    {
+      "id": "solar-notes",
+      "status": "synthetic_inline_source_not_real_material",
+      "synthetic_raw_utf8": "Energy Transfer\nA solar cell supplies current to the charge controller.\nThe charge controller regulates current sent to the battery.\n\fStored Energy\nThe battery supplies current to the pump.\nThe pump moves water from the tank to the irrigation outlet.\n",
+      "raw_file_sha256": "4fcfeb11deae8320045f17e264af18e5420cad14ead17df7b302c4065ca5e352",
+      "extraction": {
+        "parser": "author-written-fixture",
+        "version": "1",
+        "ocr": "none"
+      },
+      "pages": [
+        {
+          "page": 1,
+          "canonical_text": "Energy Transfer\nA solar cell supplies current to the charge controller.\nThe charge controller regulates current sent to the battery.\n",
+          "canonical_text_sha256": "ea16ac0d9455129a202364e7181bfa7afed1617a09d3df16bfc0d292d7fb8f2f"
+        },
+        {
+          "page": 2,
+          "canonical_text": "Stored Energy\nThe battery supplies current to the pump.\nThe pump moves water from the tank to the irrigation outlet.\n",
+          "canonical_text_sha256": "2cc1f735660714d8aec83331ed44213b097e34fad0886b9e27d3cb9cc50c93cd"
+        }
+      ],
+      "topic_ids": [
+        "energy-transfer",
+        "stored-energy"
+      ],
+      "bundle_id": "synthetic-solar-bundle",
+      "split": "development"
+    },
+    {
+      "id": "solar-summary",
+      "status": "synthetic_inline_source_not_real_material",
+      "synthetic_raw_utf8": "System Summary\nThe solar cell feeds the controller; the controller charges the battery, and the battery powers the pump.\n",
+      "raw_file_sha256": "5e0952dc3222e9a9062367ac65e46d100b6fff96b52105cbff76f1fba373085e",
+      "extraction": {
+        "parser": "author-written-fixture",
+        "version": "1",
+        "ocr": "none"
+      },
+      "pages": [
+        {
+          "page": 1,
+          "canonical_text": "System Summary\nThe solar cell feeds the controller; the controller charges the battery, and the battery powers the pump.\n",
+          "canonical_text_sha256": "5e0952dc3222e9a9062367ac65e46d100b6fff96b52105cbff76f1fba373085e"
+        }
+      ],
+      "topic_ids": [
+        "system-summary"
+      ],
+      "bundle_id": "synthetic-solar-bundle",
+      "split": "development"
+    }
+  ],
+  "questions": [
+    {
+      "id": "solar-flow",
+      "question": "Explain how the solar cell supplies energy to the pump through the controller and battery.",
+      "category": "relational_multihop",
+      "difficulty": "proposed_medium",
+      "answerability": "answerable",
+      "topic_ids": [
+        "energy-transfer",
+        "stored-energy"
+      ],
+      "reference_answer": "The solar cell supplies current to the controller, which regulates current sent to the battery. The battery then supplies current to the pump.",
+      "required_evidence_units": [
+        {
+          "id": "complete-energy-path",
+          "requirement": "The solar cell connects to the pump through controller and battery in order.",
+          "alternatives": [
+            {
+              "all_of": [
+                {
+                  "document_id": "solar-notes",
+                  "page": 1,
+                  "topic_id": "energy-transfer",
+                  "start_char": 16,
+                  "end_char": 71,
+                  "quote": "A solar cell supplies current to the charge controller.",
+                  "quote_sha256": "a9c32e8eadff2c795af412f17ea53f0ef1b7db163af63e1ec755bed18a82f170"
+                },
+                {
+                  "document_id": "solar-notes",
+                  "page": 1,
+                  "topic_id": "energy-transfer",
+                  "start_char": 72,
+                  "end_char": 132,
+                  "quote": "The charge controller regulates current sent to the battery.",
+                  "quote_sha256": "a71aedf9a216e462706568b959f2ef49a664817291bc3253de15a2aa56c0cf92"
+                },
+                {
+                  "document_id": "solar-notes",
+                  "page": 2,
+                  "topic_id": "stored-energy",
+                  "start_char": 14,
+                  "end_char": 55,
+                  "quote": "The battery supplies current to the pump.",
+                  "quote_sha256": "73f2fff96df059c41ff400e8f394b687bfa3e3a0d98294eed420190d4a5f06f5"
+                }
+              ]
+            },
+            {
+              "all_of": [
+                {
+                  "document_id": "solar-summary",
+                  "page": 1,
+                  "topic_id": "system-summary",
+                  "start_char": 15,
+                  "end_char": 120,
+                  "quote": "The solar cell feeds the controller; the controller charges the battery, and the battery powers the pump.",
+                  "quote_sha256": "feed281449add39e084b24cf9c57b32bbfa89e44deaeb33d1b4b540dd2635fd5"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "rubrics": {
+        "5": {
+          "max_marks": 5,
+          "reference_answer": "Current flows from the solar cell through the controller and battery to the pump.",
+          "criteria": [
+            {
+              "id": "criterion-1",
+              "description": "Identifies the complete ordered current path.",
+              "max_marks": 3
+            },
+            {
+              "id": "criterion-2",
+              "description": "Explains controller and battery roles using sources.",
+              "max_marks": 2
+            }
+          ]
+        },
+        "10": {
+          "max_marks": 10,
+          "reference_answer": "Current flows from the solar cell through the controller and battery to the pump.",
+          "criteria": [
+            {
+              "id": "criterion-1",
+              "description": "Identifies the complete ordered current path.",
+              "max_marks": 4
+            },
+            {
+              "id": "criterion-2",
+              "description": "Explains the controller regulating current.",
+              "max_marks": 3
+            },
+            {
+              "id": "criterion-3",
+              "description": "Explains the battery supplying current to the pump.",
+              "max_marks": 3
+            }
+          ]
+        },
+        "15": {
+          "max_marks": 15,
+          "reference_answer": "Current flows from the solar cell through the controller and battery to the pump.",
+          "criteria": [
+            {
+              "id": "criterion-1",
+              "description": "Identifies the complete ordered current path.",
+              "max_marks": 5
+            },
+            {
+              "id": "criterion-2",
+              "description": "Explains the controller role with evidence.",
+              "max_marks": 5
+            },
+            {
+              "id": "criterion-3",
+              "description": "Explains the battery/pump connection without unsupported additions.",
+              "max_marks": 5
+            }
+          ]
+        }
+      },
+      "independent_annotation_reviews": [
+        {
+          "reviewer_id": null,
+          "qualification": null,
+          "independent": true,
+          "status": "pending",
+          "approved": null
+        },
+        {
+          "reviewer_id": null,
+          "qualification": null,
+          "independent": true,
+          "status": "pending",
+          "approved": null
+        }
+      ],
+      "adjudication": {
+        "status": "pending",
+        "adjudicator_id": null,
+        "notes": null
+      },
+      "bundle_id": "synthetic-solar-bundle",
+      "split": "development",
+      "designated_marks": 10,
+      "cross_mark_rubrics_status": "Optional format examples; designated_marks is the sole primary format. Do not count these as independent questions."
+    },
+    {
+      "id": "solar-runtime",
+      "question": "For how many hours does the pump run on a full battery?",
+      "category": "unanswerable",
+      "difficulty": "proposed_medium",
+      "answerability": "unanswerable",
+      "topic_ids": [
+        "stored-energy"
+      ],
+      "reference_answer": "The supplied sources do not state battery capacity, pump demand or operating runtime.",
+      "required_evidence_units": [],
+      "rubrics": {
+        "5": {
+          "max_marks": 5,
+          "reference_answer": "Insufficient evidence: no runtime is supplied.",
+          "criteria": [
+            {
+              "id": "appropriate-abstention",
+              "description": "States that runtime cannot be established from the supplied material; does not invent a value.",
+              "max_marks": 5
+            }
+          ]
+        },
+        "10": {
+          "max_marks": 10,
+          "reference_answer": "Insufficient evidence: no runtime is supplied.",
+          "criteria": [
+            {
+              "id": "appropriate-abstention",
+              "description": "States that runtime cannot be established from the supplied material; does not invent a value.",
+              "max_marks": 10
+            }
+          ]
+        },
+        "15": {
+          "max_marks": 15,
+          "reference_answer": "Insufficient evidence: no runtime is supplied.",
+          "criteria": [
+            {
+              "id": "appropriate-abstention",
+              "description": "States that runtime cannot be established from the supplied material; does not invent a value.",
+              "max_marks": 15
+            }
+          ]
+        }
+      },
+      "independent_annotation_reviews": [
+        {
+          "reviewer_id": null,
+          "qualification": null,
+          "independent": true,
+          "status": "pending",
+          "approved": null
+        },
+        {
+          "reviewer_id": null,
+          "qualification": null,
+          "independent": true,
+          "status": "pending",
+          "approved": null
+        }
+      ],
+      "adjudication": {
+        "status": "pending",
+        "adjudicator_id": null,
+        "notes": null
+      },
+      "bundle_id": "synthetic-solar-bundle",
+      "split": "development",
+      "designated_marks": 5,
+      "cross_mark_rubrics_status": "Optional format examples; designated_marks is the sole primary format. Do not count these as independent questions."
+    }
+  ],
+  "validation_scope": "Template-integrity checks only; not a research dataset release validator, human sufficiency assessment or score calculator."
+}

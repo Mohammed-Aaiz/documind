@@ -1,5 +1,14 @@
 # DocuMind --- FreeBuff Agent Operating Rules
 
+> **2026-10-30 owner-selected research direction:** Evidence completeness (RER),
+> independent academic grading (NHRS), and evidence coverage per context token
+> (ECT1000) are the three central research objectives. Read
+> `backend/architecture/DOCUMIND_BENCHMARK_SPECIFICATION_V1.md` before proposing
+> new RAG algorithms or research claims. Benchmark the frozen current pipeline
+> first; hypotheses H1–H4 are unconfirmed. The 360-question design is proposed,
+> not an existing reviewed dataset. This research decision does not authorize
+> changing production behavior, frozen evaluations, models or user data.
+
 > **2026-10-30 production RAG implementation:** The owner's later instruction
 > selects Groq as the sole product LLM. The implemented retrieval/index/archive
 > changes and measured limits are recorded in
