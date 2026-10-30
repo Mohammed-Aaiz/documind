@@ -27,3 +27,11 @@ def isolate_document_provider_io(monkeypatch):
         raise GenerationUnavailableError("No live provider is configured in isolated document tests.")
 
     monkeypatch.setattr(kg_extraction, "complete_answer", unavailable)
+
+
+@pytest.fixture(autouse=True)
+def isolate_embedding_identity_metadata(monkeypatch):
+    """Fake-vector upload tests must not load or download a real encoder."""
+    from documents import routes
+    from embeddings.model import IDENTITY_KEY
+    monkeypatch.setattr(routes, "get_embedding_descriptor", lambda: {"identityKey": IDENTITY_KEY})

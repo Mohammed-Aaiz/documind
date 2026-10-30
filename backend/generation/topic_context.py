@@ -1,8 +1,9 @@
 """Recover document topic context after small-chunk retrieval.
 
 Sections are contiguous ranges in one authenticated owner's document. Repeated
-headings in a later range never get joined to a previous topic. Missing section
-metadata permits only a labelled neighbour window, never a claim of completeness.
+headings in a later range never get joined to a previous topic. Persisted source
+element membership recovers unheaded paragraphs; unknown metadata permits only
+a labelled neighbour window, never a claim of completeness.
 """
 from __future__ import annotations
 
@@ -20,26 +21,38 @@ MAX_CONTEXT_BYTES = 128_000
 _TOPICS = text("""
 WITH requested AS (
  SELECT value::uuid AS id FROM jsonb_array_elements_text(CAST(:seed_ids AS jsonb))
-), seeds AS (
- SELECT c.*, CASE WHEN jsonb_array_length(CASE WHEN jsonb_typeof(c.heading_path::jsonb)='array' THEN c.heading_path::jsonb ELSE '[]'::jsonb END)>0
-                  THEN c.heading_path::jsonb
-                  WHEN NULLIF(c.section,'') IS NOT NULL THEN jsonb_build_array(c.section)
+), owned AS (
+ SELECT c.id,c.document_id,c.chunk_index,c.content,c.page,c.heading_path,c.section,
+        c.element_type,c.token_count,c.chunker_version,
+        CASE WHEN jsonb_typeof(c.heading_path::jsonb)='array'
+             THEN c.heading_path::jsonb ELSE '[]'::jsonb END AS headings,
+        CASE WHEN jsonb_typeof(c.source_element_indices::jsonb)='array'
+             THEN c.source_element_indices::jsonb ELSE '[]'::jsonb END AS elements
+ FROM document_chunks c JOIN documents d ON d.id=c.document_id
+ WHERE d.user_id=CAST(:user_id AS uuid) AND c.document_id IN
+       (SELECT p.document_id FROM document_chunks p JOIN requested r ON r.id=p.id)
+), tagged AS (
+ SELECT c.*, CASE WHEN jsonb_array_length(headings)>0 THEN headings
+                  WHEN NULLIF(section,'') IS NOT NULL THEN jsonb_build_array(section)
+                  WHEN jsonb_array_length(elements)>0 AND NOT EXISTS
+                    (SELECT 1 FROM jsonb_array_elements(elements) e
+                     WHERE jsonb_typeof(e.value)<>'number' OR e.value::text !~ '^[0-9]+$')
+                    THEN jsonb_build_object('paragraph', elements)
                   ELSE NULL END AS topic
- FROM document_chunks c JOIN requested r ON r.id=c.id
- JOIN documents d ON d.id=c.document_id WHERE d.user_id=CAST(:user_id AS uuid)
+ FROM owned c
+), seeds AS (
+ SELECT c.* FROM tagged c JOIN requested r ON r.id=c.id
 )
 SELECT s.id::text AS seed_id, c.*, s.document_id::text || ':' || bounds.lo::text AS group_id,
-       CASE WHEN s.topic IS NULL THEN 'neighbour' ELSE 'section' END AS context_kind
+       CASE WHEN s.topic IS NULL THEN 'neighbour'
+            WHEN jsonb_typeof(s.topic)='object' THEN 'paragraph' ELSE 'section' END AS context_kind
 FROM seeds s
 CROSS JOIN LATERAL (
  SELECT CASE WHEN s.topic IS NULL THEN s.chunk_index-2 ELSE COALESCE(MAX(p.chunk_index)
    FILTER (WHERE p.chunk_index<s.chunk_index),-1) END AS lo,
  CASE WHEN s.topic IS NULL THEN s.chunk_index+2 ELSE COALESCE(MIN(p.chunk_index)
    FILTER (WHERE p.chunk_index>s.chunk_index),2147483647) END AS hi
- FROM document_chunks p WHERE p.document_id=s.document_id AND
-   (CASE WHEN jsonb_array_length(CASE WHEN jsonb_typeof(p.heading_path::jsonb)='array' THEN p.heading_path::jsonb ELSE '[]'::jsonb END)>0 THEN p.heading_path::jsonb
-         WHEN NULLIF(p.section,'') IS NOT NULL THEN jsonb_build_array(p.section)
-         ELSE NULL END) IS DISTINCT FROM s.topic
+ FROM tagged p WHERE p.document_id=s.document_id AND p.topic IS DISTINCT FROM s.topic
 ) bounds
 CROSS JOIN LATERAL (
  SELECT bounded.* FROM (
@@ -47,7 +60,7 @@ CROSS JOIN LATERAL (
           p.token_count, p.chunker_version, p.chunk_index,
           SUM(octet_length(p.content)) OVER () AS total_bytes,
           SUM(octet_length(p.content)) OVER (ORDER BY p.chunk_index,p.id) AS cumulative_bytes
-   FROM document_chunks p WHERE p.document_id=s.document_id
+   FROM tagged p WHERE p.document_id=s.document_id
        AND p.chunk_index>bounds.lo AND p.chunk_index<bounds.hi
  ) bounded WHERE cumulative_bytes<=:max_bytes OR bounded.id=s.id
 ) c
@@ -103,7 +116,7 @@ def assemble_topic_context(seeds: Sequence[SourceChunk], rows: Sequence[Any], *,
         included = sum(len(source.content.encode("utf-8")) for source in group)
         total = int(matches[0]["total_bytes"])
         kind = str(matches[0]["context_kind"])
-        complete = kind == "section" and included >= total
+        complete = kind in ("section", "paragraph") and included >= total
         groups[group_id] = complete
         output.extend(replace(source, topic_context_id=group_id, topic_context_complete=complete,
                               topic_context_kind=kind) for source in group)

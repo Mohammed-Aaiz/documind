@@ -57,12 +57,48 @@ Add `--generate` explicitly to send evidence to Groq and evaluate all 5/10/15 ma
 formats. Answer results include the actual answer, supplied-source count,
 verification, warnings, abstention and generation p50/p95 by mark format.
 
-Recall/MRR/nDCG use only answerable questions. Expanded evidence recall is separate
+Precision/Recall/MRR/nDCG use only answerable questions. Expanded evidence recall is separate
 from top-k recall. Unanswerable prompts use abstention rate. Keypoint coverage is
 literal normalized phrase coverage, not a semantic judge or a grade. Human grading
-and LLM judge scores remain `not measured`; no Ragas score is synthesized. Use a
+and LLM judge scores remain `not measured` unless explicitly supplied below; no Ragas score is synthesized. Use a
 representative course corpus with reviewed qrels/rubrics and repeated warm/cold
 runs before selecting models or publishing production p95 claims.
+
+## Optional semantic judge
+
+```
+venv/Scripts/python.exe -m evaluation.production_rag pipeline --owner OWNER-UUID --dataset evaluation/datasets/YOUR_QRELS.json --variant production --generate --judge --output evaluation/reports/judged_NEW.json
+```
+
+`--judge` requires `--generate` and makes additional Groq calls for each nonempty
+answer. It sends the question, answer and exact evidence excerpts actually
+supplied to the answer model. Returned claim/source IDs, booleans, score ranges
+and finite numbers are validated. Invalid, unavailable, truncated or over-budget
+judgements are `not_measured`, never substituted with zero. Summaries average only
+measured judgements. Supported-claim fraction and relevance are model estimates,
+not verified truth or Ragas scores. Using the same model/provider for generation
+and judging creates correlated-error bias. A judge can omit claims or make mistakes.
+
+## Human review
+
+```
+venv/Scripts/python.exe -m evaluation.production_rag review-export --report evaluation/reports/judged_NEW.json --output evaluation/reports/review_NEW.csv
+venv/Scripts/python.exe -m evaluation.production_rag review-summary --ratings evaluation/reports/review_NEW.csv --output evaluation/reports/human_summary_NEW.json
+```
+
+The export includes question, answer, rubric keypoints and exact supplied evidence.
+Untrusted text cells are escaped to prevent spreadsheet formula execution. A human
+reviewer fills `reviewer`, `score`, `accuracy_notes` and `rubric_notes`; scores must
+be finite, at least zero and no greater than the row's 5/10/15 marks. Blank scores
+remain pending and contribute no grade. Multiple reviewers can add distinct rows;
+duplicate rows for the same reviewer/question/format are rejected. The summarizer
+reports actual entered scores and pending counts; it does not invent a grade,
+verify reviewer expertise or establish agreement between raters.
+
+The new `datasets/student_rag_v2.json` fixture adds explicitly labelled table,
+multi-hop and conflicting-revision examples to the original synthetic fixture.
+Its short passages and hand-authored rubrics are smoke checks, not expert-reviewed
+course marks. The original v1 dataset and earlier reports remain unchanged.
 
 Minimal runnable check:
 

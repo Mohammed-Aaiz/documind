@@ -20,6 +20,7 @@ From `backend/`, using the existing Python environment:
 
 ```powershell
 venv/Scripts/python.exe -m alembic upgrade head
+venv/Scripts/python.exe -m embeddings.provision_model
 venv/Scripts/python.exe -m embeddings.provision_reranker
 venv/Scripts/python.exe -m evaluation.production_rag self-check
 venv/Scripts/python.exe -m uvicorn main:app --host 127.0.0.1 --port 8000
@@ -31,6 +32,10 @@ authenticated document reprocess endpoint archives the old derived index and
 replaces it atomically. Revision sources remain accessible through
 `/api/documents/{id}/index-revisions` and the revision `/sources` endpoint.
 Never mix embeddings from different models in the same active vector space.
+The baseline encoder is pinned and verified; runtime loading is offline. Graph
+rebuilds resume from the last validated chunk and retain partial-coverage status
+when a provider limit interrupts processing. Unheaded paragraphs retain source
+element identities so retrieval can recover their remaining child chunks.
 
 See [production RAG audit](backend/architecture/DOCUMIND_PRODUCTION_RAG_AUDIT_2026-10-29.md)
 and [evaluation commands](backend/evaluation/production_rag.md) for measured

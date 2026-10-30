@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+import math
 from contextlib import AsyncExitStack
 from dataclasses import dataclass
 from typing import AsyncIterator, Sequence
@@ -135,7 +136,14 @@ async def _stream_single(messages: Sequence[dict[str, str]], *, max_tokens: int,
                         hint = "Check the server API key." if code in (401, 403) else (
                             "The provider is rate limited; try again shortly." if code == 429 else
                             "Check that the configured service and model are available.")
-                        raise GenerationUnavailableError(f"{provider.title()} request failed ({code}). {hint}")
+                        error = GenerationUnavailableError(f"{provider.title()} request failed ({code}). {hint}")
+                        error.status_code = code
+                        try:
+                            retry_after = float(response.headers.get("Retry-After", ""))
+                            error.retry_after_seconds = max(0.0, min(300.0, retry_after)) if math.isfinite(retry_after) else None
+                        except (TypeError, ValueError):
+                            error.retry_after_seconds = None
+                        raise error
                     async for raw in response.aiter_lines():
                         if not raw or raw.startswith(":"):
                             continue

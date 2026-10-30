@@ -28,7 +28,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.exc import DBAPIError
 from starlette.concurrency import run_in_threadpool
 
-from embeddings.model import embed_query
+from embeddings.model import embed_query, compatible_embedding_labels
 from graph.service import (
     MAX_HOPS as GRAPH_MAX_HOPS,
     expand_element_seeds,
@@ -197,7 +197,12 @@ async def retrieve_chunks(
     """Retrieve the most relevant chunks from the user's documents."""
     # CPU embedding must not block voice frames, status requests or cancellation
     # on the event loop while retrieval is running.
-    query_embedding = await run_in_threadpool(embed_query, query)
+    try:
+        query_embedding = await run_in_threadpool(embed_query, query)
+    except RuntimeError as exc:
+        from generation.types import GenerationUnavailableError
+        raise GenerationUnavailableError("Document search is unavailable. Provision the pinned embedding model and retry.") from exc
+    embedding_models = compatible_embedding_labels()
     emb_str = str(query_embedding)
     if iterative_scan:
         # Transaction-local pgvector 0.8+ controls let an ANN scan continue when
@@ -231,6 +236,7 @@ async def retrieve_chunks(
         " JOIN documents d ON d.id = dc.document_id"
         " WHERE d.user_id = :user_id"
         "   AND d.embedding_status = 'ready'"
+        "   AND d.embedding_model = ANY(CAST(:embedding_models AS text[]))"
         "   AND dc.embedding IS NOT NULL"
         " ORDER BY dc.embedding <=> CAST(:embedding AS vector)"
         " LIMIT :top_k"
@@ -238,7 +244,7 @@ async def retrieve_chunks(
 
     result = await db.execute(
         search_sql,
-        {"embedding": emb_str, "user_id": user_id, "top_k": top_k},
+        {"embedding": emb_str, "user_id": user_id, "top_k": top_k, "embedding_models": list(embedding_models)},
     )
     rows = result.fetchall()
 

@@ -82,6 +82,22 @@ async def test_groq_connection_failure_never_contacts_local_service(monkeypatch)
     assert "private connection details" not in str(error.value)
 
 
+@pytest.mark.asyncio
+@pytest.mark.parametrize("header,expected", [("3", 3), ("9999", 300), ("-5", 0), ("nan", None), ("not-a-delay", None)])
+async def test_rate_limit_exposes_only_bounded_retry_metadata_without_retrying(monkeypatch, header, expected):
+    requests = []
+    def handler(request):
+        requests.append(request)
+        return httpx.Response(429, headers={"Retry-After": header}, text="private upstream key and body")
+    transport(monkeypatch, handler)
+    with pytest.raises(GenerationUnavailableError) as error:
+        await collect(settings())
+    assert error.value.status_code == 429
+    assert error.value.retry_after_seconds == expected
+    assert len(requests) == 1
+    assert "private upstream" not in str(error.value) and "fake-test-key" not in str(error.value)
+
+
 @pytest.mark.parametrize("response", [
     "data: not-json\n\n",
     'data: {"choices":[{"delta":{"content":"incomplete"}}]}\n\n',

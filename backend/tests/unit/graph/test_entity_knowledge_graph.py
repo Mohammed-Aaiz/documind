@@ -18,6 +18,37 @@ from graph.service import retrieve_knowledge_graph_candidates
 from tests.fixtures.graph_data import create_document_with_chunks
 
 
+@pytest.mark.parametrize("quote,subject,object_name", [
+    ("The reference rig provides a stable geometric frame", "reference rig", "stable geometric frame"),
+    ("against which the Kestrel frame is calibrated", "Kestrel frame", "reference rig"),
+    ("is not the calibration reference", "field bench", "calibration reference"),
+])
+def test_relation_quotes_recover_original_line_wrapping_and_sentence(quote, subject, object_name):
+    source = ("The reference rig\nprovides a stable geometric frame against which the Kestrel frame is calibrated. "
+              "A field bench is\nused for quick visual inspection only and is not the calibration reference.")
+    rows = parse_relation_response(json.dumps({"relations": [{
+        "subject": subject, "subject_type": "equipment", "predicate": "relates to",
+        "object": object_name, "object_type": "reference", "evidence_quote": quote,
+    }]}), source)
+    assert len(rows) == 1
+    assert rows[0].evidence_quote in source
+    assert subject in " ".join(rows[0].evidence_quote.split())
+    assert object_name in " ".join(rows[0].evidence_quote.split())
+    if subject == "field bench":
+        assert "is not" in rows[0].evidence_quote
+
+
+@pytest.mark.parametrize("source,quote", [
+    ("Ada founded Engines in 1843.", "Ada founded Engines in 1844."),
+    ("Ada founded Engines. Ada founded Engines.", "Ada founded Engines."),
+])
+def test_quote_alignment_rejects_invented_or_ambiguous_spans(source, quote):
+    assert not parse_relation_response(json.dumps({"relations": [{
+        "subject": "Ada", "subject_type": "person", "predicate": "founded",
+        "object": "Engines", "object_type": "organization", "evidence_quote": quote,
+    }]}), source)
+
+
 def test_relation_parser_keeps_only_exact_quotes_with_both_endpoints():
     source = "Ada founded Analytical Engines in 1843."
     payload = {
@@ -61,6 +92,31 @@ def test_relation_parser_keeps_only_exact_quotes_with_both_endpoints():
             evidence_quote=source,
         )
     ]
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("repair_succeeds", [True, False])
+async def test_invalid_graph_quotes_get_one_bounded_correction(monkeypatch, repair_succeeds):
+    source = "Ada founded Engines."
+    bad = json.dumps({"relations": [{"subject": "Ada", "subject_type": "person",
+        "predicate": "founded", "object": "Engines", "object_type": "organization",
+        "evidence_quote": "Ada ... Engines."}]})
+    calls = []
+    async def complete(messages, **kwargs):
+        calls.append(messages)
+        raw = '{"relations": []}' if repair_succeeds and len(calls) == 2 else bad
+        return ProviderCompletion(text=raw, provider="groq", model="test", finish_reason="stop")
+    monkeypatch.setattr(kg_extraction, "complete_answer", complete)
+    async with httpx.AsyncClient() as client:
+        if repair_succeeds:
+            rows, _ = await kg_extraction._extract_chunk_relations(client, text=source, settings=SimpleNamespace())
+            assert rows == []
+        else:
+            with pytest.raises(ValueError):
+                await kg_extraction._extract_chunk_relations(client, text=source, settings=SimpleNamespace())
+    assert len(calls) == 2
+    assert "never use ellipses" in calls[1][0]["content"]
+    assert calls[0][-1] == calls[1][-1]
 
 
 @pytest.mark.asyncio
@@ -108,7 +164,7 @@ async def test_relation_extractor_delegates_to_bounded_resilient_structured_prov
     assert kwargs["settings"] is settings
     assert kwargs["json_mode"] is True
     assert kwargs["purpose"] == "graph-extraction"
-    assert kwargs["max_tokens"] == 512
+    assert kwargs["max_tokens"] == 1024
     assert kwargs["timeout_seconds"] <= 30
     assert "must-not-be-sent" not in json.dumps(messages)
     assert model == "groq:hosted-model"
@@ -207,13 +263,13 @@ async def test_graph_retrieval_is_owner_scoped_and_capped_at_three_hops(
                         object_type="concept",
                         evidence_quote=source,
                     )
-                ], "llama3.2:3b"
-        return [], "llama3.2:3b"
+                ], "groq:test-model"
+        return [], "groq:test-model"
 
     monkeypatch.setattr(
         kg_extraction,
         "get_settings",
-        lambda: SimpleNamespace(ollama_model="llama3.2:3b"),
+        lambda: SimpleNamespace(groq_model="test-model", groq_context_tokens=8192),
     )
     monkeypatch.setattr(kg_extraction, "_extract_chunk_relations", extract)
 

@@ -88,6 +88,7 @@ async def test_reranker_receives_more_candidates_than_the_final_answer_limit(mon
 @pytest.mark.parametrize("iterative", [False, True])
 async def test_ann_controls_are_transaction_local_and_opt_in(monkeypatch, iterative):
     monkeypatch.setattr(rag, "embed_query", lambda query: [.1] * 384)
+    monkeypatch.setattr(rag, "compatible_embedding_labels", lambda: ("pinned-baseline", "all-MiniLM-L6-v2"))
     execute = AsyncMock(return_value=SimpleNamespace(fetchall=lambda: []))
     db = SimpleNamespace(execute=execute)
     assert await rag.retrieve_chunks(db, "owner", "query", iterative_scan=iterative) == []
@@ -95,6 +96,8 @@ async def test_ann_controls_are_transaction_local_and_opt_in(monkeypatch, iterat
     search = execute.await_args_list[-1]
     assert "d.user_id = :user_id" in str(search.args[0])
     assert search.args[1]["user_id"] == "owner"
+    assert "d.embedding_model = ANY(CAST(:embedding_models AS text[]))" in str(search.args[0])
+    assert search.args[1]["embedding_models"] == ["pinned-baseline", "all-MiniLM-L6-v2"]
     if iterative:
         controls = str(execute.await_args_list[0].args[0])
         assert "'strict_order', true" in controls

@@ -1,0 +1,269 @@
+{
+  "version": "student-rag-smoke-v2-2026-10-30",
+  "provenance": "New author-written synthetic academic smoke fixture extending v1 with table lookup, explicit multi-hop relations and conflicting revisions. Not course-expert-reviewed, not a frozen benchmark, and not proof of general exam quality.",
+  "corpus": [
+    {
+      "id": "energy",
+      "text": "Kinetic energy is the energy associated with motion. For an object of mass m moving at speed v, kinetic energy is one half of m multiplied by v squared. At a fixed speed, doubling the mass doubles kinetic energy. At a fixed mass, doubling the speed multiplies kinetic energy by four."
+    },
+    {
+      "id": "momentum",
+      "text": "Linear momentum is the product of mass and velocity. Velocity is a vector, so momentum has magnitude and direction. In an isolated system with no net external force, total momentum is conserved. Kinetic energy can change in an inelastic collision even when total momentum remains constant."
+    },
+    {
+      "id": "photosynthesis",
+      "text": "Photosynthesis converts light energy into chemical energy. Green plants use carbon dioxide and water to produce sugars and release oxygen. Chlorophyll absorbs light. The light-dependent reactions and the Calvin cycle perform different parts of this process."
+    },
+    {
+      "id": "indexes",
+      "text": "A database index is an auxiliary structure that helps locate rows without scanning every row. A B-tree supports equality and ordered comparisons. An index consumes storage and must be maintained when indexed data changes. Creating an index does not guarantee that every query will use it."
+    },
+    {
+      "id": "graphs",
+      "text": "A knowledge graph represents entities as nodes and relationships as edges. A path containing several edges can connect entities indirectly. In document question answering, each relation should retain a supporting source quotation so a graph path can be checked against original evidence."
+    },
+    {
+      "id": "retrieval",
+      "text": "Dense retrieval encodes queries and passages as numerical vectors and ranks passages by vector similarity. Keyword retrieval matches textual terms. Hybrid retrieval combines these complementary result lists. Reciprocal Rank Fusion combines ranks without treating unlike raw scores as directly comparable."
+    },
+    {
+      "id": "heat-table",
+      "text": "Specific heat capacity reference table. Material | Specific heat capacity (joules per kilogram per kelvin). Water | 4180. Aluminium | 900. Copper | 385. These values are given for this teaching exercise; compare materials at the same stated conditions."
+    },
+    {
+      "id": "solar-controller",
+      "text": "In the teaching solar irrigation system, a solar cell supplies electric current to the charge controller. The charge controller regulates the current sent to the battery. The charge controller is not connected directly to the water outlet."
+    },
+    {
+      "id": "battery-pump",
+      "text": "In the teaching solar irrigation system, the battery supplies electric current to the pump. The pump moves water from the tank to the irrigation outlet. The battery stores energy supplied through the charge controller."
+    },
+    {
+      "id": "revision-a",
+      "text": "Laboratory manual revision A states that the sensor must be calibrated every 30 days. This statement applies only to revision A."
+    },
+    {
+      "id": "revision-b",
+      "text": "Laboratory manual revision B states that the sensor must be calibrated every 20 days. This statement applies only to revision B; the excerpt does not establish which revision is currently in force."
+    }
+  ],
+  "queries": [
+    {
+      "id": "kinetic-definition",
+      "question": "What is kinetic energy and how does it depend on speed?",
+      "relevant_ids": [
+        "energy"
+      ],
+      "keypoints": {
+        "5": [
+          "motion",
+          "speed"
+        ],
+        "10": [
+          "motion",
+          "mass",
+          "squared"
+        ],
+        "15": [
+          "motion",
+          "mass",
+          "squared",
+          "four"
+        ]
+      },
+      "category": "definition"
+    },
+    {
+      "id": "collision-comparison",
+      "question": "Compare conservation of momentum and kinetic energy in an inelastic collision.",
+      "relevant_ids": [
+        "momentum",
+        "energy"
+      ],
+      "keypoints": {
+        "5": [
+          "momentum",
+          "kinetic energy"
+        ],
+        "10": [
+          "isolated system",
+          "external force",
+          "kinetic energy"
+        ],
+        "15": [
+          "isolated system",
+          "external force",
+          "kinetic energy",
+          "inelastic collision"
+        ]
+      },
+      "category": "comparison"
+    },
+    {
+      "id": "plant-energy",
+      "question": "How do green plants convert light into stored chemical energy?",
+      "relevant_ids": [
+        "photosynthesis"
+      ],
+      "keypoints": {
+        "5": [
+          "photosynthesis",
+          "sugars"
+        ],
+        "10": [
+          "carbon dioxide",
+          "water",
+          "oxygen"
+        ],
+        "15": [
+          "carbon dioxide",
+          "water",
+          "chlorophyll",
+          "Calvin cycle"
+        ]
+      },
+      "category": "explanation"
+    },
+    {
+      "id": "index-tradeoff",
+      "question": "Explain the advantages and costs of a database B-tree index.",
+      "relevant_ids": [
+        "indexes"
+      ],
+      "keypoints": {
+        "5": [
+          "rows",
+          "storage"
+        ],
+        "10": [
+          "equality",
+          "ordered",
+          "storage"
+        ],
+        "15": [
+          "equality",
+          "ordered",
+          "storage",
+          "changes"
+        ]
+      },
+      "category": "tradeoffs"
+    },
+    {
+      "id": "rag-relation",
+      "question": "How can a knowledge graph complement dense and keyword retrieval in document question answering?",
+      "relevant_ids": [
+        "graphs",
+        "retrieval"
+      ],
+      "keypoints": {
+        "5": [
+          "relationships",
+          "source"
+        ],
+        "10": [
+          "entities",
+          "relationships",
+          "source",
+          "retrieval"
+        ],
+        "15": [
+          "entities",
+          "relationships",
+          "source",
+          "retrieval",
+          "ranks"
+        ]
+      },
+      "category": "graph_synthesis"
+    },
+    {
+      "id": "unsupported-salary",
+      "question": "What is the annual salary of the Kestrel platform designer?",
+      "relevant_ids": [],
+      "keypoints": {},
+      "category": "unanswerable"
+    },
+    {
+      "id": "heat-capacity-table",
+      "category": "table_lookup",
+      "question": "According to the reference table, what are the specific heat capacities of water and copper and which is greater?",
+      "relevant_ids": [
+        "heat-table"
+      ],
+      "keypoints": {
+        "5": [
+          "4180",
+          "385"
+        ],
+        "10": [
+          "4180",
+          "385",
+          "water"
+        ],
+        "15": [
+          "4180",
+          "385",
+          "water",
+          "joules"
+        ]
+      }
+    },
+    {
+      "id": "solar-multi-hop",
+      "category": "multi_hop",
+      "question": "Trace how electric energy from the solar cell reaches the irrigation pump.",
+      "relevant_ids": [
+        "solar-controller",
+        "battery-pump"
+      ],
+      "keypoints": {
+        "5": [
+          "charge controller",
+          "battery"
+        ],
+        "10": [
+          "solar cell",
+          "charge controller",
+          "battery",
+          "pump"
+        ],
+        "15": [
+          "solar cell",
+          "charge controller",
+          "regulates",
+          "battery",
+          "pump"
+        ]
+      }
+    },
+    {
+      "id": "revision-conflict",
+      "category": "conflicting_sources",
+      "question": "Compare the calibration intervals in laboratory manual revisions A and B, and say whether the excerpts identify the current rule.",
+      "relevant_ids": [
+        "revision-a",
+        "revision-b"
+      ],
+      "keypoints": {
+        "5": [
+          "30 days",
+          "20 days"
+        ],
+        "10": [
+          "revision A",
+          "revision B",
+          "30 days",
+          "20 days"
+        ],
+        "15": [
+          "revision A",
+          "revision B",
+          "30 days",
+          "20 days",
+          "currently"
+        ]
+      }
+    }
+  ]
+}

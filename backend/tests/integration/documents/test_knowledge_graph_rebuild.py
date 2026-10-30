@@ -124,7 +124,7 @@ async def test_rebuild_reports_persisted_status_and_exact_entity_relation_counts
     assert response.json() == {
         "status": "ready",
         "model": "groq:hosted-model",
-        "version": "kg-relations-v1",
+        "version": kg_extraction.extraction_version(chunks, kg_extraction.get_settings()),
         "processedChunks": 2,
         "totalChunks": 2,
         "entityCount": 3,
@@ -165,7 +165,7 @@ async def test_rebuild_reports_answer_provider_unavailable_without_false_counts(
     assert response.json() == {
         "status": "unavailable",
         "model": "groq:hosted-model",
-        "version": "kg-relations-v1",
+        "version": kg_extraction.extraction_version(chunks, kg_extraction.get_settings()),
         "processedChunks": 0,
         "totalChunks": 1,
         "entityCount": 0,

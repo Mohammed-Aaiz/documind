@@ -104,9 +104,10 @@ LINE_JOINER = "\n"
 class ChunkMeta:
     """Structure metadata carried by a chunk.
 
-    ``source_indices``/``source_start``/``source_end`` are process-local
-    provenance used for invariant testing and debugging; they are not
-    persisted.  The fields that reach ``DocumentChunk`` are ``page``,
+    ``source_indices`` is persisted as ``DocumentChunk.source_element_indices``
+    so retrieval can recover an unheaded paragraph across its child chunks.
+    ``source_start``/``source_end`` remain process-local offsets used for
+    invariant testing and debugging. Other persisted fields are ``page``,
     ``heading_path``, ``section``, ``element_type``, ``chunker_version``
     and ``token_count``.
     """

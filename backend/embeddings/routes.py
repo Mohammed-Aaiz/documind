@@ -9,10 +9,11 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import BaseModel
 from sqlalchemy import select, text
 from sqlalchemy.ext.asyncio import AsyncSession
+from starlette.concurrency import run_in_threadpool
 
 from auth.dependencies import CurrentUser
 from documents.models import Document, DocumentChunk
-from embeddings.model import embed_texts, embed_query
+from embeddings.model import embed_texts, embed_query, get_embedding_descriptor, compatible_embedding_labels
 from storage.database import get_db
 
 router = APIRouter(prefix="/api/embeddings", tags=["embeddings"])
@@ -91,13 +92,15 @@ async def generate_embeddings(
     try:
         # Generate embeddings for all chunks
         texts = [c.content for c in chunks]
-        embeddings = embed_texts(texts)
+        embeddings = await run_in_threadpool(embed_texts, texts)
+        descriptor = get_embedding_descriptor()
 
         # Store embeddings back to chunks
         for chunk, embedding in zip(chunks, embeddings):
             chunk.embedding = embedding
 
         doc.embedding_status = "ready"
+        doc.embedding_model = descriptor["identityKey"]
         await db.commit()
 
         return EmbedResponse(
@@ -136,7 +139,8 @@ async def semantic_search(
 ):
     """Semantic search across all embedded chunks belonging to the user."""
     # Generate query embedding
-    query_embedding = embed_query(body.query)
+    query_embedding = await run_in_threadpool(embed_query, body.query)
+    embedding_models = compatible_embedding_labels()
 
     # Use pgvector cosine distance to find the most similar chunks.
     # Only search chunks that belong to documents owned by the current user
@@ -162,6 +166,7 @@ async def semantic_search(
         " JOIN documents d ON d.id = dc.document_id"
         " WHERE d.user_id = :user_id"
         "   AND d.embedding_status = 'ready'"
+        "   AND d.embedding_model = ANY(CAST(:embedding_models AS text[]))"
         "   AND dc.embedding IS NOT NULL"
         " ORDER BY dc.embedding <=> CAST(:embedding AS vector)"
         " LIMIT :top_k"
@@ -169,7 +174,8 @@ async def semantic_search(
 
     result = await db.execute(
         search_sql,
-        {"embedding": emb_str, "user_id": str(current_user.id), "top_k": body.topK},
+        {"embedding": emb_str, "user_id": str(current_user.id), "top_k": body.topK,
+         "embedding_models": list(embedding_models)},
     )
     rows = result.fetchall()
 

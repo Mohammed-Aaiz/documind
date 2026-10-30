@@ -73,7 +73,7 @@ from embeddings.visual_index import persist_visual_patches
 from dataclasses import replace
 from documents.parser import parse_pdf, parse_extracted_elements
 from documents.structure import replace_document_structure
-from embeddings.model import embed_texts, _MODEL_NAME as EMBEDDING_MODEL_NAME
+from embeddings.model import embed_texts, get_embedding_descriptor
 from graph.models import (
     DocumentStructureElement,
     KnowledgeGraphExtraction,
@@ -81,7 +81,7 @@ from graph.models import (
     KnowledgeGraphRelation,
 )
 from graph.service import ChunkView, replace_document_graph
-from documents.kg_extraction import replace_document_knowledge_graph
+from documents.kg_extraction import extraction_version, replace_document_knowledge_graph
 
 router = APIRouter(prefix="/api/documents", tags=["documents"])
 settings = get_settings()
@@ -145,6 +145,7 @@ def _build_chunk_objects(
                 element_type=chunk.meta.element_type,
                 chunker_version=chunk.meta.chunker_version,
                 token_count=chunk.meta.token_count,
+                source_element_indices=list(chunk.meta.source_indices),
             )
             db.add(obj)
             chunk_objects.append(obj)
@@ -369,6 +370,7 @@ async def _process_document(
         try:
             texts = [c.content for c in chunk_objects]
             embeddings = await run_in_threadpool(embed_texts, texts)
+            embedding_identity = (await run_in_threadpool(get_embedding_descriptor))["identityKey"]
             for chunk, embedding in zip(chunk_objects, embeddings):
                 chunk.embedding = embedding
         except Exception:
@@ -474,7 +476,7 @@ async def _process_document(
         # of the source document is represented in that content.  That is a
         # coverage fact, and it is what decides READY vs PARTIAL.
         verdict, reason = _document_verdict(coverage)
-        doc.embedding_model = EMBEDDING_MODEL_NAME
+        doc.embedding_model = embedding_identity
         doc.embedding_status = "ready"
         if verdict == "ready":
             doc.status = "ready"
@@ -788,6 +790,7 @@ async def get_document_insights(
 async def rebuild_document_knowledge_graph(
     document_id: uuid.UUID,
     current_user: CurrentUser,
+    resume: bool = Query(default=True),
     db: AsyncSession = Depends(get_db),
 ):
     """Re-extract only the entity graph for this user's already-indexed document.
@@ -796,12 +799,18 @@ async def rebuild_document_knowledge_graph(
     from the request body, and chunk selection is limited to that document.
     Existing OCR, chunks, embeddings and structure edges are never rebuilt here.
     """
-    result = await db.execute(
-        select(Document).where(
-            Document.id == document_id,
-            Document.user_id == current_user.id,
+    try:
+        result = await db.execute(
+            select(Document).where(
+                Document.id == document_id,
+                Document.user_id == current_user.id,
+            ).with_for_update(nowait=True, of=Document)
         )
-    )
+    except DBAPIError as exc:
+        await db.rollback()
+        if getattr(exc.orig, "sqlstate", None) == "55P03":
+            raise HTTPException(status_code=409, detail="Document is already being updated") from exc
+        raise
     doc = result.scalar_one_or_none()
     if doc is None:
         raise HTTPException(status_code=404, detail="Document not found")
@@ -828,11 +837,28 @@ async def rebuild_document_knowledge_graph(
             detail="Document has no persisted chunks to extract",
         )
 
+    previous = await db.scalar(select(KnowledgeGraphExtraction).where(
+        KnowledgeGraphExtraction.user_id == current_user.id,
+        KnowledgeGraphExtraction.document_id == doc.id,
+    ))
+    provider_settings = get_settings()
+    expected_model = f"groq:{provider_settings.groq_model}"[:120]
+    if previous is not None and (not resume
+        or previous.extractor_version != extraction_version(chunks, provider_settings)
+        or previous.extractor_model != expected_model):
+        try:
+            await archive_document_index(db, doc)
+        except Exception as exc:
+            await db.rollback()
+            logger.error("Graph revision could not be archived for document %s (%s)", document_id, type(exc).__name__)
+            raise HTTPException(status_code=503, detail="The existing graph could not be preserved; rebuild was not started") from exc
+
     await replace_document_knowledge_graph(
         db,
         user_id=current_user.id,
         document_id=doc.id,
         chunks=chunks,
+        resume=resume,
     )
     await db.commit()
 

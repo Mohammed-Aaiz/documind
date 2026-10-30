@@ -98,6 +98,9 @@ class DocumentChunk(Base):
     element_type: Mapped[str | None] = mapped_column(String(32), nullable=True)
     chunker_version: Mapped[str | None] = mapped_column(String(64), nullable=True)
     token_count: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    # Original extracted element positions, shared by children split from the
+    # same paragraph. NULL means the ingestion did not preserve this mapping.
+    source_element_indices: Mapped[list[int] | None] = mapped_column(JSON, nullable=True)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
     )

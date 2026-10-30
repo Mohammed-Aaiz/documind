@@ -1,0 +1,87 @@
+{
+  "mode": "semantic-judge-smoke-not-grading",
+  "observed_at": "2026-10-30T00:44:53.990928+00:00",
+  "variants": {
+    "judge_cases": {
+      "rows": [
+        {
+          "id": "supported",
+          "question": "What is the calibration reference for Kestrel frame alignment?",
+          "answers": {
+            "5": {
+              "answer": "The Kestrel frame is calibrated using the reference rig [1].",
+              "rubric_keypoints": [
+                "reference rig"
+              ],
+              "sources": [
+                {
+                  "chunkId": "3bdc4be9-624b-4ce0-af0c-6a49f80095b2",
+                  "content": "2. Sensor Calibration > 2.1 Calibration Reference\n\nFor Kestrel frame alignment, the calibration procedure uses a reference rig. The reference rig\nprovides a stable geometric frame against which the Kestrel frame is calibrated. A field bench is\nused for quick visual inspection only and is not the calibration reference."
+                }
+              ],
+              "semantic_judge": {
+                "status": "measured",
+                "claims": [
+                  {
+                    "claim": "The Kestrel frame is calibrated using the reference rig.",
+                    "source_ids": [
+                      1
+                    ],
+                    "supported": true
+                  }
+                ],
+                "supported_claim_fraction": 1.0,
+                "answer_relevance": 1.0,
+                "rationale": "Answer directly states the calibration reference as the reference rig, matching the question.",
+                "method": "model-judged semantic support and relevance; not Ragas or ground truth",
+                "limitations": "Same Groq provider/model family as generation; correlated errors and judge omissions remain possible.",
+                "provider": "groq",
+                "model": "openai/gpt-oss-20b",
+                "latency_ms": 629.0391000002273
+              }
+            }
+          }
+        },
+        {
+          "id": "contradicted",
+          "question": "What is the calibration reference for Kestrel frame alignment?",
+          "answers": {
+            "5": {
+              "answer": "The Kestrel frame is calibrated using the field bench [1].",
+              "rubric_keypoints": [
+                "reference rig"
+              ],
+              "sources": [
+                {
+                  "chunkId": "3bdc4be9-624b-4ce0-af0c-6a49f80095b2",
+                  "content": "2. Sensor Calibration > 2.1 Calibration Reference\n\nFor Kestrel frame alignment, the calibration procedure uses a reference rig. The reference rig\nprovides a stable geometric frame against which the Kestrel frame is calibrated. A field bench is\nused for quick visual inspection only and is not the calibration reference."
+                }
+              ],
+              "semantic_judge": {
+                "status": "measured",
+                "claims": [
+                  {
+                    "claim": "The Kestrel frame is calibrated using the field bench.",
+                    "source_ids": [
+                      1
+                    ],
+                    "supported": false
+                  }
+                ],
+                "supported_claim_fraction": 0.0,
+                "answer_relevance": 0.0,
+                "rationale": "The answer incorrectly states that the field bench is the calibration reference, whereas the source indicates the field bench is only for quick visual inspection and not the calibration reference.",
+                "method": "model-judged semantic support and relevance; not Ragas or ground truth",
+                "limitations": "Same Groq provider/model family as generation; correlated errors and judge omissions remain possible.",
+                "provider": "groq",
+                "model": "openai/gpt-oss-20b",
+                "latency_ms": 816.4376999993692
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "limitations": "Two deliberately constructed cases; not a production quality benchmark or human grade."
+}

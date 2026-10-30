@@ -208,6 +208,8 @@ def prepare_prompt(question: str, chunks: Sequence[Any], history: Sequence[dict]
     messages.extend(reversed(recent))
     messages.append({"role": "user", "content": prefix + "\n".join(evidence_text)})
     warnings = ["Context fitting uses a conservative byte estimate, not the model tokenizer."]
+    if any(getattr(chunk, "topic_context_kind", None) == "paragraph" for chunk in chunks):
+        warnings.append("Full source paragraphs were recovered where headings were unavailable; larger topic boundaries are unknown.")
     if any(getattr(chunk, "topic_context_complete", None) is False for chunk in chunks):
         warnings.append("Some topic context is partial or uses neighbouring paragraphs because section boundaries are unavailable; full-topic coverage is not established.")
     if len(blocks) < len(chunks) or any(b.truncated for b in blocks):
