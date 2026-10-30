@@ -47,14 +47,15 @@ function apiToReliability(data: ApiReliabilityQueryData): ReliabilityQueryData {
       rowIndex: s.rowIndex ?? null,
       headerRepeated: s.headerRepeated ?? null,
     })),
-    // Real path counts from the backend. Never estimated here.
-    semanticSourceCount: data.semanticSourceCount ?? 0,
-    structuralSourceCount: data.structuralSourceCount ?? 0,
-    structuralElementSourceCount: data.structuralElementSourceCount ?? 0,
-    tableRowSourceCount: data.tableRowSourceCount ?? 0,
-    hybridSourceCount: data.hybridSourceCount ?? 0,
-    structuralHopMax: data.structuralHopMax ?? 0,
-    pathAgreement: data.pathAgreement ?? false,
+    // Preserve absence. Older servers did not emit these fields, and a missing
+    // field must read "not reported", not zero or false.
+    semanticSourceCount: data.semanticSourceCount,
+    structuralSourceCount: data.structuralSourceCount,
+    structuralElementSourceCount: data.structuralElementSourceCount,
+    tableRowSourceCount: data.tableRowSourceCount,
+    hybridSourceCount: data.hybridSourceCount,
+    structuralHopMax: data.structuralHopMax,
+    pathAgreement: data.pathAgreement,
     // Absent/null means the extractive baseline answered — not that the answer
     // was verified.
     generation: data.generation ?? null,
@@ -152,20 +153,23 @@ export const ReliabilityPage: React.FC<ReliabilityPageProps> = () => {
       ? 0
       : data.factualGrounded
         ? 100
-        : 30
+        : 0
     : 0;
 
   // The structural count includes both element-level sources and table rows (all
   // report retrievalPath "structural"), so the chunk-level remainder subtracts
   // both. Every operand is backend-computed — never invented here.
-  const structuralChunkCount = data
+  const structuralChunkCount = data &&
+    data.structuralSourceCount !== undefined &&
+    data.structuralElementSourceCount !== undefined &&
+    data.tableRowSourceCount !== undefined
     ? Math.max(
         0,
         data.structuralSourceCount -
           data.structuralElementSourceCount -
           data.tableRowSourceCount,
       )
-    : 0;
+    : undefined;
 
   return (
     <div className="pt-28 px-8 pb-8 min-h-screen relative z-10 flex flex-col gap-8">
@@ -177,7 +181,7 @@ export const ReliabilityPage: React.FC<ReliabilityPageProps> = () => {
             Reliability Center
           </h2>
           <p className="font-body-base text-on-surface-variant max-w-2xl">
-            Real-time fidelity monitoring and structural verification of generated cognitive responses.
+            Evidence and verification reported for the most recent query.
           </p>
         </div>
         <div className="flex items-center gap-3">
@@ -190,8 +194,8 @@ export const ReliabilityPage: React.FC<ReliabilityPageProps> = () => {
             <span className="font-label-code text-label-code">REFRESH</span>
           </button>
           <div className="px-4 py-2 rounded-lg flex items-center gap-2" style={{ ...GLASS, border: '1px solid rgba(255,255,255,0.1)' }}>
-            <span className="w-2 h-2 rounded-full bg-cyber-cyan animate-pulse" />
-            <span className="font-label-code text-label-code text-cyber-cyan">NODE_SYNC_ACTIVE</span>
+            <span className="w-2 h-2 rounded-full bg-cyber-cyan" />
+            <span className="font-label-code text-label-code text-cyber-cyan">LATEST QUERY</span>
           </div>
         </div>
       </header>
@@ -218,16 +222,8 @@ export const ReliabilityPage: React.FC<ReliabilityPageProps> = () => {
             <div className="p-6 flex justify-between items-center z-10 absolute top-0 w-full"
               style={{ background: 'rgba(5,7,10,0.40)', backdropFilter: 'blur(12px)', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
               <h3 className="font-semibold text-on-surface" style={{ fontFamily: 'Geist', fontSize: '24px' }}>
-                Cognitive Pathway Tracer
+                Last Query Pathway
               </h3>
-              <div className="flex gap-2">
-                <button className="p-2 rounded-md hover:bg-surface-bright/20 text-outline hover:text-on-surface transition-colors">
-                  <span className="material-symbols-outlined text-[20px]">zoom_in</span>
-                </button>
-                <button className="p-2 rounded-md hover:bg-surface-bright/20 text-outline hover:text-on-surface transition-colors">
-                  <span className="material-symbols-outlined text-[20px]">center_focus_strong</span>
-                </button>
-              </div>
             </div>
 
             {/* Node map canvas */}
@@ -415,76 +411,50 @@ export const ReliabilityPage: React.FC<ReliabilityPageProps> = () => {
                 </p>
               </div>
 
-              {/* Production retrieval configuration. Static configuration mirrored
-                  from the backend source of truth, never a per-query measurement. */}
-              <div
-                className="rounded-lg px-5 py-4"
-                style={{ background: 'rgba(5,7,10,0.55)', border: '1px solid rgba(255,255,255,0.08)' }}
-                title="Reciprocal-rank-fusion configuration from backend/chat/rag.py"
-              >
-                <span className="font-label-code text-label-code text-outline block mb-3">PRODUCTION RRF CONFIG</span>
-                <dl className="flex flex-wrap items-center gap-x-5 gap-y-2 m-0">
-                  <div className="flex items-center gap-2">
-                    <dt className="font-label-code text-label-code" style={{ color: EVIDENCE_COLOR.SEMANTIC }}>SEMANTIC</dt>
-                    <dd className="font-label-code text-label-code text-on-surface m-0">0.70</dd>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <dt className="font-label-code text-label-code" style={{ color: EVIDENCE_COLOR['STRUCTURAL CHUNK'] }}>STRUCTURAL</dt>
-                    <dd className="font-label-code text-label-code text-on-surface m-0">0.30</dd>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <dt className="font-label-code text-label-code text-outline">K</dt>
-                    <dd className="font-label-code text-label-code text-on-surface m-0">60</dd>
-                  </div>
-                </dl>
-                <span className="font-body-xs text-on-surface-variant block mt-2 max-w-[300px]">
-                  Static production configuration (backend/chat/rag.py). Not a measurement from this query.
-                </span>
-              </div>
             </div>
 
             <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-7 gap-4">
               {[
                 {
                   label: 'Semantic sources',
-                  value: data.semanticSourceCount,
+                  value: data.semanticSourceCount ?? 'Not reported',
                   color: EVIDENCE_COLOR.SEMANTIC,
                   hint: 'Found by pgvector similarity alone.',
                 },
                 {
                   label: 'Structural chunk sources',
-                  value: structuralChunkCount,
+                  value: structuralChunkCount ?? 'Not reported',
                   color: EVIDENCE_COLOR['STRUCTURAL CHUNK'],
                   hint: 'Chunks reached through the document graph alone.',
                 },
                 {
                   label: 'Structural element sources',
-                  value: data.structuralElementSourceCount,
+                  value: data.structuralElementSourceCount ?? 'Not reported',
                   color: EVIDENCE_COLOR['STRUCTURAL ELEMENT'],
                   hint: 'Persisted document_structure_elements rows.',
                 },
                 {
                   label: 'Table row sources',
-                  value: data.tableRowSourceCount,
+                  value: data.tableRowSourceCount ?? 'Not reported',
                   color: EVIDENCE_COLOR['TABLE ROW'],
                   hint: 'Compact table rows admitted by the query gate.',
                 },
                 {
                   label: 'Hybrid sources',
-                  value: data.hybridSourceCount,
+                  value: data.hybridSourceCount ?? 'Not reported',
                   color: EVIDENCE_COLOR.HYBRID,
                   hint: 'Found independently by both paths.',
                 },
                 {
                   label: 'Maximum structural hops',
-                  value: data.structuralHopMax,
+                  value: data.structuralHopMax ?? 'Not reported',
                   color: EVIDENCE_COLOR['STRUCTURAL CHUNK'],
                   hint: 'Deepest graph expansion among the evidence.',
                 },
                 {
                   label: 'Path agreement',
-                  value: data.pathAgreement ? 'YES' : 'NO',
-                  color: data.pathAgreement ? EVIDENCE_COLOR.HYBRID : EVIDENCE_COLOR.SEMANTIC,
+                  value: data.pathAgreement === undefined ? 'Not reported' : data.pathAgreement ? 'YES' : 'NO',
+                  color: data.pathAgreement === true ? EVIDENCE_COLOR.HYBRID : EVIDENCE_COLOR.SEMANTIC,
                   hint: 'At least one source supported by both paths.',
                 },
               ].map((tile) => (

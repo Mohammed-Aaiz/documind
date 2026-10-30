@@ -94,7 +94,7 @@ class ReliabilitySourceRef(BaseModel):
 class ReliabilityQueryData(BaseModel):
     question: str
     answer: str
-    qaConfidence: float
+    qaConfidence: float | None
     retrievalScore: float
     avgRetrievalScore: float
     sourceCount: int
@@ -201,7 +201,7 @@ async def get_last_query_reliability(
     return ReliabilityQueryData(
         question=row.question,
         answer=row.answer,
-        qaConfidence=row.qa_confidence,
+        qaConfidence=(None if (row.generation_json or {}).get("engine") in {"ollama", "groq"} else row.qa_confidence),
         retrievalScore=row.retrieval_score,
         avgRetrievalScore=row.avg_retrieval_score,
         sourceCount=row.source_count,

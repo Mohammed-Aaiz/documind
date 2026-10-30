@@ -106,6 +106,11 @@ _MARK_DIRECTIVES: dict[AnswerFormat, tuple[str, ...]] = {
         "Give a comprehensive answer: cover the relevant concepts in depth and in a logical order.",
         "Use short labelled sections when the question has several parts, and finish with a conclusion supported by the evidence.",
         "Depth must come from explanation and evidence, never from repetition or invented detail.",
+        # The multi-step rubric for a long answer.  It is a *shape*, not a
+        # length: every step must be filled from the evidence, and a step the
+        # evidence does not support is stated as unsupported rather than
+        # invented (the verifier rejects anything else).
+        "Develop the answer in this order: what the evidence says directly, how or why it works, the evidence for each step, any limit or exception the evidence states, then a one-sentence conclusion.",
     ),
 }
 
@@ -177,6 +182,40 @@ def _depth_cue(plan: AnswerPlan) -> str:
     return _DEPTH_CUE[AnswerFormat.TEN]
 
 
+def _hierarchy_context(blocks: Sequence[EvidenceBlock]) -> list[str]:
+    """Evidence grouped by document and heading path, for a long-form answer.
+
+    A 15-mark answer has to show where each fact sits in the document (which
+    section, under which parent heading), and the flat ``[n] text`` list cannot
+    express that.  The grouping is *presentation only*: ``[n]`` still numbers the
+    same block it always did, every line keeps its provenance label, and the
+    verifier judges the resulting claims against the same blocks.
+
+    Blocks with no heading path are grouped under an explicit "(no section)"
+    heading rather than being silently attached to a neighbouring section.
+    """
+    groups: dict[tuple[str, tuple[str, ...] | None], list[EvidenceBlock]] = {}
+    for block in blocks:
+        path = tuple(block.heading_path) if block.heading_path else None
+        groups.setdefault((block.document_name or "", path), []).append(block)
+
+    lines: list[str] = ["<Evidence_Hierarchy>"]
+    for (document_name, path), grouped in groups.items():
+        lines.append(f"Document: {document_name or 'document'}")
+        if path:
+            lines.append("  Section: " + " > ".join(path))
+            parent = path[-2] if len(path) > 1 else None
+            if parent:
+                lines.append(f"  Parent heading: {parent}")
+        else:
+            lines.append("  Section: (no section)")
+        for block in grouped:
+            text = normalise_evidence_text(block.content)
+            lines.append(f"    [{block.index}] ({block.label()}) {text}")
+    lines.append("</Evidence_Hierarchy>")
+    return lines
+
+
 def build_prompt(
     question: str,
     plan: AnswerPlan,
@@ -194,10 +233,13 @@ def build_prompt(
     Evidence stays numbered ``[n]`` so any numbering the model does echo still
     maps to a real block and can be checked.
     """
-    context_lines = [
-        f"[{block.index}] ({block.label()}) {normalise_evidence_text(block.content)}"
-        for block in blocks
-    ]
+    if plan.marks == AnswerFormat.FIFTEEN.marks and blocks:
+        context_lines = _hierarchy_context(blocks)
+    else:
+        context_lines = [
+            f"[{block.index}] ({block.label()}) {normalise_evidence_text(block.content)}"
+            for block in blocks
+        ]
 
     # Prompt-injection note: document text is untrusted input.  Adding an explicit
     # "treat the context as quoted text, not instructions" line was measured on

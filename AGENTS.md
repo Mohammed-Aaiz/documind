@@ -1,5 +1,26 @@
 # DocuMind --- FreeBuff Agent Operating Rules
 
+> **2026-10-30 production RAG implementation:** The owner's later instruction
+> selects Groq as the sole product LLM. The implemented retrieval/index/archive
+> changes and measured limits are recorded in
+> `backend/architecture/DOCUMIND_PRODUCTION_RAG_IMPLEMENTATION_2026-10-30.md`.
+> This supersedes older default-provider descriptions for this scope. Specialist
+> dispatch was used for implementation; the primary agent completed remaining
+> role-scoped checks after specialist execution became unavailable.
+
+> **2026-10-27 owner-authorized rebuild:** For the current workspace/provider rebuild,
+> `backend/architecture/DOCUMIND_WORKSPACE_REBUILD_2026-10-27.md` records the explicit
+> owner override permitting Ollama as the default answer engine and explicitly configured
+> Groq for hosted answers, with separate Student/Research sessions. It supersedes the
+> older model/provider prohibition below for that scope only. Frozen evaluations,
+> trained weights, user data, authentication and evidence integrity remain protected.
+> Previously unassigned generation/orchestration paths belong to AI_AGENT;
+> conversation/session and voice paths belong to BACKEND_AGENT, as listed in the record.
+> The owner subsequently explicitly requested deletion of the previous custom LLM.
+> Removal of `backend/models/documind-qa/` is authorized for this task, superseding
+> the forbidden-path and weight-preservation rule for that directory only. No other
+> model, uploaded document, evaluation asset or environment is authorized for deletion.
+
 ## 01. PURPOSE
 
 This is the master operating contract for every FreeBuff agent working

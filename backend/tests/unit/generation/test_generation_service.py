@@ -59,6 +59,117 @@ class TestEvidenceBlocks:
         assert service.build_evidence_blocks([_chunk(content="   ")]) == []
 
 
+class TestLongFormGraphExpansion:
+    """A 15-mark answer gets 1-hop hierarchy context; shorter formats do not."""
+
+    @staticmethod
+    def _patch_retrieval(monkeypatch, chunks):
+        import chat.rag as rag
+
+        async def fake_retrieve(db, user_id, question, top_k=5):
+            return list(chunks)
+
+        monkeypatch.setattr(rag, "retrieve_chunks", fake_retrieve)
+        monkeypatch.setattr(rag, "dual_path_enabled", lambda: False)
+        monkeypatch.setattr(rag, "table_evidence_enabled", lambda: False)
+
+    @staticmethod
+    def _neighbour():
+        from graph.service import ExpandedEvidence
+
+        return ExpandedEvidence(
+            chunk_id="c2",
+            content="Calibration is performed by a certified technician.",
+            document_id="d1",
+            document_name="sample.txt",
+            page=3,
+            heading_path=("Reference Manual", "Calibration"),
+            parent_heading="Reference Manual",
+            section="Calibration",
+            relation="NEXT",
+            hops=1,
+            weight=1.0,
+        )
+
+    async def test_fifteen_marks_append_the_one_hop_neighbours(self, monkeypatch):
+        import graph.service as graph_service
+
+        self._patch_retrieval(monkeypatch, [_chunk()])
+
+        async def fake_expand(db, user_id, seeds, **kwargs):
+            assert seeds == ["c1"]
+            return [self._neighbour()]
+
+        monkeypatch.setattr(graph_service, "expand_evidence_via_graph", fake_expand)
+
+        chunks = await service.retrieve_evidence(None, "user-1", "How often?", answer_format=15)
+
+        assert [chunk.chunk_id for chunk in chunks] == ["c1", "c2"]
+        expanded = chunks[1]
+        assert expanded.retrieval_path == "structural"
+        assert expanded.structural_hops == 1
+        assert expanded.structural_relation == "NEXT"
+        assert expanded.score == 0.0, "structural evidence has no similarity score"
+        assert expanded.heading_path == ("Reference Manual", "Calibration")
+
+    async def test_ten_marks_do_not_expand(self, monkeypatch):
+        import graph.service as graph_service
+
+        self._patch_retrieval(monkeypatch, [_chunk()])
+        calls: list = []
+
+        async def fake_expand(*args, **kwargs):
+            calls.append((args, kwargs))
+            return [self._neighbour()]
+
+        monkeypatch.setattr(graph_service, "expand_evidence_via_graph", fake_expand)
+
+        chunks = await service.retrieve_evidence(None, "user-1", "How often?", answer_format=10)
+
+        assert [chunk.chunk_id for chunk in chunks] == ["c1"]
+        assert calls == []
+
+    def test_the_verifier_attributes_a_claim_from_an_expanded_neighbour(self):
+        # Expansion adds evidence, not a bypass: a claim is still judged against
+        # the block it cites, and the citation number is the one the prompt used.
+        from generation.verification import verify_with_mode
+
+        blocks = service.build_evidence_blocks(
+            [
+                _chunk(),
+                _chunk(
+                    "c2",
+                    content="Calibration is performed by a certified technician.",
+                ),
+            ]
+        )
+        report = verify_with_mode(
+            "Calibration is performed by a certified technician. [2]", blocks
+        )
+        assert report.verified is True
+        assert report.claims[0].citation_indices == [2]
+
+    async def test_a_failed_expansion_keeps_the_retrieved_evidence(
+        self, monkeypatch, caplog
+    ):
+        import graph.service as graph_service
+
+        self._patch_retrieval(monkeypatch, [_chunk()])
+
+        async def broken(*args, **kwargs):
+            raise RuntimeError("graph unavailable")
+
+        monkeypatch.setattr(graph_service, "expand_evidence_via_graph", broken)
+
+        with caplog.at_level("WARNING"):
+            chunks = await service.retrieve_evidence(
+                None, "user-1", "How often?", answer_format=15
+            )
+
+        assert [chunk.chunk_id for chunk in chunks] == ["c1"]
+        assert any("Graph expansion failed" in record.message for record in caplog.records)
+
+
 class TestGroundingPolicy:
     def test_no_evidence_abstains_without_calling_the_model(self, monkeypatch):
         calls = []

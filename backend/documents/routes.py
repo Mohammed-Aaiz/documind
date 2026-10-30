@@ -29,15 +29,19 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from fastapi import APIRouter, Depends, HTTPException, Query, UploadFile, status
+from starlette.concurrency import run_in_threadpool
 from sqlalchemy import delete, func, select
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.exc import DBAPIError
 from sqlalchemy.orm import selectinload
 
 from auth.dependencies import CurrentUser
 from config import get_settings
 from storage.database import get_db
 from storage.file_store import save_upload, delete_upload, cleanup_new_file
-from documents.models import Document, DocumentChunk
+from documents.models import Document, DocumentChunk, DocumentIndexRevision
+from documents.index_revisions import archive_document_index, revision_metadata, revision_sources
+from documents.ocr import OcrPolicy
 from documents.processing import (
     extract_document,
     chunk_text,
@@ -63,11 +67,21 @@ from documents.validation import (
     sanitize_filename,
 )
 from documents.insights import compute_document_insights
-from documents.parser import parse_pdf
+from documents.page_extractions import replace_document_page_extractions
+from documents.visual_processing import index_visual_document
+from embeddings.visual_index import persist_visual_patches
+from dataclasses import replace
+from documents.parser import parse_pdf, parse_extracted_elements
 from documents.structure import replace_document_structure
 from embeddings.model import embed_texts, _MODEL_NAME as EMBEDDING_MODEL_NAME
-from graph.models import DocumentStructureElement
+from graph.models import (
+    DocumentStructureElement,
+    KnowledgeGraphExtraction,
+    KnowledgeGraphMention,
+    KnowledgeGraphRelation,
+)
 from graph.service import ChunkView, replace_document_graph
+from documents.kg_extraction import replace_document_knowledge_graph
 
 router = APIRouter(prefix="/api/documents", tags=["documents"])
 settings = get_settings()
@@ -195,16 +209,20 @@ def _document_verdict(coverage: PageCoverage | None) -> tuple[str, str | None]:
 
       * no pages at all (DOCX/TXT), or every page usable -> ``ready``
       * at least one usable page and at least one unaccounted page -> ``partial``
-      * no usable page -> ``error`` / ``no_text_layer_ocr_disabled``
+      * no usable page -> ``error`` with the reason that matches what happened:
+        ``ocr_failed_all_pages`` when the OCR fallback ran and read nothing,
+        ``no_text_layer_ocr_disabled`` when it was off or could not run.
 
-    OCR is neither configured nor approved in this phase (gates 2/3 closed), so
-    ``ocr_failed_all_pages`` is unreachable today and is never claimed here: a
-    zero-usable-page document is always reported as "no text layer, OCR
-    disabled", which is exactly what was observed.
+    The reason is transient (this run's result only, gate 23) and it is why the
+    coverage carries OCR facts: "this page has no text" and "OCR ran on this
+    page and found nothing" are different observations, and the verdict must
+    report the one that actually happened.
     """
     if coverage is None or coverage.complete:
         return "ready", None
     if coverage.no_usable_pages:
+        if coverage.ocr_attempted and not coverage.ocr_unavailable:
+            return "error", "ocr_failed_all_pages"
         return "error", "no_text_layer_ocr_disabled"
     return "partial", None
 
@@ -214,6 +232,8 @@ async def _process_document(
     stored_path: Path,
     file_type: str,
     db: AsyncSession,
+    *,
+    ocr_policy: OcrPolicy | None = None,
 ) -> str | None:
     """Run the full processing pipeline for a document.
 
@@ -222,10 +242,17 @@ async def _process_document(
     every page was accounted for, PARTIAL when some page produced no usable
     content, ERROR on any failure or when no page produced usable content.
 
-    Returns the (transient) verdict reason when the document ends as ERROR, so
-    the caller and the tests can observe it for this run; it is never persisted
-    and no API exposes it (§7.2.3, gate 23 is status-only).  Returns ``None`` for
-    READY and PARTIAL.
+    ``ocr_policy`` decides the OCR fallback for pages with no usable text
+    layer; ``None`` resolves it from application settings (see
+    ``documents.ocr``).  Tests pass ``OcrPolicy.disabled()`` to exercise the
+    accounting without running an engine.
+
+    Returns the verdict reason when the document ends as ERROR, so the caller
+    and the tests can observe it for this run.  The *document-level* reason is
+    still transient (§7.2.3): it is not stored on the document and no API
+    exposes it.  The per-page facts behind it are persisted separately (one
+    ``document_page_extractions`` row per page, see
+    ``documents.page_extractions``).  Returns ``None`` for READY and PARTIAL.
     """
     now = _now_utc()
     doc.status = "processing"
@@ -238,7 +265,9 @@ async def _process_document(
     try:
         # --- Step 1: Extract text, with per-page completeness accounting ---
         try:
-            elements, coverage = extract_document(stored_path, file_type)
+            elements, coverage = await run_in_threadpool(extract_document,
+                stored_path, file_type, ocr_policy=ocr_policy
+            )
         except Exception:
             doc.status = "error"
             doc.embedding_status = "error"
@@ -246,11 +275,46 @@ async def _process_document(
             doc.updated_at = _now_utc()
             return "pipeline_exception"
 
+        # --- Step 1b: Record the per-page extraction provenance --------------
+        #
+        # Written before the verdict, so even a document that ends ERROR (no
+        # readable page) leaves behind the evidence of *why* — which pages were
+        # empty, OCR'd or unreadable.  This is provenance, not searchable
+        # content: a failure to record it is logged and does not, on its own,
+        # make an otherwise-complete document unusable, and the API reports the
+        # absence honestly (``recorded: false``) instead of inventing rows.
+        if coverage is not None:
+            # Encode capped visual crops from observed layout; never repeat OCR
+            # or block the API event loop while running local CPU inference.
+            try:
+                visual_pages, visual_patches = await run_in_threadpool(
+                    index_visual_document, stored_path, coverage.pages, settings)
+                async with db.begin_nested():
+                    await persist_visual_patches(db, document_id=doc.id,
+                        user_id=doc.user_id, patches=visual_patches)
+                coverage = replace(coverage, pages=visual_pages)
+            except Exception:
+                logger.exception("Optional visual indexing unavailable for document %s", doc.id)
+                coverage = replace(coverage, pages=tuple(
+                    replace(page, spatial_layout={**page.spatial_layout,
+                        "visual_embeddings": False,
+                        "visual_embedding_status": "indexing_failed", "visual_patch_count": 0})
+                    if page.spatial_layout else page for page in coverage.pages))
+            try:
+                await replace_document_page_extractions(db, doc.id, coverage.pages)
+            except Exception:
+                logger.exception(
+                    "page-extraction provenance could not be recorded for "
+                    "document %s; the document's own status is unaffected",
+                    doc.id,
+                )
+
         # Phase 1a: the document-level rule is page coverage, never "some
         # element was extracted somewhere".  A document with no usable page at
         # all is ERROR — never PARTIAL, and never READY — and no chunks are
-        # written for it.  Unusable pages are reported in this run's result and
-        # in the log; nothing durable is claimed about them (gate 23).
+        # written for it.  Unusable pages are reported in this run's result, in
+        # the log, and per page (with the fixed-vocabulary reason) in the rows
+        # written above.
         verdict, reason = _document_verdict(coverage)
         if verdict == "error":
             doc.status = "error"
@@ -259,12 +323,13 @@ async def _process_document(
             doc.updated_at = _now_utc()
             logger.warning(
                 "document %s verdict: error (%s); pages usable %s/%s; "
-                "unaccounted pages %s",
+                "unaccounted pages %s; OCR pages %s",
                 doc.id,
                 reason,
                 coverage.pages_usable,
                 coverage.pages_total,
                 list(coverage.unusable_pages),
+                list(coverage.ocr_pages),
             )
             return reason
 
@@ -303,7 +368,7 @@ async def _process_document(
         # --- Step 3: Generate embeddings ---
         try:
             texts = [c.content for c in chunk_objects]
-            embeddings = embed_texts(texts)
+            embeddings = await run_in_threadpool(embed_texts, texts)
             for chunk, embedding in zip(chunk_objects, embeddings):
                 chunk.embedding = embedding
         except Exception:
@@ -335,7 +400,8 @@ async def _process_document(
         # parent_id.  No semantic edges, no REFERENCES inference, no traversal.
         if file_type == "pdf":
             try:
-                parsed = parse_pdf(stored_path)
+                parsed = parse_extracted_elements(elements,
+                    page_count=coverage.pages_total if coverage else 0, source=str(stored_path))
                 await replace_document_structure(db, doc.id, parsed)
             except Exception:
                 logger.exception(
@@ -380,6 +446,27 @@ async def _process_document(
             doc.updated_at = _now_utc()
             return "pipeline_exception"
 
+        # --- Step 5b: Extract provenance-backed entity relations locally ---
+        # This is an optional enhancement to the existing structure graph.
+        # It uses the owner-authorized local-first wrapper, with automatic
+        # Groq fallback when configured; source passages may leave the machine.
+        # A missing model or malformed result
+        # leaves a durable KG status but does not make the vector/structure
+        # document unusable.
+        try:
+            await replace_document_knowledge_graph(
+                db,
+                user_id=doc.user_id,
+                document_id=doc.id,
+                chunks=chunk_objects,
+            )
+        except Exception:
+            logger.exception(
+                "entity relation extraction could not be recorded for document %s; "
+                "vector and structural retrieval remain available",
+                doc.id,
+            )
+
         # --- Step 6: All steps succeeded -- verdict from page coverage ---
         #
         # The pipeline ran to completion for the pages it could read, so the
@@ -393,16 +480,18 @@ async def _process_document(
             doc.status = "ready"
         else:
             # PARTIAL: at least one page usable, at least one not.  The pages
-            # that could not be read are reported for this run only (log +
-            # processing result), never persisted (§7.2.3, gate 23).
+            # that could not be read are logged here and recorded per page in
+            # document_page_extractions (with the fixed-vocabulary reason).
+            # The document itself carries no durable reason (§7.2.3).
             doc.status = "partial"
             logger.warning(
                 "document %s verdict: partial; pages usable %s/%s; "
-                "unaccounted pages %s",
+                "unaccounted pages %s; OCR pages %s",
                 doc.id,
                 coverage.pages_usable,
                 coverage.pages_total,
                 list(coverage.unusable_pages),
+                list(coverage.ocr_pages),
             )
         doc.updated_at = _now_utc()
         return reason
@@ -691,6 +780,110 @@ async def get_document_insights(
 
 
 # ---------------------------------------------------------------------------
+# Entity relation graph rebuild
+# ---------------------------------------------------------------------------
+
+
+@router.post("/{document_id}/knowledge-graph/rebuild")
+async def rebuild_document_knowledge_graph(
+    document_id: uuid.UUID,
+    current_user: CurrentUser,
+    db: AsyncSession = Depends(get_db),
+):
+    """Re-extract only the entity graph for this user's already-indexed document.
+
+    The owner check is part of the document lookup. No user identity is accepted
+    from the request body, and chunk selection is limited to that document.
+    Existing OCR, chunks, embeddings and structure edges are never rebuilt here.
+    """
+    result = await db.execute(
+        select(Document).where(
+            Document.id == document_id,
+            Document.user_id == current_user.id,
+        )
+    )
+    doc = result.scalar_one_or_none()
+    if doc is None:
+        raise HTTPException(status_code=404, detail="Document not found")
+    if doc.status == "processing":
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Document is currently being processed",
+        )
+    if doc.embedding_status != "ready" or doc.status not in ("ready", "partial"):
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Document must have searchable persisted chunks before graph rebuild",
+        )
+
+    chunk_rows = await db.execute(
+        select(DocumentChunk)
+        .where(DocumentChunk.document_id == doc.id)
+        .order_by(DocumentChunk.chunk_index.asc(), DocumentChunk.id.asc())
+    )
+    chunks = list(chunk_rows.scalars().all())
+    if not chunks:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Document has no persisted chunks to extract",
+        )
+
+    await replace_document_knowledge_graph(
+        db,
+        user_id=current_user.id,
+        document_id=doc.id,
+        chunks=chunks,
+    )
+    await db.commit()
+
+    extraction_row = (
+        await db.execute(
+            select(KnowledgeGraphExtraction).where(
+                KnowledgeGraphExtraction.user_id == current_user.id,
+                KnowledgeGraphExtraction.document_id == doc.id,
+            )
+        )
+    ).scalar_one_or_none()
+    if extraction_row is None:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Entity graph status could not be persisted",
+        )
+    entity_count = int(
+        (
+            await db.execute(
+                select(func.count(func.distinct(KnowledgeGraphMention.entity_id))).where(
+                    KnowledgeGraphMention.user_id == current_user.id,
+                    KnowledgeGraphMention.document_id == doc.id,
+                )
+            )
+        ).scalar_one()
+        or 0
+    )
+    relation_count = int(
+        (
+            await db.execute(
+                select(func.count()).select_from(KnowledgeGraphRelation).where(
+                    KnowledgeGraphRelation.user_id == current_user.id,
+                    KnowledgeGraphRelation.document_id == doc.id,
+                )
+            )
+        ).scalar_one()
+        or 0
+    )
+    return {
+        "status": extraction_row.status,
+        "model": extraction_row.extractor_model,
+        "version": extraction_row.extractor_version,
+        "processedChunks": extraction_row.processed_chunk_count,
+        "totalChunks": len(chunks),
+        "entityCount": entity_count,
+        "relationCount": relation_count,
+        "failureCode": extraction_row.failure_code,
+    }
+
+
+# ---------------------------------------------------------------------------
 # Delete
 # ---------------------------------------------------------------------------
 
@@ -735,6 +928,53 @@ async def delete_document(
 # ---------------------------------------------------------------------------
 # Reprocess
 # ---------------------------------------------------------------------------
+
+
+@router.get("/{document_id}/index-revisions")
+async def list_index_revisions(
+    document_id: uuid.UUID, current_user: CurrentUser,
+    limit: int = Query(default=50, ge=1, le=100), offset: int = Query(default=0, ge=0),
+    db: AsyncSession = Depends(get_db),
+):
+    document = await db.scalar(select(Document.id).where(
+        Document.id == document_id, Document.user_id == current_user.id))
+    if document is None:
+        raise HTTPException(status_code=404, detail="Document not found")
+    condition = (DocumentIndexRevision.document_id == document_id,
+                 DocumentIndexRevision.user_id == current_user.id)
+    total = await db.scalar(select(func.count()).select_from(DocumentIndexRevision).where(*condition))
+    # Listing must not fetch every archived vector and graph payload.
+    rows = await db.execute(select(
+        DocumentIndexRevision.id, DocumentIndexRevision.document_id,
+        DocumentIndexRevision.created_at, DocumentIndexRevision.chunker_version,
+        DocumentIndexRevision.embedding_model,
+        DocumentIndexRevision.payload["chunkCount"].as_integer().label("chunk_count"),
+    ).where(*condition)
+        .order_by(DocumentIndexRevision.created_at.desc(), DocumentIndexRevision.id.desc())
+        .limit(limit).offset(offset))
+    revisions = [{"revisionId": str(row.id), "documentId": str(row.document_id),
+                  "createdAt": row.created_at.isoformat() if row.created_at else "",
+                  "chunkerVersion": row.chunker_version, "embeddingModel": row.embedding_model,
+                  "chunkCount": row.chunk_count} for row in rows]
+    return {"revisions": revisions, "total": total,
+            "limit": limit, "offset": offset}
+
+
+@router.get("/{document_id}/index-revisions/{revision_id}/sources")
+async def get_index_revision_sources(
+    document_id: uuid.UUID, revision_id: uuid.UUID, current_user: CurrentUser,
+    chunkId: uuid.UUID | None = None,
+    limit: int = Query(default=50, ge=1, le=200), offset: int = Query(default=0, ge=0),
+    db: AsyncSession = Depends(get_db),
+):
+    revision = await db.scalar(select(DocumentIndexRevision).where(
+        DocumentIndexRevision.id == revision_id, DocumentIndexRevision.document_id == document_id,
+        DocumentIndexRevision.user_id == current_user.id))
+    if revision is None:
+        raise HTTPException(status_code=404, detail="Index revision not found")
+    sources = revision_sources(revision, chunk_id=chunkId)
+    return {**revision_metadata(revision), "sources": sources[offset:offset + limit],
+            "total": len(sources), "limit": limit, "offset": offset}
 
 
 @router.post("/{document_id}/reprocess", response_model=DocumentOut)
@@ -788,11 +1028,17 @@ async def reprocess_document(
     The verdict reason for the failed run is transient (logged here, never
     persisted — §7.2.3 / gate 23).
     """
-    result = await db.execute(
-        select(Document)
-        .options(selectinload(Document.chunks))
-        .where(Document.id == document_id, Document.user_id == current_user.id)
-    )
+    try:
+        result = await db.execute(
+            select(Document).options(selectinload(Document.chunks))
+            .where(Document.id == document_id, Document.user_id == current_user.id)
+            .with_for_update(nowait=True, of=Document)
+        )
+    except DBAPIError as exc:
+        await db.rollback()
+        if getattr(exc.orig, "sqlstate", None) == "55P03":
+            raise HTTPException(status_code=409, detail="Document is already being updated") from exc
+        raise
     doc = result.scalar_one_or_none()
     if doc is None:
         raise HTTPException(status_code=404, detail="Document not found")
@@ -821,6 +1067,15 @@ async def reprocess_document(
         and len(doc.chunks) > 0
     )
     previous_row_count = len(doc.chunks)
+
+    # Archive and replacement belong to the same transaction. A snapshot error
+    # must leave the live index intact rather than permitting an unsafe rebuild.
+    try:
+        await archive_document_index(db, doc)
+    except Exception as exc:
+        await db.rollback()
+        logger.error("Index revision could not be archived for document %s (%s)", document_id, type(exc).__name__)
+        raise HTTPException(status_code=503, detail="The existing index could not be preserved; reprocessing was not started") from exc
 
     # --- The replacement attempt (provisional; nothing is committed yet) ----
     # Phase 3E: delete old chunks before reprocessing to prevent mixing

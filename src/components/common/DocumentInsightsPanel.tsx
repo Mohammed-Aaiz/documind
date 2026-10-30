@@ -28,6 +28,19 @@ function formatDate(iso: string): string {
   return d.toLocaleString();
 }
 
+/**
+ * The backend's fixed failure vocabulary for a page that produced no usable
+ * text. Unknown values are shown verbatim rather than guessed at, so a newer
+ * server can add a reason without this panel mislabelling it.
+ */
+const FAILURE_REASON_LABEL: Record<string, string> = {
+  no_text_layer: 'No text layer',
+  ocr_disabled: 'OCR disabled',
+  ocr_unavailable: 'OCR unavailable',
+  ocr_failed: 'OCR found no text',
+  ocr_budget_exhausted: 'OCR time budget spent',
+};
+
 const statusColor = (status: string) => {
   if (status === 'ready') return '#4cd7f6';
   if (status === 'processing') return '#d0bcff';
@@ -341,6 +354,124 @@ export const DocumentInsightsPanel: React.FC<DocumentInsightsPanelProps> = ({
                   <StatCard label="TOTAL TOKENS" value={data.structure.totalTokenCount} />
                 </div>
               </section>
+
+              {/* Page extraction — which pages were read, and how */}
+              {data.pages && (
+                <section aria-labelledby="insights-pages-heading">
+                  <SectionHeading>PAGE EXTRACTION</SectionHeading>
+                  {!data.pages.recorded ? (
+                    <div className="rounded-lg p-3" style={{ ...GLASS }}>
+                      <span
+                        className="text-outline"
+                        style={{ fontFamily: 'JetBrains Mono', fontSize: '11px' }}
+                      >
+                        Not recorded for this document — it was processed before
+                        per-page extraction provenance was stored.
+                      </span>
+                    </div>
+                  ) : (
+                    <>
+                      <div className="grid grid-cols-3 gap-2">
+                        <StatCard label="PAGES" value={data.pages.pagesTotal} />
+                        <StatCard label="NATIVE TEXT" value={data.pages.nativePageCount} />
+                        <StatCard label="READ BY OCR" value={data.pages.ocrPageCount} />
+                        <StatCard
+                          label="UNACCOUNTED"
+                          value={data.pages.unaccountedPageCount}
+                        />
+                      </div>
+                      <div className="rounded-lg p-3 mt-2" style={{ ...GLASS }}>
+                        {data.pages.ocrPages.length === 0 &&
+                        data.pages.unaccountedPages.length === 0 ? (
+                          <span
+                            className="text-outline"
+                            style={{ fontFamily: 'JetBrains Mono', fontSize: '11px' }}
+                          >
+                            <span>Every page had a usable text layer.</span>{' '}
+                            <span>{data.pages.nativePageCount} page{data.pages.nativePageCount === 1 ? '' : 's'} read from a native text layer.</span>
+                          </span>
+                        ) : (
+                          <ul
+                            className="space-y-2"
+                            aria-label="Page extraction details"
+                          >
+                            {data.pages.ocrPages.map((page) => {
+                              // One deterministic sentence per page, built from
+                              // the recorded facts only — no estimates.
+                              const meta = [
+                                [page.ocrEngine, page.ocrEngineVersion]
+                                  .filter(Boolean)
+                                  .join(' '),
+                                page.ocrRotation
+                                  ? `read rotated ${page.ocrRotation}°`
+                                  : null,
+                                page.ocrSeconds !== null
+                                  ? `${page.ocrSeconds.toFixed(1)}s`
+                                  : null,
+                                `${page.textChars} chars`,
+                              ]
+                                .filter(Boolean)
+                                .join(' · ');
+                              return (
+                              <li
+                                key={`ocr-${page.pageNumber}`}
+                                className="flex items-start justify-between gap-3"
+                              >
+                                <div className="min-w-0">
+                                  <span
+                                    className="block text-on-surface-variant"
+                                    style={{ fontFamily: 'JetBrains Mono', fontSize: '11px' }}
+                                  >
+                                    PAGE {page.pageNumber} · OCR
+                                  </span>
+                                  <span
+                                    className="block text-outline truncate"
+                                    style={{ fontFamily: 'JetBrains Mono', fontSize: '10px' }}
+                                    title={meta}
+                                  >
+                                    {meta}
+                                  </span>
+                                </div>
+                                <span
+                                  className="flex-shrink-0"
+                                  title="Mean line confidence of the recognised text"
+                                  style={{ fontFamily: 'JetBrains Mono', fontSize: '11px', color: '#d0bcff' }}
+                                >
+                                  {page.ocrConfidence === null
+                                    ? '—'
+                                    : page.ocrConfidence.toFixed(3)}
+                                </span>
+                              </li>
+                              );
+                            })}
+                            {data.pages.unaccountedPages.map((page) => (
+                              <li
+                                key={`unaccounted-${page.pageNumber}`}
+                                className="flex items-start justify-between gap-3"
+                              >
+                                <span
+                                  className="text-on-surface-variant"
+                                  style={{ fontFamily: 'JetBrains Mono', fontSize: '11px' }}
+                                >
+                                  PAGE {page.pageNumber}
+                                </span>
+                                <span
+                                  className="flex-shrink-0"
+                                  style={{ fontFamily: 'JetBrains Mono', fontSize: '10px', color: '#ffb4ab' }}
+                                >
+                                  {FAILURE_REASON_LABEL[page.failureReason ?? ''] ??
+                                    page.failureReason ??
+                                    'Not usable'}
+                                </span>
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                      </div>
+                    </>
+                  )}
+                </section>
+              )}
 
               {/* Element Types */}
               <section aria-labelledby="insights-elements-heading">

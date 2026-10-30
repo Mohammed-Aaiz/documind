@@ -58,6 +58,18 @@ _STOPWORDS = frozenset(
 _NUMBER_RE = re.compile(r"\d+(?:[.,]\d+)*")
 
 
+#: Punctuation the token regex can glue onto a trailing token.  It allows ``.``
+#: and ``/`` *inside* a token (``3.5``, ``and/or``), so evidence text "... in
+#: 1859. The book ..." tokenises as ``1859.`` while the answer "1859" tokenises
+#: as ``1859``.  A one-word numeric answer was therefore scored 0.0 and withheld
+#: (measured 2026-10-24 on the Darwin fixture: "1859" was replaced by an empty
+#: answer with "could not be attributed" for this reason).  Token comparison
+#: keeps its measured behaviour for words; only a bare number is compared
+#: against the evidence's own extracted numbers, which already ignore
+#: punctuation.
+_TOKEN_TRAILING = ".;,:!?"
+
+
 def content_tokens(text: str) -> list[str]:
     """Lower-cased content words of ``text`` (stopwords removed)."""
     return [token for token in _TOKEN_RE.findall(text.lower()) if token not in _STOPWORDS]
@@ -251,8 +263,29 @@ def support_ratio(claim: str, evidence_text: str) -> float:
         return 0.0
     if not evidence_tokens:
         return 0.0
-    matched = sum(1 for token in claim_tokens if token in evidence_tokens)
+    evidence_numbers = _numbers(evidence_text or "")
+    matched = sum(
+        1 for token in claim_tokens if _token_matched(token, evidence_tokens, evidence_numbers)
+    )
     return matched / len(claim_tokens)
+
+
+def _token_matched(
+    token: str, evidence_tokens: set[str], evidence_numbers: set[str]
+) -> bool:
+    """Whether ``token`` counts as present in the evidence.
+
+    A bare number also matches when the evidence contains it followed by a
+    sentence stop: ``1859`` matches ``... in 1859.``.  Word tokens keep the
+    exact comparison the support thresholds were measured with; only numbers are
+    compared punctuation-insensitively, because a number carries no meaning that
+    the trailing period could change and a one-token claim has nothing else to
+    match on.
+    """
+    if token in evidence_tokens:
+        return True
+    core = token.rstrip(_TOKEN_TRAILING)
+    return bool(core) and _NUMBER_RE.fullmatch(core) is not None and core in evidence_numbers
 
 
 def numbers_supported(claim: str, evidence_text: str) -> bool:
@@ -261,6 +294,22 @@ def numbers_supported(claim: str, evidence_text: str) -> bool:
     if not claim_numbers:
         return True
     return claim_numbers <= _numbers(evidence_text)
+
+
+def attributable_text(block: EvidenceBlock) -> str:
+    """Text a claim may legitimately quote from ``block``.
+
+    The block's own provenance label (document name, page, section) is part of
+    the evidence record, not an outside fact.  A model that writes "... every 6
+    months, as stated in maintenance.pdf [1], page 4" is naming the block it
+    cites.  Measured 2026-10-22 with Qwen2.5-1.5B-Instruct: without this, every
+    such answer was rejected — "page 4" and the document name are absent from
+    the block *content*, so the numeric and lexical checks both failed while the
+    answer itself was correct.  Support thresholds are unchanged; only the text
+    they compare against includes the block's label.
+    """
+    label = block.label()
+    return f"{block.content}\n{label}" if label else block.content
 
 
 def attribute_claim(
@@ -297,8 +346,9 @@ def attribute_claim(
     # Score every block: attribution must not depend on the model naming one.
     scored: list[tuple[float, bool, int]] = []
     for block in blocks:
-        ratio = support_ratio(claim_text, block.content)
-        numeric_ok = numbers_supported(claim_text, block.content)
+        text = attributable_text(block)
+        ratio = support_ratio(claim_text, text)
+        numeric_ok = numbers_supported(claim_text, text)
         scored.append((ratio, numeric_ok, block.index))
 
     best_ratio, best_numeric, _ = max(scored, key=lambda item: (item[0], item[1]))
@@ -608,7 +658,7 @@ def check_claim(
     supporting = [by_index[index] for index in indices]
     best = max(
         supporting,
-        key=lambda block: support_ratio(strip_citations(sentence), block.content),
+        key=lambda block: support_ratio(strip_citations(sentence), attributable_text(block)),
     )
     entity_check = "not_applicable"
     if question and question.strip():

@@ -1,0 +1,119 @@
+{
+  "mode": "offline-embedding-comparison",
+  "models": {
+    "minilm": {
+      "status": "measured",
+      "source": "sentence-transformers/all-MiniLM-L6-v2",
+      "dimensions": 384,
+      "max_seq_length": 256,
+      "normalized": true,
+      "similarity": "cosine",
+      "model_load_ms": 213.62009999984366,
+      "corpus_encode_ms": 1401.060199999847,
+      "summary": {
+        "recall": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0,
+        "queries": 6,
+        "answerable_queries": 5,
+        "retrieval_p50_ms": 9.148699999968812,
+        "retrieval_p95_ms": 12.89889999998195,
+        "latency_note": "nearest-rank percentiles; small smoke datasets are not production latency evidence"
+      },
+      "rows": [
+        {
+          "id": "kinetic-definition",
+          "retrieved_ids": [
+            "energy",
+            "momentum",
+            "photosynthesis",
+            "graphs",
+            "retrieval"
+          ],
+          "retrieval_ms": 12.89889999998195,
+          "recall": 1.0,
+          "mrr": 1.0,
+          "ndcg": 1.0
+        },
+        {
+          "id": "collision-comparison",
+          "retrieved_ids": [
+            "momentum",
+            "energy",
+            "photosynthesis",
+            "retrieval",
+            "graphs"
+          ],
+          "retrieval_ms": 9.977100000014616,
+          "recall": 1.0,
+          "mrr": 1.0,
+          "ndcg": 1.0
+        },
+        {
+          "id": "plant-energy",
+          "retrieved_ids": [
+            "photosynthesis",
+            "energy",
+            "graphs",
+            "retrieval",
+            "indexes"
+          ],
+          "retrieval_ms": 8.993400000235852,
+          "recall": 1.0,
+          "mrr": 1.0,
+          "ndcg": 1.0
+        },
+        {
+          "id": "index-tradeoff",
+          "retrieved_ids": [
+            "indexes",
+            "retrieval",
+            "graphs",
+            "photosynthesis",
+            "energy"
+          ],
+          "retrieval_ms": 9.148699999968812,
+          "recall": 1.0,
+          "mrr": 1.0,
+          "ndcg": 1.0
+        },
+        {
+          "id": "rag-relation",
+          "retrieved_ids": [
+            "retrieval",
+            "graphs",
+            "indexes",
+            "photosynthesis",
+            "momentum"
+          ],
+          "retrieval_ms": 10.067199999866716,
+          "recall": 1.0,
+          "mrr": 1.0,
+          "ndcg": 1.0
+        },
+        {
+          "id": "unsupported-salary",
+          "retrieved_ids": [
+            "energy",
+            "photosynthesis",
+            "graphs",
+            "momentum",
+            "indexes"
+          ],
+          "retrieval_ms": 7.382199999938166
+        }
+      ]
+    },
+    "bge": {
+      "status": "unavailable",
+      "source": "BAAI/bge-small-en-v1.5",
+      "error_type": "OSError"
+    }
+  },
+  "limitations": "Synthetic smoke data unless replaced; no production embedding switch, reranker or generation is measured here.",
+  "dataset": "C:\\Users\\moham\\OneDrive\\Desktop\\stitch_documind_futuristic_3d_ui\\backend\\evaluation\\datasets\\student_rag_v1.json",
+  "dataset_sha256": "2dbdf421c87fe511d64095b9447e15fc68e49bb0cfad95c948278f08523856e7",
+  "dataset_version": "student-rag-smoke-v1-2026-10-29",
+  "observed_at": "2026-10-29T18:23:41.493249+00:00",
+  "k": 5
+}

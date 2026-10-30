@@ -17,13 +17,26 @@ with heading context prepended for downstream embedding quality.
 
 from __future__ import annotations
 
+import logging
 import re
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from pathlib import Path
 from copy import deepcopy
 
 import fitz  # PyMuPDF
 import docx
+from documents.spatial import display_bbox, native_page_layout, native_page_size, native_text_blocks, page_layout
+
+logger = logging.getLogger(__name__)
+
+from documents.ocr import (
+    MAX_PIXELS,
+    OcrBudgetExhausted,
+    OcrPageFailed,
+    OcrPolicy,
+    OcrSession,
+    OcrUnavailable,
+)
 
 
 # ===========================================================================
@@ -74,6 +87,11 @@ class ExtractedElement:
 
     list_items: list[str] | None = None
     """List item texts if element_type="list", else None."""
+
+    bbox_x0: float | None = None
+    bbox_y0: float | None = None
+    bbox_x1: float | None = None
+    bbox_y1: float | None = None
 
     def __post_init__(self):
         if self.element_type not in ALLOWED_ELEMENT_TYPES:
@@ -144,6 +162,30 @@ def count_usable_chars(text: str) -> int:
 
 
 @dataclass(frozen=True)
+class PageExtraction:
+    """How one page's text was obtained, for persistence and display.
+
+    ``failure_reason`` uses a fixed vocabulary so a client can render it without
+    interpreting free text: ``no_text_layer`` (nothing usable and no OCR
+    attempt), ``ocr_disabled``, ``ocr_unavailable``, ``ocr_failed`` or
+    ``ocr_budget_exhausted``.
+    """
+
+    page_number: int
+    method: str
+    """``native`` | ``ocr`` | ``none``."""
+    text_chars: int
+    """Non-whitespace alphanumeric characters the page's final text carries."""
+    ocr_engine: str | None = None
+    ocr_engine_version: str | None = None
+    ocr_confidence: float | None = None
+    ocr_rotation: int | None = None
+    ocr_seconds: float | None = None
+    failure_reason: str | None = None
+    spatial_layout: dict | None = None
+
+
+@dataclass(frozen=True)
 class PageCoverage:
     """Per-page completeness accounting for a paged format (PDF).
 
@@ -151,12 +193,34 @@ class PageCoverage:
     source document has, how many of them produced usable text, and which ones
     did not.  It is not a quality score and it makes no claim about pages it
     could not read beyond "unaccounted".
+
+    The ``ocr_*`` fields record what the OCR fallback did, because "this page
+    has no text" and "this page has no text and OCR could not read it either"
+    are different facts and the verdict must not conflate them.
     """
 
     pages_total: int
     pages_usable: int
     unusable_pages: tuple[int, ...]
     """1-based page numbers that produced no usable text, in document order."""
+
+    ocr_pages: tuple[int, ...] = ()
+    """Pages whose usable text came from OCR, in document order."""
+
+    ocr_failed_pages: tuple[int, ...] = ()
+    """Pages handed to OCR that it could not read, in document order."""
+
+    ocr_attempted: bool = False
+    """True when at least one page was actually handed to the OCR engine."""
+
+    ocr_unavailable: bool = False
+    """True when the configured engine could not run at all (not installed)."""
+
+    ocr_engine: str | None = None
+    """Engine that produced :attr:`ocr_pages`, or None when none ran."""
+
+    pages: tuple[PageExtraction, ...] = ()
+    """Every page, in document order — the durable per-page provenance."""
 
     @property
     def complete(self) -> bool:
@@ -237,6 +301,7 @@ def _pdf_table_element(
     page_num: int,
     heading_path: list[str],
     table_data: list[list[str]],
+    bbox: tuple | None = None,
 ) -> ExtractedElement:
     """One aggregate table element carrying the heading context in effect."""
     section = heading_path[-1] if heading_path else None
@@ -247,11 +312,61 @@ def _pdf_table_element(
         heading_path=list(heading_path),
         section=section,
         table_data=table_data,
+        bbox_x0=bbox[0] if bbox else None,
+        bbox_y0=bbox[1] if bbox else None,
+        bbox_x1=bbox[2] if bbox else None,
+        bbox_y1=bbox[3] if bbox else None,
+    )
+
+
+def _render_page_for_ocr(page: "fitz.Page", dpi: int):
+    """Render one page to an RGB numpy array for OCR, bounded by ``MAX_PIXELS``.
+
+    The pixmap is the page as a reader sees it: PyMuPDF rasterises the page at
+    the requested resolution, so vector text and embedded scans are treated the
+    same way.  Nothing is pre-processed (no binarisation, no deskew) — the
+    engine's own detector handles that, and inventing a filter here would make
+    the measured engine behaviour unreproducible.
+    """
+    import numpy as np
+
+    predicted_pixels = float(page.rect.width) * float(page.rect.height) * (dpi / 72.0) ** 2
+    if predicted_pixels > MAX_PIXELS:
+        # Bound before allocating a pixmap; rendering first can already OOM on
+        # a very large engineering drawing even if we downscale afterwards.
+        scale = (MAX_PIXELS / predicted_pixels) ** 0.5
+        matrix = fitz.Matrix(scale * dpi / 72.0, scale * dpi / 72.0)
+        pix = page.get_pixmap(matrix=matrix, colorspace=fitz.csRGB, alpha=False)
+    else:
+        pix = page.get_pixmap(dpi=dpi, colorspace=fitz.csRGB, alpha=False)
+    buffer = np.frombuffer(pix.samples, dtype=np.uint8)
+    return buffer.reshape(pix.height, pix.width, 3)
+
+
+def _ocr_page_element(
+    page_num: int,
+    heading_path: list[str],
+    text: str,
+) -> ExtractedElement:
+    """One element carrying a page's OCR text, tagged as plain text.
+
+    OCR cannot recover heading levels, tables or list structure reliably, so
+    none is invented here: the page becomes one ``text`` element with the page
+    number and the heading context that is current for the document.  Downstream
+    chunking then treats it exactly like native text.
+    """
+    return ExtractedElement(
+        content=text.strip(),
+        element_type="text",
+        page=page_num,
+        heading_path=list(heading_path),
+        section=heading_path[-1] if heading_path else None,
     )
 
 
 def _extract_pdf_with_coverage(
     path: Path,
+    ocr_policy: OcrPolicy | None = None,
 ) -> tuple[list[ExtractedElement], PageCoverage]:
     """Extract structured content from a PDF **and** its per-page coverage.
 
@@ -280,6 +395,16 @@ def _extract_pdf_with_coverage(
     pages_total = 0
     pages_usable = 0
     unusable_pages: list[int] = []
+    ocr_pages: list[int] = []
+    ocr_failed_pages: list[int] = []
+    ocr_attempted = False
+    ocr_unavailable = False
+    ocr_engine: str | None = None
+    page_records: list[PageExtraction] = []
+
+    ocr_session = OcrSession(ocr_policy)
+    if not ocr_session.enabled:
+        ocr_session = None
 
     for page_num in range(len(doc)):
         page = doc[page_num]
@@ -298,8 +423,117 @@ def _extract_pdf_with_coverage(
             page_chars = 0
         if page_chars >= MIN_USABLE_CHARS:
             pages_usable += 1
+            page_records.append(
+                PageExtraction(
+                    page_number=page_num + 1,
+                    method="native",
+                    text_chars=page_chars,
+                )
+            )
         else:
+            # The failure vocabulary is decided below; the default is the plain
+            # fact that this page carried no usable text layer.
+            failure_reason = "no_text_layer"
+            if ocr_unavailable:
+                failure_reason = "ocr_unavailable"
+            elif ocr_session is None:
+                failure_reason = "ocr_disabled"
+            # --- No usable text layer: the case OCR exists for ---------------
+            #
+            # OCR runs only here, so a digital page never pays for it.  A page
+            # OCR reads successfully contributes one text element and skips the
+            # native block pass (it had no usable text to contribute).  A page
+            # OCR cannot read stays unaccounted, exactly as before.
+            if ocr_session is not None and not ocr_unavailable:
+                ocr_attempted = True
+                try:
+                    ocr_image = _render_page_for_ocr(page, ocr_session.policy.dpi)
+                    result = ocr_session.read(ocr_image)
+                except OcrUnavailable as exc:
+                    ocr_unavailable = True
+                    failure_reason = "ocr_unavailable"
+                    logger.warning(
+                        "OCR unavailable for document %s (%s); pages without "
+                        "a text layer will be reported unaccounted",
+                        path.name,
+                        exc,
+                    )
+                except OcrBudgetExhausted as exc:
+                    ocr_failed_pages.append(page_num + 1)
+                    failure_reason = "ocr_budget_exhausted"
+                    logger.warning(
+                        "document %s page %s: %s; page stays unaccounted",
+                        path.name,
+                        page_num + 1,
+                        exc,
+                    )
+                except OcrPageFailed as exc:
+                    ocr_failed_pages.append(page_num + 1)
+                    failure_reason = "ocr_failed"
+                    logger.warning(
+                        "document %s page %s: %s; page stays unaccounted",
+                        path.name,
+                        page_num + 1,
+                        exc,
+                    )
+                else:
+                    if count_usable_chars(result.text) >= MIN_USABLE_CHARS:
+                        spatial_layout = None
+                        ocr_text = result.text
+                        detected_regions = list(getattr(result, "regions", ()))
+                        if detected_regions:
+                            spatial_layout = page_layout(float(page.rect.width), float(page.rect.height),
+                                detected_regions, method="rendered-page-ocr")
+                            spatial_layout["reading_coordinates"] = "orientation-corrected-normalized"
+                            spatial_layout["ocr_rotation"] = result.rotation
+                            ocr_text = "\n".join(r["text"] for r in spatial_layout["regions"])
+                        element = _ocr_page_element(page_num + 1, heading_path, ocr_text)
+                        if detected_regions:
+                            element.bbox_x0 = min(r["bbox"][0] for r in detected_regions) * float(page.rect.width)
+                            element.bbox_y0 = min(r["bbox"][1] for r in detected_regions) * float(page.rect.height)
+                            element.bbox_x1 = max(r["bbox"][2] for r in detected_regions) * float(page.rect.width)
+                            element.bbox_y1 = max(r["bbox"][3] for r in detected_regions) * float(page.rect.height)
+                        elements.append(element)
+                        pages_usable += 1
+                        ocr_pages.append(page_num + 1)
+                        ocr_engine = result.engine
+                        page_records.append(
+                            PageExtraction(
+                                page_number=page_num + 1,
+                                method="ocr",
+                                text_chars=count_usable_chars(result.text),
+                                ocr_engine=result.engine,
+                                ocr_engine_version=result.engine_version,
+                                ocr_confidence=result.mean_confidence,
+                                ocr_rotation=result.rotation,
+                                ocr_seconds=result.seconds,
+                                spatial_layout=spatial_layout,
+                            )
+                        )
+                        logger.info(
+                            "document %s page %s read by OCR (%s, %s lines, "
+                            "confidence %.3f, rotation %s, %.2fs)",
+                            path.name,
+                            page_num + 1,
+                            result.engine,
+                            result.lines,
+                            result.mean_confidence,
+                            result.rotation,
+                            result.seconds,
+                        )
+                        continue
+                    ocr_failed_pages.append(page_num + 1)
+                    failure_reason = "ocr_failed"
+
             unusable_pages.append(page_num + 1)
+            page_records.append(
+                PageExtraction(
+                    page_number=page_num + 1,
+                    method="none",
+                    text_chars=page_chars,
+                    failure_reason=failure_reason,
+                )
+            )
 
         # --- Collect tables (content + real bounding boxes) ---
         table_events: list[tuple[tuple, list[list[str]]]] = []
@@ -331,7 +565,7 @@ def _extract_pdf_with_coverage(
             for bbox, table_data in sorted(
                 table_events, key=lambda event: (event[0][1], event[0][0])
             ):
-                elements.append(_pdf_table_element(page_num, heading_path, table_data))
+                elements.append(_pdf_table_element(page_num, heading_path, table_data, display_bbox(page, bbox)))
             text = page.get_text("text")
             if text.strip():
                 elements.append(ExtractedElement(
@@ -342,14 +576,25 @@ def _extract_pdf_with_coverage(
                 ))
             continue
 
-        # Event stream entries are ``((y0, x0, kind, index), kind, payload)``
+        # Geometry is persisted once at ingestion. Multi-column ordering uses
+        # the same regions later returned as evidence, so chunking does not
+        # interleave the left and right columns row-by-row.
+        layout_rank: dict[str, int] = {}
+        try:
+            layout = native_page_layout(page, page_dict, table_events)
+            page_records[-1] = replace(page_records[-1], spatial_layout=layout)
+            layout_rank = {r["id"]: r["reading_order"] for r in layout["regions"]}
+        except (AttributeError, TypeError, ValueError):
+            logger.warning("Native page geometry unavailable for %s page %d", path.name, page_num + 1)
+
+        # Event stream entries are ``((reading_order,y0,x0,kind,index),kind,payload)``
         # where kind 0 = text block, 1 = table.  Sorting uses only real
         # PyMuPDF coordinates, so the order is the page's read order.
         events: list[tuple[tuple, int, tuple]] = []
         for index, (bbox, table_data) in enumerate(table_events):
-            events.append(((bbox[1], bbox[0], 1, index), 1, (table_data,)))
+            events.append(((layout_rank.get(f"table-{index}", 0), bbox[1], bbox[0], 1, index), 1, (table_data, bbox)))
 
-        for index, block in enumerate(page_dict.get("blocks", [])):
+        for index, (region_id, block) in enumerate(native_text_blocks(page_dict, native_page_size(page)[0])):
             # Skip image blocks (type 1)
             if block.get("type") == 1:
                 continue
@@ -387,9 +632,9 @@ def _extract_pdf_with_coverage(
 
             events.append(
                 (
-                    (block_bbox[1], block_bbox[0], 0, index),
+                    (layout_rank.get(region_id, 0), block_bbox[1], block_bbox[0], 0, index),
                     0,
-                    (block_text, block_font, block_size),
+                    (block_text, block_font, block_size, block_bbox),
                 )
             )
 
@@ -397,11 +642,12 @@ def _extract_pdf_with_coverage(
 
         for _key, kind, payload in events:
             if kind == 1:
-                (table_data,) = payload
-                elements.append(_pdf_table_element(page_num, heading_path, table_data))
+                table_data, bbox = payload
+                elements.append(_pdf_table_element(page_num, heading_path, table_data, display_bbox(page, bbox)))
                 continue
 
-            block_text, block_font, block_size = payload
+            block_text, block_font, block_size, block_bbox = payload
+            block_bbox = display_bbox(page, block_bbox)
 
             # --- Classify element type ---
             heading_level = _classify_pdf_heading(block_font, block_size)
@@ -419,6 +665,8 @@ def _extract_pdf_with_coverage(
                     heading_level=heading_level,
                     heading_path=list(heading_path),
                     section=section,
+                    bbox_x0=block_bbox[0], bbox_y0=block_bbox[1],
+                    bbox_x1=block_bbox[2], bbox_y1=block_bbox[3],
                 ))
             else:
                 section = heading_path[-1] if heading_path else None
@@ -428,6 +676,8 @@ def _extract_pdf_with_coverage(
                     page=page_num + 1,
                     heading_path=list(heading_path),
                     section=section,
+                    bbox_x0=block_bbox[0], bbox_y0=block_bbox[1],
+                    bbox_x1=block_bbox[2], bbox_y1=block_bbox[3],
                 ))
 
     doc.close()
@@ -435,6 +685,12 @@ def _extract_pdf_with_coverage(
         pages_total=pages_total,
         pages_usable=pages_usable,
         unusable_pages=tuple(unusable_pages),
+        ocr_pages=tuple(ocr_pages),
+        ocr_failed_pages=tuple(ocr_failed_pages),
+        ocr_attempted=ocr_attempted,
+        ocr_unavailable=ocr_unavailable,
+        ocr_engine=ocr_engine,
+        pages=tuple(page_records),
     )
 
 
@@ -443,7 +699,8 @@ def extract_pdf(path: Path) -> list[ExtractedElement]:
 
     Backward-compatible wrapper.  Use :func:`extract_document` when the
     document's per-page coverage is needed as well (the ingestion verdict does
-    need it).
+    need it).  OCR is applied by :func:`extract_document`, which carries the
+    policy; this wrapper uses the default policy.
     """
     elements, _coverage = _extract_pdf_with_coverage(path)
     return elements
@@ -763,7 +1020,7 @@ def extract_text(path: Path, file_type: str) -> list[ExtractedElement]:
 
 
 def extract_document(
-    path: Path, file_type: str
+    path: Path, file_type: str, ocr_policy: OcrPolicy | None = None
 ) -> tuple[list[ExtractedElement], PageCoverage | None]:
     """Extract a document together with its per-page coverage (Phase 1a).
 
@@ -772,12 +1029,17 @@ def extract_document(
     about, so the verdict for those formats is decided by the pipeline steps
     alone (§7.2.1).
 
+    ``ocr_policy`` decides whether pages with no usable text layer are read
+    with the OCR fallback (``documents.ocr``).  ``None`` resolves the policy
+    from application settings; pass ``OcrPolicy.disabled()`` to account for
+    pages without ever attempting OCR.
+
     This is the extraction entry point the ingestion pipeline uses.  The
     legacy :func:`extract_text` entry point is preserved unchanged for callers
     that only need the element stream.
     """
     if file_type == "pdf":
-        return _extract_pdf_with_coverage(path)
+        return _extract_pdf_with_coverage(path, ocr_policy)
     extractor = EXTRACTORS.get(file_type)
     if extractor is None:
         raise ValueError(f"Unsupported file type: {file_type}")

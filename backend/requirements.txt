@@ -23,18 +23,58 @@ sentence-transformers>=3.0.0
 torch==2.13.0
 transformers==5.16.1
 
+# Optional learned page-region embeddings reuse torch/transformers, Pillow and
+# PyMuPDF already declared here; no ColPali/VLM runtime dependency is added.
+# Explicit operator provisioning: python -m embeddings.provision_visual
+# Its huggingface_hub.snapshot_download is supplied by transformers and
+# sentence-transformers. The provisioner pins the CLIP repository revision;
+# inference uses local_files_only=True and never downloads on a request.
+
+# 4-bit inference for the instruct conversation model (generation/causal.py).
+# These packages do nothing unless torch reports a CUDA device; on a CPU-only
+# torch, causal.plan_loading() selects the float32 CPU path and reports why.
+# A CUDA-enabled torch build is therefore required for 4-bit loading, e.g.
+#   pip install --no-deps --index-url https://download.pytorch.org/whl/cu126 \
+#       "torch==2.13.0+cu126"
+# `--no-deps` is deliberate: it keeps the pinned torchvision 0.28.0, which
+# declares torch==2.13.0 (PEP 440 ignores the `+cu126` local label when
+# matching `==2.13.0`).
+# Measured 2026-10-22 on an RTX 3050 Laptop (4 GB): torch 2.13.0+cu126 +
+# bitsandbytes 0.50.2 loads Qwen2.5-1.5B-Instruct in NF4 at 1154 MiB allocator
+# peak / 1274 MiB driver-reported (scripts/measure_conversation_vram.py).
+bitsandbytes==0.50.2
+accelerate==1.15.0
+
 # Voice STT — real local Whisper transcription (POST /api/voice/transcribe).
 # faster-whisper runs on CTranslate2 (not torch) and decodes audio through PyAV,
 # whose wheels bundle the FFmpeg libraries, so no system ffmpeg binary is
-# required.  av is pinned below 19 on purpose: av>=19 requires Python >=3.12 and
-# would not resolve in this Python 3.11 environment.
+# required.  av is pinned to 16.1.0 because aiortc 1.14 declares av<17, and it
+# is the only version both accept; faster-whisper needs av>=11, and every
+# decode path is exercised by the voice tests.
 faster-whisper==1.2.1
 ctranslate2==4.8.2
-av==18.1.0
+av==16.1.0
 onnxruntime==1.30.0
 
-# Voice TTS — Google Text-to-Speech client (POST /api/voice/synthesize).
-# gTTS 2.5.4 requires requests.
+# Voice transport — WebRTC (POST /api/voice/webrtc/offer).  aiortc carries the
+# SDP/ICE signalling and the audio RTP path; there is no STUN/TURN server, so a
+# local call uses host candidates only and never leaves the machine.  The
+# Silero VAD model (models/vad/silero_vad.onnx) runs on the onnxruntime CPU
+# provider above: no torch, no CUDA, no VRAM.
+aiortc==1.14.0
+
+# Voice TTS — local Piper voice is the default engine (POST /api/voice/synthesize,
+# the WebRTC call's audio track).  Synthesis runs on the already-pinned onnxruntime CPU
+# provider: no network, no VRAM.  piper-tts wheels bundle their own espeak-ng
+# data, so no system-level espeak-ng install is required.  The engine is
+# GPL-3.0 — fine for server-side use; revisit before distributing a bundled
+# build.  The voice artifact is NOT committed; provision it with:
+#   python -m piper.download_voices en_US-ljspeech-medium --data-dir models/tts
+# (voice dataset: LJSpeech, public domain).
+piper-tts==1.3.0
+
+# Voice TTS — optional Google Text-to-Speech engine (TTS_ENGINE=gtts only).
+# The default local engine never calls it.  gTTS 2.5.4 requires requests.
 # NOTE: gTTS's published metadata declares click<8.2 for its CLI,
 # which conflicts with huggingface_hub's click>=8.4.2.
 # The Python gTTS runtime API does not use click.
@@ -42,6 +82,17 @@ onnxruntime==1.30.0
 #   pip install --no-deps gTTS==2.5.4
 requests==2.34.2
 gTTS==2.5.4
+
+# OCR — pages with no usable text layer (scanned PDFs and the scanned pages of
+# mixed ones).  RapidOCR ships its PP-OCR detector/recogniser/classifier ONNX
+# models inside the wheel (31.75 MB measured) and runs on the already-pinned
+# onnxruntime CPU provider: offline, no system binary, no VRAM.  Measured on
+# this machine (300 dpi, digital-quality scans): CER 0.000, ~2.5-3 s/page,
+# ~1.2 GB peak RSS.  opencv-python-headless is RapidOCR's image/geometry
+# dependency (no GUI libraries); the engine choice and its measurements are
+# recorded in architecture/DOCUMIND_OCR_ENGINE_DECISION_2026-10-24.md.
+rapidocr==3.10.0
+opencv-python-headless==5.0.0.93
 
 # Media Verification — image decoding for local image-authenticity inference.
 # Required by transformers image processors (ViTImageProcessor) used by the
@@ -54,6 +105,34 @@ pillow==12.3.0
 # targets the pinned torch 2.13.0 (torchvision 0.28.0 declares torch==2.13.0);
 # it must not be bumped independently of torch.
 torchvision==0.28.0
+
+# ---------------------------------------------------------------------------
+# Stateful conversation (Phase C)
+# ---------------------------------------------------------------------------
+# Conversation memory client.  The Redis *server* is a deployment dependency
+# (compose.yaml).  When it cannot be reached the session store falls back to
+# process-local memory and reports memoryBackend="memory" — it never pretends
+# to be Redis.
+redis==8.1.0
+
+# LangGraph orchestrates the conversation state machine
+# (backend/orchestration/graph.py).  Pinned together with its direct dependency
+# chain because langgraph 1.x pulls a much newer langchain-core than the rest of
+# this environment resolves; these are the versions actually installed and
+# imported here (verified: StateGraph + MemorySaver run, see
+# backend/tests/unit/orchestration).
+langgraph==0.2.76
+langgraph-checkpoint==2.0.10
+langgraph-sdk==0.1.51
+langchain-core==0.3.29
+langsmith==0.2.10
+requests-toolbelt==1.0.0
+zstandard==0.23.0
+jsonpatch==1.33
+jsonpointer==3.0.0
+orjson==3.10.14
+msgpack==1.1.0
+tenacity==9.0.0
 
 # Testing
 pytest==8.3.4

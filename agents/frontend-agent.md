@@ -1,5 +1,11 @@
 # FRONTEND_AGENT
 
+> **2026-10-27 rebuild:** Student/Research are modes inside the existing Workspace
+> page. Follow the current design decision at the start of `DESIGN.md`, including
+> separate active-chat/draft state, request cancellation and microphone cleanup on
+> mode changes. Server-side workspace authorization is required in addition to UI
+> filtering. Backend persists successful conversation messages; do not double-save.
+
 ## Role
 
 React/TypeScript UI and user interaction.

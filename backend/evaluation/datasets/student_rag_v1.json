@@ -1,0 +1,20 @@
+{
+  "version": "student-rag-smoke-v1-2026-10-29",
+  "provenance": "Author-written synthetic physics/computing teaching passages. Not a frozen benchmark, not a Kestrel ground-truth dataset, and not evidence of general exam performance.",
+  "corpus": [
+    {"id": "energy", "text": "Kinetic energy is the energy associated with motion. For an object of mass m moving at speed v, kinetic energy is one half of m multiplied by v squared. At a fixed speed, doubling the mass doubles kinetic energy. At a fixed mass, doubling the speed multiplies kinetic energy by four."},
+    {"id": "momentum", "text": "Linear momentum is the product of mass and velocity. Velocity is a vector, so momentum has magnitude and direction. In an isolated system with no net external force, total momentum is conserved. Kinetic energy can change in an inelastic collision even when total momentum remains constant."},
+    {"id": "photosynthesis", "text": "Photosynthesis converts light energy into chemical energy. Green plants use carbon dioxide and water to produce sugars and release oxygen. Chlorophyll absorbs light. The light-dependent reactions and the Calvin cycle perform different parts of this process."},
+    {"id": "indexes", "text": "A database index is an auxiliary structure that helps locate rows without scanning every row. A B-tree supports equality and ordered comparisons. An index consumes storage and must be maintained when indexed data changes. Creating an index does not guarantee that every query will use it."},
+    {"id": "graphs", "text": "A knowledge graph represents entities as nodes and relationships as edges. A path containing several edges can connect entities indirectly. In document question answering, each relation should retain a supporting source quotation so a graph path can be checked against original evidence."},
+    {"id": "retrieval", "text": "Dense retrieval encodes queries and passages as numerical vectors and ranks passages by vector similarity. Keyword retrieval matches textual terms. Hybrid retrieval combines these complementary result lists. Reciprocal Rank Fusion combines ranks without treating unlike raw scores as directly comparable."}
+  ],
+  "queries": [
+    {"id": "kinetic-definition", "question": "What is kinetic energy and how does it depend on speed?", "relevant_ids": ["energy"], "keypoints": {"5": ["motion", "speed"], "10": ["motion", "mass", "squared"], "15": ["motion", "mass", "squared", "four"]}},
+    {"id": "collision-comparison", "question": "Compare conservation of momentum and kinetic energy in an inelastic collision.", "relevant_ids": ["momentum", "energy"], "keypoints": {"5": ["momentum", "kinetic energy"], "10": ["isolated system", "external force", "kinetic energy"], "15": ["isolated system", "external force", "kinetic energy", "inelastic collision"]}},
+    {"id": "plant-energy", "question": "How do green plants convert light into stored chemical energy?", "relevant_ids": ["photosynthesis"], "keypoints": {"5": ["photosynthesis", "sugars"], "10": ["carbon dioxide", "water", "oxygen"], "15": ["carbon dioxide", "water", "chlorophyll", "Calvin cycle"]}},
+    {"id": "index-tradeoff", "question": "Explain the advantages and costs of a database B-tree index.", "relevant_ids": ["indexes"], "keypoints": {"5": ["rows", "storage"], "10": ["equality", "ordered", "storage"], "15": ["equality", "ordered", "storage", "changes"]}},
+    {"id": "rag-relation", "question": "How can a knowledge graph complement dense and keyword retrieval in document question answering?", "relevant_ids": ["graphs", "retrieval"], "keypoints": {"5": ["relationships", "source"], "10": ["entities", "relationships", "source", "retrieval"], "15": ["entities", "relationships", "source", "retrieval", "ranks"]}},
+    {"id": "unsupported-salary", "question": "What is the annual salary of the Kestrel platform designer?", "relevant_ids": [], "keypoints": {}}
+  ]
+}

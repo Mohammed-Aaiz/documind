@@ -44,6 +44,9 @@ export default defineConfig(({ command, mode }) => {
       // and must not be widened to paper over a port mismatch.
       strictPort: true,
       open: true,
+      watch: {
+        ignored: ['**/backend/**'], // <-- Added this to prevent the scandir crash
+      },
       proxy: {
         '/api': {
           // Pinned to IPv4: the backend runs on 0.0.0.0:8000 (IPv4), while the

@@ -1,5 +1,40 @@
 # DocuMind --- Product & UX Design Specification
 
+## Current design decision — 2026-10-27
+
+This section supersedes the older cinematic direction below for the owner-requested
+rebuild. The working surface is a calm reading and writing tool: warm neutral canvas,
+dark ink navigation, teal Student accents and indigo Research accents. Avoid continuous
+3D rendering on the main workspace. Use readable line lengths, semantic headings,
+visible focus, generous whitespace and reduced-motion support.
+
+Keep the five top-level destinations. Workspace contains a persistent Student/Research
+switch, a document library, workspace-specific chat history, a focused answer area and
+inspectable source evidence. Switching restores that mode's active chat and unsent
+draft, cancels an in-flight text request, and ends any microphone/voice session. Do not
+briefly show the previous workspace's messages during loading or apply a late answer
+to the newly selected workspace. Explicitly distinguish an empty history from a failed
+history request. Histories remain scoped by authenticated account as well as workspace.
+
+Student mode offers exam answers at 5/10/15 marks, explanation, revision and practice.
+Marks control required coverage and development, never a promised examination score.
+Research mode offers evidence synthesis, source comparison, critical appraisal and
+gap exploration. Gaps are gaps in the supplied corpus, not claims of global research
+novelty. Both modes can inspect citations and export useful text; generated source
+content is rendered as text, never trusted HTML.
+
+Show which answer provider is selected and whether evidence stays local or is sent to
+Groq. Provider availability must come from the server; do not display a green ready
+state merely because a model name is configured. Keep keys out of browser storage and
+the interface. Streamed draft text is provisional. Final citation checks are evidence
+checks with stated limits, not proof that all claims are correct.
+
+Voice has visible listening, transcribing, answering, speaking, interrupted and error
+states, with an accessible stop control. Microphone use begins only from the user's
+action. Offer text entry when voice is unavailable. Switching modes must never carry
+an active call into the other mode. Report measured response timings without invented
+targets or percentage improvements.
+
 ## 01. Design Purpose
 
 DocuMind is a dark, premium, cinematic AI workspace rather than a

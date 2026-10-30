@@ -1,0 +1,224 @@
+{
+  "mode": "offline-embedding-comparison",
+  "models": {
+    "minilm": {
+      "status": "measured",
+      "source": "sentence-transformers/all-MiniLM-L6-v2",
+      "query_prefix": "",
+      "dimensions": 384,
+      "max_seq_length": 256,
+      "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+      "normalized": true,
+      "similarity": "cosine",
+      "model_load_ms": 198.51980000021285,
+      "corpus_encode_ms": 1364.071600000898,
+      "summary": {
+        "recall": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0,
+        "queries": 6,
+        "answerable_queries": 5,
+        "answers_by_marks": {},
+        "retrieval_p50_ms": 7.038300002022879,
+        "retrieval_p95_ms": 7.727500000328291,
+        "latency_note": "nearest-rank percentiles; small smoke datasets are not production latency evidence"
+      },
+      "rows": [
+        {
+          "id": "kinetic-definition",
+          "retrieved_ids": [
+            "energy",
+            "momentum",
+            "photosynthesis",
+            "graphs",
+            "retrieval"
+          ],
+          "retrieval_ms": 7.727500000328291,
+          "recall": 1.0,
+          "mrr": 1.0,
+          "ndcg": 1.0
+        },
+        {
+          "id": "collision-comparison",
+          "retrieved_ids": [
+            "momentum",
+            "energy",
+            "photosynthesis",
+            "retrieval",
+            "graphs"
+          ],
+          "retrieval_ms": 7.038300002022879,
+          "recall": 1.0,
+          "mrr": 1.0,
+          "ndcg": 1.0
+        },
+        {
+          "id": "plant-energy",
+          "retrieved_ids": [
+            "photosynthesis",
+            "energy",
+            "graphs",
+            "retrieval",
+            "indexes"
+          ],
+          "retrieval_ms": 7.2392000001855195,
+          "recall": 1.0,
+          "mrr": 1.0,
+          "ndcg": 1.0
+        },
+        {
+          "id": "index-tradeoff",
+          "retrieved_ids": [
+            "indexes",
+            "retrieval",
+            "graphs",
+            "photosynthesis",
+            "energy"
+          ],
+          "retrieval_ms": 6.983200000831857,
+          "recall": 1.0,
+          "mrr": 1.0,
+          "ndcg": 1.0
+        },
+        {
+          "id": "rag-relation",
+          "retrieved_ids": [
+            "retrieval",
+            "graphs",
+            "indexes",
+            "photosynthesis",
+            "momentum"
+          ],
+          "retrieval_ms": 7.65990000218153,
+          "recall": 1.0,
+          "mrr": 1.0,
+          "ndcg": 1.0
+        },
+        {
+          "id": "unsupported-salary",
+          "retrieved_ids": [
+            "energy",
+            "photosynthesis",
+            "graphs",
+            "momentum",
+            "indexes"
+          ],
+          "retrieval_ms": 6.990900001255795
+        }
+      ]
+    },
+    "bge": {
+      "status": "measured",
+      "source": "embeddings/assets/bge-small-en-v1.5",
+      "query_prefix": "Represent this sentence for searching relevant passages: ",
+      "dimensions": 384,
+      "max_seq_length": 512,
+      "revision": "5c38ec7c405ec4b44b94cc5a9bb96e735b38267a",
+      "normalized": true,
+      "similarity": "cosine",
+      "model_load_ms": 258.14790000003995,
+      "corpus_encode_ms": 88.20589999959338,
+      "summary": {
+        "recall": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0,
+        "queries": 6,
+        "answerable_queries": 5,
+        "answers_by_marks": {},
+        "retrieval_p50_ms": 17.94320000044536,
+        "retrieval_p95_ms": 21.09030000065104,
+        "latency_note": "nearest-rank percentiles; small smoke datasets are not production latency evidence"
+      },
+      "rows": [
+        {
+          "id": "kinetic-definition",
+          "retrieved_ids": [
+            "energy",
+            "momentum",
+            "photosynthesis",
+            "retrieval",
+            "indexes"
+          ],
+          "retrieval_ms": 17.94320000044536,
+          "recall": 1.0,
+          "mrr": 1.0,
+          "ndcg": 1.0
+        },
+        {
+          "id": "collision-comparison",
+          "retrieved_ids": [
+            "momentum",
+            "energy",
+            "photosynthesis",
+            "retrieval",
+            "graphs"
+          ],
+          "retrieval_ms": 21.09030000065104,
+          "recall": 1.0,
+          "mrr": 1.0,
+          "ndcg": 1.0
+        },
+        {
+          "id": "plant-energy",
+          "retrieved_ids": [
+            "photosynthesis",
+            "momentum",
+            "energy",
+            "graphs",
+            "retrieval"
+          ],
+          "retrieval_ms": 17.847099999926286,
+          "recall": 1.0,
+          "mrr": 1.0,
+          "ndcg": 1.0
+        },
+        {
+          "id": "index-tradeoff",
+          "retrieved_ids": [
+            "indexes",
+            "retrieval",
+            "graphs",
+            "photosynthesis",
+            "momentum"
+          ],
+          "retrieval_ms": 18.769799997244263,
+          "recall": 1.0,
+          "mrr": 1.0,
+          "ndcg": 1.0
+        },
+        {
+          "id": "rag-relation",
+          "retrieved_ids": [
+            "graphs",
+            "retrieval",
+            "indexes",
+            "momentum",
+            "photosynthesis"
+          ],
+          "retrieval_ms": 18.795300002238946,
+          "recall": 1.0,
+          "mrr": 1.0,
+          "ndcg": 1.0
+        },
+        {
+          "id": "unsupported-salary",
+          "retrieved_ids": [
+            "graphs",
+            "indexes",
+            "momentum",
+            "retrieval",
+            "energy"
+          ],
+          "retrieval_ms": 13.38969999778783
+        }
+      ]
+    }
+  },
+  "limitations": "Synthetic smoke data unless replaced; no production embedding switch, reranker or generation is measured here.",
+  "dataset": "C:\\Users\\moham\\OneDrive\\Desktop\\stitch_documind_futuristic_3d_ui\\backend\\evaluation\\datasets\\student_rag_v1.json",
+  "dataset_sha256": "2dbdf421c87fe511d64095b9447e15fc68e49bb0cfad95c948278f08523856e7",
+  "dataset_version": "student-rag-smoke-v1-2026-10-29",
+  "runner_sha256": "7c74faad7efafc1cb3786564577c2cea56d91ebb91d69d2be1cbbbe8e619374d",
+  "observed_at": "2026-10-30T00:24:09.603347+00:00",
+  "k": 5
+}

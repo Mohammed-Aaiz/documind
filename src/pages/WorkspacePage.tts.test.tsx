@@ -8,12 +8,18 @@ import {
 
 /**
  * Workspace-level regression test for the STT/TTS coordination (audit finding
- * F-04): while the Oracle is speaking, the microphone control must be
+ * F-04): while a message is being read aloud, the microphone control must be
  * disabled, so a recording cannot capture the application's own answer.
  *
+ * The conversation composer now hosts the streaming `VoiceStreamButton` rather
+ * than a one-shot dictation button; its stable accessible name is
+ * "Voice conversation", and the same guard applies (the page disables it while
+ * the per-message speaker is playing).
+ *
  * The workspace context is replaced by a fixed store; the real
- * `VoiceSpeakerButton` and `VoiceInputButton` are rendered, and `fetch`/`Audio`
- * are stubbed — no network, no audio device, no microphone.
+ * `VoiceSpeakerButton` and `VoiceStreamButton` are rendered, and
+ * `fetch`/`Audio`/`WebSocket` are stubbed — no network, no audio device, no
+ * microphone.
  */
 
 const mocks = vi.hoisted(() => ({
@@ -73,7 +79,7 @@ describe('Workspace STT/TTS coordination', () => {
 
     const speaker = screen.getByRole('button', { name: 'Read answer aloud' });
     const mic = screen.getByRole('button', {
-      name: 'Record voice input',
+      name: 'Voice conversation',
     }) as HTMLButtonElement;
 
     // Idle: dictation is available.
@@ -112,7 +118,7 @@ describe('Workspace STT/TTS coordination', () => {
 
     expect(
       (screen.getByRole('button', {
-        name: 'Record voice input',
+        name: 'Voice conversation',
       }) as HTMLButtonElement).disabled,
     ).toBe(true);
 
@@ -137,7 +143,7 @@ describe('Workspace STT/TTS coordination', () => {
     ).toHaveLength(1);
     expect(
       (screen.getByRole('button', {
-        name: 'Record voice input',
+        name: 'Voice conversation',
       }) as HTMLButtonElement).disabled,
     ).toBe(true);
 
@@ -147,7 +153,7 @@ describe('Workspace STT/TTS coordination', () => {
     });
     expect(
       (screen.getByRole('button', {
-        name: 'Record voice input',
+        name: 'Voice conversation',
       }) as HTMLButtonElement).disabled,
     ).toBe(false);
     expect(

@@ -48,6 +48,7 @@ from dataclasses import dataclass, field
 from typing import Iterable, Sequence
 
 from sqlalchemy import Text, cast, delete, func, or_, select
+from sqlalchemy.orm import aliased
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from documents.models import Document, DocumentChunk, DocumentTableRow
@@ -55,6 +56,10 @@ from graph.models import (
     RELATION_PARENT_OF,
     DocumentGraphEdge,
     DocumentStructureElement,
+    KnowledgeGraphEntity,
+    KnowledgeGraphExtraction,
+    KnowledgeGraphMention,
+    KnowledgeGraphRelation,
 )
 
 logger = logging.getLogger(__name__)
@@ -222,6 +227,251 @@ def plan_edges(chunks: Sequence[ChunkView]) -> list[EdgeSpec]:
                 add(other.chunk_id, cur.chunk_id, RELATION_SAME_SECTION)
 
     return out
+
+
+# ---------------------------------------------------------------------------
+# Entity-relation knowledge graph retrieval
+# ---------------------------------------------------------------------------
+
+@dataclass(frozen=True)
+class KnowledgeGraphCandidate:
+    """Source chunk reached through an owner-scoped, quote-backed KG path.
+
+    Graph hops and exact-name matching are not a semantic similarity score.
+    The exact supporting quote is retained alongside the source chunk.
+    """
+
+    chunk_id: str
+    content: str
+    document_id: str
+    document_name: str
+    page: int | None
+    heading_path: tuple[str, ...] | None
+    section: str | None
+    predicate: str
+    evidence_quote: str
+    graph_path: str
+    hops: int
+
+
+_KG_QUERY_STOPWORDS = frozenset(
+    {
+        "a", "an", "and", "are", "as", "at", "be", "by", "did", "do",
+        "does", "for", "from", "how", "in", "is", "it", "of", "on",
+        "or", "that", "the", "their", "them", "this", "to", "was",
+        "were", "what", "when", "where", "which", "who", "why", "with",
+    }
+)
+_KG_QUERY_TOKEN = re.compile(r"[\w]+", re.UNICODE)
+
+
+def _kg_query_phrases(query: str, *, max_phrases: int = 96) -> list[str]:
+    """Produce bounded exact-name candidates from query surface text.
+
+    This deliberately avoids fuzzy entity resolution. A name must match the
+    stored normalized form exactly to avoid joining unrelated entities.
+    """
+
+    tokens = [token.casefold() for token in _KG_QUERY_TOKEN.findall(query)]
+    phrases: list[str] = []
+    seen: set[str] = set()
+    for start in range(len(tokens)):
+        for width in range(1, min(6, len(tokens) - start) + 1):
+            part = tokens[start : start + width]
+            if width == 1 and (len(part[0]) < 3 or part[0] in _KG_QUERY_STOPWORDS):
+                continue
+            phrase = " ".join(part)
+            if phrase not in seen:
+                seen.add(phrase)
+                phrases.append(phrase)
+    return sorted(phrases, key=lambda item: (-len(item.split()), item))[:max_phrases]
+
+
+async def retrieve_knowledge_graph_candidates(
+    db: AsyncSession,
+    user_id: str,
+    query: str,
+    *,
+    max_hops: int = 3,
+    max_seeds: int = 8,
+    max_nodes: int = 48,
+    max_candidates: int = 8,
+) -> list[KnowledgeGraphCandidate]:
+    """Retrieve source chunks reached through factual entity relations.
+
+    Seeds use exact normalized-name matches from the query. Owner-scoped
+    canonical entity IDs bridge exact matches across that owner's documents.
+    Every relation, mention, source chunk, and document is filtered by the
+    authenticated owner. Traversal is bidirectional and capped at three hops.
+
+    An empty graph returns no candidates. Database failures propagate so the
+    calling retrieval layer can preserve the dense/structural fallback and
+    report graph unavailability rather than pretending traversal succeeded.
+    """
+
+    if not query.strip() or max_hops < 1 or max_candidates < 1:
+        return []
+    owner = _as_uuid(user_id)
+    max_hops = min(int(max_hops), 3)
+    max_nodes = max(1, min(int(max_nodes), 48))
+    phrases = _kg_query_phrases(query)
+    if not phrases:
+        return []
+
+    seed_stmt = (
+        select(KnowledgeGraphEntity.id, KnowledgeGraphEntity.name)
+        .where(KnowledgeGraphEntity.user_id == owner)
+        .where(KnowledgeGraphEntity.normalized_name.in_(phrases))
+        .order_by(
+            func.length(KnowledgeGraphEntity.normalized_name).desc(),
+            KnowledgeGraphEntity.normalized_name.asc(),
+        )
+        .limit(max(1, min(int(max_seeds), 16)))
+    )
+    seeds = (await db.execute(seed_stmt)).fetchall()
+    if not seeds:
+        return []
+
+    visited: dict[str, tuple[str, ...]] = {
+        str(row.id): (str(row.name),) for row in seeds
+    }
+    frontier = set(visited)
+    evidence: dict[str, KnowledgeGraphCandidate] = {}
+
+    for hop in range(1, max_hops + 1):
+        if not frontier or len(visited) >= max_nodes:
+            break
+
+        subject = aliased(KnowledgeGraphMention)
+        object_ = aliased(KnowledgeGraphMention)
+        subject_entity = aliased(KnowledgeGraphEntity)
+        object_entity = aliased(KnowledgeGraphEntity)
+        stmt = (
+            select(
+                KnowledgeGraphRelation.id,
+                KnowledgeGraphRelation.predicate,
+                KnowledgeGraphRelation.evidence_quote,
+                subject_entity.id.label("subject_entity_id"),
+                subject_entity.name.label("subject_name"),
+                object_entity.id.label("object_entity_id"),
+                object_entity.name.label("object_name"),
+                DocumentChunk.id.label("chunk_id"),
+                DocumentChunk.content,
+                DocumentChunk.document_id,
+                DocumentChunk.page,
+                DocumentChunk.heading_path,
+                DocumentChunk.section,
+                Document.name.label("document_name"),
+            )
+            .join(
+                subject,
+                (subject.id == KnowledgeGraphRelation.subject_mention_id)
+                & (subject.user_id == KnowledgeGraphRelation.user_id)
+                & (subject.document_id == KnowledgeGraphRelation.document_id)
+                & (subject.source_chunk_id == KnowledgeGraphRelation.source_chunk_id),
+            )
+            .join(
+                object_,
+                (object_.id == KnowledgeGraphRelation.object_mention_id)
+                & (object_.user_id == KnowledgeGraphRelation.user_id)
+                & (object_.document_id == KnowledgeGraphRelation.document_id)
+                & (object_.source_chunk_id == KnowledgeGraphRelation.source_chunk_id),
+            )
+            .join(
+                subject_entity,
+                (subject_entity.id == subject.entity_id)
+                & (subject_entity.user_id == KnowledgeGraphRelation.user_id),
+            )
+            .join(
+                object_entity,
+                (object_entity.id == object_.entity_id)
+                & (object_entity.user_id == KnowledgeGraphRelation.user_id),
+            )
+            .join(
+                DocumentChunk,
+                (DocumentChunk.id == KnowledgeGraphRelation.source_chunk_id)
+                & (DocumentChunk.document_id == KnowledgeGraphRelation.document_id),
+            )
+            .join(
+                Document,
+                (Document.id == KnowledgeGraphRelation.document_id)
+                & (Document.user_id == KnowledgeGraphRelation.user_id),
+            )
+            .where(KnowledgeGraphRelation.user_id == owner)
+            .where(
+                subject_entity.id.in_(frontier)
+                | object_entity.id.in_(frontier)
+            )
+            .order_by(KnowledgeGraphRelation.id.asc())
+            .limit(128)
+        )
+        rows = (await db.execute(stmt)).fetchall()
+        next_frontier: set[str] = set()
+        for row in rows:
+            subject_id = str(row.subject_entity_id)
+            object_id = str(row.object_entity_id)
+            if subject_id in frontier:
+                anchor_id, neighbor_id = subject_id, object_id
+                path = visited[anchor_id] + (str(row.predicate), str(row.object_name))
+            else:
+                anchor_id, neighbor_id = object_id, subject_id
+                path = visited[anchor_id] + (f"← {row.predicate}", str(row.subject_name))
+
+            if neighbor_id not in visited and len(visited) < max_nodes:
+                visited[neighbor_id] = path
+                next_frontier.add(neighbor_id)
+
+            quote = str(row.evidence_quote or "").strip()
+            content = str(row.content or "")
+            if not quote or not content or quote not in content:
+                continue
+            chunk_id = str(row.chunk_id)
+            candidate = KnowledgeGraphCandidate(
+                chunk_id=chunk_id,
+                content=content,
+                document_id=str(row.document_id),
+                document_name=str(row.document_name or ""),
+                page=row.page,
+                heading_path=_norm_path(row.heading_path),
+                section=row.section,
+                predicate=str(row.predicate),
+                evidence_quote=quote,
+                graph_path=" ".join(path),
+                hops=hop,
+            )
+            previous = evidence.get(chunk_id)
+            if previous is None or (candidate.hops, candidate.graph_path) < (
+                previous.hops,
+                previous.graph_path,
+            ):
+                evidence[chunk_id] = candidate
+        frontier = next_frontier
+
+    return sorted(
+        evidence.values(),
+        key=lambda item: (item.hops, item.document_id, item.chunk_id),
+    )[: max(1, min(int(max_candidates), 16))]
+
+
+async def knowledge_graph_status(db: AsyncSession, user_id: str) -> str:
+    """Report whether KG extraction is ready for any of this owner's docs."""
+
+    owner = _as_uuid(user_id)
+    rows = (
+        await db.execute(
+            select(KnowledgeGraphExtraction.status).where(
+                KnowledgeGraphExtraction.user_id == owner
+            )
+        )
+    ).scalars().all()
+    states = set(rows)
+    if "ready" in states or "partial" in states:
+        return "available"
+    if "pending" in states:
+        return "pending"
+    if "unavailable" in states:
+        return "unavailable"
+    return "empty"
 
 
 # ---------------------------------------------------------------------------
@@ -532,6 +782,158 @@ async def load_candidates(
             "chunker_version": row.chunker_version,
         }
     return out
+
+
+# ---------------------------------------------------------------------------
+# 1-hop expansion for long-form answers
+# ---------------------------------------------------------------------------
+#
+# ``expand_from_seeds`` answers "what is near this chunk within two hops?" for
+# retrieval.  A 15-mark answer needs a different question answered: "what is the
+# *hierarchy* around this evidence?" — the section a chunk belongs to plus the
+# reading-order neighbours that continue it.  One hop is deliberate: a seed's
+# own heading path already gives its parents, and two hops would drag whole
+# unrelated sections into the prompt (the failure mode ``MAX_HOPS`` exists to
+# bound).
+
+#: Hops the long-form expansion walks.
+GRAPH_EXPANSION_HOPS = 1
+
+#: Neighbours one call may return.  Bounded so one question cannot turn into a
+#: document dump; the prompt's own block cap is smaller still.
+GRAPH_EXPANSION_MAX_NEIGHBOURS = 6
+
+#: Relation preference when the same neighbour is reachable twice, and the
+#: deterministic tie-break order (nearest reading-order first).
+_RELATION_PRIORITY: dict[str, int] = {
+    RELATION_NEXT: 0,
+    RELATION_PREV: 1,
+    RELATION_SAME_PAGE: 2,
+    RELATION_SAME_SECTION: 3,
+}
+
+
+@dataclass(frozen=True)
+class ExpandedEvidence:
+    """One 1-hop neighbour of a retrieved seed, with its structural parent.
+
+    ``parent_heading`` is the heading *above* the chunk's own section
+    (``heading_path[-2]``), which is what lets a long-form answer say "this sits
+    under Calibration" without receiving the whole document.  It is ``None`` for
+    a top-level section or a legacy chunk with no heading path — never a guess.
+    """
+
+    chunk_id: str
+    content: str
+    document_id: str
+    document_name: str
+    page: int | None
+    heading_path: tuple[str, ...] | None
+    parent_heading: str | None
+    section: str | None
+    relation: str | None
+    hops: int
+    weight: float
+
+
+def parent_heading(heading_path: Sequence[str] | str | None) -> str | None:
+    """The heading above a chunk's own section, or ``None`` at the top level."""
+    path = _norm_path(heading_path)
+    if not path or len(path) < 2:
+        return None
+    return path[-2]
+
+
+def _seed_uuid(value: object) -> uuid.UUID | None:
+    """A real chunk id, or ``None`` for a non-UUID (e.g. ``structure:…``)."""
+    try:
+        return uuid.UUID(str(value))
+    except (ValueError, TypeError, AttributeError):
+        return None
+
+
+async def expand_evidence_via_graph(
+    db: AsyncSession,
+    user_id: str,
+    semantic_seeds: Sequence[object],
+    *,
+    max_hops: int = GRAPH_EXPANSION_HOPS,
+    max_neighbours: int = GRAPH_EXPANSION_MAX_NEIGHBOURS,
+) -> list[ExpandedEvidence]:
+    """Expand retrieval seeds one hop over the user's own document graph.
+
+    Used by the 15-mark answer path to feed hierarchical context (parent heading
+    + adjacent chunks) to the generator.  Guarantees:
+
+    * only ``document_chunks`` rows of ``user_id`` are returned — every hop is
+      joined to ``documents`` on the owner, so a forged seed reaches nothing;
+    * seeds are never returned as their own neighbours;
+    * at most ``max_neighbours`` entries, ordered deterministically
+      (``hops``, relation priority, chunk id), so the same question and graph
+      always produce the same prompt;
+    * invalid (non-UUID) seed ids are ignored rather than passed to a UUID
+      column.
+    """
+    seed_ids: list[str] = []
+    for seed in semantic_seeds:
+        parsed = _seed_uuid(seed)
+        if parsed is not None:
+            text = str(parsed)
+            if text not in seed_ids:
+                seed_ids.append(text)
+    if not seed_ids or max_neighbours <= 0:
+        return []
+
+    visited = await expand_from_seeds(
+        db,
+        user_id,
+        seed_ids,
+        max_hops=max(1, int(max_hops)),
+        max_nodes=len(seed_ids) + max_neighbours + 4,
+    )
+    neighbour_ids = [
+        chunk_id
+        for chunk_id, (hops, _relation, _weight) in visited.items()
+        if hops > 0 and chunk_id not in seed_ids
+    ]
+    if not neighbour_ids:
+        return []
+
+    details = await load_candidates(db, user_id, neighbour_ids)
+    expanded: list[ExpandedEvidence] = []
+    for chunk_id in neighbour_ids:
+        info = details.get(chunk_id)
+        if info is None:
+            # Not visible to this user, or deleted between the two queries.
+            continue
+        content = str(info.get("content") or "").strip()
+        if not content:
+            continue
+        hops, relation, weight = visited[chunk_id]
+        expanded.append(
+            ExpandedEvidence(
+                chunk_id=chunk_id,
+                content=content,
+                document_id=str(info.get("document_id") or ""),
+                document_name=str(info.get("document_name") or ""),
+                page=info.get("page"),
+                heading_path=info.get("heading_path"),
+                parent_heading=parent_heading(info.get("heading_path")),
+                section=info.get("section"),
+                relation=relation,
+                hops=int(hops),
+                weight=float(weight if weight is not None else DEFAULT_WEIGHT),
+            )
+        )
+
+    expanded.sort(
+        key=lambda item: (
+            item.hops,
+            _RELATION_PRIORITY.get(item.relation or "", len(_RELATION_PRIORITY)),
+            item.chunk_id,
+        )
+    )
+    return expanded[:max_neighbours]
 
 
 async def count_document_edges(db: AsyncSession, document_id) -> int:

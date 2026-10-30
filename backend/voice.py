@@ -1,4 +1,7 @@
-"""Voice Speech-to-Text — real local Whisper transcription.
+"""Voice speech-to-text (local Whisper) and text-to-speech (local Piper or gTTS).
+
+Speech-to-text
+--------------
 
 ``POST /api/voice/transcribe`` accepts an uploaded audio file and returns a
 transcription produced **only** by the locally provisioned Whisper model
@@ -31,7 +34,9 @@ import logging
 import os
 import tempfile
 import threading
+import wave
 from pathlib import Path
+from typing import Callable
 
 from fastapi import APIRouter, File, HTTPException, Response, UploadFile, status
 from pydantic import BaseModel, Field
@@ -181,13 +186,48 @@ def _transcribe_path(model, audio_path: str) -> tuple[str, str, float]:
     Consumes the segment generator (faster-whisper decodes lazily) and joins
     the real segment text.  Returns ``(text, language, duration)``.
     """
+    return _transcribe_path_with_partials(model, audio_path)
+
+
+def _transcribe_path_with_partials(
+    model,
+    audio_path: str,
+    on_partial: Callable[[str, int, str], None] | None = None,
+) -> tuple[str, str, float]:
+    """Consume the one local Whisper decode, optionally publishing snapshots.
+
+    faster-whisper accepts a complete audio source; it does not expose an
+    incremental microphone input API. Its segment iterator can yield decoded
+    segments while a longer utterance is being processed. This callback emits
+    cumulative snapshots from that *same* iterator; it does not run duplicate
+    inference. The final return value is assembled from exactly those same
+    segments and remains authoritative for the answer pipeline.
+
+    Short utterances may be represented by one Whisper segment, so they may
+    produce only one snapshot near the end of decoding. This is progress during
+    post-utterance decoding, not live transcription while the user is speaking.
+    """
     with _inference_lock:
         segments, info = model.transcribe(audio_path, beam_size=5, vad_filter=True)
-        text = "".join(segment.text for segment in segments)
+        language = str(getattr(info, "language", "") or "")
+        pieces: list[str] = []
+        segment_count = 0
+        for segment in segments:
+            pieces.append(segment.text)
+            segment_count += 1
+            if on_partial is not None:
+                snapshot = "".join(pieces).strip()
+                if snapshot:
+                    try:
+                        on_partial(snapshot, segment_count, language)
+                    except Exception:
+                        # A dropped UI progress event must never invalidate
+                        # the final locally decoded transcript.
+                        logger.debug("Voice partial transcript delivery failed", exc_info=True)
 
     return (
-        text.strip(),
-        str(getattr(info, "language", "") or ""),
+        "".join(pieces).strip(),
+        language,
         float(getattr(info, "duration", 0.0) or 0.0),
     )
 
@@ -270,8 +310,38 @@ async def transcribe(
 
 
 # ---------------------------------------------------------------------------
-# Voice Text-to-Speech (TTS) — gTTS synthesis
+# Voice Text-to-Speech (TTS) — local Piper voice (default) or gTTS
 # ---------------------------------------------------------------------------
+#
+# ``TTS_ENGINE`` selects the synthesizer **explicitly**:
+#
+# * ``local`` (default) — the provisioned Piper voice at
+#   ``models/tts/<TTS_VOICE>.onnx``, run through ONNX Runtime on the CPU.  No
+#   network, no VRAM, no system-level espeak-ng (the ``piper-tts`` wheels carry
+#   their own espeak-ng data).
+# * ``gtts`` — the previous behaviour: an HTTPS request to Google Translate,
+#   which sends the answer text off the machine.
+#
+# There is deliberately **no fallback between them**.  A missing local voice is
+# an honest ``503``, never a silent trip to the network: keeping the answer text
+# local is the entire point of the local engine.
+
+TTS_ENGINE_LOCAL = "local"
+TTS_ENGINE_GTTS = "gtts"
+
+_LOCAL_TTS_ENGINE_NAME = "piper-local"
+_GTTS_ENGINE_NAME = "gtts"
+
+#: ``slow=True`` has no direct Piper switch.  A longer phoneme duration is the
+#: honest equivalent (1.0 is the voice's natural rate).
+_TTS_SLOW_LENGTH_SCALE = 1.3
+
+#: Provisioned voices live beside the other local models, never in the repo.
+_DEFAULT_TTS_DIR = _BACKEND_DIR / "models" / "tts"
+
+
+class TTSEngineUnavailable(RuntimeError):
+    """The configured speech engine cannot produce audio.  Never faked."""
 
 
 class SynthesizeRequest(BaseModel):
@@ -297,7 +367,143 @@ def _is_valid_language(lang: str) -> bool:
         }
 
 
-def _synthesize_speech_bytes(text: str, language: str, slow: bool) -> bytes:
+def _configured_engine() -> str:
+    """The raw, normalised ``TTS_ENGINE`` value."""
+    return (settings.tts_engine or "").strip().lower()
+
+
+def tts_engine_name() -> str:
+    """The engine **actually configured**, for honest capability reporting.
+
+    Returns ``"piper-local"``, ``"gtts"`` or ``"unavailable"`` for an unknown
+    ``TTS_ENGINE`` value.  Nothing here probes or loads a model.
+    """
+    engine = _configured_engine()
+    if engine == TTS_ENGINE_LOCAL:
+        return _LOCAL_TTS_ENGINE_NAME
+    if engine == TTS_ENGINE_GTTS:
+        return _GTTS_ENGINE_NAME
+    return "unavailable"
+
+
+def tts_media_type() -> str:
+    """The container the configured engine returns (``audio/wav`` or MP3)."""
+    return "audio/wav" if tts_engine_name() == _LOCAL_TTS_ENGINE_NAME else "audio/mpeg"
+
+
+def tts_file_suffix(media_type: str | None = None) -> str:
+    return "wav" if (media_type or tts_media_type()) == "audio/wav" else "mp3"
+
+
+def tts_language() -> str:
+    """Language the provisioned voice speaks, from its name (``en_US-...``)."""
+    prefix = (settings.tts_voice or "").split("_")[0].split("-")[0]
+    return prefix.strip().lower() or "en"
+
+
+def tts_supports_language(language: str) -> bool:
+    """Whether the configured engine can speak ``language``.
+
+    gTTS keeps its own language table.  A local voice speaks exactly one
+    language, so ``en``, ``en-US`` and ``en_GB`` are accepted for an ``en_*``
+    voice and everything else is refused rather than spoken in the wrong
+    language.
+    """
+    if tts_engine_name() == _GTTS_ENGINE_NAME:
+        return _is_valid_language(language)
+    base = tts_language()
+    code = (language or "").strip().lower().replace("_", "-")
+    return bool(base) and (code == base or code.startswith(f"{base}-"))
+
+
+def local_tts_model_path() -> Path:
+    """Resolve the provisioned voice file (never from request input)."""
+    configured = (settings.tts_model_path or "").strip()
+    if configured:
+        return Path(configured)
+    return _DEFAULT_TTS_DIR / f"{settings.tts_voice}.onnx"
+
+
+# --- Process-level singleton (mirrors the Whisper loader above) -------------
+_local_voice = None
+_local_voice_loaded = False
+_local_voice_error: str | None = None
+_local_voice_lock = threading.Lock()
+
+#: Piper is not safe to invoke concurrently on one voice instance; synthesis is
+#: serialised the same way Whisper transcription is.
+_tts_lock = threading.Lock()
+
+
+def _load_local_voice():
+    """Construct (once) and return the shared ``PiperVoice``.
+
+    Raises :class:`TTSEngineUnavailable` with a server-side-only message when
+    the voice file is missing or cannot be loaded.  The error is cached so
+    repeated requests fail fast instead of retrying a broken load.
+    """
+    global _local_voice, _local_voice_loaded, _local_voice_error
+
+    if _local_voice_loaded:
+        if _local_voice_error:
+            raise TTSEngineUnavailable(_local_voice_error)
+        return _local_voice
+
+    with _local_voice_lock:
+        # Re-check inside the lock — another thread may have loaded it.
+        if _local_voice_loaded:
+            if _local_voice_error:
+                raise TTSEngineUnavailable(_local_voice_error)
+            return _local_voice
+
+        model_path = local_tts_model_path()
+        if not model_path.is_file():
+            _local_voice_loaded = True
+            _local_voice_error = (
+                f"Local TTS voice not found at '{model_path}'. The provisioned "
+                f"Piper voice must be present locally."
+            )
+            raise TTSEngineUnavailable(_local_voice_error)
+
+        try:
+            # Imported lazily: piper pulls in onnxruntime, which is slow to
+            # import and only needed once speech is actually requested.
+            from piper import PiperVoice
+
+            _local_voice = PiperVoice.load(str(model_path), use_cuda=False)
+            _local_voice_loaded = True
+        except Exception as exc:
+            _local_voice_loaded = True
+            _local_voice_error = f"Failed to load the local TTS voice: {exc}"
+            raise TTSEngineUnavailable(_local_voice_error) from exc
+
+    return _local_voice
+
+
+def _tts_synthesis_config(slow: bool):
+    """Piper synthesis settings; ``slow`` becomes a longer phoneme duration."""
+    from piper import SynthesisConfig
+
+    return SynthesisConfig(length_scale=_TTS_SLOW_LENGTH_SCALE if slow else 1.0)
+
+
+def _synthesize_local_speech_bytes(text: str, slow: bool) -> bytes:
+    """Synthesize with the provisioned local voice and return WAV bytes."""
+    voice = _load_local_voice()
+    config = _tts_synthesis_config(slow)
+
+    buffer = io.BytesIO()
+    with _tts_lock:
+        with wave.open(buffer, "wb") as wav_file:
+            voice.synthesize_wav(text, wav_file, syn_config=config)
+
+    audio = buffer.getvalue()
+    if not audio:
+        raise TTSEngineUnavailable("The local TTS voice produced no audio.")
+    return audio
+
+
+def _synthesize_gtts_bytes(text: str, language: str, slow: bool) -> bytes:
     """Generate speech audio using gTTS and return raw MP3 bytes.
 
     Executed in a worker thread via ``run_in_threadpool`` because gTTS makes a
@@ -311,22 +517,40 @@ def _synthesize_speech_bytes(text: str, language: str, slow: bool) -> bytes:
     return buffer.getvalue()
 
 
+def _synthesize_speech_bytes(text: str, language: str, slow: bool) -> bytes:
+    """Synthesize with the configured engine, or raise ``TTSEngineUnavailable``.
+
+    The only dispatch point: no engine silently stands in for another one.
+    """
+    engine = tts_engine_name()
+    if engine == _LOCAL_TTS_ENGINE_NAME:
+        return _synthesize_local_speech_bytes(text, slow)
+    if engine == _GTTS_ENGINE_NAME:
+        return _synthesize_gtts_bytes(text, language, slow)
+    raise TTSEngineUnavailable(f"Unknown TTS_ENGINE {_configured_engine()!r}")
+
+
 @router.post("/synthesize")
 async def synthesize(
     body: SynthesizeRequest,
     current_user: CurrentUser,
 ) -> Response:
-    """Synthesize text into speech audio using gTTS.
+    """Synthesize text into speech with the configured engine.
 
-    Returns raw MP3 audio bytes with ``Content-Type: audio/mpeg`` and
-    ``Content-Disposition: inline; filename="speech.mp3"``.
+    ``TTS_ENGINE=local`` (default) returns WAV audio from the provisioned Piper
+    voice with ``Content-Type: audio/wav``; ``TTS_ENGINE=gtts`` keeps the
+    previous MP3 contract (``audio/mpeg``).  The media type and filename always
+    describe the engine that actually ran.
 
     Security and reliability constraints:
     - Requires authenticated user via ``CurrentUser``.
     - Input text is bounded to 1..2000 characters and cannot be whitespace-only.
     - Audio is generated entirely in memory (zero persistent or temporary files).
-    - Upstream Google Translate network/API failures return an honest HTTP 503
-      without leaking internal URLs, tracebacks, or credentials.
+    - An unavailable engine (missing local voice, unknown ``TTS_ENGINE``) is an
+      honest HTTP 503 — never a silent fallback to the network, and never a
+      fabricated audio response.
+    - Upstream gTTS network/API failures return 503 without leaking internal
+      URLs, tracebacks, or credentials.
     """
     # --- 1. Reject empty or whitespace-only text ---
     clean_text = body.text.strip()
@@ -343,12 +567,22 @@ async def synthesize(
             detail="Text exceeds maximum length of 2000 characters",
         )
 
-    # --- 3. Validate language code ---
+    # --- 3. Validate language code against the *configured* engine ---
     clean_lang = body.language.strip().lower()
-    if not _is_valid_language(clean_lang):
+    if not tts_supports_language(clean_lang):
+        if tts_engine_name() == _LOCAL_TTS_ENGINE_NAME:
+            # A local voice speaks one language; saying anything else is a
+            # refusal, not an attempt in the wrong language.
+            detail = (
+                f"Unsupported language code: {body.language}. The local speech "
+                f"voice speaks '{tts_language()}'; set TTS_ENGINE=gtts for other "
+                "languages."
+            )
+        else:
+            detail = f"Unsupported language code: {body.language}"
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"Unsupported language code: {body.language}",
+            detail=detail,
         )
 
     # --- 4. Synthesize speech in threadpool ---
@@ -358,6 +592,14 @@ async def synthesize(
         )
     except HTTPException:
         raise
+    except TTSEngineUnavailable:
+        # Missing voice file, failed load, unknown engine: report it, never
+        # substitute another engine (and never send an empty 200).
+        logger.exception("Voice TTS engine unavailable")
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Text-to-speech engine is unavailable",
+        )
     except ValueError as exc:
         logger.warning("gTTS validation error: %s", exc)
         raise HTTPException(
@@ -386,15 +628,18 @@ async def synthesize(
         )
 
     if not audio_bytes:
-        logger.error("gTTS returned empty audio bytes")
+        logger.error("The speech engine returned empty audio bytes")
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
             detail="Voice synthesis service returned empty audio",
         )
 
+    media_type = tts_media_type()
     return Response(
         content=audio_bytes,
-        media_type="audio/mpeg",
-        headers={"Content-Disposition": 'inline; filename="speech.mp3"'},
+        media_type=media_type,
+        headers={
+            "Content-Disposition": f'inline; filename="speech.{tts_file_suffix(media_type)}"'
+        },
     )
 

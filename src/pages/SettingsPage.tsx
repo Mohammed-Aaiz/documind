@@ -42,21 +42,21 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({ onNavigate }) => {
           <div>
             <div className="flex items-center gap-3 mb-1">
               <h2 className="font-bold text-on-surface tracking-tight" style={{ fontFamily: 'Geist', fontSize: 'clamp(28px, 4vw, 56px)', lineHeight: 1.1, letterSpacing: '-0.04em' }}>
-                System Settings
+                Account & preferences
               </h2>
               <span className="px-2.5 py-0.5 rounded-full bg-cyber-cyan/20 border border-cyber-cyan/40 text-cyber-cyan font-mono text-[10px] font-bold">
-                NODE CONFIG
+                SETTINGS
               </span>
             </div>
             <p className="text-on-surface-variant max-w-2xl" style={{ fontFamily: 'Inter', fontSize: '16px', lineHeight: 1.6 }}>
-              Configure your neural link preferences, security protocols, and visual environment for DocuMind.
+              Manage your account and saved processing preferences.
             </p>
           </div>
 
           <div className="hidden lg:flex items-center gap-4">
             <span className="flex items-center gap-2 text-cyber-cyan bg-cyber-cyan/10 px-4 py-2 rounded-full border border-cyber-cyan/20 shadow-[0_0_15px_rgba(6,182,212,0.15)]" style={{ fontFamily: 'JetBrains Mono', fontSize: '12px' }}>
               <span className="w-2 h-2 rounded-full bg-cyber-cyan animate-pulse" />
-              Secure Connection Active
+              Signed in
             </span>
           </div>
         </header>

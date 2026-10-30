@@ -17,6 +17,7 @@ database.  All of it is optional; legacy rows yield ``None``.
 """
 
 import json
+import logging
 import math
 import os
 import re
@@ -24,6 +25,8 @@ from dataclasses import dataclass, replace
 from typing import Mapping, Sequence
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.exc import DBAPIError
+from starlette.concurrency import run_in_threadpool
 
 from embeddings.model import embed_query
 from graph.service import (
@@ -54,13 +57,24 @@ from chat.qa_model import (
 RETRIEVAL_SEMANTIC = "semantic"
 """Found by the existing pgvector path only."""
 
+RETRIEVAL_LEXICAL = "lexical"
+"""Found only by PostgreSQL full-text search; no cosine score is available."""
+
 RETRIEVAL_STRUCTURAL = "structural"
 """Found only by heading/section seeding + document-graph traversal."""
 
 RETRIEVAL_HYBRID = "hybrid"
-"""Found independently by both paths."""
+"""Found independently by more than one retrieval path."""
+RETRIEVAL_KNOWLEDGE_GRAPH = "knowledge_graph"
+"""Reached through owner-scoped entity/relation triples with source evidence."""
 
-RETRIEVAL_PATHS = (RETRIEVAL_SEMANTIC, RETRIEVAL_STRUCTURAL, RETRIEVAL_HYBRID)
+RETRIEVAL_PATHS = (
+    RETRIEVAL_SEMANTIC,
+    RETRIEVAL_LEXICAL,
+    RETRIEVAL_STRUCTURAL,
+    RETRIEVAL_HYBRID,
+    RETRIEVAL_KNOWLEDGE_GRAPH,
+)
 
 
 @dataclass
@@ -89,7 +103,7 @@ class SourceChunk:
 
     # --- Dual-path provenance (additive; defaults keep legacy callers working) ---
     retrieval_path: str = RETRIEVAL_SEMANTIC
-    """Which path produced this chunk: ``"semantic"``, ``"structural"`` or
+    """Which retrieval path produced this chunk, including ``"knowledge_graph"``.
     ``"hybrid"``.  A chunk found by both paths is ``"hybrid"``."""
 
     fusion_score: float | None = None
@@ -122,6 +136,19 @@ class SourceChunk:
 
     header_repeated: bool | None = None
     """Whether ``content`` embeds the table's header row above the row itself."""
+
+    # --- Entity-relation GraphRAG provenance ---
+    knowledge_graph_path: str | None = None
+    knowledge_graph_hops: int | None = None
+    knowledge_graph_predicate: str | None = None
+    knowledge_graph_quote: str | None = None
+    spatial_regions: list[dict] | None = None
+    # Request-time section expansion metadata; no persisted schema is implied.
+    topic_context_id: str | None = None
+    topic_context_complete: bool | None = None
+    topic_context_kind: str | None = None
+    # Request-time neural rank; cosine score remains a separate measurement.
+    rerank_position: int | None = None
 
 
 def coerce_heading_path(value: object) -> tuple[str, ...] | None:
@@ -165,10 +192,19 @@ async def retrieve_chunks(
     user_id: str,
     query: str,
     top_k: int = 5,
+    *, iterative_scan: bool = False,
 ) -> list[SourceChunk]:
     """Retrieve the most relevant chunks from the user's documents."""
-    query_embedding = embed_query(query)
+    # CPU embedding must not block voice frames, status requests or cancellation
+    # on the event loop while retrieval is running.
+    query_embedding = await run_in_threadpool(embed_query, query)
     emb_str = str(query_embedding)
+    if iterative_scan:
+        # Transaction-local pgvector 0.8+ controls let an ANN scan continue when
+        # authenticated ownership filtering removes its first candidates.
+        # The planner may still choose exact search for a small owner's corpus.
+        await db.execute(text("SELECT set_config('hnsw.iterative_scan', 'strict_order', true), "
+                              "set_config('hnsw.ef_search', '100', true)"))
 
     # All dynamic values use SQLAlchemy parameter binding — no f-string
     # interpolation of user-controlled input.
@@ -222,6 +258,76 @@ async def retrieve_chunks(
         )
         for row in rows
     ]
+
+
+def fuse_search_candidates(
+    dense: Sequence[SourceChunk], lexical: Sequence[SourceChunk], *, top_k: int = 5,
+) -> list[SourceChunk]:
+    """RRF ranks independent search streams without comparing unlike scores.
+
+    Dense cosine stays in ``score``. A lexical-only hit has no measured cosine,
+    so its score is zero. ``fusion_score`` is a ranking signal, never confidence.
+    """
+    by_id: dict[str, SourceChunk] = {}
+    ranks: dict[str, float] = {}
+    streams: dict[str, set[int]] = {}
+    for stream_index, candidates in enumerate((dense, lexical)):
+        seen: set[str] = set()
+        for rank, candidate in enumerate(candidates, 1):
+            key = str(candidate.chunk_id)
+            if key in seen:
+                continue
+            seen.add(key)
+            by_id.setdefault(key, candidate)
+            ranks[key] = ranks.get(key, 0.0) + 1.0 / (60 + rank)
+            streams.setdefault(key, set()).add(stream_index)
+    ordered = sorted(ranks, key=lambda key: (-ranks[key], key))
+    return [replace(by_id[key], fusion_score=ranks[key],
+                    score=by_id[key].score if 0 in streams[key] else 0.0,
+                    retrieval_path=RETRIEVAL_HYBRID if len(streams[key]) > 1 else
+                    RETRIEVAL_SEMANTIC if 0 in streams[key] else RETRIEVAL_LEXICAL)
+            for key in ordered[:max(1, min(int(top_k), 40))]]
+
+
+async def retrieve_hybrid_chunks(
+    db: AsyncSession, user_id: str, query: str, top_k: int = 5, *, candidate_limit: int | None = None,
+) -> list[SourceChunk]:
+    """Bounded dense + PostgreSQL full-text retrieval for the product path.
+
+    FTS currently evaluates an expression over owner-filtered chunks; a matching
+    GIN expression index is a separate migration before large-corpus deployment.
+    This is PostgreSQL text ranking, not BM25 or a neural reranker.
+    """
+    limit = max(1, min(int(top_k), 20))
+    output_limit = min(32, max(limit, int(candidate_limit))) if candidate_limit is not None else limit
+    candidate_k = min(40, max(20, limit * 3, output_limit))
+    dense = await retrieve_chunks(db, user_id, query, top_k=candidate_k, iterative_scan=True)
+    try:
+        # A failure leaves the surrounding answering transaction usable.
+        async with db.begin_nested():
+            result = await db.execute(text("""
+                SELECT dc.id AS chunk_id, dc.content, dc.document_id,
+                       d.name AS document_name, dc.page, dc.heading_path,
+                       dc.section, dc.element_type, dc.token_count, dc.chunker_version
+                FROM document_chunks dc JOIN documents d ON d.id = dc.document_id
+                CROSS JOIN (SELECT websearch_to_tsquery('english', :query) AS terms) search_query
+                WHERE d.user_id = :user_id AND d.embedding_status = 'ready'
+                  AND to_tsvector('english', dc.content) @@ search_query.terms
+                ORDER BY ts_rank_cd(to_tsvector('english', dc.content), search_query.terms) DESC, dc.id
+                LIMIT :candidate_k
+            """), {"query": query, "user_id": user_id, "candidate_k": candidate_k})
+            rows = result.fetchall()
+    except DBAPIError:
+        logging.getLogger(__name__).warning("Full-text retrieval unavailable; retaining dense results")
+        return dense[:output_limit]
+    lexical = [SourceChunk(
+        chunk_id=str(row.chunk_id), content=row.content, score=0.0,
+        document_id=str(row.document_id), document_name=row.document_name, page=row.page,
+        heading_path=coerce_heading_path(row.heading_path), section=row.section,
+        element_type=row.element_type, token_count=row.token_count,
+        chunker_version=row.chunker_version, retrieval_path=RETRIEVAL_LEXICAL,
+    ) for row in rows]
+    return fuse_search_candidates(dense, lexical, top_k=output_limit)
 
 
 def build_context(chunks: list[SourceChunk], max_chars: int = 4000) -> str:
@@ -1121,7 +1227,9 @@ def fuse_dual_path(
         if sem is not None and struct is not None:
             path = RETRIEVAL_HYBRID
         elif sem is not None:
-            path = RETRIEVAL_SEMANTIC
+            # Product callers may supply a dense/lexical fused candidate pool.
+            # Do not relabel a lexical-only hit as a measured semantic match.
+            path = sem.retrieval_path
         else:
             path = RETRIEVAL_STRUCTURAL
 

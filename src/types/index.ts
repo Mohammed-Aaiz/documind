@@ -1,4 +1,6 @@
 export type Page = 'login' | 'workspace' | 'verification' | 'reliability' | 'settings';
+export type WorkspaceMode = 'student' | 'research';
+export type WorkspaceTask = 'answer' | 'explain' | 'revision' | 'practice' | 'synthesis' | 'comparison' | 'critique' | 'gaps';
 
 /**
  * Backend document status as represented in the UI.
@@ -59,6 +61,14 @@ export interface ChatSource {
   headingPath?: string[] | null;
   /** Nearest ancestor heading text. */
   section?: string | null;
+  /** Entity-relation knowledge graph traversal trail, when the backend used it. */
+  knowledgeGraphPath?: string | null;
+  /** Traversal edge count in the entity-relation graph. */
+  knowledgeGraphHops?: number | null;
+  /** Relation predicate supporting this graph path. */
+  knowledgeGraphPredicate?: string | null;
+  /** Exact source quote used to support the relation. */
+  knowledgeGraphQuote?: string | null;
 }
 
 export interface ChatMessage {
@@ -80,8 +90,22 @@ export interface ChatMessage {
    * states the count instead of presenting them as support.
    */
   omittedSourceCount?: number;
-  /** Which engine produced this answer, when the backend reports it. */
-  engine?: 'generative' | 'extractive';
+  /**
+   * Which engine produced this answer, when the backend reports it.
+   *
+   * `instruct` is the conversation path's instruction-following model;
+   * `deterministic-table` / `deterministic-list` mean the backend read the
+   * answer directly from a table cell or list item instead of generating it.
+   * All values come from the server — the UI never infers one.
+   */
+  engine?:
+    | 'generative'
+    | 'extractive'
+    | 'instruct'
+    | 'ollama'
+    | 'groq'
+    | 'deterministic-table'
+    | 'deterministic-list';
   /** Requested academic answer format (marks). */
   marks?: number;
   /**
@@ -103,6 +127,9 @@ export interface ChatMessage {
   };
   /** Honest warnings from the backend (unsupported claims, withheld answer). */
   warnings?: string[];
+  model?: string;
+  latencyMs?: number;
+  streaming?: boolean;
 }
 
 /**
@@ -178,15 +205,15 @@ export interface ReliabilityQueryData {
   insufficientContext: boolean;
   sources: ReliabilitySourceRef[];
   /** Real path counts computed by the backend — never estimated in the UI. */
-  semanticSourceCount: number;
-  structuralSourceCount: number;
+  semanticSourceCount?: number;
+  structuralSourceCount?: number;
   /** Of the structural sources, how many are element-level (`structure_element`). */
-  structuralElementSourceCount: number;
+  structuralElementSourceCount?: number;
   /** Of the structural sources, how many are compact table rows (`table_row`). */
-  tableRowSourceCount: number;
-  hybridSourceCount: number;
-  structuralHopMax: number;
-  pathAgreement: boolean;
+  tableRowSourceCount?: number;
+  hybridSourceCount?: number;
+  structuralHopMax?: number;
+  pathAgreement?: boolean;
   /**
    * Generative-path metadata for this query. Absent/null means the extractive
    * baseline produced the answer — never that verification passed.
@@ -224,6 +251,7 @@ export interface ChatSession {
   id: string;
   createdAt: string;
   preview: string;
+  workspace?: WorkspaceMode;
 }
 
 export interface PersistedMessage {

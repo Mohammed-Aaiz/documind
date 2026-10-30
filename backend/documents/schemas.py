@@ -1,7 +1,7 @@
 """Document request/response Pydantic schemas."""
 
 from datetime import datetime
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class DocumentOut(BaseModel):
@@ -86,6 +86,48 @@ class DocumentGraphInsights(BaseModel):
     coverage: float
 
 
+class DocumentOcrPageInsights(BaseModel):
+    """One page whose text came from the OCR fallback.
+
+    ``ocrConfidence`` is the mean confidence of the recognised lines the engine
+    kept — a reading, not a probability that the page is understood.
+    ``ocrRotation`` is the rotation the page had to be read at (0/90/180/270).
+    """
+
+    pageNumber: int
+    textChars: int
+    ocrEngine: str | None
+    ocrEngineVersion: str | None
+    ocrConfidence: float | None
+    ocrRotation: int | None
+    ocrSeconds: float | None
+
+
+class DocumentUnaccountedPageInsights(BaseModel):
+    """One page that produced no usable text, and the reason recorded for it."""
+
+    pageNumber: int
+    failureReason: str | None
+
+
+class DocumentPageExtractionInsights(BaseModel):
+    """Per-page extraction provenance for the last processing run.
+
+    ``recorded`` is ``False`` for a format without pages (DOCX/TXT) and for a
+    document processed before this provenance was persisted — the counts are
+    then all zero and must not be read as "this document has no pages".
+    """
+
+    recorded: bool
+    pagesTotal: int
+    nativePageCount: int
+    ocrPageCount: int
+    unaccountedPageCount: int
+    ocrPages: list[DocumentOcrPageInsights]
+    unaccountedPages: list[DocumentUnaccountedPageInsights]
+    spatialLayouts: list[dict] = Field(default_factory=list)
+
+
 class DocumentProvenanceInsights(BaseModel):
     """Which pipeline components produced this document's data."""
 
@@ -113,4 +155,5 @@ class DocumentInsightsResponse(BaseModel):
     structure: DocumentStructureInsights
     embedding: DocumentEmbeddingInsights
     graph: DocumentGraphInsights
+    pages: DocumentPageExtractionInsights
     provenance: DocumentProvenanceInsights

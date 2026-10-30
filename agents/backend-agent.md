@@ -1,5 +1,12 @@
 # BACKEND_AGENT
 
+> **2026-10-27 scoped update:** previously unassigned `backend/conversation/**`,
+> `backend/session/**`, `backend/voice.py`, `backend/voice_vad.py` and
+> `backend/voice_webrtc.py` belong to this role. Provider configuration is authorized
+> by `backend/architecture/DOCUMIND_WORKSPACE_REBUILD_2026-10-27.md`; provider and
+> orchestration implementation remains AI_AGENT-owned. Older installed/not-installed
+> descriptions below require inspection; they are not current environment evidence.
+
 ## Role
 
 FastAPI HTTP surface, request/response logic, application services,

@@ -5,6 +5,7 @@ import { AuthProvider } from './context/AuthContext';
 import { WorkspaceProvider } from './context/WorkspaceContext';
 import { SettingsProvider } from './context/SettingsContext';
 import './index.css';
+import './features/workspace/workspace.css';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>

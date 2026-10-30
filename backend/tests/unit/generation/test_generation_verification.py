@@ -41,6 +41,33 @@ class TestAttribution:
         assert check.supported is False
         assert "value absent" in check.reason
 
+    def test_a_bare_number_matches_when_the_evidence_ends_the_sentence_with_it(self):
+        # The token regex allows "." inside a token, so "... in 1859." tokenised
+        # as "1859." while the answer was "1859".  The claim then scored 0.0 and
+        # the correct one-word answer was withheld (measured 2026-10-24).
+        blocks = [
+            EvidenceBlock(
+                index=1,
+                content="Charles Darwin published On the Origin of Species in 1859.",
+                document_name="darwin_proper.pdf",
+                page=1,
+            )
+        ]
+        check = check_claim("1859", blocks)
+        assert check.supported is True
+        assert check.support_ratio == 1.0
+
+    def test_a_number_absent_from_the_evidence_is_still_unsupported(self):
+        blocks = [
+            EvidenceBlock(
+                index=1,
+                content="Charles Darwin published On the Origin of Species in 1859.",
+                document_name="darwin_proper.pdf",
+                page=1,
+            )
+        ]
+        assert check_claim("1873", blocks).supported is False
+
     def test_wrong_model_citation_is_reported(self):
         check = check_claim("The power rail operates at 12 volts [2].", BLOCKS)
         assert check.supported is False

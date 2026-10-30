@@ -1,0 +1,222 @@
+{
+  "mode": "offline-embedding-comparison",
+  "models": {
+    "minilm": {
+      "status": "measured",
+      "source": "sentence-transformers/all-MiniLM-L6-v2",
+      "dimensions": 384,
+      "max_seq_length": 256,
+      "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+      "normalized": true,
+      "similarity": "cosine",
+      "model_load_ms": 194.59180000012566,
+      "corpus_encode_ms": 1386.9049999998424,
+      "summary": {
+        "recall": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0,
+        "queries": 6,
+        "answerable_queries": 5,
+        "answers_by_marks": {},
+        "retrieval_p50_ms": 12.06369999999879,
+        "retrieval_p95_ms": 16.228200000114157,
+        "latency_note": "nearest-rank percentiles; small smoke datasets are not production latency evidence"
+      },
+      "rows": [
+        {
+          "id": "kinetic-definition",
+          "retrieved_ids": [
+            "energy",
+            "momentum",
+            "photosynthesis",
+            "graphs",
+            "retrieval"
+          ],
+          "retrieval_ms": 10.7757999999194,
+          "recall": 1.0,
+          "mrr": 1.0,
+          "ndcg": 1.0
+        },
+        {
+          "id": "collision-comparison",
+          "retrieved_ids": [
+            "momentum",
+            "energy",
+            "photosynthesis",
+            "retrieval",
+            "graphs"
+          ],
+          "retrieval_ms": 11.908200000107172,
+          "recall": 1.0,
+          "mrr": 1.0,
+          "ndcg": 1.0
+        },
+        {
+          "id": "plant-energy",
+          "retrieved_ids": [
+            "photosynthesis",
+            "energy",
+            "graphs",
+            "retrieval",
+            "indexes"
+          ],
+          "retrieval_ms": 13.060100000075181,
+          "recall": 1.0,
+          "mrr": 1.0,
+          "ndcg": 1.0
+        },
+        {
+          "id": "index-tradeoff",
+          "retrieved_ids": [
+            "indexes",
+            "retrieval",
+            "graphs",
+            "photosynthesis",
+            "energy"
+          ],
+          "retrieval_ms": 16.228200000114157,
+          "recall": 1.0,
+          "mrr": 1.0,
+          "ndcg": 1.0
+        },
+        {
+          "id": "rag-relation",
+          "retrieved_ids": [
+            "retrieval",
+            "graphs",
+            "indexes",
+            "photosynthesis",
+            "momentum"
+          ],
+          "retrieval_ms": 15.639399999599846,
+          "recall": 1.0,
+          "mrr": 1.0,
+          "ndcg": 1.0
+        },
+        {
+          "id": "unsupported-salary",
+          "retrieved_ids": [
+            "energy",
+            "photosynthesis",
+            "graphs",
+            "momentum",
+            "indexes"
+          ],
+          "retrieval_ms": 12.06369999999879
+        }
+      ]
+    },
+    "bge": {
+      "status": "measured",
+      "source": "embeddings/assets/bge-small-en-v1.5",
+      "dimensions": 384,
+      "max_seq_length": 512,
+      "revision": null,
+      "normalized": true,
+      "similarity": "cosine",
+      "model_load_ms": 305.18019999999524,
+      "corpus_encode_ms": 138.59279999996943,
+      "summary": {
+        "recall": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0,
+        "queries": 6,
+        "answerable_queries": 5,
+        "answers_by_marks": {},
+        "retrieval_p50_ms": 19.809999999779393,
+        "retrieval_p95_ms": 22.688499999730993,
+        "latency_note": "nearest-rank percentiles; small smoke datasets are not production latency evidence"
+      },
+      "rows": [
+        {
+          "id": "kinetic-definition",
+          "retrieved_ids": [
+            "energy",
+            "momentum",
+            "photosynthesis",
+            "retrieval",
+            "indexes"
+          ],
+          "retrieval_ms": 18.567999999959284,
+          "recall": 1.0,
+          "mrr": 1.0,
+          "ndcg": 1.0
+        },
+        {
+          "id": "collision-comparison",
+          "retrieved_ids": [
+            "momentum",
+            "energy",
+            "retrieval",
+            "photosynthesis",
+            "graphs"
+          ],
+          "retrieval_ms": 22.688499999730993,
+          "recall": 1.0,
+          "mrr": 1.0,
+          "ndcg": 1.0
+        },
+        {
+          "id": "plant-energy",
+          "retrieved_ids": [
+            "photosynthesis",
+            "energy",
+            "momentum",
+            "graphs",
+            "retrieval"
+          ],
+          "retrieval_ms": 22.54880000009507,
+          "recall": 1.0,
+          "mrr": 1.0,
+          "ndcg": 1.0
+        },
+        {
+          "id": "index-tradeoff",
+          "retrieved_ids": [
+            "indexes",
+            "retrieval",
+            "graphs",
+            "photosynthesis",
+            "momentum"
+          ],
+          "retrieval_ms": 16.861900000094465,
+          "recall": 1.0,
+          "mrr": 1.0,
+          "ndcg": 1.0
+        },
+        {
+          "id": "rag-relation",
+          "retrieved_ids": [
+            "graphs",
+            "retrieval",
+            "indexes",
+            "photosynthesis",
+            "momentum"
+          ],
+          "retrieval_ms": 19.94269999977405,
+          "recall": 1.0,
+          "mrr": 1.0,
+          "ndcg": 1.0
+        },
+        {
+          "id": "unsupported-salary",
+          "retrieved_ids": [
+            "graphs",
+            "indexes",
+            "retrieval",
+            "momentum",
+            "energy"
+          ],
+          "retrieval_ms": 19.809999999779393
+        }
+      ]
+    }
+  },
+  "limitations": "Synthetic smoke data unless replaced; no production embedding switch, reranker or generation is measured here.",
+  "dataset": "C:\\Users\\moham\\OneDrive\\Desktop\\stitch_documind_futuristic_3d_ui\\backend\\evaluation\\datasets\\student_rag_v1.json",
+  "dataset_sha256": "2dbdf421c87fe511d64095b9447e15fc68e49bb0cfad95c948278f08523856e7",
+  "dataset_version": "student-rag-smoke-v1-2026-10-29",
+  "runner_sha256": "b306fbdbadc45f2d62a87aef2af45f60025f4f5810280f34e3e21739617267df",
+  "observed_at": "2026-10-29T18:26:34.519779+00:00",
+  "k": 5
+}

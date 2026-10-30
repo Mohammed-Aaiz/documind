@@ -7,6 +7,8 @@
  * - Throws on non-OK responses so callers can handle errors.
  */
 
+import type { WorkspaceMode, WorkspaceTask } from '../types';
+
 const API_BASE = (import.meta.env.VITE_API_BASE_URL ?? '').replace(/\/+$/, '');
 
 // ---------------------------------------------------------------------------
@@ -51,14 +53,14 @@ async function apiFetch<T>(
     headers,
   });
 
-  const body = await res.json();
+  const body = res.status === 204 ? null : await res.json().catch(() => null);
 
   if (!res.ok) {
     // Backend returns { detail: string } on errors
     const message =
       typeof body?.detail === 'string'
         ? body.detail
-        : `Request failed (${res.status})`;
+        : typeof body?.detail?.message === 'string' ? body.detail.message : `Request failed (${res.status})`;
     throw new ApiError(message, res.status);
   }
 
@@ -115,6 +117,12 @@ export async function apiLogin(
 export async function apiLogout(): Promise<void> {
   await apiFetch<{ message: string }>('/api/auth/logout', {
     method: 'POST',
+  });
+}
+
+export async function apiRegister(name: string, email: string, password: string): Promise<LoginResponse> {
+  return apiFetch<LoginResponse>('/api/auth/register', {
+    method: 'POST', body: JSON.stringify({ name, email, password }),
   });
 }
 
@@ -192,6 +200,24 @@ export async function apiGetDocument(id: string): Promise<ApiDocumentDetail> {
   return apiFetch<ApiDocumentDetail>(`/api/documents/${id}`);
 }
 
+export type ApiKnowledgeGraphStatus = 'pending' | 'ready' | 'partial' | 'unavailable';
+
+export interface ApiKnowledgeGraphRebuild {
+  documentId: string;
+  status: ApiKnowledgeGraphStatus;
+  relationCount: number;
+}
+
+/** Build or refresh factual entity relations for one owned, searchable document. */
+export async function apiRebuildDocumentKnowledgeGraph(
+  documentId: string,
+): Promise<ApiKnowledgeGraphRebuild> {
+  return apiFetch<ApiKnowledgeGraphRebuild>(
+    `/api/documents/${encodeURIComponent(documentId)}/knowledge-graph/rebuild`,
+    { method: 'POST' },
+  );
+}
+
 export async function apiDeleteDocument(id: string): Promise<void> {
   await apiFetch<{ message: string }>(`/api/documents/${id}`, {
     method: 'DELETE',
@@ -236,6 +262,39 @@ export interface ApiDocumentGraphInsights {
   coverage: number;
 }
 
+export interface ApiDocumentOcrPage {
+  pageNumber: number;
+  textChars: number;
+  ocrEngine: string | null;
+  ocrEngineVersion: string | null;
+  /** Mean confidence of the recognised lines — not a probability of correctness. */
+  ocrConfidence: number | null;
+  /** Rotation the page had to be read at: 0, 90, 180 or 270. */
+  ocrRotation: number | null;
+  ocrSeconds: number | null;
+}
+
+export interface ApiDocumentUnaccountedPage {
+  pageNumber: number;
+  /** Fixed vocabulary from the backend: `no_text_layer`, `ocr_disabled`, … */
+  failureReason: string | null;
+}
+
+export interface ApiDocumentPageExtractionInsights {
+  /**
+   * False for a format without pages (DOCX/TXT) and for a document processed
+   * before per-page provenance was stored. The counts are then all zero and
+   * must not be read as "this document has no pages".
+   */
+  recorded: boolean;
+  pagesTotal: number;
+  nativePageCount: number;
+  ocrPageCount: number;
+  unaccountedPageCount: number;
+  ocrPages: ApiDocumentOcrPage[];
+  unaccountedPages: ApiDocumentUnaccountedPage[];
+}
+
 export interface ApiDocumentProvenanceInsights {
   parserVersion: string | null;
   chunkerVersion: string | null;
@@ -254,6 +313,8 @@ export interface ApiDocumentInsights {
   structure: ApiDocumentStructureInsights;
   embedding: ApiDocumentEmbeddingInsights;
   graph: ApiDocumentGraphInsights;
+  /** Absent on servers that predate per-page extraction provenance. */
+  pages?: ApiDocumentPageExtractionInsights;
   provenance: ApiDocumentProvenanceInsights;
 }
 
@@ -292,6 +353,11 @@ export interface ApiSource {
   headingPath?: string[] | null;
   /** Nearest ancestor heading text. */
   section?: string | null;
+  /** Owner-scoped entity-relation trail; independent from structural retrieval. */
+  knowledgeGraphPath?: string | null;
+  knowledgeGraphHops?: number | null;
+  knowledgeGraphPredicate?: string | null;
+  knowledgeGraphQuote?: string | null;
 }
 
 export interface ApiReliabilityEvidence {
@@ -592,22 +658,25 @@ export interface ApiSession {
   id: string;
   createdAt: string;
   preview: string;
+  workspace?: WorkspaceMode;
+  title?: string;
 }
 
 export interface ApiSessionList {
   sessions: ApiSession[];
 }
 
-export async function apiListSessions(): Promise<ApiSession[]> {
-  const res = await apiFetch<ApiSessionList>('/api/chat/sessions');
-  return res.sessions;
+export async function apiListSessions(workspace: WorkspaceMode = 'student'): Promise<ApiSession[]> {
+  const res = await apiFetch<ApiSessionList>(`/api/chat/sessions?workspace=${workspace}`);
+  return res.sessions.map((session) => ({ ...session, preview: session.preview ?? session.title ?? '', workspace: session.workspace ?? 'student' }));
 }
 
-export async function apiCreateSession(): Promise<ApiSession> {
-  return apiFetch<ApiSession>('/api/chat/sessions', {
+export async function apiCreateSession(workspace: WorkspaceMode = 'student'): Promise<ApiSession> {
+  const session = await apiFetch<ApiSession>('/api/chat/sessions', {
     method: 'POST',
-    body: JSON.stringify({}),
+    body: JSON.stringify({ workspace }),
   });
+  return { ...session, preview: session.preview ?? session.title ?? '', workspace: session.workspace ?? workspace };
 }
 
 export interface ApiPersistedMessage {
@@ -621,8 +690,8 @@ export interface ApiMessageList {
   messages: ApiPersistedMessage[];
 }
 
-export async function apiGetSessionMessages(sessionId: string): Promise<ApiPersistedMessage[]> {
-  const res = await apiFetch<ApiMessageList>(`/api/chat/sessions/${sessionId}/messages`);
+export async function apiGetSessionMessages(sessionId: string, workspace: WorkspaceMode = 'student'): Promise<ApiPersistedMessage[]> {
+  const res = await apiFetch<ApiMessageList>(`/api/chat/sessions/${encodeURIComponent(sessionId)}/messages?workspace=${workspace}`);
   return res.messages;
 }
 
@@ -736,4 +805,215 @@ export async function apiAnalyzeMedia(
     throw new ApiError(mediaErrorMessage(body, res.status), res.status);
   }
   return body as ApiMediaVerificationResult;
+}
+
+// ---------------------------------------------------------------------------
+// Stateful Conversation API
+//
+// `/api/conversation/{sessionId}` is the LangGraph-backed conversation: the
+// server keeps the multi-turn history (Redis, or the in-process fallback it
+// reports in `memoryBackend`).  The client never keeps its own authoritative
+// copy — it renders the `history` the server returns.
+// ---------------------------------------------------------------------------
+
+export type ApiConversationRole = 'user' | 'assistant';
+
+export interface ApiConversationTurn {
+  role: ApiConversationRole;
+  content: string;
+  createdAt: string;
+  metadata?: {
+    sources?: ApiSource[]; verification?: ApiGenerationVerification; engine?: string;
+    model?: string; marks?: number; warnings?: string[]; insufficientContext?: boolean;
+  } | null;
+}
+
+export interface ApiConversationHistory {
+  sessionId: string;
+  messages: ApiConversationTurn[];
+  memoryBackend: string;
+  memoryError?: string | null;
+}
+
+export interface ApiConversationAnswer {
+  sessionId: string;
+  question: string;
+  answer: string;
+  engine: string;
+  model: string;
+  marks: number;
+  answerFormat: string;
+  verification: {
+    claimCount: number;
+    supportedClaims: number;
+    unsupportedClaims: string[];
+    uncitedClaims: number;
+    citationAccuracy: number;
+    verified: boolean;
+    status?: string;
+    wrongEntityClaims?: string[];
+  };
+  warnings: string[];
+  sources: ApiSource[];
+  history: ApiConversationTurn[];
+  retrievalQuery: string;
+  followupResolved: boolean;
+  rerank: {
+    applied: boolean;
+    signal: string;
+    scored: number;
+    candidates: number;
+    scores: { chunkId: string; rerankScore: number }[];
+    error: string | null;
+  };
+  insufficientContext: boolean;
+  abstained: boolean;
+  latencyMs: number;
+  memoryBackend: string;
+  memoryError?: string | null;
+  pipelineVersion: string;
+}
+
+export async function apiGetConversation(
+  sessionId: string,
+  workspace: WorkspaceMode = 'student',
+): Promise<ApiConversationHistory> {
+  return apiFetch<ApiConversationHistory>(
+    `/api/conversation/${encodeURIComponent(sessionId)}?workspace=${workspace}`,
+  );
+}
+
+export async function apiAskConversation(
+  sessionId: string,
+  question: string,
+  answerFormat: '5' | '10' | '15',
+  topK: number = 5,
+  workspace: WorkspaceMode = 'student',
+  task: WorkspaceTask = 'answer',
+): Promise<ApiConversationAnswer> {
+  return apiFetch<ApiConversationAnswer>(
+    `/api/conversation/${encodeURIComponent(sessionId)}/messages`,
+    {
+      method: 'POST',
+      body: JSON.stringify({ question, answerFormat, topK, workspace, task }),
+    },
+  );
+}
+
+export async function apiDeleteConversation(sessionId: string, workspace: WorkspaceMode = 'student'): Promise<void> {
+  const token = getToken();
+  const headers: Record<string, string> = {};
+  if (token) headers['Authorization'] = `Bearer ${token}`;
+
+  const res = await fetch(
+    `${API_BASE}/api/conversation/${encodeURIComponent(sessionId)}?workspace=${workspace}`,
+    { method: 'DELETE', headers },
+  );
+  if (!res.ok && res.status !== 204) {
+    throw new ApiError(`Could not clear the conversation (${res.status})`, res.status);
+  }
+}
+
+/**
+ * Answer to the WebRTC offer for the duplex voice call.
+ *
+ * The server keeps the peer connection; media flows peer-to-peer (host
+ * candidates only) and the JSON turn protocol travels over its data channel.
+ * No STUN/TURN server is involved, so the call works fully offline.
+ */
+export interface ApiVoiceOfferAnswer {
+  sdp: string;
+  type: string;
+  sessionId: string;
+  vad: { engine?: string; available?: boolean; error?: string | null };
+  stt: string;
+  tts: string;
+}
+
+/**
+ * Send the SDP offer and receive the server's answer.
+ *
+ * Unlike the WebSocket handshake this is an ordinary authenticated request: the
+ * JWT travels in the `Authorization` header, never in a URL.
+ */
+export async function apiVoiceWebRtcOffer(
+  sessionId: string,
+  answerFormat: '5' | '10' | '15',
+  sdp: string,
+  workspace: WorkspaceMode = 'student',
+  task: WorkspaceTask = 'answer',
+): Promise<ApiVoiceOfferAnswer> {
+  return apiFetch<ApiVoiceOfferAnswer>('/api/voice/webrtc/offer', {
+    method: 'POST',
+    body: JSON.stringify({ sdp, type: 'offer', sessionId, answerFormat, workspace, task }),
+  });
+}
+
+export interface ApiConversationStatus {
+  provider?: string;
+  model?: string;
+  available?: boolean | null;
+  hosted?: boolean;
+  conversationModel?: { provider?: string; model?: string; available?: boolean | null; hosted?: boolean; configured?: boolean; error?: string | null };
+  memory?: { backend?: string };
+}
+
+export const apiConversationStatus = () => apiFetch<ApiConversationStatus>('/api/conversation/status');
+
+export async function apiDeleteSession(sessionId: string, workspace: WorkspaceMode): Promise<void> {
+  await apiFetch(`/api/chat/sessions/${encodeURIComponent(sessionId)}?workspace=${workspace}`, { method: 'DELETE' });
+}
+
+/** Parse SSE incrementally; a draft is never mistaken for a completed answer. */
+export async function apiStreamConversation(
+  sessionId: string,
+  input: { question: string; workspace: WorkspaceMode; task: WorkspaceTask; answerFormat: '5' | '10' | '15'; topK?: number },
+  onDelta: (text: string) => void,
+  signal: AbortSignal,
+): Promise<ApiConversationAnswer> {
+  const token = getToken();
+  const response = await fetch(`${API_BASE}/api/conversation/${encodeURIComponent(sessionId)}/stream`, {
+    method: 'POST', signal,
+    headers: { 'Content-Type': 'application/json', Accept: 'text/event-stream', ...(token ? { Authorization: `Bearer ${token}` } : {}) },
+    body: JSON.stringify({ ...input, topK: input.topK ?? 5 }),
+  });
+  if (!response.ok) {
+    const error = await response.json().catch(() => null);
+    throw new ApiError(typeof error?.detail === 'string' ? error.detail : error?.detail?.message ?? `Answer unavailable (${response.status}).`, response.status);
+  }
+  if (!response.body) throw new Error('The answer stream is unavailable.');
+  const reader = response.body.getReader();
+  const decoder = new TextDecoder();
+  let buffer = '';
+  let final: ApiConversationAnswer | undefined;
+  const consume = (frame: string) => {
+    const lines = frame.split('\n');
+    const event = lines.find((line) => line.startsWith('event:'))?.slice(6).trim() ?? 'message';
+    const data = lines.filter((line) => line.startsWith('data:')).map((line) => line.slice(5).trimStart()).join('\n');
+    if (!data || data === '[DONE]') return;
+    const value = JSON.parse(data);
+    const kind = event === 'message' ? value.type ?? value.event : event;
+    if (kind === 'delta') onDelta(String(value.text ?? value.delta ?? ''));
+    if (kind === 'final') final = (value.answer && typeof value.answer === 'object' ? value.answer : value) as ApiConversationAnswer;
+    if (kind === 'error') throw new Error(typeof value.message === 'string' ? value.message : 'The answer could not be completed.');
+  };
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      buffer = (buffer + decoder.decode(value, { stream: !done })).replace(/\r\n/g, '\n');
+      if (buffer.length > 1_000_000) throw new Error('The answer stream exceeded its safe size.');
+      let boundary: number;
+      while ((boundary = buffer.indexOf('\n\n')) !== -1) {
+        consume(buffer.slice(0, boundary));
+        buffer = buffer.slice(boundary + 2);
+      }
+      if (done) break;
+    }
+    if (buffer.trim()) consume(buffer);
+    if (!final) throw new Error('The connection ended before the answer was completed. Please retry.');
+    return final;
+  } finally {
+    await reader.cancel().catch(() => undefined);
+    reader.releaseLock();
+  }
 }

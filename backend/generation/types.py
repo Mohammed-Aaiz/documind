@@ -71,6 +71,11 @@ class EvidenceBlock:
     section: str | None = None
     score: float = 0.0
     chunk_id: str = ""
+    knowledge_graph_path: str | None = None
+    knowledge_graph_hops: int | None = None
+    knowledge_graph_predicate: str | None = None
+    knowledge_graph_quote: str | None = None
+    spatial_regions: list[dict] | None = None
     #: True when ``content`` is an excerpt of a longer chunk.  Structural
     #: resolution must not claim a *position* from a truncated list: the tail is
     #: missing silently, so "the eighth item" could resolve to the fifth
@@ -86,6 +91,8 @@ class EvidenceBlock:
             parts.append(f"section: {self.section}")
         elif self.heading_path:
             parts.append("section: " + " > ".join(self.heading_path))
+        if self.knowledge_graph_path:
+            parts.append(f"entity path: {self.knowledge_graph_path}")
         return ", ".join(parts)
 
 

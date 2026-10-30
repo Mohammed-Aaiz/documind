@@ -13,10 +13,12 @@ import uuid
 from datetime import datetime
 
 from sqlalchemy import (
+    CheckConstraint,
     JSON,
     DateTime,
     Float,
     ForeignKey,
+    ForeignKeyConstraint,
     Index,
     Integer,
     String,
@@ -68,6 +70,15 @@ class DocumentGraphEdge(Base):
             "target_chunk_id",
             "relation",
             name="uq_document_graph_edges_triplet",
+        ),
+        # Adjacency traversal filters ``source`` + ``relation`` (outward, created
+        # in revision 005) or ``target`` + ``relation`` (inward, revision 010).
+        # Both are composite because a single-column index would still scan
+        # every relation for the node before filtering.
+        Index(
+            "ix_document_graph_edges_target_relation",
+            "target_chunk_id",
+            "relation",
         ),
     )
 
@@ -264,4 +275,201 @@ class DocumentStructureEdge(Base):
             "source_element_id",
             "relation",
         ),
+        # The reverse direction: which parent/section contains this element.
+        Index(
+            "ix_document_structure_edges_target_relation",
+            "target_element_id",
+            "relation",
+        ),
+    )
+
+
+class KnowledgeGraphEntity(Base):
+    """Owner-scoped canonical entity; only exact normalized labels are joined."""
+
+    __tablename__ = "kg_entities"
+    __table_args__ = (
+        UniqueConstraint(
+            "user_id", "normalized_name", "entity_type", name="uq_kg_entities_owner_name_type"
+        ),
+        UniqueConstraint("user_id", "id", name="uq_kg_entities_owner_id"),
+        Index("ix_kg_entities_owner_normalized", "user_id", "normalized_name"),
+    )
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
+    )
+    user_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), nullable=False
+    )
+    name: Mapped[str] = mapped_column(String(512), nullable=False)
+    normalized_name: Mapped[str] = mapped_column(String(512), nullable=False)
+    entity_type: Mapped[str] = mapped_column(String(64), nullable=False)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), nullable=False
+    )
+
+
+class KnowledgeGraphMention(Base):
+    """A per-document occurrence supporting an owner-scoped canonical entity."""
+
+    __tablename__ = "kg_entity_mentions"
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["user_id", "entity_id"],
+            ["kg_entities.user_id", "kg_entities.id"],
+            ondelete="CASCADE",
+            name="fk_kg_mentions_entity_owner",
+        ),
+        ForeignKeyConstraint(
+            ["user_id", "document_id"],
+            ["documents.user_id", "documents.id"],
+            ondelete="CASCADE",
+            name="fk_kg_mentions_document_owner",
+        ),
+        ForeignKeyConstraint(
+            ["document_id", "source_chunk_id"],
+            ["document_chunks.document_id", "document_chunks.id"],
+            ondelete="CASCADE",
+            name="fk_kg_mentions_source_chunk_document",
+        ),
+        UniqueConstraint(
+            "user_id",
+            "document_id",
+            "source_chunk_id",
+            "id",
+            name="uq_kg_mentions_scoped_id",
+        ),
+        UniqueConstraint(
+            "document_id",
+            "source_chunk_id",
+            "entity_id",
+            "mention_text",
+            name="uq_kg_mentions_chunk_entity_text",
+        ),
+        Index("ix_kg_mentions_owner_entity", "user_id", "entity_id"),
+        Index("ix_kg_mentions_document_chunk", "document_id", "source_chunk_id"),
+    )
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
+    )
+    user_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), nullable=False)
+    document_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), nullable=False)
+    source_chunk_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), nullable=False)
+    entity_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), nullable=False)
+    mention_text: Mapped[str] = mapped_column(String(512), nullable=False)
+    extractor_model: Mapped[str] = mapped_column(String(128), nullable=False)
+    extractor_version: Mapped[str] = mapped_column(String(64), nullable=False)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), nullable=False
+    )
+
+
+class KnowledgeGraphRelation(Base):
+    """A typed relation supported by an exact quote from its source chunk."""
+
+    __tablename__ = "kg_relations"
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["user_id", "document_id"],
+            ["documents.user_id", "documents.id"],
+            ondelete="CASCADE",
+            name="fk_kg_relations_document_owner",
+        ),
+        ForeignKeyConstraint(
+            ["document_id", "source_chunk_id"],
+            ["document_chunks.document_id", "document_chunks.id"],
+            ondelete="CASCADE",
+            name="fk_kg_relations_source_chunk_document",
+        ),
+        ForeignKeyConstraint(
+            ["user_id", "document_id", "source_chunk_id", "subject_mention_id"],
+            [
+                "kg_entity_mentions.user_id",
+                "kg_entity_mentions.document_id",
+                "kg_entity_mentions.source_chunk_id",
+                "kg_entity_mentions.id",
+            ],
+            ondelete="CASCADE",
+            name="fk_kg_relations_subject_mention_scope",
+        ),
+        ForeignKeyConstraint(
+            ["user_id", "document_id", "source_chunk_id", "object_mention_id"],
+            [
+                "kg_entity_mentions.user_id",
+                "kg_entity_mentions.document_id",
+                "kg_entity_mentions.source_chunk_id",
+                "kg_entity_mentions.id",
+            ],
+            ondelete="CASCADE",
+            name="fk_kg_relations_object_mention_scope",
+        ),
+        UniqueConstraint(
+            "document_id",
+            "source_chunk_id",
+            "subject_mention_id",
+            "object_mention_id",
+            "normalized_predicate",
+            name="uq_kg_relations_chunk_triple",
+        ),
+        Index("ix_kg_relations_owner_subject", "user_id", "subject_mention_id"),
+        Index("ix_kg_relations_owner_object", "user_id", "object_mention_id"),
+        Index("ix_kg_relations_document_chunk", "document_id", "source_chunk_id"),
+    )
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
+    )
+    user_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), nullable=False)
+    document_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), nullable=False)
+    source_chunk_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), nullable=False)
+    subject_mention_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), nullable=False)
+    object_mention_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), nullable=False)
+    predicate: Mapped[str] = mapped_column(String(128), nullable=False)
+    normalized_predicate: Mapped[str] = mapped_column(String(128), nullable=False)
+    evidence_quote: Mapped[str] = mapped_column(Text, nullable=False)
+    extractor_model: Mapped[str] = mapped_column(String(128), nullable=False)
+    extractor_version: Mapped[str] = mapped_column(String(64), nullable=False)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), nullable=False
+    )
+
+
+class KnowledgeGraphExtraction(Base):
+    """Latest per-document KG extraction state, separate from vector ingestion."""
+
+    __tablename__ = "kg_extraction_status"
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["user_id", "document_id"],
+            ["documents.user_id", "documents.id"],
+            ondelete="CASCADE",
+            name="fk_kg_extraction_document_owner",
+        ),
+        UniqueConstraint("document_id", name="uq_kg_extraction_document"),
+        CheckConstraint(
+            "status IN ('pending', 'ready', 'partial', 'unavailable')",
+            name="ck_kg_extraction_status",
+        ),
+        CheckConstraint(
+            "processed_chunk_count >= 0", name="ck_kg_extraction_chunk_count"
+        ),
+        Index("ix_kg_extraction_owner_status", "user_id", "status"),
+    )
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
+    )
+    user_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), nullable=False)
+    document_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), nullable=False)
+    status: Mapped[str] = mapped_column(String(16), nullable=False, default="pending")
+    extractor_model: Mapped[str | None] = mapped_column(String(128), nullable=True)
+    extractor_version: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    processed_chunk_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    failure_code: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    started_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    completed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False
     )

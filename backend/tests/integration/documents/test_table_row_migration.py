@@ -1,5 +1,4 @@
-"""Round-trip tests for the newest migrations (``007_add_table_rows``,
-``008_add_generation_verification``).
+"""Round-trip tests for table-row, verification and graph-index migrations.
 
 The migrations are exercised by the real Alembic machinery against a throwaway
 SQLite file, so nothing here touches the configured production database:
@@ -10,8 +9,8 @@ SQLite file, so nothing here touches the configured production database:
    ``CREATE EXTENSION vector`` and cannot execute on SQLite);
 2. the one table those revisions *alter* is stood up minimally, because
    ``stamp`` does not create it either (see :func:`_stage_at_previous_revision`);
-3. ``alembic upgrade head`` therefore runs exactly the 007 upgrade and the 008
-   upgrade on top of it;
+3. upgrades target the revision under test (007, 008, or 010), so a staged
+   partial schema does not accidentally run later unrelated migrations;
 4. ``alembic downgrade 006`` runs exactly their downgrades, in reverse.
 
 The assertions read the real database schema (``PRAGMA table_info`` /
@@ -161,6 +160,75 @@ def _reliability_columns(db_path: Path) -> dict[str, tuple[str, int]]:
     return {row[1]: (row[2], row[3]) for row in rows}
 
 
+GRAPH_EDGES = "document_graph_edges"
+STRUCTURE_EDGES = "document_structure_edges"
+
+
+def _indexes_for(db_path: Path, table: str) -> set[str]:
+    with sqlite3.connect(db_path) as conn:
+        rows = conn.execute(f"PRAGMA index_list({table})").fetchall()
+    return {row[1] for row in rows}
+
+
+def _stage_edge_tables(db_path: Path) -> None:
+    """Stand up the two edge tables 010 indexes, at revision 009.
+
+    005/006 create them with PostgreSQL-only DDL that cannot run on SQLite, so
+    the test supplies the minimal tables the revision *alters* — the same
+    honest-precondition approach ``_stage_at_previous_revision`` uses.
+    """
+    _alembic(db_path, "stamp", "009")
+    with sqlite3.connect(db_path) as conn:
+        conn.execute(
+            f"CREATE TABLE {GRAPH_EDGES} (id VARCHAR(32) PRIMARY KEY, "
+            "target_chunk_id VARCHAR(32), relation VARCHAR(32))"
+        )
+        conn.execute(
+            f"CREATE TABLE {STRUCTURE_EDGES} (id VARCHAR(32) PRIMARY KEY, "
+            "target_element_id VARCHAR(32), relation VARCHAR(32))"
+        )
+
+
+class TestGraphEdgeIndexMigration:
+    def test_reverse_composite_indexes_are_created_and_dropped(self, tmp_path):
+        db_path = tmp_path / "edge-indexes.db"
+        _stage_edge_tables(db_path)
+        # SQLite's implicit PRIMARY KEY index exists; the revision's own index
+        # must not.
+        assert "ix_document_graph_edges_target_relation" not in _indexes_for(
+            db_path, GRAPH_EDGES
+        )
+
+        _alembic(db_path, "upgrade", "010")
+
+        assert "ix_document_graph_edges_target_relation" in _indexes_for(
+            db_path, GRAPH_EDGES
+        )
+        assert "ix_document_structure_edges_target_relation" in _indexes_for(
+            db_path, STRUCTURE_EDGES
+        )
+
+        _alembic(db_path, "downgrade", "009")
+
+        assert "ix_document_graph_edges_target_relation" not in _indexes_for(
+            db_path, GRAPH_EDGES
+        )
+        assert "ix_document_structure_edges_target_relation" not in _indexes_for(
+            db_path, STRUCTURE_EDGES
+        )
+
+    def test_the_revision_skips_databases_without_the_edge_tables(self, tmp_path):
+        # A database stamped at an earlier revision has no edge tables; creating
+        # an index on a missing table would abort the whole upgrade.
+        db_path = tmp_path / "no-edges.db"
+        _alembic(db_path, "stamp", "009")
+
+        _alembic(db_path, "upgrade", "010")
+
+        assert GRAPH_EDGES not in _table_names(db_path)
+        assert STRUCTURE_EDGES not in _table_names(db_path)
+
+
 class TestTableRowMigration:
     def test_upgrade_creates_the_table_and_downgrade_removes_it(self, tmp_path):
         db_path = tmp_path / "migration.db"
@@ -168,7 +236,7 @@ class TestTableRowMigration:
         _stage_at_previous_revision(db_path)
         assert TABLE not in _table_names(db_path)
 
-        _alembic(db_path, "upgrade", "head")
+        _alembic(db_path, "upgrade", "007")
 
         tables = _table_names(db_path)
         assert TABLE in tables
@@ -184,10 +252,10 @@ class TestTableRowMigration:
         db_path = tmp_path / "repeat.db"
 
         _stage_at_previous_revision(db_path)
-        _alembic(db_path, "upgrade", "head")
+        _alembic(db_path, "upgrade", "007")
         # A second upgrade finds the table present (has_table guard) and the
-        # version already at head: it must not fail and must not duplicate DDL.
-        _alembic(db_path, "upgrade", "head")
+        # version already at 007: it must not fail and must not duplicate DDL.
+        _alembic(db_path, "upgrade", "007")
 
         assert _columns(db_path) == EXPECTED_COLUMNS
 
@@ -232,7 +300,7 @@ class TestTableRowMigration:
         _stage_at_previous_revision(db_path)
         assert "generation_json" not in _reliability_columns(db_path)
 
-        _alembic(db_path, "upgrade", "head")
+        _alembic(db_path, "upgrade", "008")
 
         added = _reliability_columns(db_path)["generation_json"]
         assert added == ("JSON", 0), f"unexpected column specification: {added}"
@@ -245,7 +313,7 @@ class TestTableRowMigration:
         """007 must not touch document_structure_elements."""
         db_path = tmp_path / "additive.db"
         _stage_at_previous_revision(db_path)
-        _alembic(db_path, "upgrade", "head")
+        _alembic(db_path, "upgrade", "007")
 
         with sqlite3.connect(db_path) as conn:
             # The element table is not created by 007 (it belongs to 006), and

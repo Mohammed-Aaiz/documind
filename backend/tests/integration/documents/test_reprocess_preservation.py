@@ -24,8 +24,8 @@ processing pipeline and the real database, and checks *persisted* rows and
 * a successful attempt replaces them and leaves no active duplicates;
 * a first-time failure reports failure honestly with nothing searchable.
 
-Only ``embed_texts`` is stubbed — with real 384-dim vectors — because the
-production model is a transformers model this suite must not load.
+Embedding inference and optional graph LLM extraction are stubbed; this suite
+checks index replacement and rollback, not external model availability.
 """
 
 from __future__ import annotations
@@ -40,6 +40,7 @@ from chat.rag import retrieve_structural_candidates
 from documents.models import Document, DocumentChunk
 from graph.models import DocumentGraphEdge, DocumentStructureElement
 from tests.fixtures.pdf_layout import add_text, new_page, new_pdf
+
 
 UPLOAD_URL = "/api/documents/upload"
 LOGIN_URL = "/api/auth/login"

@@ -32,7 +32,7 @@ from __future__ import annotations
 from sqlalchemy import Text, cast, func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from documents.models import Document, DocumentChunk
+from documents.models import Document, DocumentChunk, DocumentPageExtraction
 from graph.models import DocumentGraphEdge
 
 #: File types whose chunk ``page`` metadata represents real document pages.
@@ -187,6 +187,75 @@ async def _graph_metrics(
     }
 
 
+async def _page_extraction_metrics(db: AsyncSession, document: Document) -> dict:
+    """Per-page extraction provenance, as recorded by the last processing run.
+
+    ``recorded`` is ``False`` when the document has no page rows at all — a
+    DOCX/TXT (no pages), or a document processed before per-page provenance was
+    persisted.  That is reported as "not recorded", never as zero pages, so a
+    reader can tell the two apart.  Rows are selected ordered by page number and
+    only the page-level scalars are read; no chunk content is touched.
+    """
+    rows = (
+        await db.execute(
+            select(DocumentPageExtraction)
+            .where(DocumentPageExtraction.document_id == document.id)
+            .order_by(DocumentPageExtraction.page_number.asc())
+        )
+    ).scalars().all()
+
+    if not rows:
+        return {
+            "recorded": False,
+            "pagesTotal": 0,
+            "nativePageCount": 0,
+            "ocrPageCount": 0,
+            "unaccountedPageCount": 0,
+            "ocrPages": [],
+            "unaccountedPages": [],
+        }
+
+    ocr_pages = [
+        {
+            "pageNumber": int(row.page_number),
+            "textChars": int(row.text_chars),
+            "ocrEngine": row.ocr_engine,
+            "ocrEngineVersion": row.ocr_engine_version,
+            "ocrConfidence": (
+                None if row.ocr_confidence is None else round(float(row.ocr_confidence), 4)
+            ),
+            "ocrRotation": None if row.ocr_rotation is None else int(row.ocr_rotation),
+            "ocrSeconds": (
+                None if row.ocr_seconds is None else round(float(row.ocr_seconds), 3)
+            ),
+        }
+        for row in rows
+        if row.method == "ocr"
+    ]
+    unaccounted_pages = [
+        {
+            "pageNumber": int(row.page_number),
+            "failureReason": row.failure_reason,
+        }
+        for row in rows
+        if row.method == "none"
+    ]
+
+    return {
+        "recorded": True,
+        "pagesTotal": len(rows),
+        "nativePageCount": sum(1 for row in rows if row.method == "native"),
+        "ocrPageCount": len(ocr_pages),
+        "unaccountedPageCount": len(unaccounted_pages),
+        "ocrPages": ocr_pages,
+        "unaccountedPages": unaccounted_pages,
+        "spatialLayouts": [
+            {"pageNumber": int(row.page_number), **row.spatial_layout}
+            for row in rows if getattr(row, "spatial_layout", None)
+        ],
+    }
+
+
 async def compute_document_insights(db: AsyncSession, document: Document) -> dict:
     """Return the full insights payload for an already-ownership-checked document.
 
@@ -196,6 +265,7 @@ async def compute_document_insights(db: AsyncSession, document: Document) -> dic
     structure = await _structure_metrics(db, document)
     embedding = await _embedding_metrics(db, document, structure["totalChunks"])
     graph = await _graph_metrics(db, document, structure["totalChunks"])
+    pages = await _page_extraction_metrics(db, document)
 
     return {
         "documentId": str(document.id),
@@ -211,6 +281,7 @@ async def compute_document_insights(db: AsyncSession, document: Document) -> dic
         "structure": structure,
         "embedding": embedding,
         "graph": graph,
+        "pages": pages,
         "provenance": {
             "parserVersion": document.parser_version,
             "chunkerVersion": document.chunker_version,

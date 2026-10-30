@@ -55,11 +55,21 @@ def test_sqlite_ddl_does_not_mutate_production_metadata(_create_tables):
     assert jsonbs == {
         "reliability_logs.sources_json",
         "reliability_logs.generation_json",
+        "chat_messages.evidence_metadata",
     }
-    assert len(uuids) == 32
+    # 32 before per-page extraction provenance; migration 009 added its two
+    # UUID columns, and migration 013 added sixteen owner-scoped KG columns
+    # across entities, mentions, relations and extraction status.
+    assert len(uuids) == 50
     assert "users.id" in uuids
     assert "documents.user_id" in uuids
     assert "document_structure_elements.parent_id" in uuids
+    assert "document_page_extractions.id" in uuids
+    assert "document_page_extractions.document_id" in uuids
+    assert "kg_entities.user_id" in uuids
+    assert "kg_entity_mentions.source_chunk_id" in uuids
+    assert "kg_relations.subject_mention_id" in uuids
+    assert "kg_extraction_status.document_id" in uuids
 
 
 def test_jsonb_renders_as_json_only_for_sqlite():

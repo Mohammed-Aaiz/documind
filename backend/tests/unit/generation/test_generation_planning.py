@@ -59,6 +59,14 @@ class TestPlan:
     def test_plan_is_deterministic(self):
         assert plan_answer("Compare A and B", 10) == plan_answer("Compare A and B", 10)
 
+    def test_fifteen_marks_carry_the_multi_step_rubric(self):
+        fifteen = plan_answer("Explain calibration", 15)
+        rubric = [d for d in fifteen.directives if "in this order" in d]
+        assert rubric, fifteen.directives
+        assert "conclusion" in rubric[0]
+        # The rubric is a shape, not a word count.
+        assert "words" not in rubric[0].lower()
+
 
 class TestPrompt:
     def test_evidence_is_numbered_and_question_precedes_context(self):
@@ -67,6 +75,55 @@ class TestPrompt:
         assert "Context:" in prompt
         assert "[1] (sample.txt)" in prompt and "[2] (sample.txt)" in prompt
         assert prompt.rstrip().endswith("Answer in one sentence:")
+
+    def test_fifteen_mark_prompt_groups_evidence_by_section(self):
+        # A long answer needs the document's hierarchy: which section a fact sits
+        # in, under which parent heading.  ``[n]`` numbering must be unchanged,
+        # because the verifier attributes claims by that number.
+        blocks = [
+            EvidenceBlock(
+                index=1,
+                content="The lidar array requires calibration every 30 days.",
+                document_name="manual.pdf",
+                page=4,
+                heading_path=("Reference Manual", "Calibration"),
+                section="Calibration",
+            ),
+            EvidenceBlock(
+                index=2,
+                content="Calibration is performed by a certified technician.",
+                document_name="manual.pdf",
+                page=5,
+                heading_path=("Reference Manual", "Calibration"),
+                section="Calibration",
+            ),
+        ]
+        prompt = build_prompt("How often?", plan_answer("How often?", 15), blocks)
+        assert "<Evidence_Hierarchy>" in prompt
+        assert "</Evidence_Hierarchy>" in prompt
+        assert "  Section: Reference Manual > Calibration" in prompt
+        assert "  Parent heading: Reference Manual" in prompt
+        assert "[1] (manual.pdf, page 4, section: Calibration)" in prompt
+        assert "[2] (manual.pdf, page 5, section: Calibration)" in prompt
+
+    def test_shorter_formats_keep_the_flat_numbered_context(self):
+        block = EvidenceBlock(
+            index=1,
+            content="The lidar array requires calibration every 30 days.",
+            document_name="manual.pdf",
+            heading_path=("Reference Manual", "Calibration"),
+        )
+        prompt = build_prompt("How often?", plan_answer("How often?", 10), [block])
+        assert "<Evidence_Hierarchy>" not in prompt
+        assert "[1] (manual.pdf, section: Reference Manual > Calibration)" in prompt
+
+    def test_a_block_without_structure_is_not_attached_to_a_neighbour(self):
+        blocks = [
+            EvidenceBlock(index=1, content="One.", document_name="a.pdf", heading_path=("S",)),
+            EvidenceBlock(index=2, content="Two.", document_name="a.pdf"),
+        ]
+        prompt = build_prompt("What?", plan_answer("What?", 15), blocks)
+        assert "  Section: (no section)" in prompt
 
     def test_abstention_marker_is_absent_from_the_prompt(self):
         # The model is not asked to emit a marker it rarely produces; abstention

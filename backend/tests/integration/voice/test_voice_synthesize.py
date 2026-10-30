@@ -37,6 +37,18 @@ SENTINEL_UPSTREAM_URL = "SUPER_SECRET_GOOGLE_INTERNAL_URL_https://translate.goog
 SENTINEL_INTERNAL_ERROR = "SUPER_SECRET_INTERNAL_TTS_FAILURE_AT_MEMORY_OFFSET_0xDEADBEEF"
 
 
+@pytest.fixture(autouse=True)
+def _pin_gtts_engine(monkeypatch):
+    """These cases pin ``TTS_ENGINE=gtts``.
+
+    Their subject is the gTTS mapping — its language table, its MP3 contract and
+    its upstream 503s.  The default local engine has its own module
+    (``test_voice_tts_local.py``); pinning here keeps these assertions about the
+    engine they actually name.
+    """
+    monkeypatch.setattr(voice.settings, "tts_engine", "gtts")
+
+
 async def _auth_headers(client: AsyncClient, create_test_user, email: str) -> dict:
     """Create a real user, log in, and return a Bearer authorization header."""
     await create_test_user(email=email, password="Pass123!", name="TTS User")

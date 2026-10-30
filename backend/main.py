@@ -7,12 +7,14 @@ from pathlib import Path
 from alembic import command
 from alembic.config import Config
 from fastapi import FastAPI
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 
 from config import get_settings
 from storage.database import Base, engine
-from chat.qa_model import get_model_status
-from generation.engine import get_generator_status
+from generation.providers import provider_status
+from orchestration.service import conversation_status
 
 # Import all models so Alembic can detect them
 from auth.models import User  # noqa: F401
@@ -32,6 +34,9 @@ from reliability.routes import router as reliability_router
 from embeddings.routes import router as embeddings_router
 from settings.routes import router as settings_router
 from voice import router as voice_router
+from conversation.routes import router as conversation_router
+import voice_webrtc
+from voice_webrtc import router as voice_webrtc_router
 
 settings = get_settings()
 
@@ -80,8 +85,13 @@ async def lifespan(app: FastAPI):
     # Startup: validate security configuration
     settings.require_production_jwt_secret()
     settings.upload_path.mkdir(parents=True, exist_ok=True)
+    # Pay the local cross-encoder cold start once, before serving questions.
+    from generation.reranking import warm_reranker
+    reranker = await warm_reranker()
+    logger.info("Reranker startup status: %s", reranker["status"])
     yield
-    # Shutdown: dispose engine
+    # Shutdown: end live WebRTC calls, then dispose the engine
+    await voice_webrtc.close_all_sessions()
     await engine.dispose()
 
 
@@ -90,6 +100,16 @@ app = FastAPI(
     version="1.0.0",
     lifespan=lifespan,
 )
+
+
+@app.exception_handler(RequestValidationError)
+async def validation_error_handler(request, exc: RequestValidationError):
+    # Pydantic normally reflects rejected inputs (including passwords) in
+    # validation responses. Clients need the field and reason, never the value.
+    return JSONResponse(status_code=422, content={"detail": [
+        {"loc": list(error["loc"]), "msg": error["msg"], "type": error["type"]}
+        for error in exc.errors()
+    ]})
 
 # CORS — allow the Vite dev server and preview server
 app.add_middleware(
@@ -110,23 +130,27 @@ app.include_router(embeddings_router)
 app.include_router(settings_router)
 app.include_router(voice_router)
 app.include_router(generation_router)
+app.include_router(conversation_router)
+# Full-duplex voice conversation (WebRTC) — same conversation service as the
+# text API, so voice and text share one history.  The old WebSocket transport
+# was removed when this replaced it; there is one voice transport.
+app.include_router(voice_webrtc_router)
 
 
 @app.get("/api/health", tags=["health"])
 async def health_check():
-    qa_status = get_model_status()
     return {
         "status": "healthy",
         "service": "documind-api",
         "version": "1.0.0",
         "timestamp": datetime.now(timezone.utc).isoformat(),
         "qa_model": {
-            "available": qa_status["available"],
-            "path": qa_status["model_path"],
-            "error": qa_status["error"],
+            "available": False,
+            "role": "retired",
+            "error": "The product uses the Groq answer provider.",
         },
-        # Additive generative engine.  ``loaded`` is false until the first
-        # generation request; ``available`` reflects the already-loaded state,
-        # so health stays cheap and never triggers a model load.
-        "generator": get_generator_status(),
+        # Liveness reports configuration without loading or probing a model.
+        # Authenticated conversation/status can perform a bounded local probe.
+        "generator": provider_status(),
+        "conversation": await conversation_status(),
     }

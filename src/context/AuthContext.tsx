@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect, useCallback } fr
 import { UserProfile } from '../types';
 import {
   apiLogin,
+  apiRegister,
   apiLogout,
   apiGetMe,
   getToken,
@@ -13,6 +14,7 @@ interface AuthContextType {
   isAuthenticated: boolean;
   user: UserProfile;
   login: (email: string, password: string) => Promise<void>;
+  register: (name: string, email: string, password: string) => Promise<void>;
   logout: () => void;
   updateUser: (updates: Partial<UserProfile>) => void;
 }
@@ -70,6 +72,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setIsAuthenticated(true);
   }, []);
 
+  const register = useCallback(async (name: string, email: string, password: string): Promise<void> => {
+    const res = await apiRegister(name, email, password);
+    setToken(res.access_token);
+    setUser({ name: res.user.name, email: res.user.email, avatarUrl: res.user.avatarUrl ?? undefined });
+    setIsAuthenticated(true);
+  }, []);
+
   // -----------------------------------------------------------------------
   // logout — call POST /api/auth/logout then clear local state
   // -----------------------------------------------------------------------
@@ -96,7 +105,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, user, login, logout, updateUser }}>
+    <AuthContext.Provider value={{ isAuthenticated, user, login, register, logout, updateUser }}>
       {children}
     </AuthContext.Provider>
   );

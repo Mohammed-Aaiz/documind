@@ -343,6 +343,7 @@ async def test_insights_response_contract(client: AsyncClient, seeded):
         "structure",
         "embedding",
         "graph",
+        "pages",
         "provenance",
     }
     assert set(body["structure"]) == {
@@ -358,6 +359,16 @@ async def test_insights_response_contract(client: AsyncClient, seeded):
     }
     assert set(body["embedding"]) == {"embeddedChunkCount", "coverage"}
     assert set(body["graph"]) == {"nodeCount", "edgeCount", "relationCounts", "coverage"}
+    assert set(body["pages"]) == {
+        "recorded",
+        "pagesTotal",
+        "nativePageCount",
+        "ocrPageCount",
+        "unaccountedPageCount",
+        "ocrPages",
+        "unaccountedPages",
+        "spatialLayouts",
+    }
     assert set(body["provenance"]) == {
         "parserVersion",
         "chunkerVersion",
@@ -510,6 +521,98 @@ async def test_provenance_is_null_not_invented_for_unset_document(
         "chunkerVersion": None,
         "embeddingModel": None,
     }
+
+
+# ===========================================================================
+# 10b. Per-page extraction provenance
+# ===========================================================================
+
+
+@pytest.mark.asyncio
+async def test_page_extraction_is_not_recorded_for_a_legacy_document(
+    client: AsyncClient, seeded
+):
+    """A document with no page rows reports ``recorded: false``, not zero pages.
+
+    The fixture's documents are created directly in the database, so they never
+    went through the extraction pipeline and carry no per-page rows.  The
+    endpoint must say so instead of presenting 0 pages as a measured fact.
+    """
+    body = (await _get_insights(client, seeded["token"], seeded["main_id"])).json()
+    assert body["pages"] == {
+        "recorded": False,
+        "pagesTotal": 0,
+        "nativePageCount": 0,
+        "ocrPageCount": 0,
+        "unaccountedPageCount": 0,
+        "ocrPages": [],
+        "unaccountedPages": [],
+        "spatialLayouts": [],
+    }
+
+
+@pytest.mark.asyncio
+async def test_page_extraction_reports_recorded_pages(
+    client: AsyncClient, seeded, db_session
+):
+    """Recorded rows are reported per page: how it was read and how confidently."""
+    from documents.models import DocumentPageExtraction
+
+    for row in (
+        DocumentPageExtraction(
+            id=uuid.uuid4(),
+            document_id=uuid.UUID(seeded["main_id"]),
+            page_number=1,
+            method="native",
+            text_chars=120,
+        ),
+        DocumentPageExtraction(
+            id=uuid.uuid4(),
+            document_id=uuid.UUID(seeded["main_id"]),
+            page_number=2,
+            method="ocr",
+            text_chars=95,
+            ocr_engine="rapidocr",
+            ocr_engine_version="3.10.0",
+            ocr_confidence=0.98765,
+            ocr_rotation=180,
+            ocr_seconds=2.5,
+        ),
+        DocumentPageExtraction(
+            id=uuid.uuid4(),
+            document_id=uuid.UUID(seeded["main_id"]),
+            page_number=3,
+            method="none",
+            text_chars=0,
+            failure_reason="ocr_failed",
+        ),
+    ):
+        db_session.add(row)
+    await db_session.commit()
+
+    pages = (await _get_insights(client, seeded["token"], seeded["main_id"])).json()[
+        "pages"
+    ]
+
+    assert pages["recorded"] is True
+    assert pages["pagesTotal"] == 3
+    assert pages["nativePageCount"] == 1
+    assert pages["ocrPageCount"] == 1
+    assert pages["unaccountedPageCount"] == 1
+    assert pages["ocrPages"] == [
+        {
+            "pageNumber": 2,
+            "textChars": 95,
+            "ocrEngine": "rapidocr",
+            "ocrEngineVersion": "3.10.0",
+            "ocrConfidence": 0.9877,
+            "ocrRotation": 180,
+            "ocrSeconds": 2.5,
+        }
+    ]
+    assert pages["unaccountedPages"] == [
+        {"pageNumber": 3, "failureReason": "ocr_failed"}
+    ]
 
 
 # ===========================================================================

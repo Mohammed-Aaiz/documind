@@ -1,6 +1,7 @@
 # DocuMind production-style local stack.
 #
 #   db       PostgreSQL + pgvector (internal only; NOT published to the host)
+#   redis    conversation memory for the stateful chat/voice path (internal only)
 #   backend  FastAPI image (migrations run at startup; models mounted read-only)
 #   frontend nginx serving the built SPA and proxying /api to the backend
 #
@@ -43,6 +44,25 @@ services:
     networks: [documind]
     restart: unless-stopped
 
+  redis:
+    # Stateful conversation memory (LangGraph-backed chat history).  Not
+    # published to the host: only the backend network reaches it.  Persistence
+    # is on so a restart does not silently discard conversations; the TTL per
+    # conversation is enforced by the application (CONVERSATION_TTL_SECONDS).
+    image: redis:7-alpine
+    command: ["redis-server", "--appendonly", "yes", "--maxmemory-policy", "noeviction"]
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+    security_opt:
+      - no-new-privileges:true
+    networks: [documind]
+    restart: unless-stopped
+
   backend:
     build:
       context: ./backend
@@ -61,11 +81,18 @@ services:
       # Embedding model pre-fetched into the image at build time.
       EMBEDDING_MODEL: /opt/documind-models/all-MiniLM-L6-v2
       OMP_NUM_THREADS: ${OMP_NUM_THREADS:-2}
+      # Conversation memory.  Empty/unreachable REDIS_URL is not fatal: the
+      # API reports memoryBackend="memory" instead of pretending to use Redis.
+      REDIS_URL: ${REDIS_URL:-redis://redis:6379/0}
+      CONVERSATION_TTL_SECONDS: ${CONVERSATION_TTL_SECONDS:-86400}
+      CONVERSATION_HISTORY_LIMIT: ${CONVERSATION_HISTORY_LIMIT:-12}
     volumes:
       - ./backend/models:/app/models:ro
       - uploads:/app/uploads
     depends_on:
       db:
+        condition: service_healthy
+      redis:
         condition: service_healthy
     # Readiness: /api/health answers only after migrations succeed and the app
     # booted, so a 200 here implies the DB is reachable and the schema is current.
@@ -111,6 +138,7 @@ services:
 
 volumes:
   db_data:
+  redis_data:
   uploads:
 
 networks:

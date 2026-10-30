@@ -1,6 +1,8 @@
 from datetime import datetime, timezone
+from typing import Literal
+import uuid
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -8,13 +10,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from auth.dependencies import CurrentUser
 from storage.database import get_db
 from chat.models import ChatSession, ChatMessage
-from chat.qa_model import is_model_available, get_model_status
-from chat.rag import dual_path_enabled
-from brain import Brain
-from brain.adapters import create_registry
-from brain.types import ExecutionContext
 from outcomes import Outcome
-from reliability.routes import store_query_reliability  # async, takes db=
 
 router = APIRouter(prefix="/api/chat", tags=["chat"])
 
@@ -24,15 +20,15 @@ router = APIRouter(prefix="/api/chat", tags=["chat"])
 # ---------------------------------------------------------------------------
 
 class AskRequest(BaseModel):
-    question: str
-    topK: int = 5
-    #: Answer engine for this request.  ``extractive`` (default) preserves the
-    #: existing contract; ``generative`` uses the approved local Flan-T5 path
-    #: through the same retrieval pipeline.  The default does not change
-    #: silently (DOCUMIND_PROJECT_CONTEXT.md §0.8).
-    engine: str = "extractive"
+    question: str = Field(min_length=1, max_length=2000)
+    topK: int = Field(default=5, ge=1, le=20)
+    #: The configured Ollama/Groq provider is the product answer engine.
+    #: ``generative`` remains a compatibility alias; extractive is retired.
+    engine: str = "provider"
     #: Academic answer format for the generative engine: 5, 10 or 15 marks.
     answerFormat: str = "10"
+    workspace: Literal["student", "research"] = "student"
+    task: str = "answer"
 
 
 class SourceOut(BaseModel):
@@ -60,7 +56,7 @@ class SourceOut(BaseModel):
 
     # --- Dual-path provenance (null when the structural path did not run) ---
     retrievalPath: str | None = None
-    """"semantic", "structural" or "hybrid" — which retrieval path(s) found
+    """"semantic", "structural", "hybrid" or "knowledge_graph" — which retrieval path(s) found
     this source.  Null only for responses produced before the dual path ran."""
 
     fusionScore: float | None = None
@@ -87,6 +83,13 @@ class SourceOut(BaseModel):
     headerRepeated: bool | None = None
     """Whether the row's content embeds the table's header row."""
 
+    # --- Owner-scoped entity-relation GraphRAG provenance ---
+    knowledgeGraphPath: str | None = None
+    knowledgeGraphHops: int | None = None
+    knowledgeGraphPredicate: str | None = None
+    knowledgeGraphQuote: str | None = None
+    spatialRegions: list[dict] | None = None
+
 
 class ReliabilityEvidence(BaseModel):
     """Real evidence from the RAG pipeline — no fabricated metrics.
@@ -96,7 +99,7 @@ class ReliabilityEvidence(BaseModel):
     omissions and the token budget explicit rather than silent.  They have
     defaults so existing clients are unaffected.
     """
-    qaConfidence: float          # QA model confidence score
+    qaConfidence: float | None   # None for providers without calibrated confidence
     retrievalScore: float        # best pgvector similarity score
     avgRetrievalScore: float     # mean of all retrieval scores
     sourceCount: int             # sources actually supplied to the QA model
@@ -122,7 +125,7 @@ class ReliabilityEvidence(BaseModel):
 
 class AskResponse(BaseModel):
     answer: str
-    confidence: float
+    confidence: float | None
     sources: list[SourceOut]
     insufficientContext: bool
     question: str
@@ -160,105 +163,14 @@ def _sources_from_chunks(chunks) -> list[SourceOut]:
             tableElementId=chunk.table_element_id,
             rowIndex=chunk.row_index,
             headerRepeated=chunk.header_repeated,
+            knowledgeGraphPath=getattr(chunk, "knowledge_graph_path", None),
+            knowledgeGraphHops=getattr(chunk, "knowledge_graph_hops", None),
+            knowledgeGraphPredicate=getattr(chunk, "knowledge_graph_predicate", None),
+            knowledgeGraphQuote=getattr(chunk, "knowledge_graph_quote", None),
+            spatialRegions=getattr(chunk, "spatial_regions", None),
         )
         for chunk in chunks
     ]
-
-
-async def _answer_with_generation(
-    body: AskRequest, current_user, db: AsyncSession
-) -> AskResponse:
-    """Serve ``/api/chat/ask`` with the approved local generative engine.
-
-    Retrieval, verification and reliability persistence are delegated to
-    ``generation.service`` — the same code path ``/api/generation/answer``
-    uses — so the two API surfaces cannot drift apart.  The extractive default
-    is untouched: this only runs when the caller explicitly selects it.
-    """
-    from generation.engine import get_generator_status
-    from generation.service import persist_generation, run_generation
-    from generation.types import AnswerFormat, GenerationUnavailableError
-
-    question = body.question.strip()
-    try:
-        answer_format = AnswerFormat.coerce(body.answerFormat)
-    except ValueError as exc:
-        raise HTTPException(status_code=400, detail=str(exc)) from exc
-
-    user_id = str(current_user.id)
-    try:
-        chunks, result = await run_generation(
-            db, user_id, question, top_k=body.topK, answer_format=answer_format
-        )
-    except GenerationUnavailableError as exc:
-        status = get_generator_status()
-        raise HTTPException(
-            status_code=503,
-            detail={
-                "error": "DocuMind generative model is not available",
-                "message": str(exc),
-                "model": status.get("model"),
-            },
-        ) from exc
-
-    # Persist before responding: a failure here must not look like an answer.
-    await persist_generation(db, user_id, question, chunks, result, answer_format)
-
-    supplied_ids = {b.chunk_id for b in result.blocks if b.chunk_id}
-    supplied = [c for c in chunks if str(getattr(c, "chunk_id", "")) in supplied_ids]
-    if not supplied:
-        supplied = list(chunks)
-
-    scores = [max(0.0, float(getattr(c, "score", 0.0) or 0.0)) for c in supplied]
-    paths = [getattr(c, "retrieval_path", None) for c in supplied]
-    verification = result.verification
-
-    reliability = ReliabilityEvidence(
-        qaConfidence=0.0,  # the generative engine produces no extractive span
-        retrievalScore=round(max(scores, default=0.0), 4),
-        avgRetrievalScore=round(sum(scores) / len(scores), 4) if scores else 0.0,
-        sourceCount=len(result.blocks),
-        uniqueDocuments=len({b.document_id for b in result.blocks if b.document_id}),
-        factualGrounded=bool(verification.get("verified")),
-        insufficientContext=result.insufficient_context,
-        retrievedSourceCount=len(chunks),
-        omittedSourceCount=max(0, len(chunks) - len(supplied)),
-        semanticSourceCount=paths.count("semantic"),
-        structuralSourceCount=paths.count("structural"),
-        structuralElementSourceCount=sum(
-            1 for c in supplied if getattr(c, "evidence_kind", None) == "structure_element"
-        ),
-        hybridSourceCount=paths.count("hybrid"),
-        structuralHopMax=max(
-            (int(getattr(c, "structural_hops", 0) or 0) for c in supplied), default=0
-        ),
-        pathAgreement="hybrid" in paths,
-        evidenceCoverage=(
-            len(supplied) / len(chunks) if chunks else 1.0
-        ),
-        fusionEnabled=dual_path_enabled(),
-        pipelineVersion=(
-            "generative-dual-path-v1" if dual_path_enabled() else "generative-semantic-v1"
-        ),
-    )
-
-    return AskResponse(
-        answer=result.answer,
-        confidence=0.0,  # honest: the generative engine has no span confidence
-        sources=_sources_from_chunks(supplied),
-        insufficientContext=result.insufficient_context,
-        question=question,
-        reliability=reliability,
-        outcome=(
-            Outcome.INSUFFICIENT_EVIDENCE.value
-            if result.insufficient_context
-            else Outcome.SUCCESS.value
-        ),
-        engine="generative",
-        marks=result.marks,
-        verification=verification,
-        warnings=list(result.warnings),
-    )
 
 
 # ---------------------------------------------------------------------------
@@ -269,6 +181,7 @@ class SessionOut(BaseModel):
     id: str
     createdAt: str
     preview: str  # first user message text, or empty
+    workspace: Literal["student", "research"] = "student"
 
 
 class SessionListResponse(BaseModel):
@@ -277,11 +190,13 @@ class SessionListResponse(BaseModel):
 
 class CreateSessionRequest(BaseModel):
     title: str = ""
+    workspace: Literal["student", "research"] = "student"
 
 
 class CreateSessionResponse(BaseModel):
     id: str
     createdAt: str
+    workspace: Literal["student", "research"] = "student"
 
 
 class MessageOut(BaseModel):
@@ -289,6 +204,7 @@ class MessageOut(BaseModel):
     sender: str  # 'user' or 'oracle'
     content: str
     createdAt: str
+    metadata: dict | None = None
 
 
 class MessageListResponse(BaseModel):
@@ -296,8 +212,8 @@ class MessageListResponse(BaseModel):
 
 
 class AddMessageRequest(BaseModel):
-    sender: str  # 'user' or 'oracle'
-    content: str
+    sender: Literal["user", "oracle"]
+    content: str = Field(min_length=1, max_length=8000)
 
 
 class AddMessageResponse(BaseModel):
@@ -315,11 +231,12 @@ class AddMessageResponse(BaseModel):
 async def list_sessions(
     current_user: CurrentUser,
     db: AsyncSession = Depends(get_db),
+    workspace: Literal["student", "research"] = "student",
 ):
     """Return all chat sessions for the current user, newest first."""
     result = await db.execute(
         select(ChatSession)
-        .where(ChatSession.user_id == current_user.id)
+        .where(ChatSession.user_id == current_user.id, ChatSession.workspace == workspace)
         .order_by(ChatSession.created_at.desc())
     )
     sessions = result.scalars().all()
@@ -340,6 +257,7 @@ async def list_sessions(
                 id=str(s.id),
                 createdAt=s.created_at.isoformat() if s.created_at else "",
                 preview=preview,
+                workspace=s.workspace,
             )
         )
 
@@ -357,12 +275,13 @@ async def create_session(
     db: AsyncSession = Depends(get_db),
 ):
     """Create a new chat session for the current user."""
-    session = ChatSession(user_id=current_user.id)
+    session = ChatSession(user_id=current_user.id, workspace=body.workspace)
     db.add(session)
     await db.flush()
     return CreateSessionResponse(
         id=str(session.id),
         createdAt=session.created_at.isoformat() if session.created_at else "",
+        workspace=session.workspace,
     )
 
 
@@ -375,13 +294,19 @@ async def get_messages(
     session_id: str,
     current_user: CurrentUser,
     db: AsyncSession = Depends(get_db),
+    workspace: Literal["student", "research"] = "student",
 ):
     """Return all messages for a session, ordered chronologically."""
-    # Verify session belongs to user
+    # Validate UUIDs before passing them into the database driver.
+    try:
+        session_id = str(uuid.UUID(session_id))
+    except ValueError as exc:
+        raise HTTPException(status_code=404, detail="Session not found") from exc
     sess_result = await db.execute(
         select(ChatSession).where(
             ChatSession.id == session_id,
             ChatSession.user_id == current_user.id,
+            ChatSession.workspace == workspace,
         )
     )
     if sess_result.scalar_one_or_none() is None:
@@ -401,6 +326,7 @@ async def get_messages(
                 sender=m.sender,
                 content=m.content,
                 createdAt=m.created_at.isoformat() if m.created_at else "",
+                metadata=getattr(m, "evidence_metadata", None),
             )
             for m in messages
         ]
@@ -417,13 +343,18 @@ async def add_message(
     body: AddMessageRequest,
     current_user: CurrentUser,
     db: AsyncSession = Depends(get_db),
+    workspace: Literal["student", "research"] = "student",
 ):
     """Persist a single message to a session."""
-    # Verify session belongs to user
+    try:
+        session_id = str(uuid.UUID(session_id))
+    except ValueError as exc:
+        raise HTTPException(status_code=404, detail="Session not found") from exc
     sess_result = await db.execute(
         select(ChatSession).where(
             ChatSession.id == session_id,
             ChatSession.user_id == current_user.id,
+            ChatSession.workspace == workspace,
         )
     )
     if sess_result.scalar_one_or_none() is None:
@@ -449,158 +380,64 @@ async def add_message(
 # POST /api/chat/ask
 # ---------------------------------------------------------------------------
 
+@router.delete("/sessions/{session_id}", status_code=204)
+async def delete_session(
+    session_id: str,
+    current_user: CurrentUser,
+    db: AsyncSession = Depends(get_db),
+    workspace: Literal["student", "research"] = "student",
+):
+    from orchestration.service import require_session, ConversationSessionNotFound, SessionBusyError
+    try:
+        session = await require_session(db, str(current_user.id), session_id, workspace, lock=True)
+    except ConversationSessionNotFound as exc:
+        raise HTTPException(status_code=404, detail="Session not found") from exc
+    except SessionBusyError as exc:
+        raise HTTPException(status_code=409, detail=str(exc)) from exc
+    await db.delete(session)
+    await db.flush()
+
+
+async def _answer_with_provider(body: AskRequest, current_user, db: AsyncSession) -> AskResponse:
+    from generation.types import GenerationUnavailableError
+    from orchestration.service import answer_with_memory, source_payload
+    session = ChatSession(user_id=current_user.id, workspace=body.workspace)
+    db.add(session)
+    await db.flush()
+    try:
+        result = await answer_with_memory(db, user_id=str(current_user.id), session_id=str(session.id),
+            question=body.question, top_k=body.topK, answer_format=body.answerFormat,
+            workspace=body.workspace, task=body.task)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+    except GenerationUnavailableError as exc:
+        raise HTTPException(status_code=503, detail=str(exc)) from exc
+    scores = [s.score for s in result.sources]
+    return AskResponse(answer=result.answer, confidence=None,
+        sources=[SourceOut(**source_payload(s)) for s in result.sources],
+        insufficientContext=result.insufficient_context, question=body.question,
+        reliability=ReliabilityEvidence(qaConfidence=None, retrievalScore=max(scores, default=0),
+            avgRetrievalScore=sum(scores)/len(scores) if scores else 0,
+            sourceCount=len(scores), uniqueDocuments=len({s.document_id for s in result.sources}),
+            factualGrounded=False, insufficientContext=result.insufficient_context,
+            pipelineVersion=result.pipeline_version),
+        outcome=Outcome.INSUFFICIENT_EVIDENCE.value if result.abstained else Outcome.PARTIAL.value,
+        engine=result.engine, marks=result.marks, verification=result.verification, warnings=result.warnings)
+
 @router.post("/ask", response_model=AskResponse)
 async def ask(
     body: AskRequest,
     current_user: CurrentUser,
     db: AsyncSession = Depends(get_db),
 ):
-    """Answer a question using the Brain over the user's documents.
-
-    The Brain orchestrates: classify → plan → retrieve → context → QA →
-    evidence gate → outcome.  Services execute; Brain decides.
-    """
+    """Answer with the configured provider and preserve the turn in its workspace."""
     if not body.question.strip():
         raise HTTPException(status_code=400, detail="Question cannot be empty")
 
-    # 0. Explicit engine selection.  The extractive Brain path below remains the
-    # default; ``generative`` is opt-in per request (DOCUMIND_PROJECT_CONTEXT.md
-    # §0.8) and reuses the shared generation service rather than duplicating it.
-    engine = (body.engine or "extractive").strip().lower()
-    if engine == "generative":
-        return await _answer_with_generation(body, current_user, db)
-    if engine != "extractive":
-        raise HTTPException(
-            status_code=400,
-            detail="engine must be 'extractive' or 'generative'",
-        )
-
-    # 1. Create real service adapters wired to this request's db session
-    registry = create_registry(db)
-    brain = Brain(registry)
-
-    # 2. Build execution context from the API boundary
-    ctx = ExecutionContext(
-        user_id=str(current_user.id),
-        raw_question=body.question,
-        top_k=body.topK,
-    )
-    # The reported pipeline version reflects the pipeline that will actually run
-    # for this request — the dual-path (semantic + document-structure) pipeline
-    # when it is active, otherwise the original semantic-only pipeline.  It is
-    # never advanced merely because the code exists.
-    ctx.pipeline_version = (
-        "dual-path-graph-rag-v1" if dual_path_enabled() else "rag-v1"
-    )
-
-    # 3. Let the Brain process the request
-    ctx = await brain.process(ctx)
-
-    # 4. Handle model unavailability as explicit 503 (preserves existing contract)
-    if ctx.outcome == Outcome.UNAVAILABLE:
-        # Check if it's specifically a model issue
-        model_errors = [
-            e for e in ctx.errors
-            if "qa_answer" in e.service.lower() or "model" in e.message.lower()
-        ]
-        if model_errors or not is_model_available():
-            status = get_model_status()
-            raise HTTPException(
-                status_code=503,
-                detail={
-                    "error": "DocuMind QA model is not available",
-                    "message": status.get("error", "Unknown error"),
-                    "model_path": status.get("model_path"),
-                },
-            )
-
-    # 5. Translate BrainResponse → AskResponse (existing Pydantic contract)
-    br = ctx.response
-    assert br is not None  # Brain always sets response
-
-    sources = [
-        SourceOut(
-            chunkId=s.chunk_id,
-            content=s.content,
-            score=round(max(0.0, s.score), 4),
-            documentId=s.document_id,
-            documentName=s.document_name,
-            page=s.page,
-            headingPath=list(s.heading_path) if s.heading_path else None,
-            section=s.section,
-            elementType=s.element_type,
-            tokenCount=s.token_count,
-            chunkerVersion=s.chunker_version,
-            retrievalPath=s.retrieval_path,
-            fusionScore=s.fusion_score,
-            structuralHops=s.structural_hops,
-            evidenceKind=s.evidence_kind,
-            tableElementId=s.table_element_id,
-            rowIndex=s.row_index,
-            headerRepeated=s.header_repeated,
-        )
-        for s in br.sources
-    ]
-
-    reliability = ReliabilityEvidence(
-        qaConfidence=br.reliability.get("qaConfidence", 0.0),
-        retrievalScore=br.reliability.get("retrievalScore", 0.0),
-        avgRetrievalScore=br.reliability.get("avgRetrievalScore", 0.0),
-        sourceCount=br.reliability.get("sourceCount", 0),
-        uniqueDocuments=br.reliability.get("uniqueDocuments", 0),
-        factualGrounded=br.reliability.get("factualGrounded", False),
-        insufficientContext=br.reliability.get("insufficientContext", True),
-        retrievedSourceCount=br.reliability.get("retrievedSourceCount", 0),
-        omittedSourceCount=br.reliability.get("omittedSourceCount", 0),
-        contextBudgetTokens=br.reliability.get("contextBudgetTokens", 0),
-        contextUsedTokens=br.reliability.get("contextUsedTokens", 0),
-        semanticSourceCount=br.reliability.get("semanticSourceCount", 0),
-        structuralSourceCount=br.reliability.get("structuralSourceCount", 0),
-        structuralElementSourceCount=br.reliability.get(
-            "structuralElementSourceCount", 0
-        ),
-        hybridSourceCount=br.reliability.get("hybridSourceCount", 0),
-        structuralHopMax=br.reliability.get("structuralHopMax", 0),
-        pathAgreement=br.reliability.get("pathAgreement", False),
-        evidenceCoverage=br.reliability.get("evidenceCoverage", 1.0),
-        fusionEnabled=br.reliability.get("fusionEnabled", False),
-        pipelineVersion=ctx.pipeline_version,
-    )
-
-    # 6. Store reliability data for the Reliability Center page
-    reliability_evidence = {
-        "question": body.question,
-        "answer": br.answer,
-        "qaConfidence": br.reliability.get("qaConfidence", 0.0),
-        "retrievalScore": br.reliability.get("retrievalScore", 0.0),
-        "avgRetrievalScore": br.reliability.get("avgRetrievalScore", 0.0),
-        "sourceCount": br.reliability.get("sourceCount", 0),
-        "uniqueDocuments": br.reliability.get("uniqueDocuments", 0),
-        "factualGrounded": br.reliability.get("factualGrounded", False),
-        "insufficientContext": br.reliability.get("insufficientContext", True),
-        "sources": br.reliability.get("sources", []),
-        # Evidence-sufficiency / provenance signals, persisted so the Reliability
-        # Center reads exactly the values that were returned to the client.
-        "semanticSourceCount": br.reliability.get("semanticSourceCount", 0),
-        "structuralSourceCount": br.reliability.get("structuralSourceCount", 0),
-        "structuralElementSourceCount": br.reliability.get(
-            "structuralElementSourceCount", 0
-        ),
-        "hybridSourceCount": br.reliability.get("hybridSourceCount", 0),
-        "structuralHopMax": br.reliability.get("structuralHopMax", 0),
-        "pathAgreement": br.reliability.get("pathAgreement", False),
-        "evidenceCoverage": br.reliability.get("evidenceCoverage", 1.0),
-        "fusionEnabled": br.reliability.get("fusionEnabled", False),
-        "pipelineVersion": ctx.pipeline_version,
-    }
-    await store_query_reliability(str(current_user.id), reliability_evidence, db=db)
-
-    return AskResponse(
-        answer=br.answer,
-        confidence=br.confidence,
-        sources=sources,
-        insufficientContext=br.insufficient_context,
-        question=body.question,
-        reliability=reliability,
-        outcome=br.outcome.value,
-    )
+    # Provider selection is server-side; requests cannot trigger cloud fallback.
+    engine = (body.engine or "provider").strip().lower()
+    if engine in ("provider", "generative"):
+        return await _answer_with_provider(body, current_user, db)
+    if engine == "extractive":
+        raise HTTPException(status_code=410, detail="The custom extractive model has been retired. Use the configured answer provider.")
+    raise HTTPException(status_code=400, detail="engine must be provider or generative")

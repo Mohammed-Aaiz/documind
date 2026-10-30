@@ -83,10 +83,20 @@ backend/phase4f/models/
 backend/phases/phase4f/models/
 backend/models/experiments/
 
+# Provisioned Piper TTS voices (download, not source)
+backend/models/tts/
+
 # Local Python environments
 backend/venv/
+
+# Project-local PostgreSQL cluster provisioned by
+# backend/scripts/provision_local_eval_cluster.py (data + credentials).
+backend/.pgdata/
 backend/phases/phase4f_gpu/
 
 # Runtime logs
 *.log
+
+# Explicitly provisioned local visual encoder (download, not source).
+backend/embeddings/assets/
 

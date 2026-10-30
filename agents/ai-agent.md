@@ -1,5 +1,13 @@
 # AI_AGENT
 
+> **2026-10-27 scoped update:** the owner's workspace rebuild authorizes Ollama as
+> the default product answer provider and explicitly configured Groq for hosted
+> inference. `backend/generation/**` and `backend/orchestration/**` are additionally
+> assigned to this role. See `backend/architecture/DOCUMIND_WORKSPACE_REBUILD_2026-10-27.md`.
+> Older default-model/no-hosted-provider requirements below are superseded for this
+> scope; no automatic hosted fallback, model-weight modification or frozen evaluation
+> modification is authorized.
+
 ## Role
 
 Embeddings, retrieval, QA, Brain orchestration, document graph

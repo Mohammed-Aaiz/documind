@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { Page } from './types';
+import type { Page } from './types';
 import { useAuth } from './context/AuthContext';
-import { CosmicBackground } from './components/3d/CosmicBackground';
-import { TopNavBar } from './components/common/TopNavBar';
-import { SideNavBar } from './components/common/SideNavBar';
+import { useWorkspace } from './context/WorkspaceContext';
+import { WorkspaceSidebar, Icon } from './features/workspace/WorkspaceSidebar';
 import { LoginPage } from './pages/LoginPage';
 import { WorkspacePage } from './pages/WorkspacePage';
 import { VerificationPage } from './pages/VerificationPage';
@@ -12,47 +11,22 @@ import { SettingsPage } from './pages/SettingsPage';
 
 const App: React.FC = () => {
   const { isAuthenticated } = useAuth();
-  const [currentPage, setCurrentPage] = useState<Page>('login');
-
-  const handleNavigate = (page: Page) => {
-    setCurrentPage(page);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const handleLoginSuccess = () => {
-    setCurrentPage('workspace');
-  };
-
-  // Login page — full screen, no shell
-  if (!isAuthenticated || currentPage === 'login') {
-    return (
-      <div className="relative min-h-screen w-screen bg-void-black text-on-surface overflow-hidden">
-        <CosmicBackground />
-        <LoginPage onLoginSuccess={handleLoginSuccess} />
-      </div>
-    );
-  }
-
-  const isWorkspace = currentPage === 'workspace';
-
-  // App shell — sidebar only for non-workspace pages
-  return (
-    <div className="relative min-h-screen w-screen bg-void-black text-on-surface font-body-base overflow-x-hidden">
-      <CosmicBackground />
-      {!isWorkspace && (
-        <SideNavBar currentPage={currentPage} onNavigate={handleNavigate} />
-      )}
-      <TopNavBar currentPage={currentPage} onNavigate={handleNavigate} />
-
-      {/* Main content */}
-      <main className={isWorkspace ? 'min-h-screen' : 'ml-64 min-h-screen'}>
-        {currentPage === 'workspace' && <WorkspacePage onNavigate={handleNavigate} />}
-        {currentPage === 'verification' && <VerificationPage onNavigate={handleNavigate} />}
-        {currentPage === 'reliability' && <ReliabilityPage onNavigate={handleNavigate} />}
-        {currentPage === 'settings' && <SettingsPage onNavigate={handleNavigate} />}
-      </main>
-    </div>
-  );
+  const { workspace } = useWorkspace();
+  const [page, setPage] = useState<Page>('workspace');
+  const [navigationOpen, setNavigationOpen] = useState(false);
+  const navigate = (next: Page) => { setPage(next === 'login' ? 'workspace' : next); };
+  if (!isAuthenticated) return <LoginPage onLoginSuccess={() => setPage('workspace')} />;
+  return <div className="dm-app" data-workspace={workspace}>
+    <a className="dm-skip-link" href="#main-content">Skip to content</a>
+    <WorkspaceSidebar page={page} onNavigate={navigate} open={navigationOpen} onClose={() => setNavigationOpen(false)} />
+    <main className="dm-main" id="main-content">
+      <header className="dm-topbar"><div><button className="dm-icon-button dm-menu-toggle" aria-label="Open navigation" onClick={() => setNavigationOpen(true)}><Icon name="menu" /></button><span>My workspace</span><Icon name="chevron_right" /><strong>{page === 'workspace' ? (workspace === 'student' ? 'Study & learn' : 'Research & discover') : page === 'reliability' ? 'Evidence & reliability' : page === 'verification' ? 'Media analysis' : 'Settings'}</strong></div><span className="dm-topbar-note"><span />Evidence comes first</span></header>
+      {page === 'workspace' ? <WorkspacePage onNavigate={navigate} /> : <div className="dm-utility-page">
+        {page === 'verification' && <VerificationPage onNavigate={navigate} />}
+        {page === 'reliability' && <ReliabilityPage onNavigate={navigate} />}
+        {page === 'settings' && <SettingsPage onNavigate={navigate} />}
+      </div>}
+    </main>
+  </div>;
 };
-
 export default App;

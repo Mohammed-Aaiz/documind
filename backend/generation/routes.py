@@ -1,19 +1,8 @@
-"""API surface for the additive generative answer path.
+"""Stateless Groq answering with authenticated retrieval and source verification.
 
-Endpoint: ``POST /api/generation/answer``
-
-Why a separate route instead of changing ``/api/chat/ask``: the extractive
-contract is what every existing client and test depends on, and the generative
-engine is additive until evaluation justifies making it the default.  Both
-routes share the same retrieval functions, so evidence provenance is identical.
-
-Honest behaviour:
-
-* no retrieved evidence → ``200`` with an empty answer, ``abstained=true``;
-* model unavailable → ``503`` with the model name and the load error;
-* claims the evidence does not support → returned, but listed in
-  ``verification.unsupportedClaims`` and in ``warnings``; never silently
-  dropped and never reported as verified.
+No evidence returns an explicit abstention; provider failures return a sanitized
+503. Unsupported claims are omitted with a warning only when the remaining
+answer passes verification again; otherwise the answer is withheld.
 """
 
 from __future__ import annotations
@@ -25,7 +14,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from auth.dependencies import CurrentUser
 from chat.rag import dual_path_enabled
 from chat.routes import SourceOut
-from generation.engine import get_generator_status
+from generation.providers import provider_status
 from generation.service import persist_generation, run_generation
 from generation.types import AnswerFormat, GenerationUnavailableError
 from storage.database import get_db
@@ -58,7 +47,7 @@ class GenerationVerification(BaseModel):
 
 class GenerateResponse(BaseModel):
     answer: str
-    engine: str = "generative"
+    engine: str = "groq"
     model: str
     answerFormat: str
     marks: int
@@ -78,7 +67,7 @@ async def generate_answer(
     current_user: CurrentUser,
     db: AsyncSession = Depends(get_db),
 ):
-    """Answer a question with the local generative model, grounded and verified."""
+    """Answer a question using Groq and the shared evidence retrieval pipeline."""
     question = body.question.strip()
     if not question:
         raise HTTPException(status_code=400, detail="Question cannot be empty")
@@ -95,18 +84,17 @@ async def generate_answer(
 
     user_id = str(current_user.id)
 
-    # Retrieval + generation live in the shared service, so this route and
-    # /api/chat/ask produce identical evidence, verification and persistence.
+    # Share the retrieval and provider infrastructure with workspace chat.
     try:
         chunks, result = await run_generation(
             db, user_id, question, body.topK, answer_format
         )
     except GenerationUnavailableError as exc:
-        status = get_generator_status()
+        status = provider_status()
         raise HTTPException(
             status_code=503,
             detail={
-                "error": "DocuMind generative model is not available",
+                "error": "The Groq answer provider is unavailable",
                 "message": str(exc),
                 "model": status.get("model"),
             },

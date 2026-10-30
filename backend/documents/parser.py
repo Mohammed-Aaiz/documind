@@ -111,9 +111,8 @@ Provenance
   buffer.  It is never a temporary filesystem path.
 * ``page_number`` — 1-based PDF page number.
 * ``bbox_x0/y0/x1/y1`` — PDF user-space coordinates (points, origin top-left,
-  y increasing downward).  The current extractor does **not** retain bounding
-  boxes on ``ExtractedElement``, so these are always ``None`` today;
-  coordinates are never fabricated.
+  y increasing downward). Native PDF and OCR detections retain these boxes;
+  coordinates are absent for formats/extraction paths without measured geometry.
 * ``content`` — the extracted text of the element.
 * ``heading_path`` — the actual heading ancestry (root -> nearest ancestor), or
   ``None`` when the extractor reports no heading context.  The extractor uses an
@@ -411,6 +410,10 @@ def _build_elements(extracted: list[ExtractedElement]) -> list[ParsedElement]:
                 heading_path=heading_path,
                 content=raw.content if raw.content is not None else None,
                 table_data=_norm_table_data(element_type, raw.table_data),
+                bbox_x0=raw.bbox_x0,
+                bbox_y0=raw.bbox_y0,
+                bbox_x1=raw.bbox_x1,
+                bbox_y1=raw.bbox_y1,
             )
         )
 
@@ -420,6 +423,21 @@ def _build_elements(extracted: list[ExtractedElement]) -> list[ParsedElement]:
 # ---------------------------------------------------------------------------
 # Public API
 # ---------------------------------------------------------------------------
+
+def parse_extracted_elements(
+    extracted: list[ExtractedElement], *, page_count: int, source: str,
+) -> ParsedDocument:
+    """Map a completed extraction without decoding/OCRing the PDF twice.
+
+    Ingestion already decoded the PDF and ran OCR when needed. Reusing those
+    exact elements saves that second pass and makes persisted structure match
+    the text that was chunked and embedded.
+    """
+    document = ParsedDocument(parser_version=PDF_PARSER_VERSION, source=source,
+                              page_count=page_count, elements=_build_elements(extracted))
+    validate_parsed_document(document)
+    return document
+
 
 def parse_pdf(
     path_or_bytes: Union[str, Path, bytes, bytearray],

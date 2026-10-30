@@ -40,6 +40,7 @@ from documents.processing import (
     count_usable_chars,
     extract_document,
 )
+from documents.ocr import OcrPolicy
 from documents.routes import _doc_to_out, _document_verdict
 from tests.fixtures.pdf_layout import add_text, new_page, new_pdf
 
@@ -159,10 +160,11 @@ class TestVerdictFunction:
     def test_no_usable_page_is_error_never_partial(self):
         """Zero usable pages is ``error``, and the reason names the truth.
 
-        OCR is neither configured nor approved in this phase (gates 2/3
-        closed), so the observed reason is "no text layer, OCR disabled" —
-        never ``ocr_failed_all_pages``, which would claim an attempt that was
-        never made.
+        A coverage object with no OCR attempt — OCR configured off, or no page
+        handed to it — reports "no text layer, OCR disabled", never
+        ``ocr_failed_all_pages``, which would claim an attempt that was never
+        made.  The OCR-attempted case is covered in ``test_ocr_scanned_pdf.py``
+        and ``test_ocr_fallback.py``.
         """
         status, reason = _document_verdict(PageCoverage(2, 0, (1, 2)))
         assert status == "error"
@@ -181,7 +183,7 @@ class TestExtractionCoverage:
         path = tmp_path / "digital.pdf"
         _write_pdf(path, ["text", "text"])
 
-        elements, coverage = extract_document(path, "pdf")
+        elements, coverage = extract_document(path, "pdf", ocr_policy=OcrPolicy.disabled())
 
         assert coverage is not None
         assert (coverage.pages_total, coverage.pages_usable) == (2, 2)
@@ -195,7 +197,7 @@ class TestExtractionCoverage:
         path = tmp_path / "mixed.pdf"
         _write_pdf(path, ["text", "image"])
 
-        elements, coverage = extract_document(path, "pdf")
+        elements, coverage = extract_document(path, "pdf", ocr_policy=OcrPolicy.disabled())
 
         assert coverage is not None
         assert (coverage.pages_total, coverage.pages_usable) == (2, 1)
@@ -210,7 +212,7 @@ class TestExtractionCoverage:
         path = tmp_path / "text-and-blank.pdf"
         _write_pdf(path, ["text", "blank"])
 
-        _elements, coverage = extract_document(path, "pdf")
+        _elements, coverage = extract_document(path, "pdf", ocr_policy=OcrPolicy.disabled())
 
         assert coverage is not None
         assert (coverage.pages_total, coverage.pages_usable) == (2, 1)
@@ -221,7 +223,7 @@ class TestExtractionCoverage:
         path = tmp_path / "scanned.pdf"
         _write_pdf(path, ["image", "image"])
 
-        elements, coverage = extract_document(path, "pdf")
+        elements, coverage = extract_document(path, "pdf", ocr_policy=OcrPolicy.disabled())
 
         assert coverage is not None
         assert (coverage.pages_total, coverage.pages_usable) == (2, 0)
@@ -270,7 +272,7 @@ class TestPipelineVerdict:
         )
 
         reason = await documents_routes._process_document(
-            doc, path, "pdf", db_session
+            doc, path, "pdf", db_session, ocr_policy=OcrPolicy.disabled()
         )
         await db_session.flush()
 
@@ -300,7 +302,7 @@ class TestPipelineVerdict:
         )
 
         reason = await documents_routes._process_document(
-            doc, path, "pdf", db_session
+            doc, path, "pdf", db_session, ocr_policy=OcrPolicy.disabled()
         )
         await db_session.flush()
 
@@ -327,7 +329,7 @@ class TestPipelineVerdict:
         )
 
         reason = await documents_routes._process_document(
-            doc, path, "pdf", db_session
+            doc, path, "pdf", db_session, ocr_policy=OcrPolicy.disabled()
         )
         await db_session.flush()
 
@@ -389,7 +391,7 @@ class TestPipelineVerdict:
         monkeypatch.setattr(documents_routes, "extract_document", _explode)
 
         reason = await documents_routes._process_document(
-            doc, path, "pdf", db_session
+            doc, path, "pdf", db_session, ocr_policy=OcrPolicy.disabled()
         )
         await db_session.flush()
 
@@ -457,7 +459,7 @@ class TestRotatedPages:
         for rotation in (0, 90, 180, 270):
             path = tmp_path / f"rotated-{rotation}.pdf"
             _write_rotated_pdf(path, ["text"], rotation)
-            elements, coverage = extract_document(path, "pdf")
+            elements, coverage = extract_document(path, "pdf", ocr_policy=OcrPolicy.disabled())
             assert coverage is not None
             assert coverage.pages_total == 1
             assert coverage.pages_usable == 1, f"rotation {rotation} lost usable text"
@@ -470,7 +472,7 @@ class TestRotatedPages:
         for rotation in (90, 180, 270):
             path = tmp_path / f"rotated-scan-{rotation}.pdf"
             _write_rotated_pdf(path, ["text", "image"], rotation)
-            _elements, coverage = extract_document(path, "pdf")
+            _elements, coverage = extract_document(path, "pdf", ocr_policy=OcrPolicy.disabled())
             assert coverage is not None
             assert (coverage.pages_usable, coverage.pages_total) == (1, 2)
             assert coverage.unusable_pages == (2,)
@@ -478,7 +480,7 @@ class TestRotatedPages:
 
             only_scan = tmp_path / f"rotated-scan-only-{rotation}.pdf"
             _write_rotated_pdf(only_scan, ["image"], rotation)
-            _elements2, coverage2 = extract_document(only_scan, "pdf")
+            _elements2, coverage2 = extract_document(only_scan, "pdf", ocr_policy=OcrPolicy.disabled())
             assert coverage2 is not None
             assert coverage2.no_usable_pages
             assert _document_verdict(coverage2) == (
@@ -530,7 +532,7 @@ class TestSparsePagesAreAccountedFor:
             path = tmp_path / f"sparse-{index}.pdf"
             _write_texts_pdf(path, [text])
 
-            elements, coverage = extract_document(path, "pdf")
+            elements, coverage = extract_document(path, "pdf", ocr_policy=OcrPolicy.disabled())
 
             assert coverage is not None
             assert (coverage.pages_total, coverage.pages_usable) == (1, 1), text
@@ -545,7 +547,7 @@ class TestSparsePagesAreAccountedFor:
             path = tmp_path / f"folio-{index}.pdf"
             _write_texts_pdf(path, [text])
 
-            _elements, coverage = extract_document(path, "pdf")
+            _elements, coverage = extract_document(path, "pdf", ocr_policy=OcrPolicy.disabled())
 
             assert coverage is not None
             assert (coverage.pages_total, coverage.pages_usable) == (1, 0), text
@@ -560,7 +562,7 @@ class TestSparsePagesAreAccountedFor:
         path = tmp_path / "title-and-body.pdf"
         _write_texts_pdf(path, ["Chapter 1", _TEXT_LINE])
 
-        elements, coverage = extract_document(path, "pdf")
+        elements, coverage = extract_document(path, "pdf", ocr_policy=OcrPolicy.disabled())
 
         assert coverage is not None
         assert (coverage.pages_total, coverage.pages_usable) == (2, 2)
@@ -576,7 +578,7 @@ class TestSparsePagesAreAccountedFor:
         path = tmp_path / "all-sparse.pdf"
         _write_texts_pdf(path, ["Part I", "Chapter 1", "References"])
 
-        elements, coverage = extract_document(path, "pdf")
+        elements, coverage = extract_document(path, "pdf", ocr_policy=OcrPolicy.disabled())
 
         assert coverage is not None
         assert (coverage.pages_total, coverage.pages_usable) == (3, 3)
@@ -589,7 +591,7 @@ class TestSparsePagesAreAccountedFor:
             path = tmp_path / f"no-content-{index}.pdf"
             _write_texts_pdf(path, [text])
 
-            _elements, coverage = extract_document(path, "pdf")
+            _elements, coverage = extract_document(path, "pdf", ocr_policy=OcrPolicy.disabled())
 
             assert coverage is not None
             assert (coverage.pages_total, coverage.pages_usable) == (1, 0), text
@@ -603,7 +605,7 @@ class TestSparsePagesAreAccountedFor:
         path = tmp_path / "blank-only.pdf"
         _write_pdf(path, ["blank", "blank"])
 
-        _elements, coverage = extract_document(path, "pdf")
+        _elements, coverage = extract_document(path, "pdf", ocr_policy=OcrPolicy.disabled())
 
         assert coverage is not None
         assert coverage.no_usable_pages is True
@@ -634,7 +636,7 @@ class TestSparseDocumentPipeline:
         )
 
         reason = await documents_routes._process_document(
-            doc, path, "pdf", db_session
+            doc, path, "pdf", db_session, ocr_policy=OcrPolicy.disabled()
         )
         await db_session.flush()
 
@@ -660,7 +662,7 @@ class TestSparseDocumentPipeline:
         )
 
         reason = await documents_routes._process_document(
-            doc, path, "pdf", db_session
+            doc, path, "pdf", db_session, ocr_policy=OcrPolicy.disabled()
         )
         await db_session.flush()
 
@@ -686,7 +688,7 @@ class TestSparseDocumentPipeline:
         )
 
         reason = await documents_routes._process_document(
-            doc, path, "pdf", db_session
+            doc, path, "pdf", db_session, ocr_policy=OcrPolicy.disabled()
         )
         await db_session.flush()
 
@@ -698,7 +700,13 @@ class TestSparseDocumentPipeline:
     async def test_mixed_digital_and_scanned_document_stays_partial(
         self, db_session, create_test_user, tmp_path, monkeypatch
     ):
-        """A scanned page is still unaccounted: OCR is not implemented."""
+        """With OCR configured off, a scanned page is still unaccounted.
+
+        These coverage tests disable OCR on purpose (``OcrPolicy.disabled()``)
+        so they measure the accounting rule alone.  The OCR path has its own
+        tests; this file must not start depending on an engine being
+        provisioned.
+        """
         from documents import routes as documents_routes
 
         user = await create_test_user(email="phase1a-sparse-scan@test.com")
@@ -713,7 +721,7 @@ class TestSparseDocumentPipeline:
         )
 
         reason = await documents_routes._process_document(
-            doc, path, "pdf", db_session
+            doc, path, "pdf", db_session, ocr_policy=OcrPolicy.disabled()
         )
         await db_session.flush()
 
