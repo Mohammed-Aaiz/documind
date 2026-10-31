@@ -1,0 +1,55 @@
+{
+  "title": "College Physics",
+  "authors": [
+    {
+      "type": "author",
+      "value": {
+        "name": "Paul Peter Urone",
+        "university": "California State University, Sacramento",
+        "country": "",
+        "senior_author": true,
+        "display_at_top": true
+      },
+      "id": "4956d5eb-7608-4dbc-a460-c27ad42f3db9"
+    },
+    {
+      "type": "author",
+      "value": {
+        "name": "Roger Hinrichs",
+        "university": "State University of New York, College at Oswego",
+        "country": "",
+        "senior_author": true,
+        "display_at_top": true
+      },
+      "id": "2ebf5703-d735-42fa-9602-4d65494ef816"
+    },
+    {
+      "type": "author",
+      "value": {
+        "name": "Kim Dirks",
+        "university": "University of Auckland",
+        "country": "New Zealand",
+        "senior_author": false,
+        "display_at_top": false
+      },
+      "id": "636a5a5a-b870-4a7e-90d1-68f6c765583a"
+    },
+    {
+      "type": "author",
+      "value": {
+        "name": "Manjula Sharma",
+        "university": "University of Sydney",
+        "country": "Australia",
+        "senior_author": false,
+        "display_at_top": false
+      },
+      "id": "5089b484-7518-4948-af89-4d87997dc232"
+    }
+  ],
+  "license_name": "Creative Commons Attribution License",
+  "license_version": "4.0",
+  "license_url": "https://creativecommons.org/licenses/by/4.0/",
+  "pdf_url": "https://assets.openstax.org/oscms-prodcms/media/documents/College_Physics-WEB_2s5sHvR.pdf",
+  "last_updated_pdf": "2020-06-25T15:30:00-05:00",
+  "digital_isbn_13": "978-1-947172-01-2"
+}
