@@ -679,8 +679,11 @@ class VoiceWebRTCSession:
         except SessionBusyError:
             await self.send_error("session_busy", "A response is already running in this conversation.")
             await self.send_status("listening")
-        except GenerationUnavailableError:
-            await self.send_error("engine_unavailable", "The configured answer or speech recognition engine is unavailable.")
+        except GenerationUnavailableError as exc:
+            if getattr(exc, "status_code", None) == 429:
+                await self.send_error("rate_limited", "The answer service is temporarily rate limited. Please wait a moment and try again.")
+            else:
+                await self.send_error("engine_unavailable", "The configured answer or speech recognition engine is unavailable.")
             await self.send_status("listening")
         except voice.TTSEngineUnavailable:
             logger.exception("WebRTC voice synthesis unavailable")

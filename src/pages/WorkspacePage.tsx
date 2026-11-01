@@ -7,6 +7,7 @@ import { stopActiveTtsPlayback } from '../components/common/VoiceSpeakerButton';
 import { WORKSPACES } from '../features/workspace/config';
 import { SourceLibrary } from '../features/workspace/SourceLibrary';
 import { AnswerThread } from '../features/workspace/AnswerThread';
+import { conversationMarkdown } from '../features/workspace/answerPresentation';
 import { Icon } from '../features/workspace/WorkspaceSidebar';
 
 export const WorkspacePage: React.FC<{ onNavigate: (page: Page) => void }> = () => {
@@ -30,19 +31,21 @@ export const WorkspacePage: React.FC<{ onNavigate: (page: Page) => void }> = () 
   const hosted = provider?.hosted ?? model?.hosted ?? providerName === 'groq';
   const readyCount = files.filter((file) => file.status === 'ready' || file.status === 'partial').length;
   function exportChat() {
-    const text = `# DocuMind · ${config.label}\n\n` + messages.filter((message) => !message.streaming).map((message) => `## ${message.sender === 'user' ? 'You' : 'DocuMind'}\n\n${message.text}\n\n${message.sources?.map((source, index) => `[${index + 1}] ${source.documentName}${source.page != null ? `, page ${source.page}` : ''}\n${source.content}`).join('\n\n') ?? ''}`).join('\n\n');
+    const text = conversationMarkdown(messages, config.label);
     const url = URL.createObjectURL(new Blob([text], { type: 'text/markdown' }));
-    const link = document.createElement('a'); link.href = url; link.download = `documind-${workspace}-chat.md`; link.click(); URL.revokeObjectURL(url);
+    const stamp = new Date().toISOString().slice(0, 19).replace(/[:T]/g, '-');
+    const link = document.createElement('a'); link.href = url; link.download = `documind-${workspace}-chat-${stamp}.md`; link.click(); URL.revokeObjectURL(url);
   }
   return <div className={`dm-workspace ${libraryOpen ? 'library-open' : ''}`}>
     <section className="dm-conversation">
       <div className="dm-workspace-toolbar"><div><span className="dm-space-pill"><Icon name={config.icon} />{config.label} workspace</span><span className="dm-private-note"><Icon name="lock" />Separate chat history</span></div><div><button className="dm-icon-button" disabled={!messages.length || isSending} aria-label="Export conversation as Markdown" onClick={exportChat}><Icon name="download" /></button><button className="dm-button dm-library-toggle" onClick={() => setLibraryOpen(!libraryOpen)} aria-expanded={libraryOpen}><Icon name="folder_open" />Sources<span>{files.length}</span></button></div></div>
       <div className="dm-conversation-body" key={`${workspace}-${activeSessionId ?? 'home'}`}>
-        {messages.length ? <AnswerThread messages={messages} onPlaybackChange={setTtsPlaying} voiceActive={voiceActive} /> : <div className="dm-welcome">
+        {messages.length ? <AnswerThread messages={messages} onPlaybackChange={setTtsPlaying} voiceActive={voiceActive} /> : sessionsLoading ? <div className="dm-welcome" role="status">Loading your conversation…</div> : <div className="dm-welcome">
           <div className="dm-welcome-emblem"><Icon name={config.icon} /><span /></div>
           <p className="dm-eyebrow">{config.eyebrow}</p><h1>{config.title}</h1><p className="dm-welcome-description">{config.description}</p>
           <div className="dm-starters">{config.actions.map((action) => <button key={action.task} onClick={() => { setTask(action.task); setChatInput(action.prompt); document.getElementById('workspace-question')?.focus(); }}><span className="dm-starter-icon"><Icon name={action.icon} /></span><strong>{action.title}</strong><small>{action.description}</small><Icon name="north_east" className="dm-starter-arrow" /></button>)}</div>
           <div className="dm-welcome-footnote"><Icon name="format_quote" />Built around your sources. Designed for your thinking.</div>
+          {readyCount === 0 && <button className="dm-button" onClick={() => setLibraryOpen(true)}><Icon name="upload_file" />Add a source to get started</button>}
         </div>}
       </div>
       <div className="dm-composer-area">

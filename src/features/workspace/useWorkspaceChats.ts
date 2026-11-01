@@ -6,10 +6,10 @@ import type { VoiceServerAnswer } from '../../lib/voiceStream';
 interface ModeState {
   activeSessionId: string | null; sessions: ChatSession[]; messages: ChatMessage[]; chatInput: string;
   answerFormat: '5' | '10' | '15'; task: WorkspaceTask; busy: boolean; loading: boolean;
-  error: string | null; memoryBackend: string | null;
+  error: string | null; sessionsError: string | null; memoryBackend: string | null;
 }
 const initial = (mode: WorkspaceMode): ModeState => ({ activeSessionId: null, sessions: [], messages: [], chatInput: '', answerFormat: '10',
-  task: mode === 'student' ? 'answer' : 'synthesis', busy: false, loading: false, error: null, memoryBackend: null });
+  task: mode === 'student' ? 'answer' : 'synthesis', busy: false, loading: false, error: null, sessionsError: null, memoryBackend: null });
 const fresh = () => ({ student: initial('student'), research: initial('research') });
 
 function messagesFromHistory(turns: ApiConversationTurn[], answer?: ApiConversationAnswer | VoiceServerAnswer): ChatMessage[] {
@@ -49,8 +49,8 @@ export function useWorkspaceChats(workspace: WorkspaceMode, identity: string) {
     update(mode, { loading: true });
     try {
       const sessions = await apiListSessions(mode);
-      if (requestEpoch === epoch.current) update(mode, { sessions: sessions.filter((session) => (session.workspace ?? 'student') === mode), error: null });
-    } catch (error) { if (requestEpoch === epoch.current) update(mode, { error: error instanceof Error ? error.message : 'Could not load chats.' }); }
+      if (requestEpoch === epoch.current) update(mode, { sessions: sessions.filter((session) => (session.workspace ?? 'student') === mode), sessionsError: null });
+    } catch (error) { if (requestEpoch === epoch.current) update(mode, { sessionsError: error instanceof Error ? error.message : 'Could not load chats.' }); }
     finally { if (requestEpoch === epoch.current) update(mode, { loading: false }); }
   }, [update]);
   useEffect(() => {
@@ -92,7 +92,7 @@ export function useWorkspaceChats(workspace: WorkspaceMode, identity: string) {
   const sendMessage = useCallback(async () => {
     const mode = modeRef.current; const current = stateRef.current[mode];
     const text = current.chatInput.trim();
-    if (!text || current.busy || controller.current) return;
+    if (!text || current.busy || current.loading || controller.current) return;
     const requestEpoch = ++epoch.current;
     const abort = new AbortController(); controller.current = abort;
     update(mode, { busy: true, error: null });
@@ -131,7 +131,7 @@ export function useWorkspaceChats(workspace: WorkspaceMode, identity: string) {
   const current = states[workspace];
   return { ...current, sessionsLoading: current.loading, chatError: current.error, isSending: current.busy,
     isConversationMode: current.activeSessionId !== null, startNewConversation, openConversation, deleteConversation,
-    sendMessage, cancelMessage, applyVoiceAnswer,
+    sendMessage, cancelMessage, applyVoiceAnswer, refreshSessions,
     setChatInput: (chatInput: string) => update(workspace, { chatInput }),
     setAnswerFormat: (answerFormat: '5' | '10' | '15') => update(workspace, { answerFormat }),
     setTask: (task: WorkspaceTask) => update(workspace, { task }),

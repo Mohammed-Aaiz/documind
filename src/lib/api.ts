@@ -15,7 +15,15 @@ const API_BASE = (import.meta.env.VITE_API_BASE_URL ?? '').replace(/\/+$/, '');
 // Token helpers
 // ---------------------------------------------------------------------------
 
-const TOKEN_KEY = 'documind_token';
+export const TOKEN_KEY = 'documind_token';
+export const SESSION_EXPIRED_EVENT = 'documind:session-expired';
+
+function checkSession(status: number, requestToken: string | null): void {
+  if (status === 401 && requestToken && getToken() === requestToken) {
+    clearToken();
+    window.dispatchEvent(new Event(SESSION_EXPIRED_EVENT));
+  }
+}
 
 export function getToken(): string | null {
   return localStorage.getItem(TOKEN_KEY);
@@ -56,11 +64,14 @@ async function apiFetch<T>(
   const body = res.status === 204 ? null : await res.json().catch(() => null);
 
   if (!res.ok) {
+    checkSession(res.status, token);
     // Backend returns { detail: string } on errors
     const message =
       typeof body?.detail === 'string'
         ? body.detail
-        : typeof body?.detail?.message === 'string' ? body.detail.message : `Request failed (${res.status})`;
+        : typeof body?.detail?.message === 'string' ? body.detail.message
+          : res.status === 429 ? 'Too many requests. Wait a moment and try again.'
+            : res.status >= 500 ? 'DocuMind is temporarily unavailable. Please try again shortly.' : `Request failed (${res.status})`;
     throw new ApiError(message, res.status);
   }
 
@@ -126,8 +137,8 @@ export async function apiRegister(name: string, email: string, password: string)
   });
 }
 
-export async function apiGetMe(): Promise<UserProfile> {
-  return apiFetch<UserProfile>('/api/auth/me');
+export async function apiGetMe(signal?: AbortSignal): Promise<UserProfile> {
+  return apiFetch<UserProfile>('/api/auth/me', { signal });
 }
 
 // ---------------------------------------------------------------------------
@@ -183,8 +194,9 @@ export async function apiUploadDocument(file: File): Promise<ApiDocument> {
     body: formData,
   });
 
-  const body = await res.json();
+  const body = await res.json().catch(() => null);
   if (!res.ok) {
+    checkSession(res.status, token);
     const message = typeof body?.detail === 'string' ? body.detail : `Upload failed (${res.status})`;
     throw new ApiError(message, res.status);
   }
@@ -198,6 +210,10 @@ export async function apiListDocuments(): Promise<ApiDocument[]> {
 
 export async function apiGetDocument(id: string): Promise<ApiDocumentDetail> {
   return apiFetch<ApiDocumentDetail>(`/api/documents/${id}`);
+}
+
+export async function apiReprocessDocument(id: string): Promise<ApiDocument> {
+  return apiFetch<ApiDocument>(`/api/documents/${encodeURIComponent(id)}/reprocess`, { method: 'POST' });
 }
 
 export type ApiKnowledgeGraphStatus = 'pending' | 'ready' | 'partial' | 'unavailable';
@@ -507,6 +523,7 @@ export async function apiTranscribeAudio(
 
   const body = await res.json().catch(() => null);
   if (!res.ok) {
+    checkSession(res.status, token);
     const message =
       typeof body?.detail === 'string'
         ? body.detail
@@ -551,6 +568,7 @@ export async function apiSynthesizeSpeech(
   });
 
   if (!res.ok) {
+    checkSession(res.status, token);
     const body = await res.json().catch(() => null);
     const message =
       typeof body?.detail === 'string'
@@ -802,6 +820,7 @@ export async function apiAnalyzeMedia(
 
   const body = await res.json().catch(() => null);
   if (!res.ok) {
+    checkSession(res.status, token);
     throw new ApiError(mediaErrorMessage(body, res.status), res.status);
   }
   return body as ApiMediaVerificationResult;
@@ -910,6 +929,7 @@ export async function apiDeleteConversation(sessionId: string, workspace: Worksp
     { method: 'DELETE', headers },
   );
   if (!res.ok && res.status !== 204) {
+    checkSession(res.status, token);
     throw new ApiError(`Could not clear the conversation (${res.status})`, res.status);
   }
 }
@@ -978,6 +998,7 @@ export async function apiStreamConversation(
     body: JSON.stringify({ ...input, topK: input.topK ?? 5 }),
   });
   if (!response.ok) {
+    checkSession(response.status, token);
     const error = await response.json().catch(() => null);
     throw new ApiError(typeof error?.detail === 'string' ? error.detail : error?.detail?.message ?? `Answer unavailable (${response.status}).`, response.status);
   }

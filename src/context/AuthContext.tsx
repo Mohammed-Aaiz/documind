@@ -8,6 +8,9 @@ import {
   getToken,
   setToken,
   clearToken,
+  ApiError,
+  SESSION_EXPIRED_EVENT,
+  TOKEN_KEY,
 } from '../lib/api';
 
 interface AuthContextType {
@@ -31,6 +34,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [user, setUser] = useState<UserProfile>(defaultUser);
   const [initialising, setInitialising] = useState<boolean>(true);
+  const [restoreError, setRestoreError] = useState(false);
+  const [restoreAttempt, setRestoreAttempt] = useState(0);
 
   // -----------------------------------------------------------------------
   // On mount: validate any persisted token against the backend /me endpoint.
@@ -42,20 +47,45 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       return;
     }
 
-    apiGetMe()
+    let active = true;
+    const abort = new AbortController();
+    const timeout = window.setTimeout(() => abort.abort(), 10000);
+    apiGetMe(abort.signal)
       .then((profile) => {
+        if (!active || getToken() !== token) return;
         setUser({ name: profile.name, email: profile.email, avatarUrl: profile.avatarUrl ?? undefined });
         setIsAuthenticated(true);
       })
-      .catch(() => {
-        // Token is invalid or expired — clear everything.
-        clearToken();
-        setUser(defaultUser);
-        setIsAuthenticated(false);
+      .catch((error) => {
+        if (!active || (getToken() !== token && getToken() !== null)) return;
+        if (error instanceof ApiError && (error.status === 401 || error.status === 403)) {
+          clearToken();
+          setUser(defaultUser);
+          setIsAuthenticated(false);
+        } else {
+          // A temporary outage is not evidence that the user's token expired.
+          setRestoreError(true);
+        }
       })
       .finally(() => {
-        setInitialising(false);
+        window.clearTimeout(timeout);
+        if (active) setInitialising(false);
       });
+    return () => { active = false; window.clearTimeout(timeout); abort.abort(); };
+  }, [restoreAttempt]);
+
+  useEffect(() => {
+    const expired = () => {
+      setUser(defaultUser); setIsAuthenticated(false); setInitialising(false); setRestoreError(false);
+    };
+    window.addEventListener(SESSION_EXPIRED_EVENT, expired);
+    const changed = (event: StorageEvent) => {
+      if (event.key !== null && event.key !== TOKEN_KEY) return;
+      setUser(defaultUser); setIsAuthenticated(false); setRestoreError(false); setInitialising(true);
+      setRestoreAttempt((attempt) => attempt + 1);
+    };
+    window.addEventListener('storage', changed);
+    return () => { window.removeEventListener(SESSION_EXPIRED_EVENT, expired); window.removeEventListener('storage', changed); };
   }, []);
 
   // -----------------------------------------------------------------------
@@ -99,9 +129,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setUser((prev) => ({ ...prev, ...updates }));
   }, []);
 
-  // Show nothing while we validate the stored token on first render.
-  if (initialising) {
-    return null;
+  if (initialising || restoreError) {
+    return <main className="dm-auth-restore"><section aria-live="polite">
+      <h1>DocuMind</h1>
+      {restoreError ? <><p role="alert">We couldn't reconnect to your workspace. Your sign-in is saved.</p>
+        <button className="dm-button dm-primary" onClick={() => { setRestoreError(false); setInitialising(true); setRestoreAttempt((attempt) => attempt + 1); }}>Try again</button>
+        <button className="dm-button" onClick={() => { clearToken(); setRestoreError(false); setUser(defaultUser); setIsAuthenticated(false); }}>Use another account</button>
+      </> : <p role="status">Opening your workspace…</p>}
+    </section></main>;
   }
 
   return (

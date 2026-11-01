@@ -268,7 +268,9 @@ async def transcribe(
 
     # --- 4. Model availability (honest 503, no fabricated transcript) ---
     try:
-        model = _load_model()
+        # The first local model load is CPU/file work too. Keep health checks,
+        # text chat and cancellation responsive during a cold voice request.
+        model = await run_in_threadpool(_load_model)
     except RuntimeError:
         logger.exception("Voice STT model unavailable")
         raise HTTPException(

@@ -7,7 +7,7 @@ import { WORKSPACES } from './config';
 export const Icon = ({ name, className = '' }: { name: string; className?: string }) => <span aria-hidden="true" className={`material-symbols-outlined ${className}`}>{name}</span>;
 
 export function WorkspaceSidebar({ page, onNavigate, open, onClose }: { page: Page; onNavigate: (page: Page) => void; open: boolean; onClose: () => void }) {
-  const { workspace, setWorkspace, sessions, activeSessionId, openConversation, startNewConversation, sessionsLoading, deleteConversation } = useWorkspace();
+  const { workspace, setWorkspace, sessions, activeSessionId, openConversation, startNewConversation, sessionsLoading, sessionsError, refreshSessions, deleteConversation } = useWorkspace();
   const { user, logout } = useAuth();
   const [search, setSearch] = useState('');
   const [deleteId, setDeleteId] = useState<string | null>(null);
@@ -27,7 +27,9 @@ export function WorkspaceSidebar({ page, onNavigate, open, onClose }: { page: Pa
       <label className="dm-chat-search"><Icon name="search" /><input aria-label="Search this workspace's chats" placeholder="Find a conversation" value={search} onChange={(event) => setSearch(event.target.value)} /></label>
       <div className="dm-history">
         {sessionsLoading && <p className="dm-sidebar-hint" role="status">Loading chats…</p>}
-        {!sessionsLoading && sessions.length === 0 && <p className="dm-sidebar-hint">Your conversations will live here, separate from your {workspace === 'student' ? 'research' : 'study'} chats.</p>}
+        {sessionsError && <div className="dm-sidebar-hint" role="alert"><p>{sessionsError}</p><button className="dm-text-button" onClick={() => void refreshSessions()}>Retry loading chats</button></div>}
+        {!sessionsLoading && !sessionsError && sessions.length === 0 && <p className="dm-sidebar-hint">Your conversations will live here, separate from your {workspace === 'student' ? 'research' : 'study'} chats.</p>}
+        {!sessionsLoading && !sessionsError && search && sessions.length > 0 && !sessions.some((session) => (session.preview ?? '').toLowerCase().includes(search.toLowerCase())) && <p className="dm-sidebar-hint">No conversations match this search.</p>}
         {sessions.filter((session) => (session.preview ?? '').toLowerCase().includes(search.toLowerCase())).map((session) => <div className={`dm-history-row ${session.id === activeSessionId ? 'is-active' : ''}`} key={session.id}>
           <button onClick={() => { void openConversation(session.id); onNavigate('workspace'); onClose(); }}><Icon name="chat_bubble" /><span>{session.preview || 'Untitled conversation'}</span></button>
           <button className="dm-delete-chat" aria-label={`Delete ${session.preview || 'untitled chat'}`} onClick={() => setDeleteId(session.id)}><Icon name="close" /></button>

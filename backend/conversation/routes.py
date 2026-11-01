@@ -8,6 +8,7 @@ from __future__ import annotations
 import asyncio
 import json
 import logging
+import math
 from typing import Literal
 
 from fastapi import APIRouter, Depends, HTTPException, Request, Response, status
@@ -140,6 +141,19 @@ def _http_error(exc: Exception) -> HTTPException:
     if isinstance(exc, SessionBusyError):
         return HTTPException(status_code=409, detail="A response is already running in this conversation")
     if isinstance(exc, GenerationUnavailableError):
+        if getattr(exc, "status_code", None) == 429:
+            headers = None
+            try:
+                delay = float(getattr(exc, "retry_after_seconds", None))
+                if math.isfinite(delay):
+                    headers = {"Retry-After": str(math.ceil(max(0.0, min(300.0, delay))))}
+            except (TypeError, ValueError):
+                pass
+            return HTTPException(
+                status_code=429,
+                detail="The answer service is temporarily rate limited. Please wait a moment and try again.",
+                headers=headers,
+            )
         return HTTPException(status_code=503, detail="The configured answer provider is unavailable. Check provider setup and try again.")
     return HTTPException(status_code=400, detail="Invalid conversation request")
 
@@ -225,7 +239,10 @@ async def stream_in_conversation(session_id: str, body: AskConversationRequest, 
         except _REQUEST_ERRORS as exc:
             await db.rollback()
             error = _http_error(exc)
-            yield _sse("error", {"code": str(error.status_code), "message": error.detail})
+            data = {"code": str(error.status_code), "message": error.detail}
+            if error.headers and "Retry-After" in error.headers:
+                data["retryAfterSeconds"] = int(error.headers["Retry-After"])
+            yield _sse("error", data)
         except Exception:
             await db.rollback()
             logger.exception("Conversation stream failed")

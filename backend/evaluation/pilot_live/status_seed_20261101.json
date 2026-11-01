@@ -1,0 +1,39 @@
+{
+  "database": "documind_pilot_20261101",
+  "dataset_sha256": "1315cbb287e4650a109a82aa7fad8908c1673d1b54a63c74061961712e48866a",
+  "chunk_metadata": {
+    "chunks": 151,
+    "heading_chunks": 150,
+    "section_chunks": 150,
+    "paragraph_provenance_chunks": 151
+  },
+  "source_elements": [
+    {
+      "element_type": "paragraph",
+      "count": 536
+    },
+    {
+      "element_type": "section",
+      "count": 30
+    }
+  ],
+  "tables": {
+    "documents": 1,
+    "document_graph_edges": 952,
+    "document_structure_edges": 0,
+    "kg_entities": 38,
+    "kg_relations": 21
+  },
+  "graph": [
+    {
+      "status": "partial",
+      "processed_chunk_count": 13,
+      "failure_code": "rate_limit",
+      "extractor_model": "groq:openai/gpt-oss-20b",
+      "extractor_version": "kg-relations-v2:0e72aa93301148c30c3ac07753c2902d"
+    }
+  ],
+  "pgvector_version": "0.8.6",
+  "index_policy": "source paragraph/heading regex import; no gold topic labels used",
+  "status": "development_index_readiness_not_scientific_validation"
+}
