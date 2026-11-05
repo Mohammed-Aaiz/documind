@@ -689,9 +689,24 @@ def verified_supported_claims(
     answer. The caller reports any omissions; thresholds and source IDs remain
     unchanged. Never reconstruct or paraphrase a claim during this step.
     """
-    report = verify_with_mode(answer, blocks, question=question)
-    if report.verified or not report.supported_claims:
-        return answer, report, False
+    from generation.planning import remove_text_diagrams, validate_text_diagram
+
+    whole_report = verify_with_mode(answer, blocks, question=question)
+    if whole_report.verified or not whole_report.supported_claims:
+        return answer, whole_report, False
+
+    # A diagram is verified label-by-label before this repair path. Repair prose
+    # separately so one unsupported sentence cannot flatten valid code figures.
+    prose, diagrams = remove_text_diagrams(answer)
+    if diagrams and not validate_text_diagram(answer, blocks, question=question):
+        prose, diagrams = answer, []
+    report = verify_with_mode(prose, blocks, question=question) if diagrams else whole_report
+    if diagrams and report.verified:
+        restored = prose + ("\n\n" if prose else "") + "\n\n".join(diagrams)
+        final_report = verify_with_mode(restored, blocks, question=question)
+        return (restored, final_report, False) if final_report.verified else (answer, whole_report, False)
+    if not report.supported_claims:
+        return answer, whole_report, False
     sentences = []
     for claim in report.claims:
         if not claim.supported or not claim.citation_indices:
@@ -706,7 +721,12 @@ def verified_supported_claims(
     retained = "\n\n".join(sentences)
     checked = verify_with_mode(retained, blocks, question=question)
     if not checked.verified:
-        return answer, report, False
+        return answer, whole_report, False
+    if diagrams:
+        retained += ("\n\n" if retained else "") + "\n\n".join(diagrams)
+        checked = verify_with_mode(retained, blocks, question=question)
+        if not checked.verified:
+            return answer, whole_report, False
     return retained, checked, True
 
 
@@ -724,7 +744,10 @@ async def answer_from_evidence(
     its former local model. Both paths retain the existing evidence verifier.
     """
     from config import get_settings
-    from generation.provider_prompt import prepare_prompt, select_evidence
+    from generation.provider_prompt import (
+        asks_for_diagram, extract_student_evidence_gaps, prepare_prompt, select_evidence,
+    )
+    from generation.planning import filter_text_diagrams
     from generation.providers import complete_answer
 
     started = time.perf_counter()
@@ -747,6 +770,21 @@ async def answer_from_evidence(
         completion = await complete_answer(prepared.messages, max_tokens=prepared.max_tokens,
                                            settings=settings)
         answer, model = completion.text.strip(), completion.model
+        answer, gap_notes = extract_student_evidence_gaps(answer, question)
+        warnings.extend(gap_notes)
+        if asks_for_diagram(question):
+            answer, kept_diagrams, omitted_diagrams = filter_text_diagrams(
+                answer, prepared.blocks, question=question
+            )
+            if omitted_diagrams:
+                warnings.append(
+                    f"{omitted_diagrams} diagram figure(s) were omitted because they were malformed, "
+                    "uncited, or unsupported by the supplied evidence."
+                )
+            if not kept_diagrams:
+                warnings.append(
+                    "The question requested a diagram, but the draft contained no evidence-supported figure."
+                )
         citations = {int(value) for value in re.findall(r"\[(\d+)\]", answer)}
         valid_citations = bool(citations) and citations <= {block.index for block in prepared.blocks}
         abstained = not answer or "INSUFFICIENT_EVIDENCE" in answer.upper() or not valid_citations

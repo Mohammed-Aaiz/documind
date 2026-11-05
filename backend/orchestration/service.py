@@ -16,7 +16,10 @@ from sqlalchemy import delete, select
 from sqlalchemy.exc import DBAPIError
 
 from chat.models import ChatMessage, ChatSession
-from generation.provider_prompt import prepare_prompt, select_evidence, validate_intent
+from generation.provider_prompt import (
+    asks_for_diagram, extract_student_evidence_gaps, prepare_prompt, select_evidence, validate_intent,
+)
+from generation.planning import filter_text_diagrams
 from generation.providers import provider_status, stream_answer
 from generation.types import AnswerFormat, EvidenceBlock, GenerationUnavailableError
 from generation.verification import content_tokens, split_sentences
@@ -208,6 +211,8 @@ async def stream_with_memory(db: Any, *, user_id: str, session_id: str, question
     history = await _read_history(db, session_id, int(settings.conversation_history_limit))
     history_data = [m.as_dict() for m in history]
     query, resolved = resolve_followup(question, history_data)
+    student_answer = workspace == "student" and task in ("answer", "explain")
+    diagram_requested = student_answer and asks_for_diagram(question)
     status = provider_status(settings)
     yield {"event": "meta", "data": {"provider": status["provider"], "model": status["model"],
         "hosted": status["hosted"], "fallbackConfigured": status.get("fallbackConfigured", False),
@@ -278,6 +283,22 @@ async def stream_with_memory(db: Any, *, user_id: str, session_id: str, question
                 extractive_fallback = True
                 warnings.append("The configured answer model was unavailable; exact relevant excerpts from the retrieved sources are shown instead.")
             answer = answer.strip()
+            if student_answer and not extractive_fallback:
+                answer, gap_notes = extract_student_evidence_gaps(answer, question)
+                warnings.extend(gap_notes)
+            if diagram_requested:
+                answer, kept_diagrams, omitted_diagrams = filter_text_diagrams(
+                    answer, blocks, question=question
+                )
+                if omitted_diagrams:
+                    warnings.append(
+                        f"{omitted_diagrams} diagram figure(s) were omitted because they were malformed, "
+                        "uncited, or unsupported by the supplied evidence."
+                    )
+                if not kept_diagrams:
+                    warnings.append(
+                        "The question requested a diagram, but the draft contained no evidence-supported figure."
+                    )
             abstained = not extractive_fallback and "INSUFFICIENT_EVIDENCE" in answer.upper()
             citations = {int(match) for match in _CITATION.findall(answer)}
             valid_citations = bool(citations) and citations <= {block.index for block in blocks}

@@ -446,6 +446,139 @@ def strip_citations(sentence: str) -> str:
 #: whitespace.  Whether a candidate really ends a sentence is decided per match by
 #: the shared rule in :mod:`generation.sentence_boundaries`.
 _SENTENCE_BOUNDARY_RE = re.compile(r"(?<=[.!?])\s+")
+_DIAGRAM_DECORATION_RE = re.compile(
+    r"^[\s+\-_=|/\\~:.<>^vV*#\[\]{}()─━│┌┐└┘├┤┬┴┼▼▲←→↓↑]+$"
+)
+
+
+def text_diagram_blocks(answer: str) -> list[str] | None:
+    """Return all well-formed fenced text diagrams, or None if malformed.
+
+    The product renderer supports fenced plain text. Other fence languages are
+    deliberately rejected for requested diagrams so generated HTML/SVG is never
+    trusted or rendered as executable markup.
+    """
+    blocks: list[str] = []
+    current: list[str] | None = None
+    for line in answer.replace("\r\n", "\n").split("\n"):
+        marker = line.strip()
+        if marker == "```text":
+            if current is not None:
+                return None
+            current = []
+        elif marker == "```":
+            if current is None:
+                return None
+            blocks.append("\n".join(current))
+            current = None
+        elif marker.startswith("```"):
+            return None
+        elif current is not None:
+            current.append(line)
+    if current is not None:
+        return None
+    return blocks if blocks and all(block.strip() for block in blocks) else None
+
+
+def validate_text_diagram(answer: str, evidence_blocks: Sequence[EvidenceBlock],
+                          question: str | None = None) -> bool:
+    """Fail closed unless every fenced text diagram has cited, supported labels."""
+    diagrams = text_diagram_blocks(answer)
+    if diagrams is None:
+        return False
+    allowed = {block.index for block in evidence_blocks}
+    for diagram in diagrams:
+        fenced_diagram = f"```text\n{diagram}\n```"
+        claims = split_claims(fenced_diagram)
+        if len(claims) < 2:
+            return False
+        for claim in claims:
+            citations = extract_citations(claim)
+            if not citations or not set(citations) <= allowed:
+                return False
+        from generation.verification import verify_with_mode
+
+        report = verify_with_mode(fenced_diagram, evidence_blocks, question=question)
+        if not report.verified or report.uncited_claims:
+            return False
+    return True
+
+
+def filter_text_diagrams(answer: str, evidence_blocks: Sequence[EvidenceBlock],
+                         question: str | None = None) -> tuple[str, int, int]:
+    """Remove only malformed/unsupported figures; preserve prose and valid figures.
+
+    Returns the cleaned answer, the number of retained figures, and the number
+    omitted. Unknown fence languages and unclosed blocks are never surfaced.
+    """
+    lines = answer.replace("\r\n", "\n").split("\n")
+    kept: list[str] = []
+    retained = omitted = 0
+    index = 0
+    while index < len(lines):
+        marker = lines[index].strip()
+        if not marker.startswith("```"):
+            kept.append(lines[index])
+            index += 1
+            continue
+        if marker == "```":
+            omitted += 1
+            index += 1
+            continue
+
+        end = index + 1
+        depth = 1
+        nested = False
+        while end < len(lines) and depth:
+            nested_marker = lines[end].strip()
+            if nested_marker.startswith("```") and nested_marker != "```":
+                depth += 1
+                nested = True
+            elif nested_marker == "```":
+                depth -= 1
+            end += 1
+        closed = depth == 0
+        end_exclusive = end - 1 if closed else len(lines)
+        body = lines[index + 1:end_exclusive]
+        valid_fence = marker == "```text" and closed and not nested
+        fenced = "\n".join([lines[index], *body, *([lines[end_exclusive]] if closed else [])])
+        if valid_fence and validate_text_diagram(fenced, evidence_blocks, question):
+            kept.extend(lines[index:end_exclusive + 1])
+            retained += 1
+        else:
+            omitted += 1
+        index = end_exclusive + 1 if closed else len(lines)
+
+    return "\n".join(kept).strip(), retained, omitted
+
+
+def remove_text_diagrams(answer: str) -> tuple[str, list[str]]:
+    """Remove well-formed text figures for prose-only claim repair.
+
+    The figure bodies are returned separately so callers can restore them after
+    repairing prose without flattening a verified diagram into sentence lines.
+    """
+    diagrams = text_diagram_blocks(answer)
+    if diagrams is None:
+        return answer, []
+    lines = answer.replace("\r\n", "\n").split("\n")
+    prose: list[str] = []
+    figures: list[str] = []
+    index = 0
+    while index < len(lines):
+        if lines[index].strip() != "```text":
+            prose.append(lines[index])
+            index += 1
+            continue
+        start = index
+        index += 1
+        body: list[str] = []
+        while index < len(lines) and lines[index].strip() != "```":
+            body.append(lines[index])
+            index += 1
+        figures.append("\n".join([lines[start], *body, "```" ]))
+        index += 1
+    return "\n".join(prose).strip(), figures
 
 
 def split_claims(answer: str) -> list[str]:
@@ -461,7 +594,29 @@ def split_claims(answer: str) -> list[str]:
     if not text:
         return []
     pieces: list[str] = []
+    in_text_diagram = False
     for line in text.split("\n"):
+        marker = line.strip()
+        if marker == "```text" and not in_text_diagram:
+            in_text_diagram = True
+            continue
+        if marker == "```" and in_text_diagram:
+            in_text_diagram = False
+            continue
+        if marker.startswith("```"):
+            # An unexpected fence is retained as an unsupported claim. This
+            # makes malformed or unsupported code blocks fail verification.
+            pieces.append(marker)
+            continue
+        if in_text_diagram:
+            # Box borders and connector-only rows express layout. Text-bearing
+            # labels remain claims and must be cited and supported individually.
+            line = line.strip()
+            if line.startswith("[") and line.endswith("]"):
+                line = line[1:-1].strip()
+            line = line.strip(" │┌┐└┘├┤┬┴┼")
+            if not line or _DIAGRAM_DECORATION_RE.fullmatch(line):
+                continue
         line = re.sub(r"^\s*(?:[-*•]|\d+[.)])\s+", "", line).strip()
         if not line:
             continue
@@ -480,4 +635,6 @@ def split_claims(answer: str) -> list[str]:
         # it would report an uncited claim that does not exist.
         if part and not re.fullmatch(r"\[\d{1,2}\]", part):
             pieces.append(part)
+    if in_text_diagram:
+        pieces.append("MALFORMED_UNCLOSED_TEXT_DIAGRAM")
     return pieces
