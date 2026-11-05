@@ -364,10 +364,12 @@ def attribute_claim(
         for ratio, numeric_ok, index in scored
         if ratio >= threshold and numeric_ok
     ]
-    if stated and not set(stated) & set(supporting):
+    if stated and not set(stated) <= set(supporting):
         return [], best_ratio, "claim cites evidence that does not contain it"
 
-    return sorted(supporting), best_ratio, "attributed to evidence"
+    # Preserve the model's explicit references exactly. Additional passages may
+    # contain the same wording, but were not necessarily cited for this claim.
+    return (stated if stated else sorted(supporting)), best_ratio, "attributed to evidence"
 
 
 # ---------------------------------------------------------------------------

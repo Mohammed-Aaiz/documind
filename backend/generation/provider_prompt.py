@@ -124,12 +124,22 @@ def select_evidence(question: str, chunks: Sequence[Any], *, diversify: bool = F
     neural_order = any(getattr(chunk, "rerank_position", None) is not None for chunk in chunks)
     # Parent expansion is already in neural topic order. A lexical bonus or
     # second diversity pass here would silently undo the learned ranking.
-    diversify = diversify and not neural_order
+    # A comparison needs representation from distinct retrieved documents even
+    # when the cross-encoder has supplied an ordering. Ranking still determines
+    # which passage is selected first within each document.
+    compare_documents = bool(re.search(r"\b(compare|comparison|contrast|versus|vs)\b", question, re.I))
+    corpus_question = bool(re.search(r"\b(documents|reports|sources)\b", question, re.I))
+    diversify = (diversify and not neural_order) or compare_documents or corpus_question
     candidates = []
     seen: set[tuple[str, str]] = set()
     for rank, chunk in enumerate(chunks):
         text = str(getattr(chunk, "content", "") or "").strip()
-        fingerprint = (str(getattr(chunk, "document_id", "")), re.sub(r"\s+", " ", text).casefold())
+        document_id = str(getattr(chunk, "document_id", ""))
+        chunk_id = str(getattr(chunk, "chunk_id", "") or "")
+        # Never discard a different page/chunk just because its wording repeats.
+        # Each occurrence is a separately addressable source reference.
+        fingerprint = (document_id, chunk_id or repr((getattr(chunk, "page", None),
+            getattr(chunk, "heading_path", None), re.sub(r"\s+", " ", text).casefold())))
         if not text or fingerprint in seen:
             continue
         seen.add(fingerprint)
@@ -140,6 +150,15 @@ def select_evidence(question: str, chunks: Sequence[Any], *, diversify: bool = F
     candidates.sort(key=lambda item: (-item[0], item[1]))
     ordered = []
     if diversify:
+        question_text = question.casefold()
+        named_documents = set()
+        for _, _, chunk in candidates:
+            name = str(getattr(chunk, "document_name", "") or "").strip().casefold()
+            stem = re.sub(r"\.(pdf|docx|txt)$", "", name)
+            if len(stem) >= 6 and stem in question_text:
+                named_documents.add(str(getattr(chunk, "document_id", "")))
+        if len(named_documents) >= 2:
+            candidates.sort(key=lambda item: str(getattr(item[2], "document_id", "")) not in named_documents)
         documents = set()
         deferred = []
         for item in candidates:
@@ -155,7 +174,8 @@ def select_evidence(question: str, chunks: Sequence[Any], *, diversify: bool = F
     # Keep topic paragraphs in document order after ranking whole topics.
     group_order, groups = [], {}
     for chunk in ordered:
-        key = getattr(chunk, "topic_context_id", None) or ("chunk", str(getattr(chunk, "chunk_id", "")))
+        key = (str(getattr(chunk, "document_id", "")),
+               getattr(chunk, "topic_context_id", None) or ("chunk", str(getattr(chunk, "chunk_id", ""))))
         if key not in groups:
             groups[key] = []
             group_order.append(key)
@@ -190,6 +210,20 @@ def prepare_prompt(question: str, chunks: Sequence[Any], history: Sequence[dict]
     # Reserve provider's extra reasoning budget and message overhead.
     instructions = TASKS[task] + " " + (DEPTH[answer_format.value] if workspace == "student"
         else "Write for a research reader. Do not use exam marks or pad the answer.")
+    multi_document = len({str(getattr(chunk, "document_id", "")) for chunk in chunks if getattr(chunk, "document_id", None)}) > 1
+    passage_texts = [str(getattr(chunk, "content", "") or "").strip() for chunk in chunks]
+    if multi_document:
+        instructions += (
+            " Treat each document as a separate source. Attribute each claim to its supporting passages."
+            " When sources disagree, report each side and cite it separately. Do not combine values,"
+            " dates or entities from different sources into an unsupported claim. Describe only what"
+            " the supplied excerpts show. Apply recency only when a reliable source date is supplied."
+        )
+    if len(passage_texts) != len(set(passage_texts)):
+        instructions += (
+            " A sameTextAsSource field means that source has identical excerpt text to the numbered"
+            " source; it remains a separate citable source, and does not imply broader agreement."
+        )
     student_answer = workspace == "student" and task in ("answer", "explain")
     command, parts = student_question_plan(question) if student_answer else ("", ())
     if student_answer:
@@ -241,6 +275,7 @@ def prepare_prompt(question: str, chunks: Sequence[Any], history: Sequence[dict]
     blocks: list[EvidenceBlock] = []
     sources: list[Any] = []
     evidence_text: list[str] = []
+    complete_text_sources: dict[str, int] = {}
     candidates = prioritize_question_parts(chunks, parts) if parts else list(chunks)
     for chunk in candidates:
         original_content = str(getattr(chunk, "content", "") or "").strip()
@@ -249,13 +284,14 @@ def prepare_prompt(question: str, chunks: Sequence[Any], history: Sequence[dict]
         index = len(blocks) + 1
         label = {"source": index, "document": str(getattr(chunk, "document_name", ""))[:100],
                  "page": getattr(chunk, "page", None), "text": content}
-        if student_answer:
-            heading_path = getattr(chunk, "heading_path", None)
-            section = getattr(chunk, "section", None)
-            if heading_path:
-                label["headingPath"] = list(heading_path)
-            elif section:
-                label["section"] = section
+        if multi_document:
+            label["documentId"] = str(getattr(chunk, "document_id", ""))
+        heading_path = getattr(chunk, "heading_path", None)
+        section = getattr(chunk, "section", None)
+        if heading_path:
+            label["headingPath"] = list(heading_path)
+        elif section:
+            label["section"] = section
         spatial_regions = getattr(chunk, "spatial_regions", None)
         if spatial_regions:
             # Measured geometry is evidence, not inferred image content. It is
@@ -273,8 +309,16 @@ def prepare_prompt(question: str, chunks: Sequence[Any], history: Sequence[dict]
             label["entityRelationPath"] = str(graph_path)[:500]
             label["entityRelationHops"] = getattr(chunk, "knowledge_graph_hops", None)
             label["supportingRelationQuote"] = str(graph_quote or "")[:1200]
+        # Repeated exact passages share the prompt text while keeping separate
+        # numbered sources and their original independently verifiable excerpts.
+        shared_source = complete_text_sources.get(original_content)
+        if shared_source is not None:
+            del label["text"]
+            label["sameTextAsSource"] = shared_source
         line = json.dumps(label, ensure_ascii=False)
         if estimated_tokens(line) > remaining:
+            if shared_source is not None:
+                continue
             if student_answer and (
                 getattr(chunk, "evidence_kind", None) == "table_row"
                 or getattr(chunk, "element_type", None) == "table"
@@ -301,6 +345,8 @@ def prepare_prompt(question: str, chunks: Sequence[Any], history: Sequence[dict]
             continue
         remaining -= estimated_tokens(line)
         evidence_text.append(line)
+        if shared_source is None and content == original_content:
+            complete_text_sources.setdefault(original_content, index)
         block = EvidenceBlock(index=index, content=content,
             document_id=str(getattr(chunk, "document_id", "")),
             document_name=str(getattr(chunk, "document_name", "")), page=getattr(chunk, "page", None),
@@ -340,6 +386,8 @@ def prepare_prompt(question: str, chunks: Sequence[Any], history: Sequence[dict]
         warnings.append("Some retrieved material was shortened or omitted to fit the context window; answer depth is limited to the supplied excerpts.")
     if len(chunks) > 1 and len({b.document_id for b in blocks}) < 2 and workspace == "research":
         warnings.append("The supplied evidence covers one document; cross-document conclusions cannot be established.")
+    if len({b.document_id for b in blocks if b.document_id}) > 1:
+        warnings.append("The answer uses retrieved excerpts and may not represent every document in the library.")
     return PreparedPrompt(messages, blocks, sources, max_tokens, warnings)
 
 
