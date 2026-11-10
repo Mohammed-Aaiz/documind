@@ -526,7 +526,7 @@ async def retrieve_evidence(
             routing["reranker"] = reranking
             from generation.topic_context import expand_topic_context
             try:
-                values, topic_coverage = await expand_topic_context(db, user_id, values)
+                values, topic_coverage = await expand_topic_context(db, user_id, values, question=question)
             except Exception:
                 logger.warning("Topic context unavailable; preserving retrieved evidence", exc_info=True)
                 topic_coverage = {"status": "unavailable"}
@@ -556,8 +556,13 @@ async def retrieve_evidence(
                         ranked += [(1 / (60 + rank), 1, item)
                                    for rank, item in enumerate(patches, 1)]
                         ranked.sort(key=lambda item: (-item[0], item[1]))
+                        # Text has already been bounded by topic bytes. A final
+                        # eight-item slice here severed recovered mechanisms as
+                        # visual patches competed for the same slots. Keep the
+                        # complete text candidate set plus at most four patches;
+                        # prompt fitting still enforces the context ceiling.
                         values = [replace(item, fusion_score=score)
-                                  for score, _, item in ranked][:MAX_EVIDENCE_BLOCKS]
+                                  for score, _, item in ranked]
                     except Exception:
                         logger.warning("Visual patch search unavailable; retaining text evidence", exc_info=True)
                         routing["visualIndex"] = "unavailable"

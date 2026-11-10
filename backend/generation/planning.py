@@ -521,11 +521,6 @@ def filter_text_diagrams(answer: str, evidence_blocks: Sequence[EvidenceBlock],
             kept.append(lines[index])
             index += 1
             continue
-        if marker == "```":
-            omitted += 1
-            index += 1
-            continue
-
         end = index + 1
         depth = 1
         nested = False
@@ -540,10 +535,33 @@ def filter_text_diagrams(answer: str, evidence_blocks: Sequence[EvidenceBlock],
         closed = depth == 0
         end_exclusive = end - 1 if closed else len(lines)
         body = lines[index + 1:end_exclusive]
-        valid_fence = marker == "```text" and closed and not nested
-        fenced = "\n".join([lines[index], *body, *([lines[end_exclusive]] if closed else [])])
+        # An explicitly cited figure caption can supply citations for its
+        # uncited labels. Each resulting label still passes the normal source
+        # verifier; a caption is not itself evidence that a label is true.
+        before = next((line.strip() for line in reversed(kept) if line.strip()), "")
+        after = next((line.strip() for line in lines[end_exclusive + 1:] if line.strip()), "") if closed else ""
+        # Models often place a Markdown-emphasized figure caption immediately
+        # below the drawing. Both placements identify the same bounded figure;
+        # citations still have to support every factual label below.
+        captions = (before.strip("*_ "), after.strip("*_ "))
+        caption_citations = next((extract_citations(caption) for caption in captions
+                                  if re.match(r"^(?:figure|diagram)\b", caption, re.IGNORECASE)
+                                  and extract_citations(caption)), [])
+        if caption_citations:
+            suffix = " ".join(f"[{citation}]" for citation in caption_citations)
+            body = [
+                line + " " + suffix
+                if line.strip() and not _DIAGRAM_DECORATION_RE.fullmatch(line.strip())
+                and not extract_citations(line) else line
+                for line in body
+            ]
+        # Models commonly emit an unlabelled or ``ascii`` fence for plain
+        # diagrams. Normalize those safe forms before the same label-by-label
+        # evidence checks; other languages remain rejected.
+        valid_fence = marker.lower() in {"```", "```text", "```ascii"} and closed and not nested
+        fenced = "\n".join(["```text", *body, *(["```"] if closed else [])])
         if valid_fence and validate_text_diagram(fenced, evidence_blocks, question):
-            kept.extend(lines[index:end_exclusive + 1])
+            kept.extend(["```text", *body, "```"])
             retained += 1
         else:
             omitted += 1

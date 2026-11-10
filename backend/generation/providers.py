@@ -16,7 +16,7 @@ import httpx
 
 from generation.types import GenerationUnavailableError
 
-MAX_OUTPUT_CHARS = 8000
+MAX_OUTPUT_CHARS = 12000
 
 
 @dataclass(frozen=True)
@@ -108,7 +108,7 @@ async def _stream_single(messages: Sequence[dict[str, str]], *, max_tokens: int,
     if provider == "groq" and not _secret(getattr(settings, "groq_api_key", "")):
         raise GenerationUnavailableError("Groq is selected but its server API key is not configured.")
     timeout = max(0.01, min(float(timeout_seconds), 300.0))
-    max_tokens = max(64, min(int(max_tokens), 1536))
+    max_tokens = max(64, min(int(max_tokens), 2048))
     headers = {"Content-Type": "application/json"}
     url = "https://api.groq.com/openai/v1/chat/completions"
     headers["Authorization"] = "Bearer " + _secret(getattr(settings, "groq_api_key", ""))
@@ -118,7 +118,7 @@ async def _stream_single(messages: Sequence[dict[str, str]], *, max_tokens: int,
         # GPT-OSS budgets reasoning inside max_completion_tokens. Reserve a
         # small amount so a tiny routing JSON is not starved by reasoning.
         payload.update(reasoning_effort="low", include_reasoning=False,
-                       max_completion_tokens=min(1536, max_tokens + 256))
+                       max_completion_tokens=max_tokens + 256)
     if json_mode:
         payload["response_format"] = {"type": "json_object"}
     length = 0

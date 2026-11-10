@@ -17,10 +17,12 @@ from sqlalchemy.exc import DBAPIError
 
 from chat.models import ChatMessage, ChatSession
 from generation.provider_prompt import (
-    asks_for_diagram, extract_student_evidence_gaps, prepare_prompt, select_evidence, validate_intent,
+    asks_for_diagram, extract_student_evidence_gaps, prepare_prompt, select_evidence,
+    student_question_plan, validate_intent,
 )
-from generation.planning import filter_text_diagrams
+from generation.planning import _with_citation, filter_text_diagrams
 from generation.providers import provider_status, stream_answer
+from generation.topic_context import select_topic_heading_path
 from generation.types import AnswerFormat, EvidenceBlock, GenerationUnavailableError
 from generation.verification import content_tokens, split_sentences
 from orchestration.followup import resolve_followup
@@ -33,57 +35,105 @@ _CITATION = re.compile(r"\[(\d+)\]")
 def _build_extractive_fallback(question: str, blocks: list[EvidenceBlock], marks: int) -> str:
     """Build a cited answer from exact retrieved sentences when synthesis fails.
 
-    The local model may omit references or add unsupported details. In that
+    The provider may omit references or add unsupported details. In that
     case, quote only complete sentences that occur verbatim (whitespace
-    normalized) in retrieved evidence and mention a term from the question.
+    normalized) in retrieved evidence, including a bounded same-source
+    continuation when concrete terms connect it to a question match. Persisted
+    source headings also anchor steps split into separate topic passages.
     This fallback is intentionally extractive; it does not turn lexical overlap
     into a factual paraphrase.
     """
     terms = set(content_tokens(question))
     if not terms:
         return ""
+    command_words = {"explain", "describe", "define", "discuss", "compare", "evaluate",
+                     "what", "which", "how", "why", "with", "illustrate", "list"}
+    _, parts = student_question_plan(question)
+    part_terms = [set(content_tokens(part)) - command_words for part in parts]
     capitalized_terms = {
         token.casefold() for token in re.findall(r"\b[A-Z][a-z0-9]+\b", question)
-        if token.casefold() in terms
+        if token.casefold() in terms and token.casefold() not in command_words
     }
-    focus_terms = capitalized_terms or terms
-    limit = {5: 2, 10: 4, 15: 6}.get(marks, 4)
+    focus_terms = set().union(*part_terms) if part_terms else capitalized_terms or terms
+    limit = {5: 6, 10: 10, 15: 14}.get(marks, 10)
     candidates: list[tuple[int, int, int, str]] = []
     metadata = re.compile(r"\b(?:report id|revision|document pages)\b", re.IGNORECASE)
-    article_anchor = re.compile(
-        r"\b(?:the|a|an)\s+(?:" + "|".join(re.escape(term) for term in sorted(focus_terms, key=len, reverse=True)) + r")\b",
-        re.IGNORECASE,
-    )
     for block_rank, block in enumerate(blocks):
         source = re.sub(r"\s+", " ", block.content).strip()
-        for sentence_rank, raw_sentence in enumerate(split_sentences(block.content)):
+        raw_sentences = split_sentences(block.content)
+        # Expanded working steps keep their own citations and may not repeat
+        # the topic name in the body. Their persisted matching heading anchors
+        # relevance without inventing a relationship between independent blocks.
+        heading = select_topic_heading_path(
+            question, block.heading_path or ((block.section,) if block.section else ()),
+        )
+        heading_overlap = len(focus_terms & set(content_tokens(" ".join(heading))))
+        anchors: set[int] = set()
+        for sentence_rank, raw_sentence in enumerate(raw_sentences):
             sentence = re.sub(r"\s+", " ", raw_sentence).strip()
             if len(sentence) < 45 or not re.search(r"[.!?]$", sentence) or metadata.search(sentence):
                 continue
-            overlap = len(focus_terms & set(content_tokens(sentence)))
+            overlap = max(heading_overlap, len(focus_terms & set(content_tokens(sentence))))
             if not overlap:
                 continue
-            anchor = article_anchor.search(sentence)
-            # Strip a document heading prefix such as "Executive Overview The"
-            # without cutting a later entity mention out of its sentence.
-            if anchor and 0 < anchor.start() <= 40 and not re.search(r"[!?]", sentence[:anchor.start()]):
-                sentence = sentence[anchor.start():]
             if sentence not in source:
                 continue
+            anchors.add(sentence_rank)
             candidates.append((-overlap, block_rank, sentence_rank,
-                               f"- {sentence} [{block.index}]"))
+                               f"- {_with_citation(sentence, block.index)}"))
+        # A process can continue after the last question-term match: "wind
+        # turns a rotor. The rotor drives a shaft. The shaft drives a generator."
+        # ponytail: concrete shared terms are a relevance heuristic, not an
+        # entailment model. Keep at most two adjacent continuation sentences
+        # from this source; never invent a link or bridge separate documents.
+        generic = {"system", "process", "component", "operation", "energy", "unit", "document", "report"}
+        def link_terms(value: str) -> set[str]:
+            return {token.strip(".,;:!?/") for token in content_tokens(value)
+                    if len(token.strip(".,;:!?/")) >= 4} - generic
+
+        for anchor_rank in sorted(anchors):
+            priority = -len(focus_terms & set(content_tokens(raw_sentences[anchor_rank])))
+            for sentence_rank in range(anchor_rank + 1, min(anchor_rank + 3, len(raw_sentences))):
+                if sentence_rank in anchors:
+                    break
+                sentence = re.sub(r"\s+", " ", raw_sentences[sentence_rank]).strip()
+                if (len(sentence) < 45 or not re.search(r"[.!?]$", sentence) or metadata.search(sentence)
+                        or sentence not in source or not (link_terms(sentence) & link_terms(raw_sentences[sentence_rank - 1]))):
+                    break
+                candidates.append((priority, block_rank, sentence_rank, f"- {_with_citation(sentence, block.index)}"))
     candidates.sort(key=lambda item: item[:3])
-    selected: list[str] = []
-    seen: set[str] = set()
-    for _, _, _, excerpt in candidates:
-        fingerprint = re.sub(r"\W+", " ", excerpt.casefold()).strip()
-        if fingerprint in seen:
+    # Give each explicitly requested part a relevant excerpt before allocating
+    # the remaining capacity; many hits for part (a) must not crowd out part (b).
+    promoted = []
+    for terms_for_part in part_terms:
+        if not candidates or not terms_for_part:
             continue
-        seen.add(fingerprint)
-        selected.append(excerpt)
+        best = max(range(len(candidates)), key=lambda i: len(terms_for_part & set(content_tokens(candidates[i][3]))))
+        if terms_for_part & set(content_tokens(candidates[best][3])):
+            promoted.append(candidates.pop(best))
+    candidates = promoted + candidates
+    selected: list[str] = []
+    selected_order: list[tuple[int, int]] = []
+    seen: dict[str, int] = {}
+    for _, block_rank, sentence_rank, excerpt in candidates:
+        # Citations differ between sources even when the quoted sentence is
+        # identical. Deduplicate the text, while keeping each source reference.
+        sentence_text = _CITATION.sub("", excerpt)
+        fingerprint = re.sub(r"\W+", " ", sentence_text.casefold()).strip()
+        if fingerprint in seen:
+            index = seen[fingerprint]
+            citation = _CITATION.search(excerpt)
+            if citation:
+                existing = {f"[{number}]" for number in _CITATION.findall(selected[index])}
+                if citation.group() not in existing:
+                    selected[index] = _with_citation(selected[index], int(citation.group(1)))
+            continue
         if len(selected) >= limit:
-            break
-    return "\n".join(selected)
+            continue
+        seen[fingerprint] = len(selected)
+        selected.append(excerpt)
+        selected_order.append((block_rank, sentence_rank))
+    return "\n".join(item for _, item in sorted(zip(selected_order, selected)))
 
 
 class ConversationSessionNotFound(LookupError):
@@ -339,6 +389,8 @@ async def stream_with_memory(db: Any, *, user_id: str, session_id: str, question
                     "note": "The extractive fallback quotes supplied source text. Generated answers use lexical support checks, which are not a guarantee of factual correctness."}
                 if not report.verified:
                     warnings.append("Some claims could not be confirmed by lexical evidence checks. Review the sources before relying on this answer.")
+                if extractive_fallback:
+                    warnings.append("These excerpts may not cover every required step or detail; review the source passages.")
                 if finish_reason in ("length", "max_tokens"):
                     warnings.append("The provider reached its output limit; this answer may be incomplete.")
     if abstained:

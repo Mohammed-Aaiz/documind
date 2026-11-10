@@ -1,11 +1,12 @@
 """Topic expansion retains provenance and reports bounded/inferred coverage."""
 from contextlib import asynccontextmanager
+import json
 from uuid import uuid4
 
 import pytest
 
 from chat.rag import SourceChunk
-from generation.topic_context import assemble_topic_context, expand_topic_context
+from generation.topic_context import assemble_topic_context, expand_topic_context, select_topic_heading_path
 
 
 def seed(cid="last", **kw):
@@ -98,3 +99,45 @@ async def test_expand_uses_one_parameter_bound_owner_scoped_request():
     assert params["user_id"] == owner and cid in params["seed_ids"]
     assert owner not in sql and cid not in sql
     assert "d.user_id=CAST(:user_id AS uuid)" in sql
+
+
+@pytest.mark.parametrize(("question", "expected"), [("Explain VAWT", ["VAWT"]), ("", None)])
+@pytest.mark.asyncio
+async def test_root_heading_prefix_is_bound_even_when_it_equals_seed_path(question, expected):
+    cid = str(uuid4())
+    calls = []
+
+    class Database:
+        @asynccontextmanager
+        async def begin_nested(self):
+            yield
+
+        async def execute(self, sql, params):
+            calls.append(params)
+            class Result:
+                def fetchall(self):
+                    return []
+            return Result()
+
+    source = SourceChunk(cid, "A VAWT has a vertical rotor axis.", .9, "doc", "notes.pdf", 1,
+                         heading_path=("VAWT",))
+    await expand_topic_context(Database(), str(uuid4()), [source], question=question)
+    assert json.loads(calls[0]["topic_paths"]).get(cid) == expected
+
+
+def test_subject_words_split_across_headings_select_the_named_topic():
+    assert select_topic_heading_path("Explain wind energy", ("Energy", "Wind", "Working steps")) == ("Energy", "Wind")
+    assert select_topic_heading_path("Explain tidal energy", ("Energy", "Wind", "Working steps")) == ()
+
+
+@pytest.mark.parametrize("leaf", [
+    "1. Wind strikes the rotor : Wind approaches the vertically arranged blades or buckets.\n"
+    "Depending on the type of VAWT, the rotor operates mainly using lift or drag forces .",
+    "5. No continuous wind alignment is required : Since the rotor axis is vertical, the turbine\n"
+    "can accept wind from different directions without a yaw mechanism.",
+])
+def test_full_vawt_question_recovers_parent_despite_partial_term_repetition_in_step(leaf):
+    parent = ("CONVERSION\nVertical Axis Wind Turbines (VAWT) : Less common, with blades perpendicular to the\n"
+              "ground.")
+    question = "Explain Vertical Axis Wind Turbines (VAWT) with a neat diagram."
+    assert select_topic_heading_path(question, (parent, leaf)) == (parent,)

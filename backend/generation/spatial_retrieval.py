@@ -6,7 +6,6 @@ page geometry; these are not ColPali embeddings or inferred chart values.
 """
 from __future__ import annotations
 
-import json
 import re
 import uuid
 from dataclasses import replace
@@ -15,6 +14,7 @@ from typing import Sequence
 from sqlalchemy import and_, or_, select
 
 from documents.models import Document, DocumentPageExtraction
+from generation.provider_prompt import asks_for_diagram
 from generation.verification import content_tokens
 
 _SPATIAL = re.compile(r"\b(?:above|below|left|right|beside|column|columns|layout|chart|charts|figure|diagram|table|tables|caption)\b", re.I)
@@ -52,7 +52,16 @@ def select_spatial_regions(layout: dict, question: str, content: str = "", *, li
                             "text": text[:240], "reading_order": region.get("reading_order", index),
                             "column": region.get("column"), "caption_for": region.get("caption_for")}))
     candidates.sort(key=lambda item: item[:2])
-    selected = [item[2] for item in candidates[: max(1, min(limit, 6))]]
+    count = max(1, min(limit, 6))
+    chosen = candidates[:count]
+    if asks_for_diagram(question):
+        # Preserve one observed figure from this retrieved page even when
+        # overlapping text fills the ranking. Its presence establishes only
+        # page provenance, not that the figure answers the question.
+        figure = next((item for item in candidates if item[2]["kind"] == "figure"), None)
+        if figure and figure not in chosen:
+            chosen = chosen[:-1] + [figure]
+    selected = [item[2] for item in chosen]
     # Retain a figure's actual caption association, not a caption invented from
     # proximity at query time. Ingestion alone decides and records the link.
     return sorted(selected, key=lambda item: (item.get("reading_order") or 0, item["id"]))
@@ -89,12 +98,8 @@ async def enrich_spatial_sources(db, user_id: str, question: str, chunks: Sequen
             continue
         layout = layouts.get((str(chunk.document_id), chunk.page))
         regions = select_spatial_regions(layout, question, chunk.content) if layout else []
-        content = chunk.content
-        if regions and _SPATIAL.search(question):
-            # This serializes measured geometry and observed OCR/native text.
-            # Keeping it in the same cited source lets the reader inspect the
-            # evidence behind an above/below/column answer.
-            context = json.dumps(regions, ensure_ascii=False, separators=(",", ":"))
-            content = "Observed page layout (normalized top-left coordinates): " + context + "\n" + content
-        enriched.append(replace(chunk, content=content, spatial_regions=regions or None))
+        # Keep observed geometry separate from the source's extracted text.
+        # The generation prompt serializes spatial_regions independently; adding
+        # it to content makes extractive fallbacks quote internal JSON as prose.
+        enriched.append(replace(chunk, spatial_regions=regions or None))
     return enriched, "available" if layouts else "not_recorded"

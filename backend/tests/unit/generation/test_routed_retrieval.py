@@ -136,3 +136,41 @@ async def test_missing_graph_skips_neural_routing_and_uses_dense_immediately(db_
     assert evidence.routing["path"] == "semantic"
     assert evidence.routing["source"] == "index-availability"
     assert evidence.knowledge_graph_status == status
+
+
+@pytest.mark.asyncio
+async def test_diagram_fusion_retains_the_full_expanded_text_mechanism(db_session, monkeypatch):
+    from generation import topic_context
+
+    patch_paths(monkeypatch, "semantic")
+    expanded = [SourceChunk(
+        f"topic-{index}", f"Supported wind mechanism sentence {index}.", .8, "doc-1", "energy.pdf", index + 1,
+        topic_context_id="wind-topic", topic_context_kind="section", topic_context_complete=True,
+    ) for index in range(12)]
+    patches = [SourceChunk(
+        f"visual:{index}", f"Figure {index}: observed turbine caption.", .1, "doc-1", "energy.pdf", index + 1,
+        evidence_kind="visual_patch", retrieval_path="visual_spatial",
+        spatial_regions=[{"id": f"crop-{index}", "bbox": [.1, .2, .7, .8]}],
+    ) for index in range(4)]
+
+    async def expand(*args, **kwargs):
+        return expanded, {"status": "complete", "groups": 1, "completeGroups": 1}
+
+    async def retrieve(*args, **kwargs):
+        return patches
+
+    monkeypatch.setattr(topic_context, "expand_topic_context", expand)
+    monkeypatch.setattr("config.get_settings", lambda: SimpleNamespace(visual_embeddings_enabled=True))
+    monkeypatch.setattr(visual, "visual_model_status", lambda _: {"available": True, "status": "local_artifact_present"})
+    monkeypatch.setattr(visual_index, "retrieve_visual_patches", retrieve)
+    result = await service.retrieve_evidence(
+        db_session, str(uuid4()), "Explain wind energy with a neat diagram", query_routing=True,
+    )
+    returned = {source.chunk_id: source for source in result}
+    assert len(returned) == len(result), "Source identities must not be duplicated during fusion"
+    for source in expanded + patches:
+        assert source.chunk_id in returned
+        assert returned[source.chunk_id].content == source.content
+        assert returned[source.chunk_id].page == source.page
+        assert returned[source.chunk_id].document_id == source.document_id
+    assert result.routing["topicContext"]["status"] == "complete"

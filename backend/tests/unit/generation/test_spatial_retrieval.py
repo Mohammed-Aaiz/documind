@@ -36,6 +36,16 @@ def test_invalid_boxes_are_dropped_and_selection_is_capped():
     assert len(selected) <= 6
 
 
+def test_diagram_request_retains_observed_figure_amid_relevant_text():
+    regions = [{"id": f"text-{i}", "kind": "text", "bbox": [.1, .1, .3, .2],
+                "text": "wind turbine diagram", "reading_order": i} for i in range(6)]
+    regions.append({"id": "figure-1", "kind": "figure", "bbox": [.1, .2, .8, .9],
+                    "text": "", "reading_order": 6})
+    selected = select_spatial_regions({"regions": regions}, "Explain wind turbine with diagram")
+    assert len(selected) <= 4
+    assert any(item["id"] == "figure-1" for item in selected)
+
+
 @pytest.mark.asyncio
 async def test_spatial_enrichment_never_fetches_another_owners_page_geometry(db_session, create_test_user):
     owner = await create_test_user(email="spatial-owner@example.com")
@@ -53,7 +63,8 @@ async def test_spatial_enrichment_never_fetches_another_owners_page_geometry(db_
     ]
     enriched, status = await enrich_spatial_sources(db_session, str(owner.id), "Which caption is below the figure?", chunks)
     assert status == "available"
-    assert enriched[0].spatial_regions and "Observed page layout" in enriched[0].content
+    assert enriched[0].spatial_regions
+    assert enriched[0].content == "Calibration rig."
     assert enriched[1].spatial_regions is None
     assert enriched[1].content == "Other document."
     assert "PRIVATE OWNER CAPTION" not in str(enriched)

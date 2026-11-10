@@ -57,6 +57,41 @@ async def test_groq_stream_uses_server_key_and_reports_provider(monkeypatch):
 
 
 @pytest.mark.asyncio
+@pytest.mark.parametrize("model,reserve", [("openai/gpt-oss-20b", 256), ("llama-3.3-70b-versatile", 0)])
+@pytest.mark.parametrize("requested", [640, 1280, 2048])
+async def test_transport_preserves_the_detailed_answer_allowance(monkeypatch, model, reserve, requested):
+    payloads = []
+
+    def handler(request):
+        payloads.append(json.loads(request.content))
+        return httpx.Response(200, text=stream(model=model))
+
+    transport(monkeypatch, handler)
+    _ = [delta async for delta in providers.stream_answer(
+        [{"role": "user", "content": "Explain the supplied evidence."}],
+        max_tokens=requested, settings=settings(groq_model=model),
+    )]
+    assert len(payloads) == 1
+    assert payloads[0]["max_completion_tokens"] == requested + reserve
+
+
+@pytest.mark.asyncio
+async def test_transport_still_bounds_extreme_output_requests(monkeypatch):
+    payloads = []
+
+    def handler(request):
+        payloads.append(json.loads(request.content))
+        return httpx.Response(200, text=stream())
+
+    transport(monkeypatch, handler)
+    _ = [delta async for delta in providers.stream_answer(
+        [{"role": "user", "content": "Question"}], max_tokens=100000, settings=settings(),
+    )]
+    assert len(payloads) == 1
+    assert payloads[0]["max_completion_tokens"] <= 2304
+
+
+@pytest.mark.asyncio
 @pytest.mark.parametrize("provider", ["ollama", "unknown"])
 async def test_non_groq_selection_is_rejected_before_network(monkeypatch, provider):
     def handler(request):

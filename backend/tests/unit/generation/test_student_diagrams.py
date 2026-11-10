@@ -1,5 +1,6 @@
 """Regression checks for multipart planning and independent diagram filtering."""
 from types import SimpleNamespace
+import pytest
 
 from generation.planning import filter_text_diagrams, text_diagram_blocks
 from generation.provider_prompt import asks_for_diagram, student_question_plan
@@ -34,3 +35,36 @@ def test_unclosed_diagram_is_not_retained(monkeypatch):
     clean, retained, omitted = filter_text_diagrams(answer, [EvidenceBlock(1, "source load")])
     assert (retained, omitted) == (0, 1)
     assert clean == "Supported opening [1]."
+
+
+@pytest.mark.parametrize("fence", ["```", "```ascii", "```text"])
+def test_cited_caption_supports_plain_text_figure(fence):
+    evidence = [EvidenceBlock(1, "Wind drives the rotor. The rotor turns the shaft.")]
+    answer = f"Figure: Wind turbine [1]\n\n{fence}\nWind\n |\nRotor\n```"
+    clean, retained, omitted = filter_text_diagrams(answer, evidence)
+    assert (retained, omitted) == (1, 0)
+    assert text_diagram_blocks(clean) == ["Wind [1]\n |\nRotor [1]"]
+
+
+def test_cited_caption_does_not_support_unrelated_labels():
+    evidence = [EvidenceBlock(1, "Wind drives the rotor. The rotor turns the shaft.")]
+    answer = "Figure: turbine [1]\n```ascii\nWind\n |\nNuclear reactor\n```"
+    clean, retained, omitted = filter_text_diagrams(answer, evidence)
+    assert (retained, omitted) == (0, 1)
+    assert "Nuclear reactor" not in clean
+
+
+def test_caption_after_diagram_can_support_its_labels():
+    evidence = [EvidenceBlock(1, "Wind drives the rotor. The rotor turns the shaft.")]
+    answer = "```ascii\nWind\n |\nRotor\n```\n\n*Figure: Wind turbine [1]*"
+    clean, retained, omitted = filter_text_diagrams(answer, evidence)
+    assert (retained, omitted) == (1, 0)
+    assert text_diagram_blocks(clean) == ["Wind [1]\n |\nRotor [1]"]
+
+
+def test_caption_after_diagram_cannot_support_unrelated_labels():
+    evidence = [EvidenceBlock(1, "Wind drives the rotor.")]
+    answer = "```ascii\nWind\n |\nNuclear reactor\n```\n*Figure: turbine [1]*"
+    clean, retained, omitted = filter_text_diagrams(answer, evidence)
+    assert (retained, omitted) == (0, 1)
+    assert "Nuclear reactor" not in clean

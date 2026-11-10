@@ -23,19 +23,23 @@ TASKS = {
 ALIASES = {"revise": "revision", "synthesize": "synthesis", "compare": "comparison"}
 DEPTH = {
     "5": (
-        "Give a focused 5-mark study answer: answer the command in the question directly, "
-        "cover its essential supported points, and briefly explain them."
+        "For 5 marks: answer every part with organized supported points. Explain the main "
+        "concepts and how they work or relate; include a useful example when supported. "
+        "Prefer complete explanations over a list of bare facts. Develop the essential "
+        "points with their reasons or operation, not only a definition and summary."
     ),
     "10": (
-        "Give a developed 10-mark study answer: identify and answer every part of the question, "
-        "organize the essential concepts, explain how they connect, and include examples or "
-        "comparisons when supported by the sources."
+        "For 10 marks: give a detailed, logically organized answer to every part. Explain "
+        "the supported mechanisms, steps or relationships and their significance. Include "
+        "relevant examples, comparisons or limitations when supported. Use named sections "
+        "where helpful, and explain each major point rather than merely listing it."
     ),
     "15": (
         "Give a comprehensive 15-mark study answer: answer every part of the question in a "
-        "logical structure, explain the supported concepts and their connections in depth, "
+        "logical structure, explain the supported concepts and their connections thoroughly, "
         "include relevant examples, limitations or exceptions from the sources, and conclude "
-        "only when the evidence supports a conclusion."
+        "only when the evidence supports a conclusion. Develop the requested dimensions "
+        "in depth, linking each supported cause, intermediate step and outcome."
     ),
 }
 
@@ -204,7 +208,9 @@ class PreparedPrompt:
 def prepare_prompt(question: str, chunks: Sequence[Any], history: Sequence[dict], *,
                    workspace: str, task: str, answer_format: AnswerFormat, context_tokens: int) -> PreparedPrompt:
     workspace, task = validate_intent(workspace, task)
-    max_tokens = {"5": 320, "10": 640, "15": 1024}[answer_format.value] if workspace == "student" else 768
+    # Upper bounds leave room for explanations and figures; they are not target
+    # lengths. Sparse evidence must still produce a short, qualified answer.
+    max_tokens = {"5": 640, "10": 1280, "15": 2048}[answer_format.value] if workspace == "student" else 768
     # Input budget grows with requested depth, within the operator's ceiling.
     context_tokens = min(int(context_tokens), {"5": 8192, "10": 12288, "15": 16384}[answer_format.value] if workspace == "student" else 16384)
     # Reserve provider's extra reasoning budget and message overhead.
@@ -231,8 +237,12 @@ def prepare_prompt(question: str, chunks: Sequence[Any], history: Sequence[dict]
             " Check each requested part against the source passages before drafting. "
             "If only some parts are supported, answer those with citations and name the specific "
             "parts the sources leave unanswered. Use INSUFFICIENT_EVIDENCE only as the entire reply "
-            "when no substantive part is supported. Add depth through distinct supported points, "
-            "reasoning or relevant examples. Do not repeat points to fill space. "
+            "when no substantive part is supported. Match detail to the question and marks; "
+            "do not repeat points or add optional material to fill space. For a process, "
+            "explain the supported chain from input through intermediate steps to outcome; "
+            "do not skip a supplied connecting step. Before finishing, check that each requested "
+            "part has its supported explanation or an explicit evidence gap. Put each citation on "
+            "the same line as its claim, before final punctuation; never on a separate line. "
             "Limit conclusions to the supplied excerpts and do not imply the entire document was read."
         )
         if parts:
@@ -249,7 +259,9 @@ def prepare_prompt(question: str, chunks: Sequence[Any], history: Sequence[dict]
             "only when they are one directly connected process or relationship. Use simple ASCII boxes "
             "and connector-only arrow rows. "
             "Use only components and relationships supported by "
-            "the supplied sources. Put a valid source citation after every factual label in the diagram. "
+            "the supplied sources. Put a valid source citation after every factual label in the diagram, "
+            "or put all applicable citations on a `Figure: title [1]` caption immediately above it; "
+            "every label must be supported by the caption's cited sources. "
             "Explain each relationship shown with a cited sentence in the answer; arrows alone do not "
             "establish a relationship. Reuse source wording where possible. If the evidence cannot support "
             "a diagram, say so and do not draw an unsupported one."
@@ -316,6 +328,13 @@ def prepare_prompt(question: str, chunks: Sequence[Any], history: Sequence[dict]
             del label["text"]
             label["sameTextAsSource"] = shared_source
         line = json.dumps(label, ensure_ascii=False)
+        # On a small configured window, measured geometry/headers can cost more
+        # than the minimum evidence reserve. Prefer one complete usable source
+        # over reserving output capacity for an answer with no evidence at all.
+        extra = estimated_tokens(line) - remaining
+        if not blocks and 0 < extra <= max_tokens - 64:
+            max_tokens -= extra
+            remaining += extra
         if estimated_tokens(line) > remaining:
             if shared_source is not None:
                 continue
