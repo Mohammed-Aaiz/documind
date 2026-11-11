@@ -23,7 +23,7 @@ def test_each_figure_is_checked_and_only_invalid_figure_is_removed(monkeypatch):
     figure = "```text\nSource [1]\n  |\nLoad [1]\n```"
     invalid = "```text\nUnknown [9]\n  |\nLoad [9]\n```"
     answer = f"First explanation [1].\n\n{figure}\n\nSecond explanation [1].\n\n{invalid}"
-    clean, retained, omitted = filter_text_diagrams(answer, [EvidenceBlock(1, "source load")])
+    clean, retained, omitted = filter_text_diagrams(answer, [EvidenceBlock(1, "Source supplies Load.")])
     assert (retained, omitted) == (1, 1)
     assert text_diagram_blocks(clean) == ["Source [1]\n  |\nLoad [1]"]
     assert "First explanation" in clean and "Second explanation" in clean

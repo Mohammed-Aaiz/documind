@@ -62,6 +62,58 @@ afterEach(() => {
   vi.useRealTimers();
 });
 
+describe('VoiceSpeakerButton diagram narration', () => {
+  it('reads surrounding prose after removing a diagram before the speech length limit', async () => {
+    installFetchMock();
+    const diagram = Array.from({ length: 200 }, () => '| Wind energy [1] |').join('\n');
+    render(<VoiceSpeakerButton text={`Wind turns the rotor.\n\n\`\`\`text\n${diagram}\n\`\`\`\n\nThe generator produces electricity.`} />);
+
+    await act(async () => {
+      fireEvent.click(screen.getByRole('button', { name: 'Read answer aloud' }));
+    });
+
+    const request = JSON.parse(String(vi.mocked(fetch).mock.calls[0][1]?.body));
+    expect(request.text).toBe('Wind turns the rotor.\n\nThe generator produces electricity.');
+  });
+
+  it('gives a written-answer pointer when the answer contains only a diagram', async () => {
+    installFetchMock();
+    render(<VoiceSpeakerButton text={'```text\nWind [1]\n |\nRotor [1]\n```'} />);
+
+    await act(async () => {
+      fireEvent.click(screen.getByRole('button', { name: 'Read answer aloud' }));
+    });
+
+    const request = JSON.parse(String(vi.mocked(fetch).mock.calls[0][1]?.body));
+    expect(request.text).toBe('The diagram is available in the written answer.');
+  });
+
+  it('does not speak an unclosed diagram tail', async () => {
+    installFetchMock();
+    render(<VoiceSpeakerButton text={'Wind turns the rotor.\n```text\n+--------+\n| Rotor |'} />);
+
+    await act(async () => {
+      fireEvent.click(screen.getByRole('button', { name: 'Read answer aloud' }));
+    });
+
+    const request = JSON.parse(String(vi.mocked(fetch).mock.calls[0][1]?.body));
+    expect(request.text).toBe('Wind turns the rotor.');
+  });
+
+  it('preserves other code fence languages', async () => {
+    installFetchMock();
+    const text = "```python\nprint('Rotor')\n```";
+    render(<VoiceSpeakerButton text={text} />);
+
+    await act(async () => {
+      fireEvent.click(screen.getByRole('button', { name: 'Read answer aloud' }));
+    });
+
+    const request = JSON.parse(String(vi.mocked(fetch).mock.calls[0][1]?.body));
+    expect(request.text).toBe(text);
+  });
+});
+
 describe('VoiceSpeakerButton playback ownership', () => {
   it('1. two messages synthesizing concurrently: only the current attempt plays', async () => {
     const entries = installFetchMock();

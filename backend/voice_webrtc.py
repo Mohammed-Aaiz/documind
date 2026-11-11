@@ -120,6 +120,35 @@ FRAME_SECONDS = FRAME_SAMPLES / SAMPLE_RATE
 #: 16-bit mono audio written for the transcription helper.
 _STT_SUFFIX = ".wav"
 
+def _spoken_answer_text(answer: str) -> str:
+    """Keep diagram characters in the written answer, outside voice playback.
+
+    An unfinished text fence suppresses its remaining rows rather than reading
+    box borders aloud. Complete blocks leave any following explanation intact.
+    """
+    kept: list[str] = []
+    fence = None
+    diagram_removed = False
+    for line in answer.splitlines(keepends=True):
+        marker = line.strip()
+        if fence == "text":
+            if marker == "```":
+                fence = None
+            continue
+        if fence is None and marker == "```text":
+            fence = "text"
+            diagram_removed = True
+            continue
+        if marker.startswith("```"):
+            if fence is None:
+                fence = "other"
+            elif marker == "```":
+                fence = None
+        kept.append(line)
+    return "".join(kept).strip() or (
+        "The diagram is available in the written answer." if diagram_removed else ""
+    )
+
 
 def _looks_like_sdp(sdp: str) -> bool:
     """Cheap structural check, so garbage is refused before a peer is built.
@@ -644,7 +673,7 @@ class VoiceWebRTCSession:
                 source["id"] = source["chunkId"]
             await self.send({"type": "answer", **wire})
 
-            spoken = answer.answer.strip()
+            spoken = _spoken_answer_text(answer.answer)
             if not spoken:
                 await self.send_status("listening")
                 return

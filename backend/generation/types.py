@@ -81,6 +81,10 @@ class EvidenceBlock:
     #: missing silently, so "the eighth item" could resolve to the fifth
     #: surviving one.
     truncated: bool = False
+    #: Retrieval provenance for inferred contiguous contexts. These do not alter
+    #: the original source heading, page or text and are not additional facts.
+    topic_context_id: str | None = None
+    topic_context_kind: str | None = None
 
     def label(self) -> str:
         """Human-readable provenance label used inside the prompt."""

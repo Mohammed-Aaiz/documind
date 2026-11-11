@@ -130,6 +130,25 @@ def test_subject_words_split_across_headings_select_the_named_topic():
     assert select_topic_heading_path("Explain tidal energy", ("Energy", "Wind", "Working steps")) == ()
 
 
+def test_named_acronym_does_not_expand_a_different_turbine_on_shared_words():
+    query = "Explain the working of Horizontal Axis Wind Turbines (HAWT) with a neat diagram."
+    wrong_topic = (
+        "CONVERSION\nVertical Axis Wind Turbines (VAWT): Less common, with blades perpendicular to the ground.",
+        "Working steps",
+    )
+    assert select_topic_heading_path(query, wrong_topic) == ()
+
+
+def test_named_acronym_recognizes_the_source_plural():
+    query = "Explain HAWT working with a diagram."
+    path = (
+        "CONVERSION\n4. Gearbox increases speed: In conventional HAWTs, a gearbox increases rotational speed.",
+        "Generator conversion",
+    )
+    selected = select_topic_heading_path(query, path)
+    assert selected and selected[0] == path[0]
+
+
 @pytest.mark.parametrize("leaf", [
     "1. Wind strikes the rotor : Wind approaches the vertically arranged blades or buckets.\n"
     "Depending on the type of VAWT, the rotor operates mainly using lift or drag forces .",

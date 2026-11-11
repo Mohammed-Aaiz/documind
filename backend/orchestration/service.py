@@ -58,6 +58,13 @@ def _build_extractive_fallback(question: str, blocks: list[EvidenceBlock], marks
     limit = {5: 6, 10: 10, 15: 14}.get(marks, 10)
     candidates: list[tuple[int, int, int, str]] = []
     metadata = re.compile(r"\b(?:report id|revision|document pages)\b", re.IGNORECASE)
+    window_anchors = {}
+    for block in blocks:
+        if block.topic_context_kind == "section_window" and block.topic_context_id:
+            heading = select_topic_heading_path(question, block.heading_path or ((block.section,) if block.section else ()))
+            key = (block.document_id, block.topic_context_id)
+            overlap = len(focus_terms & set(content_tokens(" ".join(heading))))
+            window_anchors[key] = max(window_anchors.get(key, 0), overlap)
     for block_rank, block in enumerate(blocks):
         source = re.sub(r"\s+", " ", block.content).strip()
         raw_sentences = split_sentences(block.content)
@@ -68,6 +75,8 @@ def _build_extractive_fallback(question: str, blocks: list[EvidenceBlock], marks
             question, block.heading_path or ((block.section,) if block.section else ()),
         )
         heading_overlap = len(focus_terms & set(content_tokens(" ".join(heading))))
+        if block.topic_context_kind == "section_window":
+            heading_overlap = max(heading_overlap, window_anchors.get((block.document_id, block.topic_context_id), 0))
         anchors: set[int] = set()
         for sentence_rank, raw_sentence in enumerate(raw_sentences):
             sentence = re.sub(r"\s+", " ", raw_sentence).strip()
@@ -345,10 +354,6 @@ async def stream_with_memory(db: Any, *, user_id: str, session_id: str, question
                         f"{omitted_diagrams} diagram figure(s) were omitted because they were malformed, "
                         "uncited, or unsupported by the supplied evidence."
                     )
-                if not kept_diagrams:
-                    warnings.append(
-                        "The question requested a diagram, but the draft contained no evidence-supported figure."
-                    )
             abstained = not extractive_fallback and "INSUFFICIENT_EVIDENCE" in answer.upper()
             citations = {int(match) for match in _CITATION.findall(answer)}
             valid_citations = bool(citations) and citations <= {block.index for block in blocks}
@@ -381,6 +386,15 @@ async def stream_with_memory(db: Any, *, user_id: str, session_id: str, question
                         citations = {int(match) for match in _CITATION.findall(answer)}
                         valid_citations = bool(citations) and citations <= {block.index for block in blocks}
                         report = verify_with_mode(answer, blocks, question=question)
+                if report.verified and valid_citations and diagram_requested:
+                    from generation.diagrams import ensure_source_diagrams
+                    completed, diagram_notes = ensure_source_diagrams(answer, blocks, question)
+                    completed_report = verify_with_mode(completed, blocks, question=question)
+                    if completed_report.verified:
+                        answer, report = completed, completed_report
+                        warnings.extend(diagram_notes)
+                    else:
+                        warnings.append("A recovered diagram did not pass final evidence checks and was omitted.")
                 if not report.verified or not valid_citations:
                     abstained = True
                     warnings.append("The available evidence excerpts did not pass answer verification; the answer was withheld.")

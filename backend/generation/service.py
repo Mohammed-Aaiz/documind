@@ -524,7 +524,13 @@ async def retrieve_evidence(
             from generation.reranking import rerank_candidates
             values, reranking = await rerank_candidates(question, values, top_k=top_k)
             routing["reranker"] = reranking
-            from generation.topic_context import expand_topic_context
+            from generation.topic_context import add_named_topic_anchors, expand_topic_context
+            try:
+                values = await add_named_topic_anchors(db, user_id, question, values)
+            except Exception:
+                # Optional heading enrichment must not discard usable ranked
+                # evidence if its database lookup is temporarily unavailable.
+                logger.warning("Named topic anchors unavailable; retaining ranked evidence", exc_info=True)
             try:
                 values, topic_coverage = await expand_topic_context(db, user_id, values, question=question)
             except Exception:
@@ -786,10 +792,6 @@ async def answer_from_evidence(
                     f"{omitted_diagrams} diagram figure(s) were omitted because they were malformed, "
                     "uncited, or unsupported by the supplied evidence."
                 )
-            if not kept_diagrams:
-                warnings.append(
-                    "The question requested a diagram, but the draft contained no evidence-supported figure."
-                )
         citations = {int(value) for value in re.findall(r"\[(\d+)\]", answer)}
         valid_citations = bool(citations) and citations <= {block.index for block in prepared.blocks}
         abstained = not answer or "INSUFFICIENT_EVIDENCE" in answer.upper() or not valid_citations
@@ -808,6 +810,15 @@ async def answer_from_evidence(
     if answer and not abstained and not report.verified:
         abstained = True
         warnings.append("The generated draft contained claims the evidence verifier could not support and was withheld.")
+    if answer and not abstained and asks_for_diagram(question):
+        from generation.diagrams import ensure_source_diagrams
+        completed, diagram_notes = ensure_source_diagrams(answer, prepared.blocks, question)
+        completed_report = verify_with_mode(completed, prepared.blocks, question=question)
+        if completed_report.verified:
+            answer, report = completed, completed_report
+            warnings.extend(diagram_notes)
+        else:
+            warnings.append("A recovered diagram did not pass final evidence checks and was omitted.")
     return prepared.sources, GenerativeAnswer(
         answer="" if abstained else answer, abstained=abstained,
         insufficient_context=abstained, verification=report.summary(),

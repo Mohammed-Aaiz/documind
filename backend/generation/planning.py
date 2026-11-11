@@ -501,6 +501,9 @@ def validate_text_diagram(answer: str, evidence_blocks: Sequence[EvidenceBlock],
         report = verify_with_mode(fenced_diagram, evidence_blocks, question=question)
         if not report.verified or report.uncited_claims:
             return False
+        from generation.diagrams import connections_supported
+        if not connections_supported(diagram, evidence_blocks):
+            return False
     return True
 
 
@@ -535,6 +538,12 @@ def filter_text_diagrams(answer: str, evidence_blocks: Sequence[EvidenceBlock],
         closed = depth == 0
         end_exclusive = end - 1 if closed else len(lines)
         body = lines[index + 1:end_exclusive]
+        # A caption inside a plain-text fence still labels that one figure.
+        # Removing it from the drawing avoids treating its title as a node.
+        inside_caption = ""
+        first_content = next((position for position, line in enumerate(body) if line.strip()), None)
+        if first_content is not None and re.match(r"^(?:figure|diagram)\s*:", body[first_content].strip("*_ "), re.I):
+            inside_caption = body.pop(first_content).strip("*_ ")
         # An explicitly cited figure caption can supply citations for its
         # uncited labels. Each resulting label still passes the normal source
         # verifier; a caption is not itself evidence that a label is true.
@@ -543,7 +552,7 @@ def filter_text_diagrams(answer: str, evidence_blocks: Sequence[EvidenceBlock],
         # Models often place a Markdown-emphasized figure caption immediately
         # below the drawing. Both placements identify the same bounded figure;
         # citations still have to support every factual label below.
-        captions = (before.strip("*_ "), after.strip("*_ "))
+        captions = (inside_caption, before.strip("*_ "), after.strip("*_ "))
         caption_citations = next((extract_citations(caption) for caption in captions
                                   if re.match(r"^(?:figure|diagram)\b", caption, re.IGNORECASE)
                                   and extract_citations(caption)), [])
@@ -632,7 +641,7 @@ def split_claims(answer: str) -> list[str]:
             line = line.strip()
             if line.startswith("[") and line.endswith("]"):
                 line = line[1:-1].strip()
-            line = line.strip(" │┌┐└┘├┤┬┴┼")
+            line = line.strip(" |│┌┐└┘├┤┬┴┼")
             if not line or _DIAGRAM_DECORATION_RE.fullmatch(line):
                 continue
         line = re.sub(r"^\s*(?:[-*•]|\d+[.)])\s+", "", line).strip()

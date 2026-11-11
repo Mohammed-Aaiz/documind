@@ -84,8 +84,19 @@ function isAbortError(err: unknown): boolean {
 // ---------------------------------------------------------------------------
 
 function prepareTextForTts(rawText: string): string {
-  const clean = rawText.trim();
-  if (!clean) return '';
+  let inDiagram = false;
+  let hasDiagram = false;
+  // Strip diagram rows before truncating so they cannot crowd out later prose.
+  const clean = rawText.split(/\r?\n/).filter((line) => {
+    if (/^\s*```text\s*$/.test(line)) {
+      inDiagram = hasDiagram = true;
+      return false;
+    }
+    if (!inDiagram) return true;
+    if (/^\s*```\s*$/.test(line)) inDiagram = false;
+    return false;
+  }).join('\n').replace(/\n{3,}/g, '\n\n').trim();
+  if (!clean) return hasDiagram ? 'The diagram is available in the written answer.' : '';
   if (clean.length <= 2000) return clean;
 
   // Truncate at natural sentence or word boundary before 1990 chars

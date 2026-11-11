@@ -86,6 +86,34 @@ def prioritize_question_parts(chunks: Sequence[Any], parts: Sequence[str]) -> li
     """Promote one matching passage per explicit part before context fitting."""
     from generation.verification import content_tokens
 
+    # Recovered topics can contain many small paragraphs. Give each explicitly
+    # requested topic a turn before one long topic consumes the context window.
+    # Within each topic, the original document order remains unchanged.
+    from generation.topic_context import topic_acronyms
+    groups: dict[tuple, list[Any]] = {}
+    for chunk in chunks:
+        key = (str(getattr(chunk, "document_id", "")),
+               getattr(chunk, "topic_context_id", None) or ("chunk", id(chunk)))
+        groups.setdefault(key, []).append(chunk)
+    group_terms = {key: set(content_tokens(" ".join(
+        " ".join(getattr(chunk, "heading_path", None) or ()) + " " + str(getattr(chunk, "content", "") or "")
+        for chunk in values))) for key, values in groups.items()}
+    matched = []
+    for part in parts:
+        terms = set(content_tokens(_COMMAND.sub("", part)))
+        acronyms = topic_acronyms(part)
+        eligible = [key for key in groups if key not in matched
+                    and (not acronyms or any(word in group_terms[key] or word + "s" in group_terms[key] for word in acronyms))]
+        if eligible and terms:
+            best = max(eligible, key=lambda key: len(terms & group_terms[key]))
+            if terms & group_terms[best]:
+                matched.append(best)
+    if len(matched) > 1 and any(len(groups[key]) > 1 for key in matched):
+        interleaved = [groups[key][index]
+                       for index in range(max(len(groups[key]) for key in matched))
+                       for key in matched if index < len(groups[key])]
+        return interleaved + [chunk for key, values in groups.items() if key not in matched for chunk in values]
+
     remaining = list(chunks)
     promoted = []
     passage_terms = {
@@ -376,6 +404,8 @@ def prepare_prompt(question: str, chunks: Sequence[Any], history: Sequence[dict]
             knowledge_graph_predicate=getattr(chunk, "knowledge_graph_predicate", None),
             knowledge_graph_quote=getattr(chunk, "knowledge_graph_quote", None),
             spatial_regions=getattr(chunk, "spatial_regions", None),
+            topic_context_id=getattr(chunk, "topic_context_id", None),
+            topic_context_kind=getattr(chunk, "topic_context_kind", None),
             truncated=len(content) < len(str(getattr(chunk, "content", ""))))
         blocks.append(block)
         # Source excerpts returned to users are exactly those the provider saw.
