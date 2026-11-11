@@ -129,3 +129,25 @@ review files produce means of 0.567 (5 marks, three answerable cases), 0.893
 (10 marks, three answerable cases), and 0.795 (15 marks, one answerable case).
 The earlier mean is superseded for reporting. Human NHRS remains null and no
 comparative research claim follows from these diagnostics.
+
+## Broad-topic answer regression — 2026-11-11
+
+The owner reported a shallow wind-energy answer and automatically displayed
+figures whose relevance had not been verified. A read-only retrieval trace of
+the question on the owner's indexed notes found 9 candidates and 8 fitted
+passages before the heading change. The scoped heading adjustment recovered
+26 candidates and fit 19 passages, including more HAWT and VAWT material.
+Two fitted passages containing tidal terms were already present in the original
+dense candidates; the change does not establish complete topic isolation.
+
+A live Groq 10-mark check with the final retrieval code returned 19 sources,
+one source-derived flow figure and a verified 896-character answer. The output
+still omitted meaningful dimensions and its diagram stopped at the shaft. An
+earlier prompt-expansion attempt produced repetitive prose and failed bounded
+context tests, so that prompt change was removed. These observations are not an
+answer-quality pass or a human grade. The final focused backend gate passed 512
+tests; the source-figure frontend suite passed 11 tests and its build passed.
+The local interface now places page-matched figures behind an optional disclosure
+that states their relevance has not been verified. The figure interface depends
+on pre-existing uncommitted frontend and backend changes and is not part of the
+scoped retrieval commit.

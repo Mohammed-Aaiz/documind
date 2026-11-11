@@ -130,6 +130,30 @@ def test_subject_words_split_across_headings_select_the_named_topic():
     assert select_topic_heading_path("Explain tidal energy", ("Energy", "Wind", "Working steps")) == ()
 
 
+@pytest.mark.parametrize("parent", ["Wind Energy", "CONVERSION\nWind Energy"])
+def test_broad_topic_uses_concise_parent_instead_of_definition_leaf(parent):
+    leaf = "Wind energy is renewable energy captured from moving air."
+    assert select_topic_heading_path("Explain wind energy with a neat diagram", (parent, leaf)) == (parent,)
+
+
+@pytest.mark.parametrize("parent", ["Wind and tidal energy", "WIND TIDAL OCEAN THERMAL ENERGY"])
+def test_broad_topic_does_not_expand_a_mixed_subject_parent(parent):
+    leaf = "Wind energy is renewable energy captured from moving air."
+    assert select_topic_heading_path("Explain wind energy with a neat diagram", (parent, leaf)) != (parent,)
+
+
+def test_retrieved_formula_can_recover_its_named_wind_subtopic():
+    parent = "Vertical Axis Wind Turbines (VAWT)"
+    formula = "Wind energy → mechanical energy → electrical energy"
+    assert select_topic_heading_path("Explain wind energy", (parent, formula)) == (parent,)
+
+
+@pytest.mark.parametrize("parent", ["Wind and tidal energy systems (WTES)", "Tidal energy systems (TES)"])
+def test_formula_cannot_expand_mixed_or_unrelated_named_subtopic(parent):
+    formula = "Wind energy → mechanical energy → electrical energy"
+    assert select_topic_heading_path("Explain wind energy", (parent, formula)) != (parent,)
+
+
 def test_named_acronym_does_not_expand_a_different_turbine_on_shared_words():
     query = "Explain the working of Horizontal Axis Wind Turbines (HAWT) with a neat diagram."
     wrong_topic = (

@@ -121,6 +121,46 @@ def test_hierarchical_topic_recovers_sibling_leaves_and_preserves_provenance():
     assert [source.heading_path for source in expanded] == [tuple(row["heading_path"]) for row in rows[1:4]]
 
 
+def test_broad_topic_recovers_parent_details_without_adjacent_or_foreign_topics():
+    root = "CONVERSION\nWind Energy"
+    rows = [
+        chunk(0, [root, "Wind energy is renewable energy captured from moving air."],
+              "Wind energy is renewable energy captured from moving air."),
+        chunk(1, [root, "Horizontal axis wind turbines"],
+              "A horizontal axis turbine uses wind to rotate a rotor."),
+        chunk(2, [root, "Generator operation"],
+              "The generator converts mechanical rotation into electrical energy."),
+        chunk(3, ["CONVERSION\nWind tunnel testing", "Measurements"],
+              "A wind tunnel is used to measure aerodynamic forces."),
+        chunk(4, ["CONVERSION\nTidal Energy", "Tidal barrage"],
+              "A tidal barrage uses changing sea levels."),
+    ]
+    foreign = chunk(0, [root, "Private detail"], "PRIVATE SOURCE", document=FOREIGN_DOC)
+    selected = execute_topic_query(rows + [foreign], [rows[0]["id"], foreign["id"]],
+                                   question="Explain wind energy with a neat diagram")
+    assert {row["id"] for row in selected} == {row["id"] for row in rows[:3]}
+    assert all(row["seed_id"] == rows[0]["id"] for row in selected)
+    original = SourceChunk(rows[0]["id"], rows[0]["content"], .8, DOC, "energy.pdf", rows[0]["page"],
+                           heading_path=tuple(rows[0]["heading_path"]))
+    expanded, _ = assemble_topic_context([original], selected)
+    assert [(item.content, item.page, item.document_id) for item in expanded] == [
+        (row["content"], row["page"], DOC) for row in rows[:3]
+    ]
+
+
+def test_retrieved_formula_recovers_named_subtopic_not_adjacent_topic():
+    root = "Vertical Axis Wind Turbines (VAWT)"
+    formula = "Wind energy → mechanical energy → electrical energy"
+    rows = [
+        chunk(0, [root], "A VAWT has a vertical rotor axis."),
+        chunk(1, [root, formula], formula),
+        chunk(2, [root, "Rotor operation"], "Wind turns the VAWT rotor."),
+        chunk(3, ["Tidal Energy", "Tidal barrage"], "A tidal barrage uses sea levels."),
+    ]
+    selected = execute_topic_query(rows, [rows[1]["id"]], question="Explain wind energy")
+    assert [row["id"] for row in selected] == [row["id"] for row in rows[:3]]
+
+
 def test_repeated_parent_heading_after_another_topic_is_a_separate_occurrence():
     rows = [
         chunk(0, ["Wind", "VAWT", "Definition"]),

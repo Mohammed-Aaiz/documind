@@ -215,6 +215,29 @@ def select_topic_heading_path(question: str, heading_path: Sequence[str] | None)
     query_terms = terms(question)
     if not query_terms:
         return ()
+    # Legacy extraction often marks a definition sentence as a child heading.
+    # If a concise ancestor already names the whole requested topic, repeating
+    # those same words in the definition is not a reason to narrow the context
+    # to that one sentence. Keep this conservative: a multi-subject chapter
+    # title with several extra terms must not become the expansion boundary.
+    if len(query_terms) >= 2:
+        for depth, label in enumerate(path[:-1], 1):
+            label_terms = terms(label)
+            if query_terms <= label_terms and label_terms - query_terms <= {"conversion", "introduction", "overview", "section", "chapter"}:
+                return path[:depth]
+        # A formula may sit beneath a separately rooted named subtype rather
+        # than the requested topic. Recover that subtype only when its heading
+        # explicitly names an acronym and shares a question term, and the
+        # formula itself names the entire topic. This does not scan sibling
+        # topics; it only expands an already retrieved passage's own parent.
+        if re.search(r"(?:[-=]+>|→|⇒)", path[-1]) and query_terms <= terms(path[-1]):
+            distinctive = query_terms - {"energy", "system", "process", "technology", "method", "power", "conversion", "resource"}
+            for depth, label in enumerate(path[:-1], 1):
+                named_subject = label.split("(", 1)[0]
+                if (re.search(r"\([A-Z][A-Z0-9]{1,}\)", label)
+                        and not re.search(r"\b(?:and|or)\b|[,;/]", named_subject, re.I)
+                        and distinctive & terms(named_subject)):
+                    return path[:depth]
     matches = []
     prefix_terms: set[str] = set()
     for depth, label in enumerate(path, 1):
