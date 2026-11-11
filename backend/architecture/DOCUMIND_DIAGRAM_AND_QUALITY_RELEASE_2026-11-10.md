@@ -120,3 +120,12 @@ gate passed 562 tests with two pre-existing dependency/fixture deprecation
 warnings; the frontend production build and 32 focused voice/answer UI tests
 also passed. The final source adjustment was verified against the actual
 captured HAWT/VAWT passages without another hosted generation call.
+
+### Diagnostic mean correction — final post-process packet
+
+The preceding 0.900 10-mark mean came from the earlier post-process packet.
+After the final numbered-step label adjustment, the two fresh isolated AI
+review files produce means of 0.567 (5 marks, three answerable cases), 0.893
+(10 marks, three answerable cases), and 0.795 (15 marks, one answerable case).
+The earlier mean is superseded for reporting. Human NHRS remains null and no
+comparative research claim follows from these diagnostics.
